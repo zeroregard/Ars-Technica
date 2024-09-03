@@ -23,10 +23,10 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 
 version = "${mc_version}-${mod_version}"
-group = 'com.yourname.modid'
+group = 'net.mcreator.ars_technica'
 
 base {
-    archivesBaseName = 'modid'
+    archivesBaseName = 'ars_technica'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
