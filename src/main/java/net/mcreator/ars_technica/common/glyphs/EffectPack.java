@@ -72,13 +72,11 @@ public class EffectPack extends AbstractItemResolveEffect {
   }
 
   private int getPackGridSize(double amplifier) {
-    if (amplifier == -1.0) {
-      return 1;
-    } else if (amplifier == 0.0) {
-      return 2;
-    } else {
-      return 3;
-    }
+    int value = (int) amplifier + 2;
+    // Clamp value just to be safe from other mods adding amplification
+    value = Math.max(value, 1);
+    value = Math.min(value, 3);
+    return value;
   }
 
   private void packItems(Item item, List<ItemEntity> itemEntities, SpellStats spellStats, Level world,
