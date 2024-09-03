@@ -1,15 +1,26 @@
 {
   "mod_elements": [],
   "variable_elements": [],
-  "sound_elements": [],
+  "sound_elements": [
+    {
+      "name": "equip_set",
+      "files": [
+        "equip_set"
+      ],
+      "category": "player",
+      "subtitle": ""
+    }
+  ],
   "tag_elements": {},
   "tab_element_order": {},
   "language_map": {
     "en_us": {
+      "subtitles.equip_set": "",
       "item.ars_technica.technomancer_boots": "Technomancer\u0027s Boots",
       "ars_technica.glyph_desc.glyph_pack": "Condenses identical items, crafting them into 2x2 recipes. Augment for 3x3, Dampen for 1x1",
       "ars_technica.glyph_name.glyph_insert": "Insert",
       "itemGroup.ars_technica": "Ars Technica",
+      "subtitles.ars_technica.equip_set": "",
       "ars_technica.glyph_name.glyph_carve": "Carve",
       "ars_technica.glyph_desc.glyph_carve": "Shapes identical items, crafting them into stairs. Augment for walls, Dampen for slabs",
       "ars_technica.armor_set.shift_info": "Hold %s for set info",

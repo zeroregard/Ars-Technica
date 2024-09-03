@@ -1,0 +1,10 @@
+{
+  "equip_set": {
+    "sounds": [
+      {
+        "name": "ars_technica:equip_set",
+        "stream": false
+      }
+    ]
+  }
+}

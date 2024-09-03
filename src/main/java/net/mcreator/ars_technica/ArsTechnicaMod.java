@@ -21,6 +21,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import net.mcreator.ars_technica.setup.ModSetup;
 import net.mcreator.ars_technica.setup.ArsNouveauRegistry;
+import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.client.events.ClientHandler;
 
 import java.util.function.Supplier;
@@ -42,6 +43,7 @@ public class ArsTechnicaMod {
 		// End of user code block mod constructor
 		MinecraftForge.EVENT_BUS.register(this);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		ArsTechnicaModSounds.REGISTRY.register(bus);
 		// Start of user code block mod init
 		ModSetup.registers(bus);
 		bus.addListener(this::setup);
