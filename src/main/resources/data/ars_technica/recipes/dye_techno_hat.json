@@ -1,0 +1,14 @@
+{
+  "type": "ars_nouveau:dye",
+  "ingredients": [
+    {
+      "tag": "forge:dyes"
+    },
+    {
+      "item": "ars_technica:technomancer_helmet"
+    }
+  ],
+  "result": {
+    "item": "ars_technica:technomancer_helmet"
+  }
+}

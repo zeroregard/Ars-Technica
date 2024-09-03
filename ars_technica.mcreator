@@ -1,0 +1,43 @@
+{
+  "mod_elements": [],
+  "variable_elements": [],
+  "sound_elements": [],
+  "tag_elements": {},
+  "tab_element_order": {},
+  "language_map": {
+    "en_us": {
+      "ars_technica.glyph_name.glyph_carve": "Carve",
+      "ars_technica.glyph_desc.glyph_carve": "Shapes identical items, crafting them into stairs. Augment for walls, Dampen for slabs",
+      "item.ars_technica.technomancer_boots": "Technomancer\u0027s Boots",
+      "ars_technica.glyph_desc.glyph_pack": "Condenses identical items, crafting them into 2x2 recipes. Augment for 3x3, Dampen for 1x1",
+      "ars_technica.glyph_desc.glyph_insert": "Inserts nearby items into nearby containers in a medium radius where this spell is activated. The range may be expanded with AOE.",
+      "item.ars_technica.technomancer_chestplate": "Technomancer\u0027s Robes",
+      "item.ars_technica.technomancer_leggings": "Technomancer\u0027s Leggings",
+      "item.ars_technica.technomancer_helmet": "Technomancer\u0027s Hat",
+      "ars_technica.glyph_name.glyph_pack": "Pack",
+      "itemGroup.ars_technica": "Ars Technica",
+      "ars_technica.glyph_name.glyph_insert": "Insert"
+    }
+  },
+  "foldersRoot": {
+    "name": "~",
+    "children": []
+  },
+  "workspaceSettings": {
+    "modid": "ars_technica",
+    "modName": "Ars Technica",
+    "version": "1.0.0",
+    "author": "Mathias Norregaard",
+    "websiteURL": "https://mcreator.net",
+    "license": "Not specified",
+    "serverSideOnly": false,
+    "requiredMods": [],
+    "dependencies": [],
+    "dependants": [],
+    "mcreatorDependencies": [],
+    "currentGenerator": "forge-1.20.1",
+    "credits": "Created using mod maker MCreator - https://mcreator.net/about",
+    "modElementsPackage": "net.mcreator.ars_technica"
+  },
+  "mcreatorVersion": 202400232117
+}

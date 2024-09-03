@@ -1,0 +1,6 @@
+build/*
+.mcreator/*
+bin/*
+.gradle/*
+run/*
+.DS_Store
