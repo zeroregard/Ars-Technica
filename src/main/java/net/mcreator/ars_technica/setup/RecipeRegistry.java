@@ -18,6 +18,7 @@ public class RecipeRegistry {
 
   public static void register(IEventBus eventBus) {
     RECIPES.register(eventBus);
+    SERIALIZERS.register(eventBus);
   }
 
   public static final RegistryObject<RecipeType<TechnomancerArmorRecipe>> TECHNOMANCER_ARMOR_UP = RECIPES.register(

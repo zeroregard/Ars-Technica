@@ -2,6 +2,8 @@ package net.mcreator.ars_technica.setup;
 
 import java.util.Arrays;
 import java.util.List;
+
+import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
 import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 
 import net.minecraft.world.level.ItemLike;
@@ -20,5 +22,7 @@ public class ArsNouveauRegistry {
       PerkRegistry.registerPerkProvider(armor,
           stack -> new ArmorPerkHolder(stack, List.of(perkSlots, perkSlots, perkSlots, perkSlots)));
     }
+
+    ArsNouveauAPI.getInstance().getEnchantingRecipeTypes().add(RecipeRegistry.TECHNOMANCER_ARMOR_UP.get());
   }
 }

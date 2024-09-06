@@ -14,13 +14,15 @@ import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
+import org.apache.logging.log4j.Logger;
 
 public class ATTagsProvider {
 
   public static class ATItemTagsProvider extends ItemTagsProvider {
-
+    private static final Logger LOGGER = ArsTechnicaMod.LOGGER;
     public static final TagKey<Item> MAGIC_HOOD = ItemTags.create(new ResourceLocation(ArsNouveau.MODID, "hood"));
     public static final TagKey<Item> MAGIC_ROBE = ItemTags.create(new ResourceLocation(ArsNouveau.MODID, "robe"));
     public static final TagKey<Item> MAGIC_LEG = ItemTags.create(new ResourceLocation(ArsNouveau.MODID, "legs"));
@@ -58,6 +60,11 @@ public class ATTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider p_256380_) {
       // This class only exists to satisfy the requirement for ATItemTagsProvider.
+    }
+
+    @Override
+    public @NotNull String getName() {
+      return "Ars Technica Block Tags";
     }
   }
 }

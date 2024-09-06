@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.llamalad7.mixinextras/mixinextras-common/0.2.0-beta.8/dc3137254acb483097f62d4549f79871cb72f3d2/mixinextras-common-0.2.0-beta.8.jar" />
+        </processorPath>
+        <module name="ars_technica.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="17" />
+  </component>
+</project>

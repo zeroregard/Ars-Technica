@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.datagen;
 
+import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 
 import net.mcreator.ars_technica.recipe.TechnomancerArmorRecipe;
@@ -21,7 +22,13 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
   @Override
   public void collectJsons(CachedOutput cache) {
     addTechnomancerArmorRecipes();
-
+    Path output = this.generator.getPackOutput().getOutputFolder();
+    for (EnchantingApparatusRecipe g : recipes) {
+      if (g != null) {
+        Path path = getRecipePath(output, g.getId().getPath());
+        saveStable(cache, g.asRecipe(), path);
+      }
+    }
   }
 
   protected void addTechnomancerArmorRecipes() {
