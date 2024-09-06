@@ -8,5 +8,6 @@ public class ModSetup {
     GlyphsRegistry.registerGlyphs();
     ItemsRegistry.ITEMS.register(modEventBus);
     CreativeTabRegistry.TABS.register(modEventBus);
+    RecipeRegistry.register(modEventBus);
   }
 }
