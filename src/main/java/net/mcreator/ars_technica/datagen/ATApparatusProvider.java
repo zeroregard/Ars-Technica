@@ -11,6 +11,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import static com.simibubi.create.AllItems.BRASS_INGOT;
+import static com.simibubi.create.AllItems.GOGGLES;
+
 import java.nio.file.Path;
 
 public class ATApparatusProvider extends ApparatusRecipeProvider {
@@ -37,19 +40,19 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
         builder().withResult(ItemsRegistry.TECHNOMANCER_HELMET.get())
             .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_HOOD))
             .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get()).withPedestalItem(Items.NETHERITE_INGOT)
-            .withPedestalItem(2, Items.COPPER_BLOCK).withSourceCost(7000).keepNbtOfReagent(true).build()));
+            .withPedestalItem(BRASS_INGOT).withPedestalItem(GOGGLES).withSourceCost(7000).keepNbtOfReagent(true).build()));
     recipes.add(new TechnomancerArmorRecipe(builder().withResult(ItemsRegistry.TECHNOMANCER_CHESTPLATE.get())
         .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_ROBE))
         .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get()).withPedestalItem(Items.NETHERITE_INGOT)
-        .withPedestalItem(2, Items.COPPER_BLOCK).withSourceCost(7000).keepNbtOfReagent(true).build()));
+        .withPedestalItem(2, BRASS_INGOT).withSourceCost(7000).keepNbtOfReagent(true).build()));
     recipes.add(new TechnomancerArmorRecipe(
         builder().withResult((ItemsRegistry.TECHNOMANCER_LEGGINGS.get())).withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_LEG))
             .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get()).withPedestalItem(Items.NETHERITE_INGOT)
-            .withPedestalItem(2, Items.COPPER_BLOCK).withSourceCost(7000).keepNbtOfReagent(true).build()));
+            .withPedestalItem(2, BRASS_INGOT).withSourceCost(7000).keepNbtOfReagent(true).build()));
     recipes.add(new TechnomancerArmorRecipe(builder().withResult(ItemsRegistry.TECHNOMANCER_BOOTS.get())
         .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_BOOT))
         .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get()).withPedestalItem(Items.NETHERITE_INGOT)
-        .withPedestalItem(2, Items.COPPER_BLOCK).withSourceCost(7000).keepNbtOfReagent(true).build()));
+        .withPedestalItem(2, BRASS_INGOT).withSourceCost(7000).keepNbtOfReagent(true).build()));
 
   }
 

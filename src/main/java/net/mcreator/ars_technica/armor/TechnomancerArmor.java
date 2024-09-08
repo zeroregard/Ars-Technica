@@ -38,8 +38,11 @@ import java.util.function.Supplier;
 
 public class TechnomancerArmor extends AnimatedMagicArmor {
 
-  public TechnomancerArmor(ArmorItem.Type slot) {
+  private final String specialInformation;
+
+  public TechnomancerArmor(ArmorItem.Type slot, @Nullable String tooltipSpecialInformation) {
     super(TechnomancerMaterial.INSTANCE, slot, new TechnomancerArmorModel("technomancer_medium_armor").withEmptyAnim());
+    specialInformation = tooltipSpecialInformation;
   }
 
   @Override
@@ -102,6 +105,10 @@ public class TechnomancerArmor extends AnimatedMagicArmor {
       }
       list.add(getArmorSetTitle(equippedCounter)); // "X out of 4 equipped"
       list.addAll(equippedList); // list of equipped armor pieces
+      Component specialInfo = getArmorPieceSpecialInformation();
+      if ( specialInfo != null ) {
+        list.add(specialInfo);
+      }
       list.add(
           Component.translatable(ArsTechnicaMod.MODID + ".armor_set.technomancer.desc").withStyle(ChatFormatting.GRAY));
     }
@@ -112,6 +119,15 @@ public class TechnomancerArmor extends AnimatedMagicArmor {
     return Component.translatable(ArsTechnicaMod.MODID + ".armor_set.technomancer")
         .append(" (" + equipped + " / 4)")
         .withStyle(ChatFormatting.DARK_AQUA);
+  }
+
+  @Nullable
+  private Component getArmorPieceSpecialInformation() {
+    if (specialInformation == null) {
+      return null;
+    }
+    return Component.translatable(ArsTechnicaMod.MODID + specialInformation)
+            .withStyle(ChatFormatting.GOLD);
   }
 
   @Override

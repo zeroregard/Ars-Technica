@@ -6,8 +6,8 @@ public class ModSetup {
 
   public static void registers(IEventBus modEventBus) {
     GlyphsRegistry.registerGlyphs();
-    ItemsRegistry.ITEMS.register(modEventBus);
-    CreativeTabRegistry.TABS.register(modEventBus);
+    ItemsRegistry.register(modEventBus);
+    CreativeTabRegistry.register(modEventBus);
     RecipeRegistry.register(modEventBus);
   }
 }
