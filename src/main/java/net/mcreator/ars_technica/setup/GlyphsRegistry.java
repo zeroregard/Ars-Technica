@@ -3,10 +3,7 @@ package net.mcreator.ars_technica.setup;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 
-import net.mcreator.ars_technica.common.glyphs.EffectCarve;
-import net.mcreator.ars_technica.common.glyphs.EffectInsert;
-import net.mcreator.ars_technica.common.glyphs.EffectPack;
-import net.mcreator.ars_technica.common.glyphs.EffectPress;
+import net.mcreator.ars_technica.common.glyphs.*;
 
 public class GlyphsRegistry {
 
@@ -15,6 +12,7 @@ public class GlyphsRegistry {
     register(EffectCarve.INSTANCE);
     register(EffectInsert.INSTANCE);
     register(EffectPress.INSTANCE);
+    register(EffectPolish.INSTANCE);
   }
 
   public static void register(AbstractSpellPart spellPart) {
