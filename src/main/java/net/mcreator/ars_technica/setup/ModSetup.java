@@ -9,5 +9,6 @@ public class ModSetup {
     ItemsRegistry.register(modEventBus);
     CreativeTabRegistry.register(modEventBus);
     RecipeRegistry.register(modEventBus);
+    EntityRegistry.register(modEventBus);
   }
 }
