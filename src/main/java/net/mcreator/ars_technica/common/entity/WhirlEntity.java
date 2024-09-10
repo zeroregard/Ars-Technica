@@ -22,7 +22,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource {
     private double radius;
     private int duration;
     private final Level world;
-    private float speed = 0.2f;
+    private float speed = 0.05f;
     private FanProcessingType processor;
     private final WhirlCurrent current;
 
@@ -45,7 +45,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource {
         this.world = world;
         this.processor = AllFanProcessingTypes.NONE;
 
-        this.current =  new WhirlCurrent(this);
+        this.current = new WhirlCurrent(this);
     }
 
     public WhirlEntity(Level world, Vec3 position, double radius, int duration, FanProcessingType processor) {
@@ -56,7 +56,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource {
         this.world = world;
         this.processor = processor;
 
-        this.current =  new WhirlCurrent(this);
+        this.current = new WhirlCurrent(this);
     }
 
     @Override

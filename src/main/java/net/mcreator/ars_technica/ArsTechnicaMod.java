@@ -19,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.FriendlyByteBuf;
 
+import net.mcreator.ars_technica.setup.NetworkHandler;
 import net.mcreator.ars_technica.setup.ModSetup;
 import net.mcreator.ars_technica.setup.ArsNouveauRegistry;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
@@ -54,6 +55,7 @@ public class ArsTechnicaMod {
 	public void setup(final FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			ArsNouveauRegistry.postInit();
+			NetworkHandler.registerMessages();
 		});
 	}
 

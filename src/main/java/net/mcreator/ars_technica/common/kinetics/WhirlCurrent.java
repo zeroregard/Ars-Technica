@@ -5,15 +5,20 @@ import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
-import net.minecraft.core.BlockPos;
+import net.mcreator.ars_technica.network.ParticleEffectPacket;
+import net.mcreator.ars_technica.setup.NetworkHandler;
+
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkDirection;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -24,12 +29,10 @@ public class WhirlCurrent {
     private AABB bounds;
     private List<ItemEntity> affectedEntities;
     private double radius;
-    private final UUID uniqueId;
 
     public WhirlCurrent(WhirlEntity source) {
         this.source = source;
         this.radius = source.getRadius();
-        this.uniqueId = UUID.randomUUID();
 
         Vec3 centerPos = source.getPosition(1);
         bounds = new AABB(centerPos.subtract(radius, radius, radius),
@@ -44,6 +47,7 @@ public class WhirlCurrent {
 
     protected void tickAffectedEntities(Level world) {
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
+        List<ServerPlayer> nearbyPlayers = getNearbyPlayers(world);
         for (Iterator<ItemEntity> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
             Entity entity = iterator.next();
             if (!entity.isAlive() || !entity.getBoundingBox().intersects(bounds)) { // || !isItemBeingProcessedByThis(entity)) {
@@ -55,14 +59,15 @@ public class WhirlCurrent {
             double distance = entity.position().distanceTo(source.position());
 
             Vec3 motion = entity.getDeltaMovement();
-            Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(0.1);
-            Vec3 pull = direction.scale(0.05 * (radius - distance));
+            Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(0.05);
+            Vec3 pull = direction.scale(0.01 * (radius - distance));
 
             entity.setDeltaMovement(motion.add(tangentialMotion).add(pull));
-            // setProcessingId(entity, this.uniqueId);
             entity.fallDistance = 0;
 
             FanProcessingType processingType = source.getProcessor();
+
+            entity.hurtMarked = true;
 
             if (processingType == AllFanProcessingTypes.NONE)
                 continue;
@@ -71,44 +76,37 @@ public class WhirlCurrent {
                 if (FanProcessing.canProcess(itemEntity, processingType)) {
                     ArsTechnicaMod.LOGGER.info("Processing...");
                     FanProcessing.applyProcessing(itemEntity, processingType);
-                }
-                if (world != null && world.isClientSide) {
-                    ArsTechnicaMod.LOGGER.info("Spawning particles...");
-                    processingType.spawnProcessingParticles(world, entity.position());
+                    sendParticlesToNearbyPlayers(nearbyPlayers, itemEntity, processingType);
+
                 }
             }
         }
     }
+
+    private List<ServerPlayer> getNearbyPlayers(Level world) {
+        double playerRadius = 50;
+        AABB playerBounds = new AABB(source.position().subtract(playerRadius, playerRadius, playerRadius),
+                source.position().add(playerRadius, playerRadius, playerRadius));
+        return world.getEntitiesOfClass(ServerPlayer.class, playerBounds);
+    }
+
+    private void sendParticlesToNearbyPlayers(List<ServerPlayer> players, ItemEntity itemEntity, FanProcessingType processingType) {
+        Vec3 itemPos = itemEntity.position();
+        ParticleType<?> particleType = ParticleTypes.DUST;
+
+        for (ServerPlayer player : players) {
+            ParticleEffectPacket packet = new ParticleEffectPacket(itemPos, particleType);
+            NetworkHandler.CHANNEL.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        }
+    }
+
 
     public void stopAffectedItems() {
         for (ItemEntity item : affectedEntities) {
             item.setDeltaMovement(Vec3.ZERO);
             item.hurtMarked = true;
-            // removeProcessingId(item);
         }
         affectedEntities.clear();
-    }
-
-    private static void removeProcessingId(Entity entity) {
-        CompoundTag nbt = entity.getPersistentData();
-        if (nbt.contains("CreateData")) {
-            CompoundTag createData = nbt.getCompound("CreateData");
-            if (createData.contains("WhirlwindId")) {
-                createData.remove("WhirlwindId");
-                if (createData.isEmpty()) {
-                    nbt.remove("CreateData");
-                }
-            }
-        }
-    }
-
-    private static void setProcessingId(Entity entity, UUID uniqueId) {
-        CompoundTag nbt = entity.getPersistentData();
-        if (!nbt.contains("CreateData")) {
-            nbt.put("CreateData", new CompoundTag());
-        }
-        CompoundTag createData = nbt.getCompound("CreateData");
-        createData.putUUID("WhirlwindId", uniqueId);
     }
 
     private static UUID getProcessingId(Entity entity) {
@@ -122,9 +120,5 @@ public class WhirlCurrent {
         return null;
     }
 
-    private boolean isItemBeingProcessedByThis(Entity entity) {
-        UUID processingId = getProcessingId(entity);
-        return processingId == null || processingId.equals(this.uniqueId);
-    }
 
 }
