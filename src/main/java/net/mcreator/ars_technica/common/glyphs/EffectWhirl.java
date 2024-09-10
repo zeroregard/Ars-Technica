@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtendTime;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +26,7 @@ public class EffectWhirl extends AbstractEffect {
 public static final EffectWhirl INSTANCE = new EffectWhirl();
 
     private final double defaultRadius = 1.0;
-    private final int defaultDuration = 60;
+    private final int defaultDuration = 180;
 
     private EffectWhirl() {
         super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_whirl"), "Whirl");
@@ -36,11 +38,12 @@ public static final EffectWhirl INSTANCE = new EffectWhirl();
 
         double aoeAmplifier = spellStats.getAoeMultiplier();
         double durationAmplifier = spellStats.getDurationMultiplier();
-        int extraDurationTicks = Math.toIntExact(Math.round(durationAmplifier * 20));
+        int extraDurationTicks = Math.toIntExact(Math.round(durationAmplifier * 40));
         Vec3 position = rayTraceResult.getLocation();
 
-        WhirlEntity whirl = new WhirlEntity(serverWorld, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks);
+        WhirlEntity whirl = new WhirlEntity(serverWorld, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, AllFanProcessingTypes.SPLASHING);
         serverWorld.addFreshEntity(whirl);
+
     }
 
 
