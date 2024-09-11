@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.armor;
 
+import net.minecraft.Util;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,14 +32,37 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 import net.minecraft.world.level.Level;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import com.hollingsworth.arsnouveau.api.perk.*;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+
+import static alexthw.ars_elemental.ConfigHandler.Common.ARMOR_MANA_REGEN;
+import static alexthw.ars_elemental.ConfigHandler.Common.ARMOR_MAX_MANA;
 
 public class TechnomancerArmor extends AnimatedMagicArmor {
 
   private final String specialInformation;
+
+  private static final EnumMap<ArmorItem.Type, UUID> ARMOR_MODIFIER_UUID_PER_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266744_) -> {
+    p_266744_.put(ArmorItem.Type.BOOTS, UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"));
+    p_266744_.put(ArmorItem.Type.LEGGINGS, UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"));
+    p_266744_.put(ArmorItem.Type.CHESTPLATE, UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"));
+    p_266744_.put(ArmorItem.Type.HELMET, UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"));
+  });
 
   public TechnomancerArmor(ArmorItem.Type slot, @Nullable String tooltipSpecialInformation) {
     super(TechnomancerMaterial.INSTANCE, slot, new TechnomancerArmorModel("technomancer_medium_armor").withEmptyAnim());
@@ -113,6 +137,26 @@ public class TechnomancerArmor extends AnimatedMagicArmor {
           Component.translatable(ArsTechnicaMod.MODID + ".armor_set.technomancer.desc").withStyle(ChatFormatting.GRAY));
     }
 
+  }
+
+  @Override
+  public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot pEquipmentSlot, ItemStack stack) {
+    ImmutableMultimap.Builder<Attribute, AttributeModifier> attributes = new ImmutableMultimap.Builder<>();
+    attributes.putAll(super.getDefaultAttributeModifiers(pEquipmentSlot));
+    if (this.getType().getSlot() == pEquipmentSlot) {
+      UUID uuid = ARMOR_MODIFIER_UUID_PER_TYPE.get(this.getType());
+      IPerkHolder<ItemStack> perkHolder = PerkUtil.getPerkHolder(stack);
+      if (perkHolder != null) {
+        attributes.put(PerkAttributes.MAX_MANA.get(), new AttributeModifier(uuid, "max_mana_armor", ARMOR_MAX_MANA.get(), AttributeModifier.Operation.ADDITION));
+        attributes.put(PerkAttributes.MANA_REGEN_BONUS.get(), new AttributeModifier(uuid, "mana_regen_armor", ARMOR_MANA_REGEN.get(), AttributeModifier.Operation.ADDITION));
+        for (PerkInstance perkInstance : perkHolder.getPerkInstances()) {
+          IPerk perk = perkInstance.getPerk();
+          attributes.putAll(perk.getModifiers(this.getType().getSlot(), stack, perkInstance.getSlot().value));
+        }
+
+      }
+    }
+    return attributes.build();
   }
 
   private Component getArmorSetTitle(int equipped) {

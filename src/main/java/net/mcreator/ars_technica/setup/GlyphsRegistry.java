@@ -13,6 +13,7 @@ public class GlyphsRegistry {
     register(EffectInsert.INSTANCE);
     register(EffectPress.INSTANCE);
     register(EffectPolish.INSTANCE);
+    register(EffectWhirl.INSTANCE);
   }
 
   public static void register(AbstractSpellPart spellPart) {

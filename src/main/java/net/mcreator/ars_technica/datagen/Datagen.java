@@ -24,9 +24,7 @@ public class Datagen {
         BlockTagsProvider BTP = new ATTagsProvider.ATBlockTagsProvider(gen, provider, existingFileHelper);
         gen.addProvider(event.includeServer(), BTP);
         gen.addProvider(event.includeServer(), new ATTagsProvider.ATItemTagsProvider(gen, provider, BTP, existingFileHelper));
-        LOGGER.info("Tags done, now for apparatus");
         gen.addProvider(event.includeServer(), new ATApparatusProvider(gen));
-        LOGGER.info("Apparatus done");
 
     }
 

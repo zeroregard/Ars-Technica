@@ -16,4 +16,5 @@ import net.mcreator.ars_technica.ArsTechnicaMod;
 public class ArsTechnicaModSounds {
 	public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ArsTechnicaMod.MODID);
 	public static final RegistryObject<SoundEvent> EQUIP_SET = REGISTRY.register("equip_set", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "equip_set")));
+	public static final RegistryObject<SoundEvent> WHIRL_NONE = REGISTRY.register("whirl_none", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "whirl_none")));
 }
