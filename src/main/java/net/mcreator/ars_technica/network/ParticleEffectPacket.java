@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.network;
 
+import com.simibubi.create.foundation.utility.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -45,6 +46,15 @@ public class ParticleEffectPacket {
                     if (packet.particleType == ParticleTypes.DUST) {
                         DustParticleOptions dustOptions = new DustParticleOptions(new Vector3f(1.0f, 1.0f, 1.0f), 1.0f);
                         clientWorld.addParticle(dustOptions, packet.position.x, packet.position.y, packet.position.z, 0, 0, 0);
+                    }
+                    else if (packet.particleType == ParticleTypes.SOUL_FIRE_FLAME) {
+                        clientWorld.addParticle(ParticleTypes.SOUL_FIRE_FLAME, packet.position.x, packet.position.y + 0.44999998807907104, packet.position.z, 0.0, 0.0, 0.0);
+                    }
+                    else if (packet.particleType == ParticleTypes.SMOKE) {
+                        clientWorld.addParticle(ParticleTypes.SMOKE, packet.position.x, packet.position.y + 0.25, packet.position.z, 0.0, 0.0625, 0.0);
+                    }
+                    else if (packet.particleType == ParticleTypes.POOF) {
+                        clientWorld.addParticle(ParticleTypes.POOF, packet.position.x, packet.position.y + 0.25, packet.position.z, 0.0, 0.0625, 0.0);
                     }
                 }
             });

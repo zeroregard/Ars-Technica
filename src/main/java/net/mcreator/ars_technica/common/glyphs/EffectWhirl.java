@@ -4,7 +4,12 @@ import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtendTime;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectConjureWater;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectFlare;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectHex;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,8 +28,8 @@ import org.jetbrains.annotations.NotNull;
 public class EffectWhirl extends AbstractEffect {
 public static final EffectWhirl INSTANCE = new EffectWhirl();
 
-    private final double defaultRadius = 1.0;
-    private final int defaultDuration = 180;
+    private final double defaultRadius = 1.5;
+    private final int defaultDuration = 360;
 
     private EffectWhirl() {
         super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_whirl"), "Whirl");
@@ -39,7 +44,27 @@ public static final EffectWhirl INSTANCE = new EffectWhirl();
         int extraDurationTicks = Math.toIntExact(Math.round(durationAmplifier * 40));
         Vec3 position = rayTraceResult.getLocation();
 
-        WhirlEntity whirl = new WhirlEntity(serverWorld, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, AllFanProcessingTypes.SPLASHING);
+        FanProcessingType processingType = AllFanProcessingTypes.NONE;
+
+        if (spellContext.hasNextPart()) {
+            while (spellContext.hasNextPart()) {
+                AbstractSpellPart next = spellContext.nextPart();
+                if (next instanceof AbstractEffect) {
+                    if (next == EffectConjureWater.INSTANCE) {
+                        processingType = AllFanProcessingTypes.SPLASHING;
+                    } else if (next == EffectFlare.INSTANCE) {
+                        processingType = AllFanProcessingTypes.SMOKING;
+                    } else if (next == EffectSmelt.INSTANCE) {
+                        processingType = AllFanProcessingTypes.BLASTING;
+                    } else if (next == EffectHex.INSTANCE) {
+                        processingType = AllFanProcessingTypes.HAUNTING;
+                    }
+                    break;
+                }
+            }
+        }
+
+        WhirlEntity whirl = new WhirlEntity(serverWorld, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, processingType);
         serverWorld.addFreshEntity(whirl);
 
     }

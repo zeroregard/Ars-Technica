@@ -3,7 +3,6 @@ package net.mcreator.ars_technica.common.kinetics;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.mcreator.ars_technica.setup.NetworkHandler;
@@ -29,6 +28,7 @@ public class WhirlCurrent {
     private AABB bounds;
     private List<ItemEntity> affectedEntities;
     private double radius;
+    private int tickCount = 0;
 
     public WhirlCurrent(WhirlEntity source) {
         this.source = source;
@@ -40,10 +40,16 @@ public class WhirlCurrent {
     }
 
     public void tick() {
+        tickCount++;
         Level world = source.getLevel();
         if (world == null) return;
         tickAffectedEntities(world);
+        if (tickCount % 3 == 0) {
+            Vec3 pos = source.getPosition(1.0f);
+            // particles go here
+        }
     }
+
 
     protected void tickAffectedEntities(Level world) {
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
@@ -60,7 +66,7 @@ public class WhirlCurrent {
 
             Vec3 motion = entity.getDeltaMovement();
             Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(0.05);
-            Vec3 pull = direction.scale(0.01 * (radius - distance));
+            Vec3 pull = direction.scale(0.03 * (radius - distance));
 
             entity.setDeltaMovement(motion.add(tangentialMotion).add(pull));
             entity.fallDistance = 0;
@@ -74,10 +80,10 @@ public class WhirlCurrent {
 
             if (entity instanceof ItemEntity itemEntity) {
                 if (FanProcessing.canProcess(itemEntity, processingType)) {
-                    ArsTechnicaMod.LOGGER.info("Processing...");
                     FanProcessing.applyProcessing(itemEntity, processingType);
-                    sendParticlesToNearbyPlayers(nearbyPlayers, itemEntity, processingType);
-
+                    if (tickCount % 3 == 0) {
+                        sendParticlesToNearbyPlayers(nearbyPlayers, itemEntity, processingType);
+                    }
                 }
             }
         }
@@ -92,7 +98,20 @@ public class WhirlCurrent {
 
     private void sendParticlesToNearbyPlayers(List<ServerPlayer> players, ItemEntity itemEntity, FanProcessingType processingType) {
         Vec3 itemPos = itemEntity.position();
-        ParticleType<?> particleType = ParticleTypes.DUST;
+        ParticleType<?> particleType;
+
+        if(processingType == AllFanProcessingTypes.BLASTING) {
+            particleType = ParticleTypes.SMOKE;
+        }
+        else if(processingType == AllFanProcessingTypes.HAUNTING) {
+            particleType = ParticleTypes.SOUL_FIRE_FLAME;
+        }
+        else if(processingType == AllFanProcessingTypes.SMOKING) {
+            particleType = ParticleTypes.POOF;
+        }
+        else {
+            particleType = ParticleTypes.DUST;
+        }
 
         for (ServerPlayer player : players) {
             ParticleEffectPacket packet = new ParticleEffectPacket(itemPos, particleType);
@@ -102,6 +121,9 @@ public class WhirlCurrent {
 
 
     public void stopAffectedItems() {
+        if (affectedEntities == null) {
+            return;
+        }
         for (ItemEntity item : affectedEntities) {
             item.setDeltaMovement(Vec3.ZERO);
             item.hurtMarked = true;

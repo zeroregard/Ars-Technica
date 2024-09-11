@@ -15,6 +15,7 @@
   "tab_element_order": {},
   "language_map": {
     "en_us": {
+      "ars_technica.glyph_desc.glyph_whirl": "Creates a whirlwind in an area, causing items to be centrifuged. Combine with water/flare/smelt/hex to wash/smoke/blast/haunt items",
       "subtitles.equip_set": "",
       "ars_technica.glyph_desc.glyph_pack": "Condenses identical items, crafting them into 2x2 recipes. Augment for 3x3, Dampen for 1x1",
       "item.ars_technica.technomancer_boots": "Technomancer\u0027s Boots",
@@ -29,13 +30,14 @@
       "ars_technica.armor_set.technomancer": "Technomancer\u0027s Set",
       "ars_technica.create_goggles_info": "Augments your HUD with miscellaneous information about placed Create components",
       "ars_technica.glyph_name.glyph_press": "Press",
-      "ars_technica.glyph_desc.glyph_insert": "Inserts nearby items into nearby containers in a medium radius where this spell is activated. The range may be expanded with AOE.",
+      "ars_technica.glyph_desc.glyph_insert": "Inserts nearby items into nearby containers in a medium radius where this spell is activated. The range may be expanded with AOE",
       "ars_technica.armor_set.technomancer.desc": "Armor set bonus not yet determined (WIP)",
       "item.ars_technica.technomancer_chestplate": "Technomancer\u0027s Robes",
       "item.ars_technica.technomancer_leggings": "Technomancer\u0027s Leggings",
       "item.ars_technica.technomancer_helmet": "Technomancer\u0027s Hat",
       "ars_technica.glyph_name.glyph_pack": "Pack",
-      "ars_technica.glyph_name.glyph_polish": "Polish"
+      "ars_technica.glyph_name.glyph_polish": "Polish",
+      "ars_technica.glyph_name.glyph_whirl": "Whirl"
     }
   },
   "foldersRoot": {

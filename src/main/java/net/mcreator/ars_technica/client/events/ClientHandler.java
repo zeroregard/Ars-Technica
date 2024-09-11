@@ -41,6 +41,7 @@ public class ClientHandler {
 
   @SubscribeEvent
   public static void init(final FMLClientSetupEvent evt) {
+
   }
 
   public static int colorFromArmor(ItemStack stack) {
@@ -52,6 +53,7 @@ public class ClientHandler {
 
   @SubscribeEvent
   public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    ArsTechnicaMod.LOGGER.info("Registering entity renderers");
     event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
   }
 }
