@@ -1,6 +1,8 @@
 package net.mcreator.ars_technica.network;
 
-import com.simibubi.create.foundation.utility.VecHelper;
+import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
+import net.mcreator.ars_technica.client.events.ModParticles;
+import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -55,6 +57,10 @@ public class ParticleEffectPacket {
                     }
                     else if (packet.particleType == ParticleTypes.POOF) {
                         clientWorld.addParticle(ParticleTypes.POOF, packet.position.x, packet.position.y + 0.25, packet.position.z, 0.0, 0.0625, 0.0);
+                    }
+                    else if (packet.particleType == ModParticles.SPIRAL_DUST_TYPE.get()) {
+                        SpiralDustParticleTypeData data = new SpiralDustParticleTypeData(ModParticles.SPIRAL_DUST_TYPE.get(), ParticleColor.WHITE, false);
+                        clientWorld.addParticle(data, packet.position.x, packet.position.y + 0.25, packet.position.z, 0, 0, 0);
                     }
                 }
             });

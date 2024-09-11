@@ -4,7 +4,6 @@ import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.kinetics.WhirlCurrent;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.core.BlockPos;
@@ -122,7 +121,6 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
         if (PROCESSOR_TYPE.equals(key)) {
             this.processor = AllFanProcessingTypes.parseLegacy(this.entityData.get(PROCESSOR_TYPE));
-            ArsTechnicaMod.LOGGER.info("Processor updated to " + this.processor.toString());
         }
     }
 

@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.setup;
 
+import net.mcreator.ars_technica.client.events.ModParticles;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 public class ModSetup {
@@ -10,5 +11,6 @@ public class ModSetup {
     CreativeTabRegistry.register(modEventBus);
     RecipeRegistry.register(modEventBus);
     EntityRegistry.register(modEventBus);
+    ModParticles.PARTICLES.register(modEventBus);
   }
 }

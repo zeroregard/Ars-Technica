@@ -3,6 +3,7 @@ package net.mcreator.ars_technica.common.kinetics;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.mcreator.ars_technica.setup.NetworkHandler;
@@ -44,16 +45,15 @@ public class WhirlCurrent {
         Level world = source.getLevel();
         if (world == null) return;
         tickAffectedEntities(world);
-        if (tickCount % 3 == 0) {
-            Vec3 pos = source.getPosition(1.0f);
-            // particles go here
-        }
     }
 
 
     protected void tickAffectedEntities(Level world) {
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(world);
+        if (tickCount % 4 == 0) {
+            sendWhirlParticles(nearbyPlayers);
+        }
         for (Iterator<ItemEntity> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
             Entity entity = iterator.next();
             if (!entity.isAlive() || !entity.getBoundingBox().intersects(bounds)) { // || !isItemBeingProcessedByThis(entity)) {
@@ -82,7 +82,7 @@ public class WhirlCurrent {
                 if (FanProcessing.canProcess(itemEntity, processingType)) {
                     FanProcessing.applyProcessing(itemEntity, processingType);
                     if (tickCount % 3 == 0) {
-                        sendParticlesToNearbyPlayers(nearbyPlayers, itemEntity, processingType);
+                        sendProcessingParticles(nearbyPlayers, itemEntity, processingType);
                     }
                 }
             }
@@ -96,7 +96,14 @@ public class WhirlCurrent {
         return world.getEntitiesOfClass(ServerPlayer.class, playerBounds);
     }
 
-    private void sendParticlesToNearbyPlayers(List<ServerPlayer> players, ItemEntity itemEntity, FanProcessingType processingType) {
+    private void sendWhirlParticles(List<ServerPlayer> players) {
+        for (ServerPlayer player : players) {
+            ParticleEffectPacket packet = new ParticleEffectPacket(source.getPosition(1.0f), ModParticles.SPIRAL_DUST_TYPE.get());
+            NetworkHandler.CHANNEL.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        }
+    }
+
+    private void sendProcessingParticles(List<ServerPlayer> players, ItemEntity itemEntity, FanProcessingType processingType) {
         Vec3 itemPos = itemEntity.position();
         ParticleType<?> particleType;
 

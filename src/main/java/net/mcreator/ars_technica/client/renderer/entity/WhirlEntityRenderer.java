@@ -19,7 +19,6 @@ public class WhirlEntityRenderer extends GenericRenderer<WhirlEntity> {
     @Override
     public void render(WhirlEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         FanProcessingType type = entity.getProcessor();
-        ArsTechnicaMod.LOGGER.info(type);
         model.setType(type);
 
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
