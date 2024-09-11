@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.common.kinetics;
 
+import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
@@ -52,7 +53,7 @@ public class WhirlCurrent {
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(world);
         if (tickCount % 4 == 0) {
-            sendWhirlParticles(nearbyPlayers);
+            sendWhirlParticles(nearbyPlayers, source.getProcessor());
         }
         for (Iterator<ItemEntity> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
             Entity entity = iterator.next();
@@ -96,9 +97,16 @@ public class WhirlCurrent {
         return world.getEntitiesOfClass(ServerPlayer.class, playerBounds);
     }
 
-    private void sendWhirlParticles(List<ServerPlayer> players) {
+    private void sendWhirlParticles(List<ServerPlayer> players, FanProcessingType processingType) {
+        if (processingType == AllFanProcessingTypes.NONE) {
+            return;
+        }
+        ParticleColor color = ParticleColor.WHITE;
+        if(processingType == AllFanProcessingTypes.BLASTING || processingType == AllFanProcessingTypes.HAUNTING || processingType == AllFanProcessingTypes.SMOKING) {
+            color = new ParticleColor(32, 32, 32);
+        }
         for (ServerPlayer player : players) {
-            ParticleEffectPacket packet = new ParticleEffectPacket(source.getPosition(1.0f), ModParticles.SPIRAL_DUST_TYPE.get());
+            ParticleEffectPacket packet = new ParticleEffectPacket(source.getPosition(1.0f), ModParticles.SPIRAL_DUST_TYPE.get(), color);
             NetworkHandler.CHANNEL.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         }
     }

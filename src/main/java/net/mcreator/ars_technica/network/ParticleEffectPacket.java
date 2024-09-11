@@ -1,6 +1,7 @@
 package net.mcreator.ars_technica.network;
 
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.minecraft.client.Minecraft;
@@ -20,24 +21,40 @@ import java.util.function.Supplier;
 public class ParticleEffectPacket {
     private final Vec3 position;
     private final ParticleType<?> particleType;
+    private final ParticleColor particleColor;
 
     public ParticleEffectPacket(Vec3 position, ParticleType<?> particleType) {
         this.position = position;
         this.particleType = particleType;
+        this.particleColor = ParticleColor.WHITE;
+    }
+
+    public ParticleEffectPacket(Vec3 position, ParticleType<?> particleType, ParticleColor particleColor) {
+        this.position = position;
+        this.particleType = particleType;
+        this.particleColor = particleColor;
     }
 
     public static void encode(ParticleEffectPacket packet, FriendlyByteBuf buf) {
         buf.writeDouble(packet.position.x);
         buf.writeDouble(packet.position.y);
         buf.writeDouble(packet.position.z);
+        buf.writeFloat(packet.particleColor.getRed());
+        buf.writeFloat(packet.particleColor.getGreen());
+        buf.writeFloat(packet.particleColor.getBlue());
         buf.writeResourceLocation(ForgeRegistries.PARTICLE_TYPES.getKey(packet.particleType));
     }
 
     public static ParticleEffectPacket decode(FriendlyByteBuf buf) {
         Vec3 position = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        int r = Math.round(buf.readFloat() * 255);
+        int g = Math.round(buf.readFloat() * 255);
+        int b = Math.round(buf.readFloat() * 255);
+        ParticleColor color = new ParticleColor(r, g, b);
         ResourceLocation particleId = buf.readResourceLocation();
         ParticleType<?> particleType = ForgeRegistries.PARTICLE_TYPES.getValue(particleId);
-        return new ParticleEffectPacket(position, particleType);
+
+        return new ParticleEffectPacket(position, particleType, color);
     }
 
     public static void handle(ParticleEffectPacket packet, Supplier<NetworkEvent.Context> ctx) {
@@ -59,7 +76,7 @@ public class ParticleEffectPacket {
                         clientWorld.addParticle(ParticleTypes.POOF, packet.position.x, packet.position.y + 0.25, packet.position.z, 0.0, 0.0625, 0.0);
                     }
                     else if (packet.particleType == ModParticles.SPIRAL_DUST_TYPE.get()) {
-                        SpiralDustParticleTypeData data = new SpiralDustParticleTypeData(ModParticles.SPIRAL_DUST_TYPE.get(), ParticleColor.WHITE, false);
+                        SpiralDustParticleTypeData data = new SpiralDustParticleTypeData(ModParticles.SPIRAL_DUST_TYPE.get(), packet.particleColor, false);
                         clientWorld.addParticle(data, packet.position.x, packet.position.y + 0.25, packet.position.z, 0, 0, 0);
                     }
                 }

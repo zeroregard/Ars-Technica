@@ -27,9 +27,7 @@ public class SpiralDustParticle extends TextureSheetParticle {
 
         this.friction = 0.96F;
         this.speedUpWhenYMotionIsBlocked = true;
-        this.rCol = r;
-        this.gCol = g;
-        this.bCol = b;
+        this.setColor(r, g, b);
         this.lifetime = lifetime + (int)Math.floor(Math.random() * 50);
 
         this.pickSprite(sprite);
