@@ -13,6 +13,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import static com.simibubi.create.AllItems.BRASS_INGOT;
 import static com.simibubi.create.AllItems.GOGGLES;
+import static com.simibubi.create.AllItems.PRECISION_MECHANISM;
 
 import java.nio.file.Path;
 
@@ -25,6 +26,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
   @Override
   public void collectJsons(CachedOutput cache) {
     addTechnomancerArmorRecipes();
+    addCurioRecipes();
     Path output = this.generator.getPackOutput().getOutputFolder();
     for (EnchantingApparatusRecipe g : recipes) {
       if (g != null) {
@@ -54,6 +56,17 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
         .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get()).withPedestalItem(Items.NETHERITE_INGOT)
         .withPedestalItem(2, BRASS_INGOT).withSourceCost(7000).keepNbtOfReagent(true).build()));
 
+  }
+
+
+  protected void addCurioRecipes() {
+    recipes.add(builder().withResult(ItemsRegistry.TRANSMUTATION_FOCUS)
+              .withReagent(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE)
+              .withPedestalItem(1, Ingredient.of(BRASS_INGOT))
+              .withPedestalItem(Items.PISTON)
+              .withPedestalItem(PRECISION_MECHANISM)
+              .withPedestalItem(Ingredient.of(Items.DIAMOND))
+              .build());
   }
 
   protected static Path getRecipePath(Path pathIn, String str) {

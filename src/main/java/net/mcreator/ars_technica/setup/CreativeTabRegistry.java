@@ -20,9 +20,10 @@ public class CreativeTabRegistry {
         public static final RegistryObject<CreativeModeTab> ARS_TECHNICA_TAB = TABS.register("ars_technica",
                         () -> CreativeModeTab.builder()
                                         .title(Component.translatable("itemGroup.ars_technica"))
-                                        .icon(() -> ItemsRegistry.TECHNOMANCER_HELMET.get().getDefaultInstance())
+                                        .icon(() -> ItemsRegistry.TRANSMUTATION_FOCUS.get().getDefaultInstance())
                                         .displayItems((params, output) -> {
                                                 List.of(
+                                                                ItemsRegistry.TRANSMUTATION_FOCUS.get(),
                                                                 ItemsRegistry.TECHNOMANCER_HELMET.get(),
                                                                 ItemsRegistry.TECHNOMANCER_CHESTPLATE.get(),
                                                                 ItemsRegistry.TECHNOMANCER_LEGGINGS.get(),
@@ -30,7 +31,7 @@ public class CreativeTabRegistry {
                                                                 .forEach(item -> output
                                                                                 .accept(item.getDefaultInstance()));
                                         })
-                                        .withTabsBefore(CreativeModeTabs.BUILDING_BLOCKS)
+                                        .withTabsBefore(CreativeModeTabs.BUILDING_BLOCKS) // TODO: should come after Ars Elemental
                                         .build());
 
         public static void register(IEventBus modEventBus) {
