@@ -8,7 +8,10 @@ import net.mcreator.ars_technica.setup.ArsElementalModItems;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import static com.simibubi.create.AllItems.BRASS_INGOT;
@@ -63,9 +66,9 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
     recipes.add(builder().withResult(ItemsRegistry.TRANSMUTATION_FOCUS)
               .withReagent(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE)
               .withPedestalItem(1, Ingredient.of(BRASS_INGOT))
-              .withPedestalItem(Items.PISTON)
+              .withPedestalItem(Items.RABBIT_FOOT)
               .withPedestalItem(PRECISION_MECHANISM)
-              .withPedestalItem(Ingredient.of(Items.DIAMOND))
+              .withPedestalItem(Ingredient.of(Items.EMERALD))
               .build());
   }
 

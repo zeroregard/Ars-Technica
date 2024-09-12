@@ -1,6 +1,11 @@
 package net.mcreator.ars_technica.armor;
 
+import com.hollingsworth.arsnouveau.api.item.ISpellModifierItem;
+import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
+import com.hollingsworth.arsnouveau.api.spell.Spell;
+import com.hollingsworth.arsnouveau.api.spell.SpellSchools;
 import net.minecraft.Util;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,7 +58,7 @@ import net.minecraft.world.item.TooltipFlag;
 import static alexthw.ars_elemental.ConfigHandler.Common.ARMOR_MANA_REGEN;
 import static alexthw.ars_elemental.ConfigHandler.Common.ARMOR_MAX_MANA;
 
-public class TechnomancerArmor extends AnimatedMagicArmor {
+public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModifierItem {
 
   private final String specialInformation;
 
@@ -79,6 +84,16 @@ public class TechnomancerArmor extends AnimatedMagicArmor {
     String color = getColor(stack);
     String location = "textures/armor/technomancer_medium_armor_" + color + ".png";
     return new ResourceLocation(ArsTechnicaMod.MODID, location).toString();
+  }
+
+  @Override
+  public int getManaDiscount(ItemStack i, Spell spell) {
+    double sum = 0;
+    for (AbstractSpellPart part : spell.recipe) {
+      if (SpellSchools.MANIPULATION.isPartOfSchool(part))
+        sum += 0.2 * part.getCastingCost();
+    }
+    return Mth.ceil(sum);
   }
 
   @Override
