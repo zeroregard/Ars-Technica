@@ -7,6 +7,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
+import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -20,7 +21,7 @@ public class WhirlProcessing extends FanProcessing {
 
     public static boolean applyProcessing(ItemEntity entity, FanProcessingType type, Level world, SpellResolver whirlOwner) {
         double processingBoost = 0.0;
-        if ( hasTransmutationFocus(whirlOwner)) {
+        if (SpellResolverHelpers.hasTransmutationFocus(whirlOwner)) {
             processingBoost += 1.0;
         }
         if (decrementProcessingTime(entity, type, processingBoost) != 0)
@@ -60,14 +61,10 @@ public class WhirlProcessing extends FanProcessing {
     }
 
     private static boolean shouldDoubleOutputs(SpellResolver whirlOwner) {
-        if(whirlOwner != null && hasTransmutationFocus(whirlOwner)) {
+        if(whirlOwner != null && SpellResolverHelpers.hasTransmutationFocus(whirlOwner)) {
             return true;
         }
         return false;
-    }
-
-    private static boolean hasTransmutationFocus(SpellResolver whirlOwner) {
-        return whirlOwner.hasFocus(ItemsRegistry.TRANSMUTATION_FOCUS.get().getDefaultInstance());
     }
 
     private static Optional<ProcessingRecipe<?>> getProcessingRecipeForEntity(ItemEntity entity, FanProcessingType type, Level world) {
