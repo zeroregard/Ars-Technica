@@ -110,7 +110,6 @@ public class WhirlProcessing extends FanProcessing {
             int timeModifierForStackSize = ((entity.getItem().getCount() - 1) / 16) + 1;
             int baseProcessingTime = (int) (AllConfigs.server().kinetics.fanProcessingTime.get() * timeModifierForStackSize) + 1;
 
-            // Apply amplification to reduce processing time
             int processingTime = (int) (baseProcessingTime / (1 + processingBoost));
             processing.putInt("Time", processingTime);
         }

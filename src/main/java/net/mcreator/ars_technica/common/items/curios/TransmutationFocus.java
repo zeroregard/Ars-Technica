@@ -21,22 +21,6 @@ public class TransmutationFocus extends ArsNouveauCurio implements ISpellModifie
         super(properties);
     }
 
-    public TransmutationFocus() {
-        super();
-    }
-
-    public static void tryPropagateEntitySpell(SpellResolver resolver) {
-        if (!resolver.hasFocus(ItemsRegistry.TRANSMUTATION_FOCUS.get().getDefaultInstance()))
-            return;
-        // TODO: stuff here
-    }
-
-    public static void tryPropagateBlockSpell(SpellResolver resolver) {
-        if (!resolver.hasFocus(ItemsRegistry.TRANSMUTATION_FOCUS.get().getDefaultInstance()))
-            return;
-        // TODO: stuff here
-    }
-
     @Override
     public SpellStats.Builder applyItemModifiers(ItemStack stack, SpellStats.Builder builder, AbstractSpellPart spellPart, HitResult rayTraceResult, Level world, @Nullable LivingEntity shooter, SpellContext spellContext) {
         builder.addAugment(AugmentFortune.INSTANCE);
