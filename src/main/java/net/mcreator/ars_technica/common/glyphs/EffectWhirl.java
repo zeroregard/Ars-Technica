@@ -64,7 +64,7 @@ public static final EffectWhirl INSTANCE = new EffectWhirl();
             }
         }
 
-        WhirlEntity whirl = new WhirlEntity(serverWorld, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, processingType);
+        WhirlEntity whirl = new WhirlEntity(serverWorld, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, processingType, resolver);
         serverWorld.addFreshEntity(whirl);
 
     }

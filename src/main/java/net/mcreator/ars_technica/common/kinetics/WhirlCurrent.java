@@ -1,8 +1,8 @@
 package net.mcreator.ars_technica.common.kinetics;
 
+import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
-import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
@@ -14,6 +14,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -41,15 +42,14 @@ public class WhirlCurrent {
                 centerPos.add(radius, radius, radius));
     }
 
-    public void tick() {
+    public void tick(SpellResolver whirlOwner) {
         tickCount++;
         Level world = source.getLevel();
         if (world == null) return;
-        tickAffectedEntities(world);
+        tickAffectedEntities(world, whirlOwner);
     }
 
-
-    protected void tickAffectedEntities(Level world) {
+    protected void tickAffectedEntities(Level world, SpellResolver whirlOwner) {
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(world);
         if (tickCount % 4 == 0) {
@@ -80,8 +80,8 @@ public class WhirlCurrent {
                 continue;
 
             if (entity instanceof ItemEntity itemEntity) {
-                if (FanProcessing.canProcess(itemEntity, processingType)) {
-                    FanProcessing.applyProcessing(itemEntity, processingType);
+                if (WhirlProcessing.canProcess(itemEntity, processingType)) {
+                    WhirlProcessing.applyProcessing(itemEntity, processingType, world, whirlOwner);
                     if (tickCount % 3 == 0) {
                         sendProcessingParticles(nearbyPlayers, itemEntity, processingType);
                     }

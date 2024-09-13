@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.common.entity;
 
+import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
@@ -14,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +38,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     private float speed = 0.05f;
     private FanProcessingType processor;
     private final WhirlCurrent current;
+    private final SpellResolver spellResolver;
 
     private static final EntityDataAccessor<String> PROCESSOR_TYPE = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.STRING);
 
@@ -58,14 +61,16 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.duration = 100;
         this.world = world;
         this.current = new WhirlCurrent(this);
+        this.spellResolver = null;
     }
 
-    public WhirlEntity(Level world, Vec3 position, double radius, int duration, FanProcessingType processor) {
+    public WhirlEntity(Level world, Vec3 position, double radius, int duration, FanProcessingType processor, SpellResolver spellResolver) {
         super(EntityRegistry.WHIRL_ENTITY.get(), world);
         this.setPos(position.x, position.y, position.z);
         this.radius = radius;
         this.duration = duration;
         this.world = world;
+        this.spellResolver = spellResolver;
 
         setProcessor(processor);
 
@@ -107,7 +112,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
             return;
         }
 
-        current.tick();
+        current.tick(this.spellResolver);
     }
 
     @Override
