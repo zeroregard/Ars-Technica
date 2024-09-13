@@ -1,9 +1,11 @@
 package net.mcreator.ars_technica.common.entity;
 
+import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.common.kinetics.WhirlCurrent;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.core.BlockPos;
@@ -36,8 +38,10 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     private float speed = 0.05f;
     private FanProcessingType processor;
     private final WhirlCurrent current;
+    private final SpellResolver spellResolver;
 
     private static final EntityDataAccessor<String> PROCESSOR_TYPE = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
 
 
     public double getRadius() {
@@ -58,15 +62,17 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.duration = 100;
         this.world = world;
         this.current = new WhirlCurrent(this);
+        this.spellResolver = null;
     }
 
-    public WhirlEntity(Level world, Vec3 position, double radius, int duration, FanProcessingType processor) {
+    public WhirlEntity(Level world, Vec3 position, double radius, int duration, FanProcessingType processor, SpellResolver spellResolver) {
         super(EntityRegistry.WHIRL_ENTITY.get(), world);
         this.setPos(position.x, position.y, position.z);
         this.radius = radius;
         this.duration = duration;
         this.world = world;
-
+        this.spellResolver = spellResolver;
+        setSpeed(SpellResolverHelpers.hasTransmutationFocus(spellResolver) ? 0.1f : 0.05f);
         setProcessor(processor);
 
         this.current = new WhirlCurrent(this);
@@ -76,6 +82,10 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     public void tick() {
         super.tick();
         handleWhirlwindEffect();
+    }
+
+    private void setSpeed(float speed) {
+        this.entityData.set(SPEED, speed);
     }
 
     private void setProcessor(FanProcessingType processor) {
@@ -107,12 +117,13 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
             return;
         }
 
-        current.tick();
+        current.tick(this.spellResolver);
     }
 
     @Override
     protected void defineSynchedData() {
         this.entityData.define(PROCESSOR_TYPE, AllFanProcessingTypes.NONE.toString());
+        this.entityData.define(SPEED, 0.05f);
     }
 
     @Override
@@ -121,6 +132,9 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
         if (PROCESSOR_TYPE.equals(key)) {
             this.processor = AllFanProcessingTypes.parseLegacy(this.entityData.get(PROCESSOR_TYPE));
+        }
+        if(SPEED.equals(key)) {
+            this.speed = this.entityData.get(SPEED);
         }
     }
 
@@ -194,7 +208,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
     private PlayState rotateAnimationPredicate(AnimationState<?> event)  {
         event.getController().setAnimation(RawAnimation.begin().thenPlay("rotation"));
-        event.getController().setAnimationSpeed(0.75f);
+        event.getController().setAnimationSpeed(0.75f * (speed / 0.05f));
         return PlayState.CONTINUE;
     }
 }
