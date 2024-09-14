@@ -5,6 +5,7 @@ import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
@@ -58,30 +59,34 @@ public class ParticleEffectPacket {
     }
 
     public static void handle(ParticleEffectPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            Minecraft.getInstance().execute(() -> {
-                Level clientWorld = Minecraft.getInstance().level;
+        if (ctx.get().getDirection().getReceptionSide().isServer()) {
+            ctx.get().setPacketHandled(true);
+            return;
+        }
+        ctx.get().enqueueWork(new Runnable() {
+            // Use anon - lambda causes classloading issues
+            @Override
+            public void run() {
+                Minecraft mc = Minecraft.getInstance();
+                ClientLevel clientWorld = mc.level;
                 if (clientWorld != null && packet.particleType != null) {
                     if (packet.particleType == ParticleTypes.DUST) {
                         DustParticleOptions dustOptions = new DustParticleOptions(new Vector3f(1.0f, 1.0f, 1.0f), 1.0f);
                         clientWorld.addParticle(dustOptions, packet.position.x, packet.position.y, packet.position.z, 0, 0, 0);
-                    }
-                    else if (packet.particleType == ParticleTypes.SOUL_FIRE_FLAME) {
+                    } else if (packet.particleType == ParticleTypes.SOUL_FIRE_FLAME) {
                         clientWorld.addParticle(ParticleTypes.SOUL_FIRE_FLAME, packet.position.x, packet.position.y + 0.44999998807907104, packet.position.z, 0.0, 0.0, 0.0);
-                    }
-                    else if (packet.particleType == ParticleTypes.SMOKE) {
+                    } else if (packet.particleType == ParticleTypes.SMOKE) {
                         clientWorld.addParticle(ParticleTypes.SMOKE, packet.position.x, packet.position.y + 0.25, packet.position.z, 0.0, 0.0625, 0.0);
-                    }
-                    else if (packet.particleType == ParticleTypes.POOF) {
+                    } else if (packet.particleType == ParticleTypes.POOF) {
                         clientWorld.addParticle(ParticleTypes.POOF, packet.position.x, packet.position.y + 0.25, packet.position.z, 0.0, 0.0625, 0.0);
-                    }
-                    else if (packet.particleType == ModParticles.SPIRAL_DUST_TYPE.get()) {
+                    } else if (packet.particleType == ModParticles.SPIRAL_DUST_TYPE.get()) {
                         SpiralDustParticleTypeData data = new SpiralDustParticleTypeData(ModParticles.SPIRAL_DUST_TYPE.get(), packet.particleColor, false);
                         clientWorld.addParticle(data, packet.position.x, packet.position.y + 0.25, packet.position.z, 0, 0, 0);
                     }
                 }
-            });
+            }
         });
         ctx.get().setPacketHandled(true);
     }
+
 }
