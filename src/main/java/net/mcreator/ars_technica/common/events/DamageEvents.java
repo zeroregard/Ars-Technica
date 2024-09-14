@@ -19,8 +19,6 @@ import net.minecraftforge.fml.common.Mod;
 public class DamageEvents {
     @SubscribeEvent
     public static void damageTweaking(LivingHurtEvent event) {
-        ArsTechnicaMod.LOGGER.info(event);
-        ArsTechnicaMod.LOGGER.info(event.getSource());
         LivingEntity entity = event.getEntity();
 
         if (entity instanceof Player player) {
