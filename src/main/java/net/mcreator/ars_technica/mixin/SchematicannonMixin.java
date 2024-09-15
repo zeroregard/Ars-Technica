@@ -1,6 +1,7 @@
 package net.mcreator.ars_technica.mixin;
 
 import com.simibubi.create.content.schematics.cannon.SchematicannonBlockEntity;
+import net.mcreator.ars_technica.ConfigHandler;
 import net.mcreator.ars_technica.armor.TechnomancerArmor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -24,13 +25,17 @@ public class SchematicannonMixin {
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void modifyCooldownEveryTick(CallbackInfo ci) {
+        if(!ConfigHandler.Common.SCHEMATIC_CANNON_SPEED_BOOST_ENABLED.get()) {
+            return;
+        }
         if(state != SchematicannonBlockEntity.State.RUNNING) {
             return;
         }
         SchematicannonBlockEntity entity = (SchematicannonBlockEntity) (Object) this;
-        AABB range = new AABB(entity.getBlockPos()).inflate(8);
+        double range = ConfigHandler.Common.SCHEMATIC_CANNON_SPEED_BOOST_RANGE.get();
+        AABB aabb = new AABB(entity.getBlockPos()).inflate(range);
         Level world = entity.getLevel();
-        List<Player> nearbyPlayers = world.getEntitiesOfClass(Player.class, range);
+        List<Player> nearbyPlayers = world.getEntitiesOfClass(Player.class, aabb);
 
         if (!nearbyPlayers.isEmpty() && world.getGameTime() % 2 == 0) {
             boolean technomancerNearby = nearbyPlayers.stream().anyMatch(player -> TechnomancerArmor.isWearingFullSet(player));
