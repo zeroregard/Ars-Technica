@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.mcreator.ars_technica.mixin",
+  "refmap": "ars_technica.refmap.jsonn",
+  "mixins": [
+    "SchematicannonMixin"
+  ],
+  "client": [],
+  "server": []
+}

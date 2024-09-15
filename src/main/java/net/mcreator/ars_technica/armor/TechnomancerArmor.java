@@ -205,4 +205,16 @@ public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModif
       }
     });
   }
+
+  public static boolean isWearingFullSet(LivingEntity entity) {
+    ItemStack head = entity.getItemBySlot(EquipmentSlot.HEAD);
+    ItemStack chest = entity.getItemBySlot(EquipmentSlot.CHEST);
+    ItemStack legs = entity.getItemBySlot(EquipmentSlot.LEGS);
+    ItemStack boots = entity.getItemBySlot(EquipmentSlot.FEET);
+
+    return head.getItem() instanceof TechnomancerArmor &&
+            chest.getItem() instanceof TechnomancerArmor &&
+            legs.getItem() instanceof TechnomancerArmor &&
+            boots.getItem() instanceof TechnomancerArmor;
+  }
 }
