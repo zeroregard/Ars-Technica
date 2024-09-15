@@ -14,6 +14,7 @@ import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
@@ -36,13 +37,24 @@ public static final EffectWhirl INSTANCE = new EffectWhirl();
     }
 
     @Override
+    public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
+        if (!(world instanceof ServerLevel serverWorld)) return;
+        Vec3 position = rayTraceResult.getLocation();
+        resolve(position, serverWorld, shooter, spellStats, spellContext, resolver);
+    }
+
+    @Override
     public void onResolveBlock(BlockHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         if (!(world instanceof ServerLevel serverWorld)) return;
+        Vec3 position = rayTraceResult.getLocation();
+        resolve(position, serverWorld, shooter, spellStats, spellContext, resolver);
+    }
+
+    protected void resolve(Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
 
         double aoeAmplifier = spellStats.getAoeMultiplier();
         double durationAmplifier = spellStats.getDurationMultiplier();
         int extraDurationTicks = Math.toIntExact(Math.round(durationAmplifier * 40));
-        Vec3 position = rayTraceResult.getLocation();
 
         FanProcessingType processingType = AllFanProcessingTypes.NONE;
 
@@ -64,8 +76,8 @@ public static final EffectWhirl INSTANCE = new EffectWhirl();
             }
         }
 
-        WhirlEntity whirl = new WhirlEntity(serverWorld, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, processingType, resolver);
-        serverWorld.addFreshEntity(whirl);
+        WhirlEntity whirl = new WhirlEntity(world, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, processingType, resolver);
+        world.addFreshEntity(whirl);
 
     }
 
