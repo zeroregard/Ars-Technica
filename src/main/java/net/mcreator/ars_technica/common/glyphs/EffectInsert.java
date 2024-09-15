@@ -4,6 +4,7 @@ import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.common.helpers.StorageHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -13,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -38,54 +37,44 @@ public class EffectInsert extends AbstractItemResolveEffect {
       SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
     double expansion = 2 + spellStats.getAoeMultiplier();
     List<BlockEntity> containers = getContainersInArea(pos, world, (int) expansion);
-    processItemEntities(entityList, containers);
+    processItemEntities(world, entityList, containers);
   }
 
-  public void processItemEntities(List<ItemEntity> entityList, List<BlockEntity> containers) {
+  public void processItemEntities(Level world, List<ItemEntity> entityList, List<BlockEntity> containers) {
+    List<BlockPos> containerPosTargets = new ArrayList<>();
+    for (BlockEntity container : containers) {
+      containerPosTargets.add(container.getBlockPos());
+    }
+
     Iterator<ItemEntity> itemIterator = entityList.iterator();
 
-    for (BlockEntity container : containers) {
-      LazyOptional<IItemHandler> capability = container.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
+    while (itemIterator.hasNext()) {
+      ItemEntity itemEntity = itemIterator.next();
+      ItemStack stack = itemEntity.getItem();
 
-      if (!capability.isPresent()) {
+      if (stack.isEmpty()) {
+        itemIterator.remove();
         continue;
       }
-      IItemHandler itemHandler = capability.orElse(null);
 
-      while (itemIterator.hasNext()) {
-        ItemEntity itemEntity = itemIterator.next();
-        ItemStack stack = itemEntity.getItem();
+      BlockPos bestPos = StorageHelpers.getValidStorePos(world, containerPosTargets, stack);
 
-        if (stack.isEmpty()) {
-          itemIterator.remove();
-          continue;
-        }
-
-        ItemStack remaining = ItemHandlerHelper.insertItemStacked(itemHandler, stack, false);
-
-        if (remaining.isEmpty()) {
-          itemIterator.remove();
-          itemEntity.discard();
-        } else {
-          itemEntity.setItem(remaining);
-        }
-
-        if (isContainerFull(itemHandler)) {
-          break;
+      if (bestPos != null) {
+        BlockEntity bestContainer = world.getBlockEntity(bestPos);
+        if (bestContainer != null) {
+          IItemHandler itemHandler = StorageHelpers.getItemCapFromTile(bestContainer);
+          if (itemHandler != null) {
+            ItemStack remaining = ItemHandlerHelper.insertItemStacked(itemHandler, stack, false);
+            if (remaining.isEmpty()) {
+              itemIterator.remove();
+              itemEntity.discard();
+            } else {
+              itemEntity.setItem(remaining);
+            }
+          }
         }
       }
     }
-  }
-
-  private boolean isContainerFull(IItemHandler itemHandler) {
-    for (int i = 0; i < itemHandler.getSlots(); i++) {
-      ItemStack stackInSlot = itemHandler.getStackInSlot(i);
-      int slotLimit = itemHandler.getSlotLimit(i);
-      if (stackInSlot.isEmpty() || stackInSlot.getCount() < slotLimit) {
-        return false;
-      }
-    }
-    return true;
   }
 
   public List<BlockEntity> getContainersInArea(BlockPos pos, Level world, int expansion) {
