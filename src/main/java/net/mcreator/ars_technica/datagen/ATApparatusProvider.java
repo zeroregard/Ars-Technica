@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import static com.simibubi.create.AllItems.BRASS_INGOT;
 import static com.simibubi.create.AllItems.GOGGLES;
 import static com.simibubi.create.AllItems.PRECISION_MECHANISM;
+import static com.simibubi.create.AllItems.WRENCH;
 
 import java.nio.file.Path;
 
@@ -30,6 +31,8 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
   public void collectJsons(CachedOutput cache) {
     addTechnomancerArmorRecipes();
     addCurioRecipes();
+    addIngredientRecipes();
+    addEquipmentRecipes();
     Path output = this.generator.getPackOutput().getOutputFolder();
     for (EnchantingApparatusRecipe g : recipes) {
       if (g != null) {
@@ -40,7 +43,6 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
   }
 
   protected void addTechnomancerArmorRecipes() {
-
     recipes.add(new TechnomancerArmorRecipe(
         builder().withResult(ItemsRegistry.TECHNOMANCER_HELMET.get())
             .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_HOOD))
@@ -58,7 +60,6 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
         .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_BOOT))
         .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get()).withPedestalItem(Items.NETHERITE_INGOT)
         .withPedestalItem(2, BRASS_INGOT).withSourceCost(7000).keepNbtOfReagent(true).build()));
-
   }
 
 
@@ -70,6 +71,25 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
               .withPedestalItem(PRECISION_MECHANISM)
               .withPedestalItem(Ingredient.of(Items.EMERALD))
               .build());
+  }
+
+  protected void addIngredientRecipes() {
+    recipes.add(builder().withResult(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM)
+            .withReagent(PRECISION_MECHANISM)
+            .withPedestalItem(4, Ingredient.of(Items.AMETHYST_SHARD))
+            .withPedestalItem(4, Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM))
+            .withSourceCost(500)
+            .build());
+  }
+
+  protected void addEquipmentRecipes() {
+    recipes.add(builder().withResult(ItemsRegistry.RUNIC_SPANNER)
+            .withReagent(WRENCH)
+            .withPedestalItem(Ingredient.of(Items.GOLD_INGOT))
+            .withPedestalItem(Ingredient.of(new ItemStack(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
+            .withPedestalItem(Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE))
+            .withSourceCost(500)
+            .build());
   }
 
   protected static Path getRecipePath(Path pathIn, String str) {

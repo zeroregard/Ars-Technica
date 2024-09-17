@@ -24,6 +24,8 @@ public class CreativeTabRegistry {
                                         .displayItems((params, output) -> {
                                                 List.of(
                                                                 ItemsRegistry.TRANSMUTATION_FOCUS.get(),
+                                                                ItemsRegistry.CALIBRATED_PRECISION_MECHANISM.get(),
+                                                                ItemsRegistry.RUNIC_SPANNER.get(),
                                                                 ItemsRegistry.TECHNOMANCER_HELMET.get(),
                                                                 ItemsRegistry.TECHNOMANCER_CHESTPLATE.get(),
                                                                 ItemsRegistry.TECHNOMANCER_LEGGINGS.get(),
