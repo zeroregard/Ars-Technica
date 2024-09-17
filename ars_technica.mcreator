@@ -24,8 +24,8 @@
   "language_map": {
     "en_us": {
       "subtitles.equip_set": "",
-      "item.ars_technica.technomancer_boots": "Technomancer\u0027s Boots",
       "ars_technica.glyph_desc.glyph_pack": "Condenses identical items, crafting them into 2x2 recipes. Augment for 3x3, Dampen for 1x1",
+      "item.ars_technica.technomancer_boots": "Technomancer\u0027s Boots",
       "item.ars_technica.transmutation_focus": "Focus of Transmutation",
       "item.ars_technica.calibrated_precision_mechanism": "Calibrated Precision Mechanism",
       "subtitles.ars_technica.equip_set": "",
@@ -50,7 +50,7 @@
       "ars_technica.tooltip.transmutation_focus": "Augments spells with Luck and improves Whirl processing",
       "item.ars_technica.technomancer_chestplate": "Technomancer\u0027s Robes",
       "item.ars_technica.technomancer_helmet": "Technomancer\u0027s Hat",
-      "item.ars_technica.runic_spanner": ""
+      "item.ars_technica.runic_spanner": "Runic Spanner"
     }
   },
   "foldersRoot": {

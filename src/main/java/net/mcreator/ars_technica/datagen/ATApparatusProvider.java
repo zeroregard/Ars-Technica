@@ -87,7 +87,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
             .withReagent(WRENCH)
             .withPedestalItem(Ingredient.of(Items.GOLD_INGOT))
             .withPedestalItem(Ingredient.of(new ItemStack(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
-            .withPedestalItem(Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM))
+            .withPedestalItem(Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE))
             .withSourceCost(500)
             .build());
   }
