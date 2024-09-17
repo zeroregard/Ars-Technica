@@ -12,7 +12,9 @@
     "sounds": [
       {
         "name": "ars_technica:whirl",
-        "stream": false
+        "stream": true,
+        "max_distance": 16,
+        "attenuation_distance": 4
       }
     ]
   }

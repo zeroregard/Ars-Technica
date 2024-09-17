@@ -5,19 +5,27 @@ import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import com.simibubi.create.foundation.sound.SoundScapes;
+import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.common.kinetics.WhirlCurrent;
+import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -39,6 +47,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     private FanProcessingType processor;
     private final WhirlCurrent current;
     private final SpellResolver spellResolver;
+    private final EntityLoopingSound sound;
 
     private static final EntityDataAccessor<String> PROCESSOR_TYPE = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
@@ -63,6 +72,10 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.world = world;
         this.current = new WhirlCurrent(this);
         this.spellResolver = null;
+
+        SoundEvent sound = ArsTechnicaModSounds.WHIRL_NONE.get();
+        this.sound = new EntityLoopingSound(this, sound, 1.0f, 1.0f);
+        Minecraft.getInstance().getSoundManager().play(this.sound);
     }
 
     public WhirlEntity(Level world, Vec3 position, double radius, int duration, FanProcessingType processor, SpellResolver spellResolver) {
@@ -74,7 +87,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.spellResolver = spellResolver;
         setSpeed(SpellResolverHelpers.hasTransmutationFocus(spellResolver) ? 0.1f : 0.05f);
         setProcessor(processor);
-
+        this.sound = null;
         this.current = new WhirlCurrent(this);
     }
 
@@ -107,6 +120,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         }
         return "NONE";
     }
+
     private void handleWhirlwindEffect() {
         if (!this.world.isClientSide) {
             duration--;
@@ -133,8 +147,12 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         if (PROCESSOR_TYPE.equals(key)) {
             this.processor = AllFanProcessingTypes.parseLegacy(this.entityData.get(PROCESSOR_TYPE));
         }
+
         if(SPEED.equals(key)) {
             this.speed = this.entityData.get(SPEED);
+            if(world.isClientSide) {
+                sound.setPitch(1.1f + 3 * speed);
+            }
         }
     }
 
