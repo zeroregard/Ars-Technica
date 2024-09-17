@@ -2,9 +2,13 @@ package net.mcreator.ars_technica.mixin;
 
 import com.hollingsworth.arsnouveau.common.block.RuneBlock;
 import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.foundation.utility.Lang;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.UseOnContext;
@@ -17,8 +21,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.mcreator.ars_technica.common.api.IRuneTileModifier;
 
+import java.util.List;
+
 @Mixin(RuneTile.class)
-public class RuneTileMixin implements IRuneTileModifier {
+public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation {
 
     @Shadow
     private int ticksUntilCharge;
@@ -49,5 +55,13 @@ public class RuneTileMixin implements IRuneTileModifier {
     @Override
     public void setCustomTicksUntilCharge(int ticks) {
         this.ticksUntilChargeCount = ticks;
+    }
+
+    @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        Lang.text("Cooldown Ticks: ").forGoggles(tooltip);
+        double cooldown = ticksUntilChargeCount == 0 ? 20 * 2 : ticksUntilChargeCount;
+        Lang.number(cooldown).forGoggles(tooltip);
+        return true;
     }
 }
