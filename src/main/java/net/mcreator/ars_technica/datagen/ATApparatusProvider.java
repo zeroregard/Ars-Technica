@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import static com.simibubi.create.AllItems.BRASS_INGOT;
 import static com.simibubi.create.AllItems.GOGGLES;
 import static com.simibubi.create.AllItems.PRECISION_MECHANISM;
+import static com.simibubi.create.AllItems.WRENCH;
 
 import java.nio.file.Path;
 
@@ -31,6 +32,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
     addTechnomancerArmorRecipes();
     addCurioRecipes();
     addIngredientRecipes();
+    addEquipmentRecipes();
     Path output = this.generator.getPackOutput().getOutputFolder();
     for (EnchantingApparatusRecipe g : recipes) {
       if (g != null) {
@@ -76,6 +78,16 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
             .withReagent(PRECISION_MECHANISM)
             .withPedestalItem(4, Ingredient.of(Items.AMETHYST_SHARD))
             .withPedestalItem(4, Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM))
+            .withSourceCost(500)
+            .build());
+  }
+
+  protected void addEquipmentRecipes() {
+    recipes.add(builder().withResult(ItemsRegistry.RUNIC_SPANNER)
+            .withReagent(WRENCH)
+            .withPedestalItem(Ingredient.of(Items.GOLD_INGOT))
+            .withPedestalItem(Ingredient.of(new ItemStack(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
+            .withPedestalItem(Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM))
             .withSourceCost(500)
             .build());
   }

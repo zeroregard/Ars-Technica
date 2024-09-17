@@ -53,15 +53,19 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
     }
 
     @Override
-    public void setCustomTicksUntilCharge(int ticks) {
-        this.ticksUntilChargeCount = ticks;
+    public void incrementCustomTicksUntilCharge() {
+        this.ticksUntilChargeCount += 40;
+
+        if (this.ticksUntilChargeCount >= 680) {
+            this.ticksUntilChargeCount = 40;
+        }
     }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        Lang.text("Cooldown Ticks: ").forGoggles(tooltip);
-        double cooldown = ticksUntilChargeCount == 0 ? 20 * 2 : ticksUntilChargeCount;
-        Lang.number(cooldown).forGoggles(tooltip);
+        Lang.text("Cooldown: ").forGoggles(tooltip);
+        double cooldownSeconds = (ticksUntilChargeCount == 0 ? 20 * 2 : ticksUntilChargeCount) / 20;
+        Lang.number(cooldownSeconds).add(Lang.text(" s")).forGoggles(tooltip);
         return true;
     }
 }
