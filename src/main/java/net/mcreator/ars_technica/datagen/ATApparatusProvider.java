@@ -30,6 +30,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
   public void collectJsons(CachedOutput cache) {
     addTechnomancerArmorRecipes();
     addCurioRecipes();
+    addIngredientRecipes();
     Path output = this.generator.getPackOutput().getOutputFolder();
     for (EnchantingApparatusRecipe g : recipes) {
       if (g != null) {
@@ -40,7 +41,6 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
   }
 
   protected void addTechnomancerArmorRecipes() {
-
     recipes.add(new TechnomancerArmorRecipe(
         builder().withResult(ItemsRegistry.TECHNOMANCER_HELMET.get())
             .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_HOOD))
@@ -58,7 +58,6 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
         .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_BOOT))
         .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get()).withPedestalItem(Items.NETHERITE_INGOT)
         .withPedestalItem(2, BRASS_INGOT).withSourceCost(7000).keepNbtOfReagent(true).build()));
-
   }
 
 
@@ -70,6 +69,15 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
               .withPedestalItem(PRECISION_MECHANISM)
               .withPedestalItem(Ingredient.of(Items.EMERALD))
               .build());
+  }
+
+  protected void addIngredientRecipes() {
+    recipes.add(builder().withResult(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM)
+            .withReagent(PRECISION_MECHANISM)
+            .withPedestalItem(4, Ingredient.of(Items.AMETHYST_SHARD))
+            .withPedestalItem(4, Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM))
+            .withSourceCost(500)
+            .build());
   }
 
   protected static Path getRecipePath(Path pathIn, String str) {

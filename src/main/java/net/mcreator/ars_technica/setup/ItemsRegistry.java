@@ -5,6 +5,7 @@ import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.armor.IGoggleHelmet;
 import net.mcreator.ars_technica.armor.TechnomancerArmor;
 import net.mcreator.ars_technica.common.items.curios.TransmutationFocus;
+import net.mcreator.ars_technica.common.items.ingredients.CalibratedPrecisionMechanism;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -25,6 +26,7 @@ public class ItemsRegistry {
 
   public static RegistryObject<Item> TRANSMUTATION_FOCUS = ITEMS.register("transmutation_focus", () -> new TransmutationFocus(defaultItemProperties().stacksTo(1)).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus")));
 
+  public static RegistryObject<Item> CALIBRATED_PRECISION_MECHANISM = ITEMS.register("calibrated_precision_mechanism", () -> new CalibratedPrecisionMechanism(defaultItemProperties().stacksTo(64)));
 
   public static void register(IEventBus eventBus) {
     ITEMS.register(eventBus);
