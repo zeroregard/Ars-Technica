@@ -27,10 +27,9 @@ import org.jetbrains.annotations.NotNull;
 
 
 public class EffectWhirl extends AbstractEffect {
-public static final EffectWhirl INSTANCE = new EffectWhirl();
-
-    private final double defaultRadius = 1.5;
-    private final int defaultDuration = 360;
+    public static final EffectWhirl INSTANCE = new EffectWhirl();
+    public final float DEFAULT_RADIUS  = 1.5f;
+    public final int DEFAULT_DURATION = 360;
 
     private EffectWhirl() {
         super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_whirl"), "Whirl");
@@ -52,7 +51,7 @@ public static final EffectWhirl INSTANCE = new EffectWhirl();
 
     protected void resolve(Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
 
-        double aoeAmplifier = spellStats.getAoeMultiplier();
+        float aoeAmplifier = (float)spellStats.getAoeMultiplier();
         double durationAmplifier = spellStats.getDurationMultiplier();
         int extraDurationTicks = Math.toIntExact(Math.round(durationAmplifier * 40));
 
@@ -76,7 +75,7 @@ public static final EffectWhirl INSTANCE = new EffectWhirl();
             }
         }
 
-        WhirlEntity whirl = new WhirlEntity(world, position, defaultRadius + aoeAmplifier, defaultDuration + extraDurationTicks, processingType, resolver);
+        WhirlEntity whirl = new WhirlEntity(world, position, DEFAULT_RADIUS + aoeAmplifier * 0.5f, DEFAULT_DURATION + extraDurationTicks, processingType, resolver);
         world.addFreshEntity(whirl);
 
     }

@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.foundation.sound.SoundScapes;
 import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
+import net.mcreator.ars_technica.common.glyphs.EffectWhirl;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.common.kinetics.WhirlCurrent;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
@@ -40,7 +41,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity {
 
-    private double radius;
+    private float radius;
     private int duration;
     private final Level world;
     private float speed = 0.05f;
@@ -51,9 +52,12 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
     private static final EntityDataAccessor<String> PROCESSOR_TYPE = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> RADIUS = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
 
+    private static float DEFAULT_PITCH = 1.1f;
+    private static float SPEED_PITCH_MULTIPLIER = 3;
 
-    public double getRadius() {
+    public float getRadius() {
         return radius;
     }
 
@@ -67,7 +71,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
     public WhirlEntity(EntityType<? extends WhirlEntity> entityType, Level world) {
         super(entityType, world);
-        this.radius = 1.0;
+        this.radius = 1.0f;
         this.duration = 100;
         this.world = world;
         this.current = new WhirlCurrent(this);
@@ -78,13 +82,13 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         Minecraft.getInstance().getSoundManager().play(this.sound);
     }
 
-    public WhirlEntity(Level world, Vec3 position, double radius, int duration, FanProcessingType processor, SpellResolver spellResolver) {
+    public WhirlEntity(Level world, Vec3 position, float radius, int duration, FanProcessingType processor, SpellResolver spellResolver) {
         super(EntityRegistry.WHIRL_ENTITY.get(), world);
         this.setPos(position.x, position.y, position.z);
-        this.radius = radius;
         this.duration = duration;
         this.world = world;
         this.spellResolver = spellResolver;
+        setRadius(radius);
         setSpeed(SpellResolverHelpers.hasTransmutationFocus(spellResolver) ? 0.1f : 0.05f);
         setProcessor(processor);
         this.sound = null;
@@ -103,6 +107,10 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
     private void setProcessor(FanProcessingType processor) {
         this.entityData.set(PROCESSOR_TYPE, getProcessorLegacyId(processor));
+    }
+
+    private void setRadius(float radius) {
+        this.entityData.set(RADIUS, radius);
     }
 
     private String getProcessorLegacyId(FanProcessingType processor) {
@@ -138,6 +146,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     protected void defineSynchedData() {
         this.entityData.define(PROCESSOR_TYPE, AllFanProcessingTypes.NONE.toString());
         this.entityData.define(SPEED, 0.05f);
+        this.entityData.define(RADIUS, 1.5f);
     }
 
     @Override
@@ -151,16 +160,20 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         if(SPEED.equals(key)) {
             this.speed = this.entityData.get(SPEED);
             if(world.isClientSide) {
-                sound.setPitch(1.1f + 3 * speed);
+                sound.setPitch(DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
             }
+        }
+
+        if(RADIUS.equals(key)) {
+            this.radius = this.entityData.get(RADIUS);
         }
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         this.duration = compound.getInt("Duration");
-        this.radius = compound.getDouble("Radius");
-        this.speed = compound.getFloat("Speed");
+        setRadius(compound.getFloat("Radius"));
+        setSpeed(compound.getFloat("Speed"));
 
         if (compound.contains("ProcessorType")) {
             String processorType = compound.getString("ProcessorType");
@@ -171,8 +184,8 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("Duration", this.duration);
-        compound.putDouble("Radius", this.radius);
-        compound.putDouble("Speed", this.speed);
+        compound.putFloat("Radius", this.radius);
+        compound.putFloat("Speed", this.speed);
         if (this.processor != null) {
             compound.putString("ProcessorType", getProcessorLegacyId(this.processor));
         }
