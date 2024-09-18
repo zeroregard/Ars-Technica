@@ -6,7 +6,9 @@
   "mixins": [
     "SchematicannonMixin",
     "RuneBlockMixin",
-    "RuneTileMixin"
+    "RuneTileMixin",
+    "BacktankUtilMixin",
+    "AnimatedMagicArmorMixin"
   ],
   "client": [],
   "server": []

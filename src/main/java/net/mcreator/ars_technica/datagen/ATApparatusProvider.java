@@ -3,6 +3,8 @@ package net.mcreator.ars_technica.datagen;
 import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 
+import com.simibubi.create.content.equipment.armor.BacktankItem;
+import net.mcreator.ars_technica.common.items.threads.PressurePerk;
 import net.mcreator.ars_technica.recipe.TechnomancerArmorRecipe;
 import net.mcreator.ars_technica.setup.ArsElementalModItems;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
@@ -12,10 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.*;
 import static com.simibubi.create.AllItems.BRASS_INGOT;
 import static com.simibubi.create.AllItems.GOGGLES;
 import static com.simibubi.create.AllItems.PRECISION_MECHANISM;
 import static com.simibubi.create.AllItems.WRENCH;
+import static com.simibubi.create.AllItems.COPPER_BACKTANK;
 
 import java.nio.file.Path;
 
@@ -31,6 +35,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
     addCurioRecipes();
     addIngredientRecipes();
     addEquipmentRecipes();
+    addThreadRecipes();
     Path output = this.generator.getPackOutput().getOutputFolder();
     for (EnchantingApparatusRecipe g : recipes) {
       if (g != null) {
@@ -63,7 +68,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
 
   protected void addCurioRecipes() {
     recipes.add(builder().withResult(ItemsRegistry.TRANSMUTATION_FOCUS)
-              .withReagent(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE)
+              .withReagent(MANIPULATION_ESSENCE)
               .withPedestalItem(1, Ingredient.of(BRASS_INGOT))
               .withPedestalItem(Items.RABBIT_FOOT)
               .withPedestalItem(PRECISION_MECHANISM)
@@ -75,7 +80,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
     recipes.add(builder().withResult(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM)
             .withReagent(PRECISION_MECHANISM)
             .withPedestalItem(4, Ingredient.of(Items.AMETHYST_SHARD))
-            .withPedestalItem(4, Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM))
+            .withPedestalItem(4, Ingredient.of(SOURCE_GEM))
             .withSourceCost(500)
             .build());
   }
@@ -85,8 +90,18 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
             .withReagent(WRENCH)
             .withPedestalItem(Ingredient.of(Items.GOLD_INGOT))
             .withPedestalItem(Ingredient.of(new ItemStack(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
-            .withPedestalItem(Ingredient.of(com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE))
+            .withPedestalItem(Ingredient.of(MANIPULATION_ESSENCE))
             .withSourceCost(500)
+            .build());
+  }
+
+  protected void addThreadRecipes() {
+    recipes.add(builder()
+            .withResult(getPerkItem(PressurePerk.INSTANCE.getRegistryName()))
+            .withReagent(BLANK_THREAD)
+            .withPedestalItem(3, Ingredient.of(AIR_ESSENCE))
+            .withPedestalItem(Ingredient.of(COPPER_BACKTANK))
+            .withPedestalItem(Ingredient.of(new ItemStack(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
             .build());
   }
 

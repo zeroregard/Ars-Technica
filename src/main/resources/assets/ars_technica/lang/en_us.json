@@ -26,5 +26,8 @@
   "ars_technica.tooltip.transmutation_focus": "Augments spells with Luck and improves Whirl processing",
   "item.ars_technica.technomancer_chestplate": "Technomancer\u0027s Robes",
   "item.ars_technica.technomancer_helmet": "Technomancer\u0027s Hat",
-  "item.ars_technica.runic_spanner": "Runic Spanner"
+  "item.ars_technica.runic_spanner": "Runic Spanner",
+  "ars_technica.thread_of": "Thread of %s",
+  "ars_technica.perk_desc.thread_pressure": "Grants the wielder ultra-high-pressure air. Air refills over time - higher levels means more capacity and faster fill rate.",
+  "item.ars_technica.thread_pressure": "Pressure"
 }
