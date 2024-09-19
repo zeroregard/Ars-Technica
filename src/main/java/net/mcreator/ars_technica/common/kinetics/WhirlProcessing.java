@@ -8,7 +8,6 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
-import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -46,11 +45,9 @@ public class WhirlProcessing extends FanProcessing {
         if (shouldDoubleOutputs(whirlOwner)) {
             Optional<ProcessingRecipe<?>> recipe = getProcessingRecipeForEntity(entity, type, world);
             // If there's a processing recipe, we need to check if any of them are chanced based
-            if (recipe.get() != null) {
-                ArsTechnicaMod.LOGGER.info(recipe.get());
+            if (!recipe.isEmpty()) {
                 for (ItemStack stack : stacks) {
                     if (isChanceBased(stack, recipe.get())) {
-                        ArsTechnicaMod.LOGGER.info("This is chance based, growing stack for " + stack.getItem());
                         stack.grow(stack.getCount());
                     }
                 }

@@ -13,6 +13,7 @@ public class EntityLoopingSound extends AbstractTickableSoundInstance {
 
     private final Entity entity;
     private final double maxDistance = 16;
+    private final float maxVolume;
     private final double maxDistanceSquared = maxDistance * maxDistance;
 
     public EntityLoopingSound(Entity entity, SoundEvent sound, float volume, float pitch) {
@@ -21,6 +22,7 @@ public class EntityLoopingSound extends AbstractTickableSoundInstance {
         this.looping = true;
         this.delay = 0;
         this.volume = volume;
+        this.maxVolume = volume;
         this.pitch = pitch;
         this.attenuation = Attenuation.LINEAR;
         this.x = entity.getX();
@@ -49,7 +51,7 @@ public class EntityLoopingSound extends AbstractTickableSoundInstance {
             double distanceSquared = minecraft.player.distanceToSqr(this.x, this.y, this.z);
             if (distanceSquared <= maxDistanceSquared) {
                 float distanceFactor = (float) Math.sqrt(distanceSquared) / (float) maxDistance;
-                this.volume = Math.max(0.0f, 1.0f - distanceFactor);
+                this.volume = Math.max(0.0f, 1.0f - distanceFactor) * maxVolume;
             }
         }
     }

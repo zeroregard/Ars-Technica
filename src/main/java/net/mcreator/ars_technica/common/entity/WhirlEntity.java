@@ -5,6 +5,7 @@ import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.common.kinetics.WhirlCurrent;
@@ -41,16 +42,16 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     private final Level world;
     private float speed = 0.05f;
     private FanProcessingType processor;
-    private final WhirlCurrent current;
+    private WhirlCurrent current;
     private final SpellResolver spellResolver;
-    private final EntityLoopingSound sound;
+    private EntityLoopingSound sound;
 
     private static final EntityDataAccessor<String> PROCESSOR_TYPE = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RADIUS = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
 
-    private static float DEFAULT_PITCH = 1.1f;
-    private static float SPEED_PITCH_MULTIPLIER = 3;
+    private static float DEFAULT_PITCH = 0.8f;
+    private static float SPEED_PITCH_MULTIPLIER = 4;
 
     public float getRadius() {
         return radius;
@@ -69,12 +70,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.radius = 1.0f;
         this.duration = 100;
         this.world = world;
-        this.current = new WhirlCurrent(this);
         this.spellResolver = null;
-
-        SoundEvent sound = ArsTechnicaModSounds.WHIRL_NONE.get();
-        this.sound = new EntityLoopingSound(this, sound, 1.0f, 1.0f);
-        Minecraft.getInstance().getSoundManager().play(this.sound);
     }
 
     public WhirlEntity(Level world, Vec3 position, float radius, int duration, FanProcessingType processor, SpellResolver spellResolver) {
@@ -84,11 +80,13 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.world = world;
         this.spellResolver = spellResolver;
         setRadius(radius);
+        this.radius = radius; // WhirlCurrent needs this immediately, cannot wait for entityData update
         setSpeed(SpellResolverHelpers.hasTransmutationFocus(spellResolver) ? 0.1f : 0.05f);
         setProcessor(processor);
         this.sound = null;
         this.current = new WhirlCurrent(this);
     }
+
 
     @Override
     public void tick() {
@@ -127,14 +125,17 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     private void handleWhirlwindEffect() {
         if (!this.world.isClientSide) {
             duration--;
-        }
-        if (duration <= 0) {
-            current.stopAffectedItems();
-            this.discard();
-            return;
+            if (current != null) {
+                current.tick(this.spellResolver);
+            }
+            if (duration <= 0) {
+                if (current != null) {
+                    current.stopAffectedItems();
+                }
+                this.discard();
+            }
         }
 
-        current.tick(this.spellResolver);
     }
 
     @Override
@@ -148,20 +149,42 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
 
-        if (PROCESSOR_TYPE.equals(key)) {
-            this.processor = AllFanProcessingTypes.parseLegacy(this.entityData.get(PROCESSOR_TYPE));
-        }
-
-        if(SPEED.equals(key)) {
+        if (SPEED.equals(key)) {
             this.speed = this.entityData.get(SPEED);
-            if(world.isClientSide) {
+            if (world.isClientSide && sound != null) {
                 sound.setPitch(DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
             }
         }
 
-        if(RADIUS.equals(key)) {
+        if (PROCESSOR_TYPE.equals(key)) {
+            this.processor = AllFanProcessingTypes.parseLegacy(this.entityData.get(PROCESSOR_TYPE));
+            initSound();
+        }
+
+        if (RADIUS.equals(key)) {
             this.radius = this.entityData.get(RADIUS);
         }
+    }
+
+    private void initSound() {
+        if (world.isClientSide && sound == null) {
+            SoundEvent event = getLoopingSoundFromType();
+            this.sound = new EntityLoopingSound(this, event, 0.5f, DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
+            Minecraft.getInstance().getSoundManager().play(this.sound);
+        }
+    }
+
+    private SoundEvent getLoopingSoundFromType() {
+        if (processor == AllFanProcessingTypes.HAUNTING) {
+            return ArsTechnicaModSounds.WHIRL_HAUNT.get();
+        }
+        if (processor == AllFanProcessingTypes.SPLASHING) {
+            return ArsTechnicaModSounds.WHIRL_SPLASH.get();
+        }
+        if (processor == AllFanProcessingTypes.SMOKING || processor == AllFanProcessingTypes.BLASTING) {
+            return ArsTechnicaModSounds.WHIRL_SMELT.get();
+        }
+        return ArsTechnicaModSounds.WHIRL_NONE.get();
     }
 
     @Override
@@ -227,12 +250,13 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     }
 
     AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;
     }
 
-    private PlayState rotateAnimationPredicate(AnimationState<?> event)  {
+    private PlayState rotateAnimationPredicate(AnimationState<?> event) {
         event.getController().setAnimation(RawAnimation.begin().thenPlay("rotation"));
         event.getController().setAnimationSpeed(0.75f * (speed / 0.05f));
         return PlayState.CONTINUE;

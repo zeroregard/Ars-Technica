@@ -75,7 +75,7 @@ public class EffectWhirl extends AbstractEffect {
             }
         }
 
-        WhirlEntity whirl = new WhirlEntity(world, position, DEFAULT_RADIUS + aoeAmplifier * 0.5f, DEFAULT_DURATION + extraDurationTicks, processingType, resolver);
+        WhirlEntity whirl = new WhirlEntity(world, position, DEFAULT_RADIUS + aoeAmplifier * 0.33f, DEFAULT_DURATION + extraDurationTicks, processingType, resolver);
         world.addFreshEntity(whirl);
 
     }
@@ -83,13 +83,13 @@ public class EffectWhirl extends AbstractEffect {
 
     @Override
     public int getDefaultManaCost() {
-        return 20;
+        return 40;
     }
 
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentAOE.INSTANCE, AugmentAmplify.INSTANCE, AugmentExtendTime.INSTANCE);
+        return augmentSetOf(AugmentAOE.INSTANCE, AugmentExtendTime.INSTANCE);
     }
 
     @Nonnull

@@ -11,8 +11,63 @@
     "subtitle": "subtitles.whirl_none",
     "sounds": [
       {
-        "name": "ars_technica:whirl",
+        "name": "ars_technica:whirl_none",
         "stream": true,
+        "max_distance": 16,
+        "attenuation_distance": 4
+      }
+    ]
+  },
+  "whirl_splash": {
+    "subtitle": "subtitles.whirl_splash",
+    "sounds": [
+      {
+        "name": "ars_technica:whirl_splash",
+        "stream": true,
+        "max_distance": 16,
+        "attenuation_distance": 4
+      }
+    ]
+  },
+  "whirl_haunt": {
+    "subtitle": "subtitles.whirl_haunt",
+    "sounds": [
+      {
+        "name": "ars_technica:whirl_haunt",
+        "stream": true,
+        "max_distance": 16,
+        "attenuation_distance": 4
+      }
+    ]
+  },
+  "whirl_smelt": {
+    "subtitle": "subtitles.whirl_smelt",
+    "sounds": [
+      {
+        "name": "ars_technica:whirl_smelt",
+        "stream": true,
+        "max_distance": 16,
+        "attenuation_distance": 4
+      }
+    ]
+  },
+  "whirl_process_affect_water": {
+    "subtitle": "subtitles.whirl_process_affect_water",
+    "sounds": [
+      {
+        "name": "ars_technica:whirl_process_affect_water",
+        "stream": false,
+        "max_distance": 16,
+        "attenuation_distance": 4
+      }
+    ]
+  },
+  "whirl_process_affect_fire": {
+    "subtitle": "subtitles.whirl_process_affect_fire",
+    "sounds": [
+      {
+        "name": "ars_technica:whirl_process_affect_fire",
+        "stream": false,
         "max_distance": 16,
         "attenuation_distance": 4
       }
