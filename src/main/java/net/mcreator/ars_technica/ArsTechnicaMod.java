@@ -1,5 +1,9 @@
 package net.mcreator.ars_technica;
 
+import com.simibubi.create.foundation.utility.ModelSwapper;
+import net.mcreator.ars_technica.setup.Curios;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -40,22 +44,26 @@ import java.util.AbstractMap;
 public class ArsTechnicaMod {
 	public static final Logger LOGGER = LogManager.getLogger(ArsTechnicaMod.class);
 	public static final String MODID = "ars_technica";
+	public static final ModelSwapper CUSTOM_MODELS = new ModelSwapper();
 
 	public ArsTechnicaMod() {
-		// Start of user code block mod constructor
-		// End of user code block mod constructor
 		MinecraftForge.EVENT_BUS.register(this);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 		ArsTechnicaModSounds.REGISTRY.register(bus);
-		// Start of user code block mod init
 		ModSetup.registers(bus);
 		ArsNouveauRegistry.init();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_SPEC);
 		bus.addListener(this::setup);
-		// End of user code block mod init
+
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> onCtorClient(bus, forgeEventBus));
+		Curios.init(bus, forgeEventBus);
 	}
 
-	// Start of user code block mod methods
+	private void onCtorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
+		CUSTOM_MODELS.registerListeners(modEventBus);
+	}
+
 	public void setup(final FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			ArsNouveauRegistry.postInit();
@@ -67,7 +75,6 @@ public class ArsTechnicaMod {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::init);
 	}
 
-	// End of user code block mod methods
 	private static final String PROTOCOL_VERSION = "1";
 	public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 	private static int messageID = 0;

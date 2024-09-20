@@ -6,11 +6,15 @@ import net.mcreator.ars_technica.armor.IGoggleHelmet;
 import net.mcreator.ars_technica.armor.TechnomancerArmor;
 import net.mcreator.ars_technica.common.items.curios.TransmutationFocus;
 import net.mcreator.ars_technica.common.items.equipment.RunicSpanner;
+import net.mcreator.ars_technica.common.items.equipment.SpyMonocleModel;
 import net.mcreator.ars_technica.common.items.ingredients.CalibratedPrecisionMechanism;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,10 +33,22 @@ public class ItemsRegistry {
 
   public static RegistryObject<Item> CALIBRATED_PRECISION_MECHANISM = ITEMS.register("calibrated_precision_mechanism", () -> new CalibratedPrecisionMechanism(defaultItemProperties().stacksTo(64)));
   public static RegistryObject<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(defaultItemProperties().stacksTo(1)));
+  public static RegistryObject<Item> SPY_MONOCLE = ITEMS.register("spy_monocle",  () -> new RunicSpanner(defaultItemProperties().stacksTo(1)));
 
   public static void register(IEventBus eventBus) {
     ITEMS.register(eventBus);
     GogglesItem.addIsWearingPredicate(IGoggleHelmet::isGoggleHelmet);
+
+    // DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> addModels());
+  }
+
+  private static Runnable addModels() {
+    return () -> {
+      ResourceLocation blockModelLocation = new ResourceLocation(ArsTechnicaMod.MODID, "block/spy_monocle");
+      ArsTechnicaMod.CUSTOM_MODELS.getCustomBlockModels().register(blockModelLocation, (templateModel) -> {
+        return new SpyMonocleModel(templateModel);
+      });
+    };
   }
 
   public static Item.Properties defaultItemProperties() {
