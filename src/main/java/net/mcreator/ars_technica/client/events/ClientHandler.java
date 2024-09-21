@@ -5,7 +5,11 @@ import com.hollingsworth.arsnouveau.api.perk.IPerkHolder;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,36 +27,41 @@ import net.mcreator.ars_technica.client.renderer.entity.WhirlEntityRenderer;
 @OnlyIn(Dist.CLIENT)
 public class ClientHandler {
 
-  @SubscribeEvent
-  public static void initItemColors(final RegisterColorHandlersEvent.Item event) {
+    @SubscribeEvent
+    public static void initItemColors(final RegisterColorHandlersEvent.Item event) {
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_BOOTS.get());
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_BOOTS.get());
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_CHESTPLATE.get());
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_CHESTPLATE.get());
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_HELMET.get());
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_HELMET.get());
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_LEGGINGS.get());
-  }
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_LEGGINGS.get());
+    }
 
-  @SubscribeEvent
-  public static void init(final FMLClientSetupEvent event) {
+    @SubscribeEvent
+    public static void init(final FMLClientSetupEvent event) {
 
-  }
+    }
 
-  public static int colorFromArmor(ItemStack stack) {
-    IPerkHolder<ItemStack> holder = PerkUtil.getPerkHolder(stack);
-    if (!(holder instanceof ArmorPerkHolder armorPerkHolder))
-      return DyeColor.BROWN.getTextColor();
-    return DyeColor.byName(armorPerkHolder.getColor(), DyeColor.BROWN).getTextColor();
-  }
+    @SubscribeEvent
+    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER, () -> SpyMonocleCurioRenderer.createBodyLayer());
+    }
 
-  @SubscribeEvent
-  public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-    event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
-  }
+    public static int colorFromArmor(ItemStack stack) {
+        IPerkHolder<ItemStack> holder = PerkUtil.getPerkHolder(stack);
+        if (!(holder instanceof ArmorPerkHolder armorPerkHolder))
+            return DyeColor.BROWN.getTextColor();
+        return DyeColor.byName(armorPerkHolder.getColor(), DyeColor.BROWN).getTextColor();
+    }
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
+    }
 }

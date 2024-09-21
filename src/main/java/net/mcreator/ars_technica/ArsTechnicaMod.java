@@ -1,8 +1,10 @@
 package net.mcreator.ars_technica;
 
-import com.simibubi.create.foundation.utility.ModelSwapper;
-import net.mcreator.ars_technica.setup.Curios;
+import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
+import net.mcreator.ars_technica.setup.ItemsRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +32,7 @@ import net.mcreator.ars_technica.setup.ModSetup;
 import net.mcreator.ars_technica.setup.ArsNouveauRegistry;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.client.events.ClientHandler;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.util.function.Supplier;
 import java.util.function.Function;
@@ -44,7 +47,6 @@ import java.util.AbstractMap;
 public class ArsTechnicaMod {
 	public static final Logger LOGGER = LogManager.getLogger(ArsTechnicaMod.class);
 	public static final String MODID = "ars_technica";
-	public static final ModelSwapper CUSTOM_MODELS = new ModelSwapper();
 
 	public ArsTechnicaMod() {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -56,12 +58,15 @@ public class ArsTechnicaMod {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_SPEC);
 		bus.addListener(this::setup);
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> onCtorClient(bus, forgeEventBus));
-		Curios.init(bus, forgeEventBus);
+		DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
+			bus.addListener(this::doClientStuff);
+			return new Object();
+		});
 	}
 
-	private void onCtorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
-		CUSTOM_MODELS.registerListeners(modEventBus);
+	@OnlyIn(Dist.CLIENT)
+	private void doClientStuff(final FMLClientSetupEvent event) {
+		CuriosRendererRegistry.register(ItemsRegistry.SPY_MONOCLE.get(), () -> new SpyMonocleCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER)));
 	}
 
 	public void setup(final FMLCommonSetupEvent event) {
