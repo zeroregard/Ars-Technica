@@ -96,10 +96,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
 
     recipes.add(builder().withResult(ItemsRegistry.SPY_MONOCLE)
             .withReagent(Items.SPYGLASS)
-            .withPedestalItem(Ingredient.of(Items.GOLD_INGOT))
             .withPedestalItem(Ingredient.of(new ItemStack(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
-            .withPedestalItem(Ingredient.of(MANIPULATION_ESSENCE))
-            .withSourceCost(500)
             .build());
   }
 

@@ -29,5 +29,7 @@
   "item.ars_technica.runic_spanner": "Runic Spanner",
   "ars_technica.thread_of": "Thread of %s",
   "ars_technica.perk_desc.thread_pressure": "Grants the wielder ultra-high-pressure air. Air refills over time - higher levels means more capacity and faster fill rate.",
-  "item.ars_technica.thread_pressure": "Pressure"
+  "item.ars_technica.thread_pressure": "Pressure",
+  "item.ars_technica.spy_monocle": "Spy Monocle",
+  "item.ars_technica.spy_monocle.tooltip": "Press %s to zoom in"
 }

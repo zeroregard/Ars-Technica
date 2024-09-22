@@ -18,6 +18,8 @@ public class ArsTechnicaModSounds {
 
 	public static final RegistryObject<SoundEvent> EQUIP_SET = REGISTRY.register("equip_set",
 			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "equip_set")));
+	public static final RegistryObject<SoundEvent> SPY_MONOCLE_USE = REGISTRY.register("spy_monocle_use",
+			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "spy_monocle_use")));
 
 	public static final RegistryObject<SoundEvent> WHIRL_NONE = REGISTRY.register("whirl_none",
 			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "whirl_none")));
