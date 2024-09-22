@@ -42,6 +42,9 @@ public class SpyMonocleCurioRenderer implements ICurioRenderer {
         model.setupAnim(slotContext.entity(), limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.prepareMobModel(slotContext.entity(), limbSwing, limbSwingAmount, partialTicks);
         matrixStack.pushPose();
+        if (slotContext.entity().isCrouching()) {
+            matrixStack.translate(0.0F, 0.25F, 0.0F);
+        }
         model.head.render(matrixStack, renderTypeBuffer.getBuffer(RenderType.entityCutoutNoCull(new ResourceLocation(ArsTechnicaMod.MODID, "textures/entity/spy_monocle.png"))), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStack.popPose();
     }
