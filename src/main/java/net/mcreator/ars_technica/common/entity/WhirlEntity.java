@@ -5,24 +5,22 @@ import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
-import net.mcreator.ars_technica.ArsTechnicaMod;
-import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
+import net.mcreator.ars_technica.client.events.ClientHandler;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.common.kinetics.WhirlCurrent;
-import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -44,14 +42,13 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     private FanProcessingType processor;
     private WhirlCurrent current;
     private final SpellResolver spellResolver;
-    private EntityLoopingSound sound;
+    private boolean soundPlaying;
 
     private static final EntityDataAccessor<String> PROCESSOR_TYPE = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RADIUS = SynchedEntityData.defineId(WhirlEntity.class, EntityDataSerializers.FLOAT);
 
-    private static float DEFAULT_PITCH = 0.8f;
-    private static float SPEED_PITCH_MULTIPLIER = 4;
+
 
     public float getRadius() {
         return radius;
@@ -83,7 +80,6 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.radius = radius; // WhirlCurrent needs this immediately, cannot wait for entityData update
         setSpeed(SpellResolverHelpers.hasTransmutationFocus(spellResolver) ? 0.1f : 0.05f);
         setProcessor(processor);
-        this.sound = null;
         this.current = new WhirlCurrent(this);
     }
 
@@ -92,6 +88,19 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     public void tick() {
         super.tick();
         handleWhirlwindEffect();
+        // handleGravity();
+    }
+
+    private void handleGravity() {
+        BlockPos belowPos = getBlockPosBelowThatAffectsMyMovement();
+        boolean onGround = !this.world.getBlockState(belowPos).isAir();
+        if (!onGround) {
+            moveDown();
+        }
+    }
+
+    private void moveDown() {
+        this.setPos(this.getX(), this.getY() - 0.03f, this.getZ());
     }
 
     private void setSpeed(float speed) {
@@ -151,9 +160,6 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
         if (SPEED.equals(key)) {
             this.speed = this.entityData.get(SPEED);
-            if (world.isClientSide && sound != null) {
-                sound.setPitch(DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
-            }
         }
 
         if (PROCESSOR_TYPE.equals(key)) {
@@ -167,24 +173,10 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
     }
 
     private void initSound() {
-        if (world.isClientSide && sound == null) {
-            SoundEvent event = getLoopingSoundFromType();
-            this.sound = new EntityLoopingSound(this, event, 0.5f, DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
-            Minecraft.getInstance().getSoundManager().play(this.sound);
+        if (world.isClientSide && !soundPlaying) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHandler.handleWhirlSound(this, processor, speed));
+            soundPlaying = true;
         }
-    }
-
-    private SoundEvent getLoopingSoundFromType() {
-        if (processor == AllFanProcessingTypes.HAUNTING) {
-            return ArsTechnicaModSounds.WHIRL_HAUNT.get();
-        }
-        if (processor == AllFanProcessingTypes.SPLASHING) {
-            return ArsTechnicaModSounds.WHIRL_SPLASH.get();
-        }
-        if (processor == AllFanProcessingTypes.SMOKING || processor == AllFanProcessingTypes.BLASTING) {
-            return ArsTechnicaModSounds.WHIRL_SMELT.get();
-        }
-        return ArsTechnicaModSounds.WHIRL_NONE.get();
     }
 
     @Override

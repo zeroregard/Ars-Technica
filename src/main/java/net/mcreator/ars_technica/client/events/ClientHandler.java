@@ -4,8 +4,15 @@ import com.hollingsworth.arsnouveau.api.perk.ArmorPerkHolder;
 import com.hollingsworth.arsnouveau.api.perk.IPerkHolder;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
+import net.mcreator.ars_technica.common.entity.WhirlEntity;
+import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,6 +49,28 @@ public class ClientHandler {
   @SubscribeEvent
   public static void init(final FMLClientSetupEvent event) {
 
+  }
+
+  private static float DEFAULT_PITCH = 0.8f;
+  private static float SPEED_PITCH_MULTIPLIER = 4;
+
+  public static void handleWhirlSound(WhirlEntity entity, FanProcessingType processor, float speed) {
+    SoundEvent event = getLoopingSoundFromType(processor);
+    EntityLoopingSound sound = new EntityLoopingSound(entity, event, 0.5f, DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
+    Minecraft.getInstance().getSoundManager().play(sound);
+  }
+
+  private static SoundEvent getLoopingSoundFromType(FanProcessingType processor) {
+    if (processor == AllFanProcessingTypes.HAUNTING) {
+      return ArsTechnicaModSounds.WHIRL_HAUNT.get();
+    }
+    if (processor == AllFanProcessingTypes.SPLASHING) {
+      return ArsTechnicaModSounds.WHIRL_SPLASH.get();
+    }
+    if (processor == AllFanProcessingTypes.SMOKING || processor == AllFanProcessingTypes.BLASTING) {
+      return ArsTechnicaModSounds.WHIRL_SMELT.get();
+    }
+    return ArsTechnicaModSounds.WHIRL_NONE.get();
   }
 
   public static int colorFromArmor(ItemStack stack) {
