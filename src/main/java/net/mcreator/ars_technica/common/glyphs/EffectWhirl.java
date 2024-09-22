@@ -1,8 +1,8 @@
 package net.mcreator.ars_technica.common.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
+import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.RuneCaster;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtendTime;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectConjureWater;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectFlare;
@@ -41,6 +41,10 @@ public class EffectWhirl extends AbstractEffect {
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         if (!(world instanceof ServerLevel serverWorld)) return;
         Vec3 position = rayTraceResult.getLocation();
+        if(spellContext.getCaster() instanceof RuneCaster runeCaster) {
+            Vec3 casterPos = runeCaster.getPosition();
+            position = casterPos.add(0.5f, 0, 0.5f);
+        }
         resolve(position, serverWorld, shooter, spellStats, spellContext, resolver);
     }
 
