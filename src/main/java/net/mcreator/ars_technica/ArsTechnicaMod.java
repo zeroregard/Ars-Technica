@@ -49,6 +49,7 @@ public class ArsTechnicaMod {
 		ArsTechnicaModSounds.REGISTRY.register(bus);
 		// Start of user code block mod init
 		ModSetup.registers(bus);
+		ArsNouveauRegistry.init();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_SPEC);
 		bus.addListener(this::setup);
 		// End of user code block mod init

@@ -4,8 +4,10 @@ import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
+import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.mcreator.ars_technica.setup.NetworkHandler;
 
@@ -13,6 +15,9 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -30,7 +35,7 @@ public class WhirlCurrent {
     private final WhirlEntity source;
     private AABB bounds;
     private List<ItemEntity> affectedEntities;
-    private double radius;
+    private float radius;
     private int tickCount = 0;
 
     public WhirlCurrent(WhirlEntity source) {
@@ -57,7 +62,7 @@ public class WhirlCurrent {
         }
         for (Iterator<ItemEntity> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
             Entity entity = iterator.next();
-            if (!entity.isAlive() || !entity.getBoundingBox().intersects(bounds)) { // || !isItemBeingProcessedByThis(entity)) {
+            if (!entity.isAlive() || !entity.getBoundingBox().intersects(bounds)) {
                 iterator.remove();
                 continue;
             }
@@ -67,7 +72,7 @@ public class WhirlCurrent {
 
             Vec3 motion = entity.getDeltaMovement();
             Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(0.05);
-            Vec3 pull = direction.scale(0.03 * (radius - distance));
+            Vec3 pull = direction.scale(0.05 * (Math.sqrt(radius) - distance));
 
             entity.setDeltaMovement(motion.add(tangentialMotion).add(pull));
             entity.fallDistance = 0;
@@ -81,12 +86,40 @@ public class WhirlCurrent {
 
             if (entity instanceof ItemEntity itemEntity) {
                 if (WhirlProcessing.canProcess(itemEntity, processingType)) {
-                    WhirlProcessing.applyProcessing(itemEntity, processingType, world, whirlOwner);
-                    if (tickCount % 3 == 0) {
-                        sendProcessingParticles(nearbyPlayers, itemEntity, processingType);
+                    Vec3 itemPosition = itemEntity.getPosition(1.0f);
+                    if (WhirlProcessing.applyProcessing(itemEntity, processingType, world, whirlOwner)) {
+                        sendProcessingFinishedSound(itemPosition, processingType);
                     }
+                    if (tickCount % 8 == 0) {
+                        // Play a sound and send particles again
+                        sendProcessingSound(itemPosition, processingType);
+                        sendProcessingParticles(nearbyPlayers, itemEntity, processingType); // TODO: these should be more 'explosive' for this
+                    }
+                    sendProcessingParticles(nearbyPlayers, itemEntity, processingType);
                 }
             }
+        }
+    }
+
+    private void sendProcessingSound(Vec3 itemPos, FanProcessingType processingType) {
+        SoundEvent event = ArsTechnicaModSounds.WHIRL_PROCESS_AFFECT_FIRE.get();
+        if (processingType == AllFanProcessingTypes.SPLASHING) {
+            event = ArsTechnicaModSounds.WHIRL_PROCESS_AFFECT_WATER.get();
+        }
+        sendSoundEvent(itemPos, event);
+    }
+
+    private void sendProcessingFinishedSound(Vec3 itemPos, FanProcessingType processingType) {
+        SoundEvent event = SoundEvents.FIRE_EXTINGUISH;
+        if (processingType == AllFanProcessingTypes.SPLASHING) {
+            event = SoundEvents.PLAYER_SPLASH;
+        }
+        sendSoundEvent(itemPos, event);
+    }
+
+    private void sendSoundEvent(Vec3 pos, SoundEvent event) {
+        if(event != null) {
+            source.getLevel().playSound(null, pos.x, pos.y, pos.z, event, SoundSource.AMBIENT, 0.25f, 1.0f);
         }
     }
 

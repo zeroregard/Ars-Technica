@@ -26,10 +26,8 @@ public class StorageHelpers {
         IItemHandler handler = getItemCapFromTile(tile);
         if (handler == null)
             return ItemScroll.SortPref.INVALID;
-        ArsTechnicaMod.LOGGER.info("Container is valid");
 
         for (ItemFrame itemFrame : level.getEntitiesOfClass(ItemFrame.class, new AABB(tile.getBlockPos()).inflate(1))) {
-            ArsTechnicaMod.LOGGER.info("Found item frame...");
 
             BlockPos framePos = itemFrame.blockPosition();
             Direction facing = itemFrame.getDirection();
@@ -63,9 +61,7 @@ public class StorageHelpers {
         ItemScroll.SortPref foundPref = ItemScroll.SortPref.INVALID;
 
         for (BlockPos b : containerPosTargets) {
-            ArsTechnicaMod.LOGGER.info("Checking container at " + b.toString());
             ItemScroll.SortPref pref = sortPrefForStack(level, b, stack);
-            ArsTechnicaMod.LOGGER.info("Preference for this container is " + pref.toString());
             // Pick our highest priority
             if (pref.ordinal() > foundPref.ordinal()) {
                 foundPref = pref;
