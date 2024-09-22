@@ -10,24 +10,24 @@ import org.jetbrains.annotations.NotNull;
 public class TechnomancerMaterial implements ArmorMaterial {
 
   public static final TechnomancerMaterial INSTANCE = new TechnomancerMaterial();
+  private static int DurabilityMultiplier = 33;
 
   @Override
   public int getDurabilityForType(ArmorItem.Type type) {
     return switch (type) {
-      case HELMET -> 15;
-      case CHESTPLATE -> 17;
-      case LEGGINGS -> 18;
-      case BOOTS -> 13;
+      case HELMET -> 15 * DurabilityMultiplier;
+      case CHESTPLATE -> 18 * DurabilityMultiplier;
+      case LEGGINGS -> 17 * DurabilityMultiplier;
+      case BOOTS -> 13 * DurabilityMultiplier;
     };
   }
 
   @Override
   public int getDefenseForType(ArmorItem.Type type) {
     return switch (type) {
-      case HELMET -> 3;
-      case CHESTPLATE -> 6;
-      case LEGGINGS -> 8;
-      case BOOTS -> 3;
+      case HELMET, BOOTS -> 3;
+      case CHESTPLATE -> 8;
+      case LEGGINGS -> 6;
     };
   }
 
