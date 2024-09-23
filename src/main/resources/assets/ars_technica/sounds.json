@@ -72,5 +72,14 @@
         "attenuation_distance": 4
       }
     ]
+  },
+  "spy_monocle_use": {
+    "subtitle": "subtitles.spy_monocle_use",
+    "sounds": [
+      {
+        "name": "ars_technica:spy_monocle_use",
+        "stream": false
+      }
+    ]
   }
 }

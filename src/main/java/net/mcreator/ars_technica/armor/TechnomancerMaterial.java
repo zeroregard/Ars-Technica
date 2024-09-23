@@ -38,7 +38,7 @@ public class TechnomancerMaterial implements ArmorMaterial {
 
   @Override
   public String getName() {
-    return "ars_artificy:technomancer";
+    return "ars_technica:technomancer";
   }
 
   @Override

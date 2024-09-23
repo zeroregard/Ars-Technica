@@ -1,5 +1,11 @@
 package net.mcreator.ars_technica;
 
+import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
+import net.mcreator.ars_technica.setup.ItemsRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -26,6 +32,7 @@ import net.mcreator.ars_technica.setup.ModSetup;
 import net.mcreator.ars_technica.setup.ArsNouveauRegistry;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.client.events.ClientHandler;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.util.function.Supplier;
 import java.util.function.Function;
@@ -42,20 +49,26 @@ public class ArsTechnicaMod {
 	public static final String MODID = "ars_technica";
 
 	public ArsTechnicaMod() {
-		// Start of user code block mod constructor
-		// End of user code block mod constructor
 		MinecraftForge.EVENT_BUS.register(this);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 		ArsTechnicaModSounds.REGISTRY.register(bus);
-		// Start of user code block mod init
 		ModSetup.registers(bus);
 		ArsNouveauRegistry.init();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_SPEC);
 		bus.addListener(this::setup);
-		// End of user code block mod init
+
+		DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
+			bus.addListener(this::doClientStuff);
+			return new Object();
+		});
 	}
 
-	// Start of user code block mod methods
+	@OnlyIn(Dist.CLIENT)
+	private void doClientStuff(final FMLClientSetupEvent event) {
+		CuriosRendererRegistry.register(ItemsRegistry.SPY_MONOCLE.get(), () -> new SpyMonocleCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER)));
+	}
+
 	public void setup(final FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			ArsNouveauRegistry.postInit();
@@ -67,7 +80,6 @@ public class ArsTechnicaMod {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::init);
 	}
 
-	// End of user code block mod methods
 	private static final String PROTOCOL_VERSION = "1";
 	public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 	private static int messageID = 0;

@@ -6,6 +6,7 @@ import net.mcreator.ars_technica.armor.IGoggleHelmet;
 import net.mcreator.ars_technica.armor.TechnomancerArmor;
 import net.mcreator.ars_technica.common.items.curios.TransmutationFocus;
 import net.mcreator.ars_technica.common.items.equipment.RunicSpanner;
+import net.mcreator.ars_technica.common.items.equipment.SpyMonocle;
 import net.mcreator.ars_technica.common.items.ingredients.CalibratedPrecisionMechanism;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
@@ -29,11 +30,13 @@ public class ItemsRegistry {
 
   public static RegistryObject<Item> CALIBRATED_PRECISION_MECHANISM = ITEMS.register("calibrated_precision_mechanism", () -> new CalibratedPrecisionMechanism(defaultItemProperties().stacksTo(64)));
   public static RegistryObject<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(defaultItemProperties().stacksTo(1)));
+  public static RegistryObject<Item> SPY_MONOCLE = ITEMS.register("spy_monocle",  () -> new SpyMonocle(defaultItemProperties().stacksTo(1)));
 
   public static void register(IEventBus eventBus) {
     ITEMS.register(eventBus);
     GogglesItem.addIsWearingPredicate(IGoggleHelmet::isGoggleHelmet);
   }
+
 
   public static Item.Properties defaultItemProperties() {
     return new Item.Properties();

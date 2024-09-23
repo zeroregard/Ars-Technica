@@ -7,12 +7,16 @@ import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+
+import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
+import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.minecraft.client.Minecraft;
+
 import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
-import net.mcreator.ars_technica.setup.EntityRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
+
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,58 +34,64 @@ import net.mcreator.ars_technica.client.renderer.entity.WhirlEntityRenderer;
 @OnlyIn(Dist.CLIENT)
 public class ClientHandler {
 
-  @SubscribeEvent
-  public static void initItemColors(final RegisterColorHandlersEvent.Item event) {
+    @SubscribeEvent
+    public static void initItemColors(final RegisterColorHandlersEvent.Item event) {
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_BOOTS.get());
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_BOOTS.get());
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_CHESTPLATE.get());
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_CHESTPLATE.get());
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_HELMET.get());
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_HELMET.get());
 
-    event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
-        ItemsRegistry.TECHNOMANCER_LEGGINGS.get());
-  }
-
-  @SubscribeEvent
-  public static void init(final FMLClientSetupEvent event) {
-
-  }
-
-  private static float DEFAULT_PITCH = 0.8f;
-  private static float SPEED_PITCH_MULTIPLIER = 4;
-
-  public static void handleWhirlSound(WhirlEntity entity, FanProcessingType processor, float speed) {
-    SoundEvent event = getLoopingSoundFromType(processor);
-    EntityLoopingSound sound = new EntityLoopingSound(entity, event, 0.5f, DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
-    Minecraft.getInstance().getSoundManager().play(sound);
-  }
-
-  private static SoundEvent getLoopingSoundFromType(FanProcessingType processor) {
-    if (processor == AllFanProcessingTypes.HAUNTING) {
-      return ArsTechnicaModSounds.WHIRL_HAUNT.get();
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemsRegistry.TECHNOMANCER_LEGGINGS.get());
     }
-    if (processor == AllFanProcessingTypes.SPLASHING) {
-      return ArsTechnicaModSounds.WHIRL_SPLASH.get();
-    }
-    if (processor == AllFanProcessingTypes.SMOKING || processor == AllFanProcessingTypes.BLASTING) {
-      return ArsTechnicaModSounds.WHIRL_SMELT.get();
-    }
-    return ArsTechnicaModSounds.WHIRL_NONE.get();
-  }
 
-  public static int colorFromArmor(ItemStack stack) {
-    IPerkHolder<ItemStack> holder = PerkUtil.getPerkHolder(stack);
-    if (!(holder instanceof ArmorPerkHolder armorPerkHolder))
-      return DyeColor.BROWN.getTextColor();
-    return DyeColor.byName(armorPerkHolder.getColor(), DyeColor.BROWN).getTextColor();
-  }
+    @SubscribeEvent
+    public static void init(final FMLClientSetupEvent event) {
 
-  @SubscribeEvent
-  public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-    event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
-  }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER, () -> SpyMonocleCurioRenderer.createBodyLayer());
+    }
+
+    private static float DEFAULT_PITCH = 0.8f;
+    private static float SPEED_PITCH_MULTIPLIER = 4;
+
+    public static void handleWhirlSound(WhirlEntity entity, FanProcessingType processor, float speed) {
+        SoundEvent event = getLoopingSoundFromType(processor);
+        EntityLoopingSound sound = new EntityLoopingSound(entity, event, 0.5f, DEFAULT_PITCH + SPEED_PITCH_MULTIPLIER * speed);
+        Minecraft.getInstance().getSoundManager().play(sound);
+    }
+
+    private static SoundEvent getLoopingSoundFromType(FanProcessingType processor) {
+        if (processor == AllFanProcessingTypes.HAUNTING) {
+            return ArsTechnicaModSounds.WHIRL_HAUNT.get();
+        }
+        if (processor == AllFanProcessingTypes.SPLASHING) {
+            return ArsTechnicaModSounds.WHIRL_SPLASH.get();
+        }
+        if (processor == AllFanProcessingTypes.SMOKING || processor == AllFanProcessingTypes.BLASTING) {
+            return ArsTechnicaModSounds.WHIRL_SMELT.get();
+        }
+        return ArsTechnicaModSounds.WHIRL_NONE.get();
+    }
+
+    public static int colorFromArmor(ItemStack stack) {
+        IPerkHolder<ItemStack> holder = PerkUtil.getPerkHolder(stack);
+        if (!(holder instanceof ArmorPerkHolder armorPerkHolder))
+            return DyeColor.BROWN.getTextColor();
+        return DyeColor.byName(armorPerkHolder.getColor(), DyeColor.BROWN).getTextColor();
+    }
+
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
+    }
 }
