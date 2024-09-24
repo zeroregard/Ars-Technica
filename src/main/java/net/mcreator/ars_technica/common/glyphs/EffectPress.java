@@ -11,6 +11,7 @@ import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
 
 import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
+import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -36,9 +37,7 @@ import java.util.stream.Collectors;
 
 public class EffectPress extends AbstractItemResolveEffect {
     public static final EffectPress INSTANCE = new EffectPress();
-    private static int DEFAULT_AMOUNT_TO_PRESS = 32;
-    private static int AMOUNT_PER_AMPLIFIER = 4;
-    private static float DEFAULT_SPEED = 2.0f;
+    private static float DEFAULT_SPEED = 4.0f;
 
     private EffectPress() {
         super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_press"), "Press");
@@ -61,14 +60,21 @@ public class EffectPress extends AbstractItemResolveEffect {
             }
         }
 
+        boolean hasFocus = SpellResolverHelpers.hasTransmutationFocus(resolver);
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
-        int maxAmountToPress = Math.round(4 * (1 + aoeBuff));
-        float speed = DEFAULT_SPEED;
+        int maxAmountToPress = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
+
+        float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
 
         if (!validPressableEntities.isEmpty()) {
-            ItemEntity first = validPressableEntities.stream().findFirst().get();
-            ArcanePressEntity arcanePressEntity = new ArcanePressEntity(first.position().add(0, 1.0f, 0), world, maxAmountToPress, speed, validPressableEntities);
-            world.addFreshEntity(arcanePressEntity);
+            ItemEntity closest = validPressableEntities.stream()
+                    .min(Comparator.comparingDouble(e -> e.position().distanceTo(posVec)))
+                    .orElse(null);
+
+            if (closest != null) {
+                ArcanePressEntity arcanePressEntity = new ArcanePressEntity(closest.position().add(0, 1.0f, 0), world, maxAmountToPress, speed, validPressableEntities);
+                world.addFreshEntity(arcanePressEntity);
+            }
         }
     }
 

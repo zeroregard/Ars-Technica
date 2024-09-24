@@ -145,6 +145,9 @@ public class ArcanePressEntity extends Entity implements GeoEntity {
                 return;
             }
 
+            var currentPos = currentItem.getPosition(1.0f);
+            setPos(currentPos.add(Math.random() / 4f, 1f, Math.random() / 4f));
+
             RegistryAccess registryAccess = world.registryAccess();
             PressingRecipe recipe = pressingRecipe.get();
             ItemStack pressedStack = recipe.getResultItem(registryAccess);
@@ -156,8 +159,9 @@ public class ArcanePressEntity extends Entity implements GeoEntity {
             currentStack.shrink(1);
 
             amountPressed++;
+
             AllSoundEvents.MECHANICAL_PRESS_ACTIVATION.playOnServer(world, blockPosition(), .5f,
-                    .75f + (speed / 8));
+                    .75f + (speed / 16));
         }
 
         if (currentStack.getCount() <= 0) {
