@@ -9,6 +9,8 @@ import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
 
+import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
+import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -29,14 +31,14 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EffectPress extends AbstractItemResolveEffect {
     public static final EffectPress INSTANCE = new EffectPress();
+    private static int DEFAULT_AMOUNT_TO_PRESS = 32;
+    private static int AMOUNT_PER_AMPLIFIER = 4;
+    private static float DEFAULT_SPEED = 2.0f;
 
     private EffectPress() {
         super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_press"), "Press");
@@ -47,32 +49,32 @@ public class EffectPress extends AbstractItemResolveEffect {
                                   @Nullable LivingEntity shooter,
                                   SpellStats spellStats,
                                   SpellContext spellContext, SpellResolver resolver) {
-        RegistryAccess registryAccess = world.registryAccess();
+        List<ItemEntity> validPressableEntities = new ArrayList<>();
+
         for (ItemEntity itemEntity : entityList) {
             ItemStack itemStack = itemEntity.getItem();
-            int stackSize = itemStack.getCount();
 
-            Optional<PressingRecipe> pressingRecipe = world.getRecipeManager()
-                    .getRecipeFor(AllRecipeTypes.PRESSING.getType(), new RecipeWrapper(new net.minecraftforge.items.ItemStackHandler(1) {
-                        {
-                            setStackInSlot(0, itemStack);
-                        }
-                    }), world);
+            Optional<PressingRecipe> pressingRecipe = RecipeHelpers.getPressingRecipeForItemStack(itemStack, world);
 
             if (pressingRecipe.isPresent()) {
-                PressingRecipe recipe = pressingRecipe.get();
-                ItemStack resultStack = recipe.getResultItem(registryAccess);
-                resultStack.setCount(stackSize);
-                itemEntity.discard();
-                ItemEntity resultEntity = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), resultStack);
-                world.addFreshEntity(resultEntity);
+                validPressableEntities.add(itemEntity);
             }
+        }
+
+        int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
+        int maxAmountToPress = Math.round(4 * (1 + aoeBuff));
+        float speed = DEFAULT_SPEED;
+
+        if (!validPressableEntities.isEmpty()) {
+            ItemEntity first = validPressableEntities.stream().findFirst().get();
+            ArcanePressEntity arcanePressEntity = new ArcanePressEntity(first.position().add(0, 1.0f, 0), world, maxAmountToPress, speed, validPressableEntities);
+            world.addFreshEntity(arcanePressEntity);
         }
     }
 
     @Override
     public int getDefaultManaCost() {
-        return 20;
+        return 100;
     }
 
     @Nonnull
