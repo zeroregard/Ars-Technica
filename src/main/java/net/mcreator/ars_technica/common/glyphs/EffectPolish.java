@@ -2,29 +2,26 @@ package net.mcreator.ars_technica.common.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.common.entity.ArcanePolishEntity;
+import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
+import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class EffectPolish extends AbstractItemResolveEffect {
     public static final EffectPolish INSTANCE = new EffectPolish();
+    private static float DEFAULT_SPEED = 2.0f;
 
     private EffectPolish() {
         super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_polish"), "Polish");
@@ -35,29 +32,38 @@ public class EffectPolish extends AbstractItemResolveEffect {
                                   @Nullable LivingEntity shooter,
                                   SpellStats spellStats,
                                   SpellContext spellContext, SpellResolver resolver) {
-        RegistryAccess registryAccess = world.registryAccess();
+        List<ItemEntity> validPolishableEntities = new ArrayList<>();
+
         for (ItemEntity itemEntity : entityList) {
             ItemStack itemStack = itemEntity.getItem();
-            int stackSize = itemStack.getCount();
 
-            SandPaperPolishingRecipe.SandPaperInv sandpaperInventory = new SandPaperPolishingRecipe.SandPaperInv(itemStack);
-            Optional<SandPaperPolishingRecipe> polishingRecipe = world.getRecipeManager()
-                    .getRecipeFor(AllRecipeTypes.SANDPAPER_POLISHING.getType(), sandpaperInventory, world);
+            Optional<SandPaperPolishingRecipe> polishingRecipe = RecipeHelpers.getPolishingRecipeForItemStack(itemStack, world);
 
             if (polishingRecipe.isPresent()) {
-                SandPaperPolishingRecipe recipe = polishingRecipe.get();
-                ItemStack resultStack = recipe.getResultItem(registryAccess);
-                resultStack.setCount(stackSize);
-                itemEntity.discard();
-                ItemEntity resultEntity = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), resultStack);
-                world.addFreshEntity(resultEntity);
+                validPolishableEntities.add(itemEntity);
+            }
+        }
+
+        boolean hasFocus = SpellResolverHelpers.hasTransmutationFocus(resolver);
+        int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
+        int maxAmountToPolish = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
+        float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
+
+        if (!validPolishableEntities.isEmpty()) {
+            ItemEntity closest = validPolishableEntities.stream()
+                    .min(Comparator.comparingDouble(e -> e.position().distanceTo(posVec)))
+                    .orElse(null);
+
+            if (closest != null) {
+                ArcanePolishEntity arcanePolishEntity = new ArcanePolishEntity(closest.position().add(0, 0.5f, 0), world, maxAmountToPolish, speed, validPolishableEntities);
+                world.addFreshEntity(arcanePolishEntity);
             }
         }
     }
 
     @Override
     public int getDefaultManaCost() {
-        return 20;
+        return 120;
     }
 
     @Nonnull

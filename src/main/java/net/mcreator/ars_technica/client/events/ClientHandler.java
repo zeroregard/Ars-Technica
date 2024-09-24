@@ -8,6 +8,7 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 
+import net.mcreator.ars_technica.client.renderer.entity.ArcanePolishEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePressEntityRenderer;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.setup.EntityRegistry;
@@ -18,6 +19,7 @@ import net.mcreator.ars_technica.common.entity.WhirlEntity;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.minecraft.sounds.SoundEvent;
 
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -93,7 +95,11 @@ public class ClientHandler {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        EntityType a = EntityRegistry.WHIRL_ENTITY.get();
+        EntityType b = EntityRegistry.ARCANE_PRESS_ENTITY.get();
+        EntityType c = EntityRegistry.ARCANE_POLISH_ENTITY.get();
         event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
     }
 }

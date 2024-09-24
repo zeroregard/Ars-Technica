@@ -1,11 +1,12 @@
 package net.mcreator.ars_technica.common.entity;
 
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
+import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,49 +24,59 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 import java.util.Optional;
 
-public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity {
-
-    public ArcanePressEntity(Vec3 position, Level world, int maxAmountToPress, float speed, List<ItemEntity> pressableEntities) {
-        super(EntityRegistry.ARCANE_PRESS_ENTITY.get(), position, world, maxAmountToPress, speed, pressableEntities);
+public class ArcanePolishEntity extends ArcaneProcessEntity implements GeoEntity {
+    protected double distanceToItem = 0.5;
+    public ArcanePolishEntity(Vec3 position, Level world, int maxAmountToPolish, float speed, List<ItemEntity> polishableEntities) {
+        super(EntityRegistry.ARCANE_POLISH_ENTITY.get(), position, world, maxAmountToPolish, speed, polishableEntities);
     }
 
-    public ArcanePressEntity(EntityType<ArcanePressEntity> entityType, Level world) {
+    public ArcanePolishEntity(EntityType<ArcanePolishEntity> entityType, Level world) {
         super(entityType, world);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if(tickCount == 1) {
+            AllSoundEvents.SANDING_SHORT.playOnServer(world, blockPosition(), .5f,
+                    .75f + (speed / 8));
+        }
     }
 
 
     @Override
     protected void process(ItemEntity item) {
-        press(item);
+        polish(item);
     }
 
-    private void press(ItemEntity item) {
+    private void polish(ItemEntity item) {
         ItemStack currentStack = item.getItem();
         if (currentStack.getCount() > 0) {
-            Optional<PressingRecipe> pressingRecipe = RecipeHelpers.getPressingRecipeForItemStack(currentStack, world);
+            Optional<SandPaperPolishingRecipe> polishingRecipe = RecipeHelpers.getPolishingRecipeForItemStack(currentStack, world);
 
-            if (pressingRecipe.isEmpty()) {
+            if (polishingRecipe.isEmpty()) {
                 processableEntities.remove(currentItem);
                 currentItem = null;
                 return;
             }
 
             var currentPos = currentItem.getPosition(1.0f);
-            setPos(currentPos.add(Math.random() / 4f, 1f, Math.random() / 4f));
+            setPos(currentPos.add(Math.random() / 8f, distanceToItem, Math.random() / 8f));
 
             RegistryAccess registryAccess = world.registryAccess();
-            PressingRecipe recipe = pressingRecipe.get();
-            ItemStack pressedStack = recipe.getResultItem(registryAccess);
-            pressedStack.setCount(1);
+            SandPaperPolishingRecipe recipe = polishingRecipe.get();
+            ItemStack polishedStack = recipe.getResultItem(registryAccess);
+            polishedStack.setCount(1);
 
-            growOutput(item, pressedStack);
+            growOutput(item, polishedStack);
 
             currentStack.shrink(1);
 
             amountProcessed++;
 
-            AllSoundEvents.MECHANICAL_PRESS_ACTIVATION.playOnServer(world, blockPosition(), .5f,
-                    .75f + (speed / 16));
+            AllSoundEvents.CONTROLLER_PUT.playOnServer(world, blockPosition(), .75f,
+                    1.5f + (speed / 16));
         }
 
         if (currentStack.getCount() <= 0) {
@@ -74,8 +85,15 @@ public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity 
     }
 
     @Override
+    protected void moveToItem() {
+        setPos(currentItem.position().add(0, distanceToItem, 0));
+    }
+
+
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "pressController", 0, this::pressAnimationPredicate));
+        controllerRegistrar.add(new AnimationController<>(this, "polishController", 0, this::polishAnimationPredicate));
     }
 
     AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
@@ -85,8 +103,8 @@ public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity 
         return factory;
     }
 
-    private PlayState pressAnimationPredicate(AnimationState<?> event) {
-        event.getController().setAnimation(RawAnimation.begin().thenPlay("press"));
+    private PlayState polishAnimationPredicate(AnimationState<?> event) {
+        event.getController().setAnimation(RawAnimation.begin().thenPlay("polish"));
         event.getController().setAnimationSpeed(speed);
         return PlayState.CONTINUE;
     }
