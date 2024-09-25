@@ -1,9 +1,11 @@
 {
-  "equip_set": {
+  "click": {
     "sounds": [
       {
-        "name": "ars_technica:equip_set",
-        "stream": false
+        "name": "ars_technica:click",
+        "stream": false,
+        "max_distance": 4,
+        "attenuation_distance": 4
       }
     ]
   },
