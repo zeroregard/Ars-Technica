@@ -1,10 +1,12 @@
 package net.mcreator.ars_technica;
 
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
+import net.mcreator.ars_technica.recipe.ConfigRecipeCondition;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.DistExecutor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -71,6 +73,7 @@ public class ArsTechnicaMod {
 
 	public void setup(final FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
+			CraftingHelper.register(ConfigRecipeCondition.Serializer.INSTANCE);
 			ArsNouveauRegistry.postInit();
 			NetworkHandler.registerMessages();
 		});

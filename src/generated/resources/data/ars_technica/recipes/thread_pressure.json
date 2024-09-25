@@ -1,5 +1,12 @@
 {
   "type": "ars_nouveau:enchanting_apparatus",
+  "conditions": [
+    {
+      "type": "ars_technica:config_enabled",
+      "config_option": "recipeThreadPressureEnabled",
+      "value": true
+    }
+  ],
   "keepNbtOfReagent": false,
   "output": {
     "item": "ars_technica:thread_pressure"
