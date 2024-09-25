@@ -31,7 +31,7 @@ public class SpyMonocle extends Item {
     public static final float ZOOM_FOV_MODIFIER = 0.1F;
     public static final float ZOOM_SENSITIVITY_MODIFIER = 0.05F;
     private static final String ZOOM_TAG = "Zoomed";
-    private double previousSensitivity = 0.0;
+    private Double previousSensitivity = null;
 
     public SpyMonocle(Properties properties) {
         super(properties);
@@ -75,14 +75,16 @@ public class SpyMonocle extends Item {
 
     private void adjustMouseSensitivity(Player player, boolean zooming) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == player && zooming) {
-            if (previousSensitivity == 0.0F) {
-                previousSensitivity = mc.options.sensitivity().get();
+        if (mc.player == player) {
+            if(zooming) {
+                if (previousSensitivity == null) {
+                    previousSensitivity = mc.options.sensitivity().get();
+                }
+                mc.options.sensitivity().set(previousSensitivity * ZOOM_SENSITIVITY_MODIFIER);
+            } else if (previousSensitivity != null) {
+                mc.options.sensitivity().set(previousSensitivity);
+                previousSensitivity = null;
             }
-            mc.options.sensitivity().set(previousSensitivity * ZOOM_SENSITIVITY_MODIFIER);
-        } else {
-            mc.options.sensitivity().set(previousSensitivity);
-            previousSensitivity = 0.0F;
         }
     }
 }

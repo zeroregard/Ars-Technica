@@ -15,6 +15,7 @@ import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StorageHelpers {
@@ -72,6 +73,16 @@ public class StorageHelpers {
             }
         }
         return returnPos;
+    }
+
+    public static List<BlockPos> getValidStorePositions(Level level, List<BlockPos> containerPosTargets, ItemStack stack) {
+        List<BlockPos> validPositions = new ArrayList<>();
+        for (BlockPos pos : containerPosTargets) {
+            if (sortPrefForStack(level, pos, stack) != ItemScroll.SortPref.INVALID) {
+                validPositions.add(pos);
+            }
+        }
+        return validPositions;
     }
 
     public static ItemScroll.SortPref sortPrefForStack(Level level, @Nullable BlockPos b, ItemStack stack) {

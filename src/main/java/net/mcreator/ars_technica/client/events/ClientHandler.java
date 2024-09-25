@@ -8,6 +8,7 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 
+import net.mcreator.ars_technica.client.renderer.entity.ArcanePressEntityRenderer;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.client.Minecraft;
@@ -93,5 +94,6 @@ public class ClientHandler {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
     }
 }
