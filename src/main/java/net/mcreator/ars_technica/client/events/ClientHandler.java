@@ -95,9 +95,6 @@ public class ClientHandler {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        EntityType a = EntityRegistry.WHIRL_ENTITY.get();
-        EntityType b = EntityRegistry.ARCANE_PRESS_ENTITY.get();
-        EntityType c = EntityRegistry.ARCANE_POLISH_ENTITY.get();
         event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
