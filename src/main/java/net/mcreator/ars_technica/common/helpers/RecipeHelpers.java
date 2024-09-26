@@ -1,6 +1,7 @@
 package net.mcreator.ars_technica.common.helpers;
 
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
@@ -41,6 +42,12 @@ public class RecipeHelpers {
                         setStackInSlot(0, input);
                     }
                 }), world);
+    }
+
+    public static Optional<SandPaperPolishingRecipe> getPolishingRecipeForItemStack(ItemStack input, Level world) {
+        SandPaperPolishingRecipe.SandPaperInv sandpaperInventory = new SandPaperPolishingRecipe.SandPaperInv(input);
+        return world.getRecipeManager()
+                .getRecipeFor(AllRecipeTypes.SANDPAPER_POLISHING.getType(), sandpaperInventory, world);
     }
 
     private static <C extends Container, T extends Recipe<C>> Optional<T> getRecipeFor(

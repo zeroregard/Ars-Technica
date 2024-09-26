@@ -63,7 +63,6 @@ public class EffectPress extends AbstractItemResolveEffect {
         boolean hasFocus = SpellResolverHelpers.hasTransmutationFocus(resolver);
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
         int maxAmountToPress = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
-
         float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
 
         if (!validPressableEntities.isEmpty()) {

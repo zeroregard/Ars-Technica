@@ -16,18 +16,18 @@ public class ArcanePressModel extends GeoModel<ArcanePressEntity> {
     }
 
     @Override
-    public ResourceLocation getModelResource(ArcanePressEntity whirl) {
+    public ResourceLocation getModelResource(ArcanePressEntity entity) {
         return new ResourceLocation(ArsTechnicaMod.MODID, "geo/arcane_press.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureResource(ArcanePressEntity whirl) {
+    public ResourceLocation getTextureResource(ArcanePressEntity entity) {
         String path = "textures/entity/arcane_press.png";
         return new ResourceLocation(ArsTechnicaMod.MODID, path);
     }
 
     @Override
-    public ResourceLocation getAnimationResource(ArcanePressEntity whirl) {
+    public ResourceLocation getAnimationResource(ArcanePressEntity entity) {
         return new ResourceLocation(ArsTechnicaMod.MODID, "animations/animations_arcane_press.json");
     }
 }
