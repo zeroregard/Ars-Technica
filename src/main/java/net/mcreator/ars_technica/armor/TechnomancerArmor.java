@@ -54,8 +54,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
-import static alexthw.ars_elemental.ConfigHandler.Common.ARMOR_MANA_REGEN;
-import static alexthw.ars_elemental.ConfigHandler.Common.ARMOR_MAX_MANA;
+import static net.mcreator.ars_technica.ConfigHandler.Common.ARMOR_MANA_REGEN;
+import static net.mcreator.ars_technica.ConfigHandler.Common.ARMOR_MAX_MANA;
 
 public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModifierItem {
 

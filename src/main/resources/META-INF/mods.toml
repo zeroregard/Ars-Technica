@@ -1,17 +1,18 @@
 modLoader="javafml"
 loaderVersion="[47,)"
-license="Not specified"
+license="GNU GENERAL PUBLIC LICENSE"
+logoFile = "ars_technica_logo.png"
+description = '''
+This Ars Nouveau/Create add-on integrates machinery into magic. Become the Technomancer to build faster and summon entities that magically transform items.
+'''
 
 [[mods]]
 modId="ars_technica"
-version="1.0.0"
+version="1.20.1-1.0.1"
 displayName="Ars Technica"
-displayURL="https://mcreator.net"
-credits="Created using mod maker MCreator - https://mcreator.net/about"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/ars-technica"
+credits="Created with blood and tears in IntelliJ IDEA. Thanks to Bailey and Alex for code reference. Thanks to Jared for ideas, graphics and modelling."
 authors="Mathias Norregaard"
-
-# Start of user code block mod configuration
-# End of user code block mod configuration
 
 [[dependencies.ars_technica]]
     modId="minecraft"
@@ -20,8 +21,23 @@ authors="Mathias Norregaard"
     ordering="AFTER"
     side="BOTH"
 
+[[dependencies.ars_technica]]
+    modId = "ars_nouveau"
+    mandatory = true
+    versionRange = "[1.20.1-4.9.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
 
+[[dependencies.ars_technica]]
+    modId = "ars_elemental"
+    mandatory = true
+    versionRange = "[1.20.1-0.6,)"
+    ordering = "AFTER"
+    side = "BOTH"
 
-
-# Start of user code block dependencies configuration
-# End of user code block dependencies configuration
+[[dependencies.ars_technica]]
+    modId = "create"
+    mandatory = true
+    versionRange = "[0.5,)"
+    ordering = "AFTER"
+    side = "BOTH"

@@ -7,6 +7,8 @@ public class ConfigHandler {
 
     public static class Common {
 
+        public static ForgeConfigSpec.IntValue ARMOR_MAX_MANA;
+        public static ForgeConfigSpec.IntValue ARMOR_MANA_REGEN;
         public static ForgeConfigSpec.BooleanValue SCHEMATIC_CANNON_SPEED_BOOST_ENABLED;
         public static ForgeConfigSpec.ConfigValue<Double> SCHEMATIC_CANNON_SPEED_BOOST_RANGE;
 
@@ -40,8 +42,11 @@ public class ConfigHandler {
 
         public Common(ForgeConfigSpec.Builder builder) {
 
-            builder.comment("Adjust these variables for perk-related settings")
-                    .push("Perks");
+            builder.comment("Adjust these variables for Technomancer armor settings")
+                            .push("Technomancer");
+
+            ARMOR_MAX_MANA = builder.comment("Max mana bonus for each armor piece").defineInRange("armorMaxMana", 100, 0, 10000);
+            ARMOR_MANA_REGEN = builder.comment("Mana regen bonus for each armor piece").defineInRange("armorManaRegen", 4, 0, 100);
 
             SCHEMATIC_CANNON_SPEED_BOOST_ENABLED = builder.comment("If enabled, schematic cannons will fire faster when players wearing the full Technomancer set are nearby schematic cannons")
                     .define("schematicCannonSpeedBoostEnabled", true);
