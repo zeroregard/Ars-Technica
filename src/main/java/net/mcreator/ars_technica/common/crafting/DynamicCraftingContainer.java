@@ -37,12 +37,20 @@ public class DynamicCraftingContainer implements CraftingContainer {
 
   @Override
   public ItemStack getItem(int index) {
-    return this.items.get(index);
+    if (index >= 0 && index < this.items.size()) {
+      return this.items.get(index);
+    } else {
+      return ItemStack.EMPTY;
+    }
   }
 
   @Override
   public void setItem(int index, ItemStack stack) {
-    this.items.set(index, stack);
+    if (index >= 0 && index < this.items.size()) {
+      this.items.set(index, stack);
+    } else {
+      System.err.println("Attempted to set item at invalid index: " + index);
+    }
   }
 
   @Override
