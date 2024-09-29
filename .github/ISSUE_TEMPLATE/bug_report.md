@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a bug to help improve the project
+about: Report a bug to help improve the project (crashes, glitches, unexpected behaviour)
 title: "[BUG] "
 labels: bug
 assignees: ''
