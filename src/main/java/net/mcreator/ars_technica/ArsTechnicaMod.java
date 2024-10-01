@@ -1,9 +1,15 @@
 package net.mcreator.ars_technica;
 
+import com.simibubi.create.content.kinetics.BlockStressDefaults;
+import com.simibubi.create.content.kinetics.BlockStressValues;
+import com.simibubi.create.foundation.utility.Couple;
+import com.simibubi.create.foundation.utility.RegisteredObjects;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
+import net.mcreator.ars_technica.common.kinetics.CustomStressValueProvider;
 import net.mcreator.ars_technica.recipe.ConfigRecipeCondition;
-import net.mcreator.ars_technica.setup.ItemsRegistry;
+import net.mcreator.ars_technica.setup.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -29,9 +35,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.FriendlyByteBuf;
 
-import net.mcreator.ars_technica.setup.NetworkHandler;
-import net.mcreator.ars_technica.setup.ModSetup;
-import net.mcreator.ars_technica.setup.ArsNouveauRegistry;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.client.events.ClientHandler;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
@@ -77,8 +80,14 @@ public class ArsTechnicaMod {
 			ArsNouveauRegistry.postInit();
 			NetworkHandler.registerMessages();
 		});
+		registerStressValues();
 	}
 
+	private static void registerStressValues() {
+		var sourceEngineId = BlockRegistry.SOURCE_ENGINE.getId();
+		BlockStressDefaults.setDefaultCapacity(sourceEngineId, 16384.0);
+		BlockStressDefaults.setGeneratorSpeed(sourceEngineId, () -> Couple.create(0, 256));
+	}
 	public void clientSetup(final FMLClientSetupEvent event) {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::init);
 	}
