@@ -85,9 +85,10 @@ public class ArsTechnicaMod {
 
 	private static void registerStressValues() {
 		var sourceEngineId = BlockRegistry.SOURCE_ENGINE.getId();
-		BlockStressDefaults.setDefaultCapacity(sourceEngineId, 16384.0);
+		BlockStressDefaults.setDefaultCapacity(sourceEngineId, 256.0);
 		BlockStressDefaults.setGeneratorSpeed(sourceEngineId, () -> Couple.create(0, 256));
 	}
+
 	public void clientSetup(final FMLClientSetupEvent event) {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::init);
 	}

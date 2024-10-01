@@ -3,10 +3,10 @@
 	"parent": "block/block",
 	"textures": {
 		"5": "create:block/creative_casing",
-		"6": "create:block/creative_motor",
+		"6": "ars_technica:block/source_motor",
 		"7": "create:block/flap_display_front",
 		"particle": "create:block/creative_casing",
-		"1_0": "create:block/axis"
+		"1_0": "ars_technica:block/ars_nouveau_axis"
 	},
 	"elements": [
 		{

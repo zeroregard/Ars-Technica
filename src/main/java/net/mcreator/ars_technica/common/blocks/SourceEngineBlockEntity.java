@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.common.blocks;
 
+import com.hollingsworth.arsnouveau.api.util.SourceUtil;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlocks;
@@ -11,6 +12,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollVa
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.VecHelper;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.setup.BlockRegistry;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.core.BlockPos;
@@ -24,8 +26,11 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
 
     public static final int DEFAULT_SPEED = 16;
     public static final int MAX_SPEED = 256;
+    public static final float SPEED_TO_SOURCE_MULTIPLIER = 7.5f;
 
+    protected boolean fueled = false;
     protected ScrollValueBehaviour generatedSpeed;
+    protected int tickCount = 0;
 
     public SourceEngineBlockEntity(BlockPos pos, BlockState state) {
         super(EntityRegistry.SOURCE_ENGINE_BLOCK_ENTITY.get(), pos, state);
@@ -46,6 +51,10 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
     @Override
     public void tick() {
         super.tick();
+        tickCount++;
+        if (tickCount % 20 == 0) {
+            consumeSource();
+        }
     }
 
     @Override
@@ -55,8 +64,22 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
             updateGeneratedRotation();
     }
 
+    protected void consumeSource() {
+        var absoluteSpeed = Math.abs(generatedSpeed.getValue());
+        var sourceCost = Math.round(absoluteSpeed * SPEED_TO_SOURCE_MULTIPLIER);
+        var success = SourceUtil.takeSourceWithParticles(worldPosition, level, 10, sourceCost) != null;
+        var fueledStateChanged = success != fueled;
+        fueled = success;
+        if(fueledStateChanged) {
+            updateGeneratedRotation();
+        }
+    }
+
     @Override
     public float getGeneratedSpeed() {
+        if (!fueled) {
+            return 0;
+        }
         if (!BlockRegistry.SOURCE_ENGINE.get().defaultBlockState().is(getBlockState().getBlock()))
             return 0;
         return convertToDirection(generatedSpeed.getValue(), getBlockState().getValue(SourceEngineBlock.FACING));
