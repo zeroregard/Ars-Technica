@@ -3,9 +3,7 @@ package net.mcreator.ars_technica.common.blocks;
 import com.hollingsworth.arsnouveau.api.util.SourceUtil;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
-import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.motor.KineticScrollValueBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -13,6 +11,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollVa
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.VecHelper;
+import net.mcreator.ars_technica.ConfigHandler;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.BlockRegistry;
 import net.mcreator.ars_technica.setup.EntityRegistry;
@@ -28,7 +27,6 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
 
     public static final int DEFAULT_SPEED = 16;
     public static final int MAX_SPEED = 256;
-    public static final float SPEED_TO_SOURCE_MULTIPLIER = 7.5f;
 
     protected boolean fueled = false;
     protected ScrollValueBehaviour generatedSpeed;
@@ -73,7 +71,7 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
 
     protected void consumeSource() {
         var absoluteSpeed = Math.abs(generatedSpeed.getValue());
-        var sourceCost = Math.round(absoluteSpeed * SPEED_TO_SOURCE_MULTIPLIER);
+        var sourceCost = (int)Math.round(absoluteSpeed * ConfigHandler.Common.SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER.get());
         var success = SourceUtil.takeSourceWithParticles(worldPosition, level, 10, sourceCost) != null;
         var fueledStateChanged = success != fueled;
         fueled = success;

@@ -34,7 +34,7 @@ public class ItemsRegistry {
   public static RegistryObject<Item> SPY_MONOCLE = ITEMS.register("spy_monocle",  () -> new SpyMonocle(defaultItemProperties().stacksTo(1)));
 
   public static final RegistryObject<BlockItem> SOURCE_ENGINE =
-          ITEMS.register("source_engine", () -> new BlockItem(BlockRegistry.SOURCE_ENGINE.get(), defaultItemProperties().stacksTo(1)));
+          ITEMS.register("source_engine", () -> new BlockItem(BlockRegistry.SOURCE_ENGINE.get(), defaultItemProperties().stacksTo(64)));
 
   public static void register(IEventBus eventBus) {
     ITEMS.register(eventBus);

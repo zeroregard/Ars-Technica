@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BEB",
+    "CSC",
+    "BCB"
+  ],
+  "key": {
+    "B": {
+      "item": "create:brass_ingot"
+    },
+    "C": {
+      "item": "create:cogwheel"
+    },
+    "S": {
+      "item": "ars_nouveau:source_gem"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    }
+  },
+  "result": {
+    "item": "ars_technica:source_engine",
+    "count": 1
+  }
+}

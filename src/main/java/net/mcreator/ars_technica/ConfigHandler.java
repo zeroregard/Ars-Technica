@@ -12,6 +12,8 @@ public class ConfigHandler {
         public static ForgeConfigSpec.BooleanValue SCHEMATIC_CANNON_SPEED_BOOST_ENABLED;
         public static ForgeConfigSpec.ConfigValue<Double> SCHEMATIC_CANNON_SPEED_BOOST_RANGE;
 
+        public static ForgeConfigSpec.ConfigValue<Double> SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER;
+
         // Recipes
         public final ForgeConfigSpec.BooleanValue RECIPE_FOCUS_TRANSMUTATION_ENABLED;
         public static final String RECIPE_FOCUS_TRANSMUTATION_CONFIG_OPTION = "recipeFocusTransmutationEnabled";
@@ -28,17 +30,7 @@ public class ConfigHandler {
         public final ForgeConfigSpec.BooleanValue RECIPE_SPY_MONOCLE_ENABLED;
         public static final String RECIPE_SPY_MONOCLE_CONFIG_OPTION = "recipeSpyMonocleEnabled";
 
-        //public final ForgeConfigSpec.BooleanValue RECIPE_TECHNOMANCER_BOOTS_ENABLED;
-        //public static final String RECIPE_TECHNOMANCER_BOOTS_CONFIG_OPTION = "recipeTechnomancerBootsEnabled";
 
-        //public final ForgeConfigSpec.BooleanValue RECIPE_TECHNOMANCER_CHESTPLATE_ENABLED;
-        //public static final String RECIPE_TECHNOMANCER_CHESTPLATE_CONFIG_OPTION = "recipeTechnomancerChestplateEnabled";
-
-        //public final ForgeConfigSpec.BooleanValue RECIPE_TECHNOMANCER_LEGGINGS_ENABLED;
-        //public static final String RECIPE_TECHNOMANCER_LEGGINGS_CONFIG_OPTION = "recipeTechnomancerLeggingsEnabled";
-
-        //public final ForgeConfigSpec.BooleanValue RECIPE_TECHNOMANCER_HELMET_ENABLED;
-        //public static final String RECIPE_TECHNOMANCER_HELMET_CONFIG_OPTION = "recipeTechnomancerHelmetEnabled";
 
         public Common(ForgeConfigSpec.Builder builder) {
 
@@ -53,6 +45,12 @@ public class ConfigHandler {
             SCHEMATIC_CANNON_SPEED_BOOST_RANGE = builder.comment("Range for above-mentioned perk, if enabled.")
                     .define("schematicCannonSpeedBoostRange", 8D);
 
+            builder.pop();
+
+            builder.comment("Adjust these variables for block settings")
+                    .push("Blocks");
+            SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER = builder.comment("Determines the multiplier used in the cost for generating rotation, defaults to 7.5")
+                    .defineInRange("sourceMotorSpeedToSourceMultiplier", 7.5f, 0f, 100f);
             builder.pop();
 
             builder.comment("Set these variables to false/true to disable/enable recipes")
