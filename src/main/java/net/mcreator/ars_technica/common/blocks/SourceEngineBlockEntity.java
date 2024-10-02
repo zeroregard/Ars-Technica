@@ -5,6 +5,7 @@ import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.motor.KineticScrollValueBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -12,11 +13,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollVa
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.VecHelper;
-import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.BlockRegistry;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -31,6 +33,11 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
     protected boolean fueled = false;
     protected ScrollValueBehaviour generatedSpeed;
     protected int tickCount = 0;
+
+
+    public boolean isFueled() {
+        return fueled;
+    }
 
     public SourceEngineBlockEntity(BlockPos pos, BlockState state) {
         super(EntityRegistry.SOURCE_ENGINE_BLOCK_ENTITY.get(), pos, state);
@@ -72,6 +79,9 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
         fueled = success;
         if(fueledStateChanged) {
             updateGeneratedRotation();
+            var pos = getBlockPos().getCenter();
+            var event = fueled ? ArsTechnicaModSounds.SOURCE_ENGINE_START.get() : ArsTechnicaModSounds.SOURCE_ENGINE_STOP.get();
+            getLevel().playSound(null, pos.x, pos.y, pos.z, event, SoundSource.BLOCKS, 0.25f, 1.0f);
         }
     }
 

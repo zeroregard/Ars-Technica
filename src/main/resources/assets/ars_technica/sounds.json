@@ -83,5 +83,23 @@
         "stream": false
       }
     ]
+  },
+  "source_engine_start": {
+    "subtitle": "subtitles.source_engine_start",
+    "sounds": [
+      {
+        "name": "ars_technica:source_engine_start",
+        "stream": false
+      }
+    ]
+  },
+  "source_engine_stop": {
+    "subtitle": "subtitles.source_engine_stop",
+    "sounds": [
+      {
+        "name": "ars_technica:source_engine_stop",
+        "stream": false
+      }
+    ]
   }
 }

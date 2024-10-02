@@ -4,6 +4,7 @@ import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.BlockStressValues;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
+import net.mcreator.ars_technica.client.AllPartialModels;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.common.kinetics.CustomStressValueProvider;
 import net.mcreator.ars_technica.recipe.ConfigRecipeCondition;
@@ -72,6 +73,7 @@ public class ArsTechnicaMod {
 	@OnlyIn(Dist.CLIENT)
 	private void doClientStuff(final FMLClientSetupEvent event) {
 		CuriosRendererRegistry.register(ItemsRegistry.SPY_MONOCLE.get(), () -> new SpyMonocleCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER)));
+		AllPartialModels.init();
 	}
 
 	public void setup(final FMLCommonSetupEvent event) {
