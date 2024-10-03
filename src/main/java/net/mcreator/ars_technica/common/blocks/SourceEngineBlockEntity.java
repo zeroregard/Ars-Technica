@@ -4,6 +4,7 @@ import com.hollingsworth.arsnouveau.api.util.SourceUtil;
 import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
+import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.motor.KineticScrollValueBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
@@ -15,9 +16,12 @@ import net.mcreator.ars_technica.ConfigHandler;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.BlockRegistry;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -54,6 +58,28 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
     }
 
     @Override
+    public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        boolean added = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+        if (!IRotate.StressImpact.isEnabled())
+            return added;
+
+        Lang.translate("gui.goggles.source_consumption")
+                .forGoggles(tooltip);
+        int sourceCostTotal = getSourceCost();
+
+        Lang.number(sourceCostTotal)
+                .space()
+                .translate("ars_nouveau.unit.source")
+                .style(ChatFormatting.DARK_PURPLE)
+                .space()
+                .add(Lang.translate("gui.goggles.per_second")
+                        .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 1);
+
+        return true;
+    }
+
+    @Override
     public void tick() {
         super.tick();
         tickCount++;
@@ -70,8 +96,7 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
     }
 
     protected void consumeSource() {
-        var absoluteSpeed = Math.abs(generatedSpeed.getValue());
-        var sourceCost = (int)Math.round(absoluteSpeed * ConfigHandler.Common.SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER.get());
+        var sourceCost = getSourceCost();
         var success = SourceUtil.takeSourceWithParticles(worldPosition, level, 10, sourceCost) != null;
         var fueledStateChanged = success != fueled;
         fueled = success;
@@ -81,6 +106,12 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
             var event = fueled ? ArsTechnicaModSounds.SOURCE_ENGINE_START.get() : ArsTechnicaModSounds.SOURCE_ENGINE_STOP.get();
             getLevel().playSound(null, pos.x, pos.y, pos.z, event, SoundSource.BLOCKS, 0.25f, 1.0f);
         }
+    }
+
+    private int getSourceCost() {
+        var absoluteSpeed = Math.abs(generatedSpeed.getValue());
+        var sourceCost = (int)Math.round(absoluteSpeed * ConfigHandler.Common.SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER.get());
+        return sourceCost;
     }
 
     @Override

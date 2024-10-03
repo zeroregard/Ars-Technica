@@ -32,5 +32,9 @@
   "item.ars_technica.thread_pressure": "Pressure",
   "item.ars_technica.spy_monocle": "Spy Monocle",
   "item.ars_technica.spy_monocle.tooltip": "Press %s to zoom in",
-  "block.ars_technica.source_engine": "Source Motor"
+  "block.ars_technica.source_engine": "Source Motor",
+  "create.gui.goggles.source_consumption": "Source Consumption",
+  "create.ars_nouveau.unit.source": "source",
+  "create.gui.goggles.per_second": "per second"
+
 }
