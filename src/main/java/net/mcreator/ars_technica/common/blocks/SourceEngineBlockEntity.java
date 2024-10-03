@@ -64,6 +64,7 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
             return added;
 
         Lang.translate("gui.goggles.source_consumption")
+                .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip);
         int sourceCostTotal = getSourceCost();
 
