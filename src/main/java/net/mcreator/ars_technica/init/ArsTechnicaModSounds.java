@@ -36,4 +36,11 @@ public class ArsTechnicaModSounds {
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "whirl_process_affect_water"), 8f));
 	public static final RegistryObject<SoundEvent> WHIRL_PROCESS_AFFECT_FIRE = REGISTRY.register("whirl_process_affect_fire",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "whirl_process_affect_fire"), 8f));
+
+	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_START = REGISTRY.register("source_engine_start",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "source_engine_start"), 8f));
+	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_STOP = REGISTRY.register("source_engine_stop",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "source_engine_stop"), 8f));
+
+
 }

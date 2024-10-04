@@ -10,8 +10,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.concurrent.CompletableFuture;
 
-import static net.mcreator.ars_technica.ArsTechnicaMod.LOGGER;
-
 
 @Mod.EventBusSubscriber(modid = ArsTechnicaMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Datagen {
@@ -25,6 +23,7 @@ public class Datagen {
         gen.addProvider(event.includeServer(), BTP);
         gen.addProvider(event.includeServer(), new ATTagsProvider.ATItemTagsProvider(gen, provider, BTP, existingFileHelper));
         gen.addProvider(event.includeServer(), new ATApparatusProvider(gen));
+        gen.addProvider(event.includeClient(), new ModBlockStateProvider(gen.getPackOutput(), ArsTechnicaMod.MODID, existingFileHelper));
 
     }
 

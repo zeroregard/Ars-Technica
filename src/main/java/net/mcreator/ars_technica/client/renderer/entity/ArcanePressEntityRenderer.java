@@ -30,7 +30,6 @@ public class ArcanePressEntityRenderer extends GenericRenderer<ArcanePressEntity
         float z = radius * (float)Math.sin(angle);
 
 
-
         matrixStack.pushPose();
         matrixStack.translate(x, 0, z);
         matrixStack.rotateAround(new Quaternionf().rotateLocalY(angle), 0, 0, 0);

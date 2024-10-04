@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "ars_technica:block/source_engine/block_vertical",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "ars_technica:block/source_engine/block",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "ars_technica:block/source_engine/block",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "ars_technica:block/source_engine/block"
+    },
+    "facing=up": {
+      "model": "ars_technica:block/source_engine/block_vertical"
+    },
+    "facing=west": {
+      "model": "ars_technica:block/source_engine/block",
+      "y": 90
+    }
+  }
+}
