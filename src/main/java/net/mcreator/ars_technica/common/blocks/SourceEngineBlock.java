@@ -1,14 +1,14 @@
 package net.mcreator.ars_technica.common.blocks;
 
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
-import com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -16,8 +16,12 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.Collections;
+import java.util.List;
 
 public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<SourceEngineBlockEntity> {
 
@@ -28,6 +32,11 @@ public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<So
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AllShapes.MOTOR_BLOCK.get(state.getValue(FACING));
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+        return Collections.singletonList(new ItemStack(ItemsRegistry.SOURCE_ENGINE.get()));
     }
 
     @Override

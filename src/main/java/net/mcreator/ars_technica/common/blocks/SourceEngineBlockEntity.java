@@ -16,15 +16,18 @@ import net.mcreator.ars_technica.ConfigHandler;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.BlockRegistry;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
