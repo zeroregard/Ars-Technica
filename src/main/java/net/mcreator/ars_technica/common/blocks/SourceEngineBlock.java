@@ -11,7 +11,10 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -62,6 +65,26 @@ public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<So
     @Override
     public boolean hideStressImpact() {
         return true;
+    }
+
+    @Override
+    public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, world, pos, oldState, isMoving);
+        checkForPower(world, pos);
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
+        checkForPower(world, pos);
+    }
+
+    private void checkForPower(Level world, BlockPos pos) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof SourceEngineBlockEntity) {
+            boolean isPowered = world.hasNeighborSignal(pos);
+            ((SourceEngineBlockEntity) blockEntity).setPowered(isPowered);
+        }
     }
 
     @Override
