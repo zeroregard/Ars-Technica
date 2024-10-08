@@ -8,6 +8,7 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 
+import net.mcreator.ars_technica.client.renderer.entity.ArcaneHammerEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePolishEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePressEntityRenderer;
 import net.mcreator.ars_technica.common.blocks.SourceEngineRenderer;
@@ -100,7 +101,7 @@ public class ClientHandler {
         event.registerEntityRenderer(EntityRegistry.WHIRL_ENTITY.get(), WhirlEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
-
+        event.registerEntityRenderer(EntityRegistry.ARCANE_HAMMER_ENTITY.get(), ArcaneHammerEntityRenderer::new);
 
         event.registerBlockEntityRenderer(EntityRegistry.SOURCE_ENGINE_BLOCK_ENTITY.get(), SourceEngineRenderer::new);
     }

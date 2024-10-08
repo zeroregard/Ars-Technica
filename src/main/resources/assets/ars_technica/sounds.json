@@ -101,5 +101,23 @@
         "stream": false
       }
     ]
+  },
+  "obliterate_charge": {
+    "subtitle": "subtitles.obliterate_charge",
+    "sounds": [
+      {
+        "name": "ars_technica:obliterate_charge",
+        "stream": false
+      }
+    ]
+  },
+  "obliterate_smash": {
+    "subtitle": "subtitles.obliterate_smash",
+    "sounds": [
+      {
+        "name": "ars_technica:obliterate_smash",
+        "stream": false
+      }
+    ]
   }
 }
