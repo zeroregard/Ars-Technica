@@ -77,7 +77,7 @@ public class EffectObliterate extends AbstractEffect {
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentAOE.INSTANCE, AugmentSensitive.INSTANCE);
+        return augmentSetOf(AugmentSensitive.INSTANCE);
     }
 
     @Nonnull

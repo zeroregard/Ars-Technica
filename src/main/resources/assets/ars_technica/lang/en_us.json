@@ -9,6 +9,7 @@
   "ars_technica.glyph_desc.glyph_polish": "Refines items into their polished variants",
   "ars_technica.glyph_desc.glyph_press": "Flattens items into their pressed variants",
   "ars_technica.glyph_desc.glyph_whirl": "Creates a whirlwind in an area, causing items to be centrifuged. Combine with water/flare/smelt/hex to wash/smoke/blast/haunt items",
+  "ars_technica.glyph_desc.glyph_obliterate": "Obliterates foes by sheer force with an arcane hammer. Use Sensitive to crush items instead of destroying them",
   "ars_technica.glyph_name.glyph_carve": "Carve",
   "ars_technica.glyph_name.glyph_insert": "Insert",
   "ars_technica.glyph_name.glyph_obliterate": "Obliterate",
@@ -34,5 +35,5 @@
   "item.ars_technica.technomancer_leggings": "Technomancer\u0027s Leggings",
   "item.ars_technica.thread_pressure": "Pressure",
   "item.ars_technica.transmutation_focus": "Focus of Transmutation",
-  "itemGroup.ars_technica": "Ars Technica"
+  "itemGroup.ars_technica": "Ars Technica",
 }
