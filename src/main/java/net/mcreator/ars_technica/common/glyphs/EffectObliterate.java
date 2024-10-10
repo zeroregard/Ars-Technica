@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.common.glyphs;
 
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import net.mcreator.ars_technica.ArsTechnicaMod;
@@ -16,6 +17,7 @@ import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -28,9 +30,9 @@ import net.mcreator.ars_technica.common.helpers.CraftingHelpers;
 import net.mcreator.ars_technica.common.helpers.ItemHelpers;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.object.Color;
 
-import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
 import java.util.*;
@@ -46,15 +48,23 @@ public class EffectObliterate extends AbstractEffect {
 
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         var target = rayTraceResult.getEntity();
-        var color = new Color(spellContext.getColors().getColor());
-        ArcaneHammerEntity arcaneHammerEntity = new ArcaneHammerEntity(target, world, shooter, color);
-        world.addFreshEntity(arcaneHammerEntity);
+        var position = target.getPosition(1.0f);
+        resolve(target, position, world, shooter, spellStats, spellContext, resolver);
     }
 
     public void onResolveBlock(BlockHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        var color = new Color(spellContext.getColors().getColor());
         var position = rayTraceResult.getBlockPos().getCenter().add(0, 0.5, 0);
-        ArcaneHammerEntity arcaneHammerEntity = new ArcaneHammerEntity(position, world, shooter, color);
+        resolve(null, position, world, shooter, spellStats, spellContext, resolver);
+    }
+
+    private void resolve(@Nullable Entity target, Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
+        var color = new Color(spellContext.getColors().getColor());
+        var processItems = spellStats.isSensitive();
+        ArcaneHammerEntity arcaneHammerEntity = new ArcaneHammerEntity(target, position, world, shooter, color, resolver, processItems);
+        Vec3 direction = position.subtract(shooter.position()).normalize();
+        Vec3 rotation = new Vec3(0, 0, 0);
+        float yaw = (float)(-Math.atan2(direction.z(), direction.x()) + Math.PI/2);
+        arcaneHammerEntity.setYaw(yaw);
         world.addFreshEntity(arcaneHammerEntity);
     }
 
@@ -67,7 +77,7 @@ public class EffectObliterate extends AbstractEffect {
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentAOE.INSTANCE);
+        return augmentSetOf(AugmentAOE.INSTANCE, AugmentSensitive.INSTANCE);
     }
 
     @Nonnull
