@@ -1,0 +1,23 @@
+{
+  "type": "ars_nouveau:glyph",
+  "count": 1,
+  "exp": 160,
+  "inputItems": [
+    {
+      "item": {
+        "item": "ars_nouveau:manipulation_essence"
+      }
+    },
+    {
+      "item": {
+        "item": "minecraft:anvil"
+      }
+    },
+    {
+      "item": {
+        "item": "minecraft:diamond_block"
+      }
+    }
+  ],
+  "output": "ars_technica:glyph_obliterate"
+}
