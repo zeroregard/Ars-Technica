@@ -31,11 +31,15 @@ public class ArsTechnicaModSounds {
 			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "whirl_splash")));
 	public static final RegistryObject<SoundEvent> WHIRL_HAUNT = REGISTRY.register("whirl_haunt",
 			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "whirl_haunt")));
-
 	public static final RegistryObject<SoundEvent> WHIRL_PROCESS_AFFECT_WATER = REGISTRY.register("whirl_process_affect_water",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "whirl_process_affect_water"), 8f));
 	public static final RegistryObject<SoundEvent> WHIRL_PROCESS_AFFECT_FIRE = REGISTRY.register("whirl_process_affect_fire",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "whirl_process_affect_fire"), 8f));
+
+	public static final RegistryObject<SoundEvent> OBLITERATE_CHARGE = REGISTRY.register("obliterate_charge",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_charge"), 8f));
+	public static final RegistryObject<SoundEvent> OBLITERATE_SMASH = REGISTRY.register("obliterate_smash",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_smash"), 8f));
 
 	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_START = REGISTRY.register("source_engine_start",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "source_engine_start"), 8f));

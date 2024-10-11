@@ -42,12 +42,12 @@ public class WhirlProcessing extends FanProcessing {
     }
 
     private static List<ItemStack> applyCustomProcessing(List<ItemStack> stacks, ItemEntity entity, FanProcessingType type, Level world, SpellResolver whirlOwner) {
-        if (shouldDoubleOutputs(whirlOwner)) {
+        if (SpellResolverHelpers.shouldDoubleOutputs(whirlOwner)) {
             Optional<ProcessingRecipe<?>> recipe = getProcessingRecipeForEntity(entity, type, world);
             // If there's a processing recipe, we need to check if any of them are chanced based
             if (!recipe.isEmpty()) {
                 for (ItemStack stack : stacks) {
-                    if (isChanceBased(stack, recipe.get())) {
+                    if (RecipeHelpers.isChanceBased(stack, recipe.get())) {
                         stack.grow(stack.getCount());
                     }
                 }
@@ -55,13 +55,6 @@ public class WhirlProcessing extends FanProcessing {
         }
 
         return stacks;
-    }
-
-    private static boolean shouldDoubleOutputs(SpellResolver whirlOwner) {
-        if(whirlOwner != null && SpellResolverHelpers.hasTransmutationFocus(whirlOwner)) {
-            return true;
-        }
-        return false;
     }
 
     private static Optional<ProcessingRecipe<?>> getProcessingRecipeForEntity(ItemEntity entity, FanProcessingType type, Level world) {
@@ -82,14 +75,6 @@ public class WhirlProcessing extends FanProcessing {
         return Optional.empty();
     }
 
-
-
-    private static boolean isChanceBased(ItemStack input, ProcessingRecipe<?> recipe) {
-        List<ProcessingOutput> rollables = recipe.getRollableResults();
-
-        return rollables.stream()
-                .anyMatch(rollable -> input.getItem() == rollable.getStack().getItem() && rollable.getChance() < 1);
-    }
 
     private static int decrementProcessingTime(ItemEntity entity, FanProcessingType type, double processingBoost) {
         CompoundTag nbt = entity.getPersistentData();

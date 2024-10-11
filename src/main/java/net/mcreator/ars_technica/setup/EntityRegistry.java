@@ -2,6 +2,7 @@ package net.mcreator.ars_technica.setup;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
+import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
 import net.mcreator.ars_technica.common.entity.ArcanePolishEntity;
 import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
@@ -40,6 +41,11 @@ public class EntityRegistry {
     public static final RegistryObject<EntityType<ArcanePolishEntity>> ARCANE_POLISH_ENTITY = registerEntity(
             "arcane_polish_entity",
             EntityType.Builder.<ArcanePolishEntity>of(ArcanePolishEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F));
+
+    public static final RegistryObject<EntityType<ArcaneHammerEntity>> ARCANE_HAMMER_ENTITY = registerEntity(
+            "arcane_hammer_entity",
+            EntityType.Builder.<ArcaneHammerEntity>of(ArcaneHammerEntity::new, MobCategory.MISC)
                     .sized(1.0F, 1.0F));
 
     public static final RegistryObject<BlockEntityType<SourceEngineBlockEntity>> SOURCE_ENGINE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
