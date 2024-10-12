@@ -38,8 +38,12 @@ public class ArsTechnicaModSounds {
 
 	public static final RegistryObject<SoundEvent> OBLITERATE_CHARGE = REGISTRY.register("obliterate_charge",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_charge"), 8f));
+	public static final RegistryObject<SoundEvent> OBLITERATE_CHARGE_LARGE = REGISTRY.register("obliterate_charge_large",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_charge_large"), 8f));
 	public static final RegistryObject<SoundEvent> OBLITERATE_SMASH = REGISTRY.register("obliterate_smash",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_smash"), 8f));
+	public static final RegistryObject<SoundEvent> OBLITERATE_SHOCKWAVE = REGISTRY.register("obliterate_shockwave",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_shockwave"), 16f));
 
 	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_START = REGISTRY.register("source_engine_start",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "source_engine_start"), 8f));

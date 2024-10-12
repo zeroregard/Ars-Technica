@@ -33,7 +33,6 @@ public class ArcanePressEntityRenderer extends GenericRenderer<ArcanePressEntity
         matrixStack.pushPose();
         matrixStack.translate(x, 0, z);
         matrixStack.rotateAround(new Quaternionf().rotateLocalY(angle), 0, 0, 0);
-
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
 
         matrixStack.popPose();

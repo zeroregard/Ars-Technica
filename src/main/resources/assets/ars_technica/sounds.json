@@ -111,11 +111,29 @@
       }
     ]
   },
+  "obliterate_charge_large": {
+    "subtitle": "subtitles.obliterate_charge_large",
+    "sounds": [
+      {
+        "name": "ars_technica:obliterate_charge_large",
+        "stream": false
+      }
+    ]
+  },
   "obliterate_smash": {
     "subtitle": "subtitles.obliterate_smash",
     "sounds": [
       {
         "name": "ars_technica:obliterate_smash",
+        "stream": false
+      }
+    ]
+  },
+  "obliterate_shockwave": {
+    "subtitle": "subtitles.obliterate_shockwave",
+    "sounds": [
+      {
+        "name": "ars_technica:obliterate_shockwave",
         "stream": false
       }
     ]

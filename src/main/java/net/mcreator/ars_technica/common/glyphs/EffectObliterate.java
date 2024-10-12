@@ -59,15 +59,17 @@ public class EffectObliterate extends AbstractEffect {
 
     private void resolve(@Nullable Entity target, Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         var color = new Color(spellContext.getColors().getColor());
-        var processItems = spellStats.isSensitive();
-        ArcaneHammerEntity arcaneHammerEntity = new ArcaneHammerEntity(target, position, world, shooter, color, resolver, processItems);
+        ArcaneHammerEntity arcaneHammerEntity = new ArcaneHammerEntity(target, position, world, shooter, color, resolver, spellStats);
+        setYaw(position, shooter, arcaneHammerEntity);
+        world.addFreshEntity(arcaneHammerEntity);
+    }
+
+    private void setYaw(Vec3 position, @NotNull LivingEntity shooter, ArcaneHammerEntity arcaneHammerEntity) {
         Vec3 direction = position.subtract(shooter.position()).normalize();
         Vec3 rotation = new Vec3(0, 0, 0);
         float yaw = (float)(-Math.atan2(direction.z(), direction.x()) + Math.PI/2);
         arcaneHammerEntity.setYaw(yaw);
-        world.addFreshEntity(arcaneHammerEntity);
     }
-
 
     @Override
     public int getDefaultManaCost() {
@@ -77,7 +79,7 @@ public class EffectObliterate extends AbstractEffect {
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentSensitive.INSTANCE);
+        return augmentSetOf(AugmentSensitive.INSTANCE, AugmentAmplify.INSTANCE);
     }
 
     @Nonnull
