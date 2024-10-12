@@ -9,6 +9,7 @@ import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +25,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -159,6 +163,17 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity {
         if(target != null) {
             var damageSource = getDamageSource();
             target.hurt(damageSource, getDamage());
+            if (resolver != null) {
+                resolver.onResolveEffect(world, new EntityHitResult(target));
+            }
+        } else {
+            var pos = getPosition(1.0f).add(-1f, -1f, -1f);
+            var blockPos = new BlockPos((int) Math.round(pos.x), (int) Math.round(pos.y),(int)Math.round(pos.z));
+            if (resolver != null) {
+                resolver.onResolveEffect(world, new
+                        BlockHitResult(pos, Direction.UP, blockPos, false));
+            }
+
         }
         var pos = getPosition(1.0f);
         world.playSound(null, pos.x, pos.y, pos.z, ArsTechnicaModSounds.OBLITERATE_SMASH.get(), SoundSource.BLOCKS, 0.75f, speed);
