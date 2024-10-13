@@ -137,5 +137,13 @@
         "stream": false
       }
     ]
+  },
+  "pocket_factory": {
+    "sounds": [
+      {
+        "name": "ars_technica:pocket_factory",
+        "stream": true
+      }
+    ]
   }
 }

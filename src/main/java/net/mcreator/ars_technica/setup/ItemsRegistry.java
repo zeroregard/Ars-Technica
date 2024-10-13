@@ -8,10 +8,13 @@ import net.mcreator.ars_technica.common.items.curios.TransmutationFocus;
 import net.mcreator.ars_technica.common.items.equipment.RunicSpanner;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocle;
 import net.mcreator.ars_technica.common.items.ingredients.CalibratedPrecisionMechanism;
+import net.mcreator.ars_technica.common.items.other.PocketFactoryDisc;
+import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.RecordItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,6 +35,8 @@ public class ItemsRegistry {
   public static RegistryObject<Item> CALIBRATED_PRECISION_MECHANISM = ITEMS.register("calibrated_precision_mechanism", () -> new CalibratedPrecisionMechanism(defaultItemProperties().stacksTo(64)));
   public static RegistryObject<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(defaultItemProperties().stacksTo(1)));
   public static RegistryObject<Item> SPY_MONOCLE = ITEMS.register("spy_monocle",  () -> new SpyMonocle(defaultItemProperties().stacksTo(1)));
+
+  public static RegistryObject<Item> POCKET_FACTORY_DISC = ITEMS.register("pocket_factory_disc", () -> new RecordItem(3, () -> ArsTechnicaModSounds.POCKET_FACTORY_DISC.get(), defaultItemProperties().stacksTo(1), 3072));
 
   public static final RegistryObject<BlockItem> SOURCE_ENGINE =
           ITEMS.register("source_engine", () -> new BlockItem(BlockRegistry.SOURCE_ENGINE.get(), defaultItemProperties().stacksTo(64)));

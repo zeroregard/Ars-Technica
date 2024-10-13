@@ -50,5 +50,8 @@ public class ArsTechnicaModSounds {
 	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_STOP = REGISTRY.register("source_engine_stop",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "source_engine_stop"), 8f));
 
+	public static final RegistryObject<SoundEvent> POCKET_FACTORY_DISC = REGISTRY.register("pocket_factory",
+			() -> SoundEvent.createVariableRangeEvent(new ResourceLocation("ars_technica", "pocket_factory")));
+
 
 }
