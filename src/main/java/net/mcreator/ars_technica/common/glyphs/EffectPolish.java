@@ -14,6 +14,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.core.object.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,6 +49,7 @@ public class EffectPolish extends AbstractItemResolveEffect {
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
         int maxAmountToPolish = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
         float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
+        var color = new Color(spellContext.getColors().getColor());
 
         if (!validPolishableEntities.isEmpty()) {
             ItemEntity closest = validPolishableEntities.stream()
@@ -55,7 +57,7 @@ public class EffectPolish extends AbstractItemResolveEffect {
                     .orElse(null);
 
             if (closest != null) {
-                ArcanePolishEntity arcanePolishEntity = new ArcanePolishEntity(closest.position().add(0, 0.5f, 0), world, maxAmountToPolish, speed, validPolishableEntities);
+                ArcanePolishEntity arcanePolishEntity = new ArcanePolishEntity(closest.position().add(0, 0.5f, 0), world, maxAmountToPolish, speed, color, validPolishableEntities);
                 world.addFreshEntity(arcanePolishEntity);
             }
         }

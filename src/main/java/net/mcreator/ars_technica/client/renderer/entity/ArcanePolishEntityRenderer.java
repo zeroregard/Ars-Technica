@@ -10,12 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
-public class ArcanePolishEntityRenderer extends GenericRenderer<ArcanePolishEntity> {
-    private final ArcanePolishModel model;
+public class ArcanePolishEntityRenderer extends ArcaneEntityRendererBase<ArcanePolishEntity> {
+
     public ArcanePolishEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new ArcanePolishModel());
-        this.model = (ArcanePolishModel) this.getGeoModel();
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 
     @Override
@@ -24,16 +22,5 @@ public class ArcanePolishEntityRenderer extends GenericRenderer<ArcanePolishEnti
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
         matrixStack.popPose();
     }
-
-    @Override
-    public ResourceLocation getTextureLocation(ArcanePolishEntity entity) {
-        return model.getTextureResource(entity);
-    }
-
-    @Override
-    public RenderType getRenderType(ArcanePolishEntity animatable, ResourceLocation texture, @org.jetbrains.annotations.Nullable MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityTranslucentCull(texture);
-    }
-
 
 }

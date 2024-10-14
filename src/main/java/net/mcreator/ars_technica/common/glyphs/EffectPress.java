@@ -28,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import net.mcreator.ars_technica.common.helpers.CraftingHelpers;
 import net.mcreator.ars_technica.common.helpers.ItemHelpers;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import software.bernie.geckolib.core.object.Color;
 
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
@@ -64,6 +65,7 @@ public class EffectPress extends AbstractItemResolveEffect {
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
         int maxAmountToPress = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
         float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
+        var color = new Color(spellContext.getColors().getColor());
 
         if (!validPressableEntities.isEmpty()) {
             ItemEntity closest = validPressableEntities.stream()
@@ -71,7 +73,7 @@ public class EffectPress extends AbstractItemResolveEffect {
                     .orElse(null);
 
             if (closest != null) {
-                ArcanePressEntity arcanePressEntity = new ArcanePressEntity(closest.position().add(0, 1.0f, 0), world, maxAmountToPress, speed, validPressableEntities);
+                ArcanePressEntity arcanePressEntity = new ArcanePressEntity(closest.position().add(0, 1.0f, 0), world, maxAmountToPress, speed, color, validPressableEntities);
                 world.addFreshEntity(arcanePressEntity);
             }
         }

@@ -10,13 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
-public class ArcanePressEntityRenderer extends GenericRenderer<ArcanePressEntity> {
-    private final ArcanePressModel model;
+public class ArcanePressEntityRenderer extends ArcaneEntityRendererBase<ArcanePressEntity> {
     private static float accumulatedTime = 0.0f;
+
     public ArcanePressEntityRenderer(EntityRendererProvider.Context context) {
         super(context, new ArcanePressModel());
-        this.model = (ArcanePressModel) this.getGeoModel();
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 
     @Override
@@ -29,7 +27,6 @@ public class ArcanePressEntityRenderer extends GenericRenderer<ArcanePressEntity
         float x = radius * (float)Math.cos(angle);
         float z = radius * (float)Math.sin(angle);
 
-
         matrixStack.pushPose();
         matrixStack.translate(x, 0, z);
         matrixStack.rotateAround(new Quaternionf().rotateLocalY(angle), 0, 0, 0);
@@ -37,16 +34,5 @@ public class ArcanePressEntityRenderer extends GenericRenderer<ArcanePressEntity
 
         matrixStack.popPose();
     }
-
-    @Override
-    public ResourceLocation getTextureLocation(ArcanePressEntity entity) {
-        return model.getTextureResource(entity);
-    }
-
-    @Override
-    public RenderType getRenderType(ArcanePressEntity animatable, ResourceLocation texture, @org.jetbrains.annotations.Nullable MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityTranslucentCull(texture);
-    }
-
 
 }
