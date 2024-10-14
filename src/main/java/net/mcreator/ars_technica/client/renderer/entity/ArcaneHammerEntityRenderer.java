@@ -42,7 +42,7 @@ public class ArcaneHammerEntityRenderer extends GenericRenderer<ArcaneHammerEnti
 
     @Override
     public RenderType getRenderType(ArcaneHammerEntity animatable, ResourceLocation texture, @org.jetbrains.annotations.Nullable MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityTranslucentCull(texture);
+        return RenderType.entityTranslucentEmissive(texture);
     }
 
     @Override
