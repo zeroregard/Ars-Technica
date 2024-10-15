@@ -18,6 +18,7 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.Color;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -26,8 +27,8 @@ import java.util.Optional;
 
 public class ArcanePolishEntity extends ArcaneProcessEntity implements GeoEntity {
     protected double distanceToItem = 0.5;
-    public ArcanePolishEntity(Vec3 position, Level world, int maxAmountToPolish, float speed, List<ItemEntity> polishableEntities) {
-        super(EntityRegistry.ARCANE_POLISH_ENTITY.get(), position, world, maxAmountToPolish, speed, polishableEntities);
+    public ArcanePolishEntity(Vec3 position, Level world, int maxAmountToPolish, float speed, Color color, List<ItemEntity> polishableEntities) {
+        super(EntityRegistry.ARCANE_POLISH_ENTITY.get(), position, world, maxAmountToPolish, speed, color, polishableEntities);
     }
 
     public ArcanePolishEntity(EntityType<ArcanePolishEntity> entityType, Level world) {
@@ -108,4 +109,5 @@ public class ArcanePolishEntity extends ArcaneProcessEntity implements GeoEntity
         event.getController().setAnimationSpeed(speed);
         return PlayState.CONTINUE;
     }
+
 }

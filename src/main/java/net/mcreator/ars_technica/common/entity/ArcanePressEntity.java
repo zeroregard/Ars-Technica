@@ -6,6 +6,9 @@ import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -17,22 +20,23 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.Color;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 import java.util.Optional;
 
-public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity {
+public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity, Colorable {
 
-    public ArcanePressEntity(Vec3 position, Level world, int maxAmountToPress, float speed, List<ItemEntity> pressableEntities) {
-        super(EntityRegistry.ARCANE_PRESS_ENTITY.get(), position, world, maxAmountToPress, speed, pressableEntities);
+
+    public ArcanePressEntity(Vec3 position, Level world, int maxAmountToPress, float speed, Color color, List<ItemEntity> pressableEntities) {
+        super(EntityRegistry.ARCANE_PRESS_ENTITY.get(), position, world, maxAmountToPress, speed, color, pressableEntities);
     }
 
     public ArcanePressEntity(EntityType<ArcanePressEntity> entityType, Level world) {
         super(entityType, world);
     }
-
 
     @Override
     protected void process(ItemEntity item) {
@@ -90,4 +94,5 @@ public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity 
         event.getController().setAnimationSpeed(speed);
         return PlayState.CONTINUE;
     }
+
 }

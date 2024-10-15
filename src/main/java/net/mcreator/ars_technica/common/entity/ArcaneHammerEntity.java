@@ -47,7 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ArcaneHammerEntity extends Entity implements GeoEntity {
+public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     private static float UNSCALED_TIME_TILL_OBLITERATE = 0.71f;
     private static float UNSCALED_TIME_TILL_DISCARD = 1.5f;
     private static float AMPS_SIZE_MULTIPLIER = (1/3f);

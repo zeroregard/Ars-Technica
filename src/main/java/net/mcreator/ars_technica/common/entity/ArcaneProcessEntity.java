@@ -12,11 +12,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.core.object.Color;
 
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class ArcaneProcessEntity extends Entity {
+public abstract class ArcaneProcessEntity extends Entity implements Colorable {
 
     private static int TICKS_TO_PROCESS_RATIO = 20;
     private static int TICKS_TO_RESET_RATIO = TICKS_TO_PROCESS_RATIO * 2;
@@ -29,9 +30,12 @@ public abstract class ArcaneProcessEntity extends Entity {
     protected ItemEntity currentItem;
     protected ItemEntity currentOutput;
     protected int tickCount;
+    protected Color color;
     protected Level world;
 
     protected static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.INT);
+
 
     private int getTicksToPress() {
         return Math.round(TICKS_TO_PROCESS_RATIO / speed);
@@ -45,12 +49,17 @@ public abstract class ArcaneProcessEntity extends Entity {
         this.entityData.set(SPEED, speed);
     }
 
-    public ArcaneProcessEntity(EntityType<?> entityType, Vec3 position, Level world, int maxToProcess, float speed, List<ItemEntity> processableEntities) {
+    protected void setColor(Color color) {
+        this.entityData.set(COLOR, color.getColor());
+    }
+
+    public ArcaneProcessEntity(EntityType<?> entityType, Vec3 position, Level world, int maxToProcess, float speed, Color color, List<ItemEntity> processableEntities) {
         super(entityType, world);
         this.setPos(position.x, position.y, position.z);
         this.maxToProcess = maxToProcess;
         this.speed = speed;
         setSpeed(speed);
+        setColor(color);
         this.processableEntities = processableEntities;
         this.world = world;
     }
@@ -64,6 +73,7 @@ public abstract class ArcaneProcessEntity extends Entity {
     @Override
     protected void defineSynchedData() {
         this.entityData.define(SPEED, 2.0f);
+        this.entityData.define(COLOR, 0);
     }
 
     @Override
@@ -72,6 +82,10 @@ public abstract class ArcaneProcessEntity extends Entity {
 
         if (SPEED.equals(key)) {
             this.speed = this.entityData.get(SPEED);
+        }
+
+        if (COLOR.equals(key)) {
+            this.color = new Color(this.entityData.get(COLOR));
         }
     }
 
@@ -147,10 +161,26 @@ public abstract class ArcaneProcessEntity extends Entity {
             this.speed = compound.getFloat("Speed");
             this.entityData.set(SPEED, this.speed);
         }
+        if(compound.contains("Color")) {
+            this.color = new Color(compound.getInt("Color"));
+            this.entityData.set(COLOR, this.color.getColor());
+        }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putFloat("Speed", this.speed);
+        compound.putInt("Color", this.color.getColor());
+    }
+
+
+    @Override
+    public Color getColor() {
+        return color;
+    }
+
+    @Override
+    public double getAlpha() {
+        return 1;
     }
 }
