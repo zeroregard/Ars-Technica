@@ -2,6 +2,7 @@ package net.mcreator.ars_technica;
 
 import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.common.block.BasicSpellTurret;
+import com.simibubi.create.content.decoration.encasing.EncasableBlock;
 import com.simibubi.create.content.decoration.encasing.EncasingRegistry;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.BlockStressValues;
@@ -53,6 +54,8 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.AbstractMap;
 
+import static net.mcreator.ars_technica.setup.BlockRegistry.ANDESITE_ENCASED_TURRET_BLOCK;
+
 @Mod("ars_technica")
 public class ArsTechnicaMod {
 	public static final Logger LOGGER = LogManager.getLogger(ArsTechnicaMod.class);
@@ -97,7 +100,7 @@ public class ArsTechnicaMod {
 	}
 
 	private static void registerEncasing() {
-		EncasingRegistry.addVariant(com.hollingsworth.arsnouveau.setup.registry.BlockRegistry.BASIC_SPELL_TURRET.get(), ); // Example encased block
+		EncasingRegistry.addVariant((Block & EncasableBlock) com.hollingsworth.arsnouveau.setup.registry.BlockRegistry.BASIC_SPELL_TURRET.get(), ANDESITE_ENCASED_TURRET_BLOCK.get());
 	}
 
 	public void clientSetup(final FMLClientSetupEvent event) {
