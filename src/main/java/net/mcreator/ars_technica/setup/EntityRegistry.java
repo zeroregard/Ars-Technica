@@ -1,6 +1,7 @@
 package net.mcreator.ars_technica.setup;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.common.blocks.turrets.EncasedTurretBlockEntity;
 import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
 import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
 import net.mcreator.ars_technica.common.entity.ArcanePolishEntity;
@@ -52,6 +53,10 @@ public class EntityRegistry {
             "source_engine_block_entity",
             () -> BlockEntityType.Builder.of(SourceEngineBlockEntity::new, BlockRegistry.SOURCE_ENGINE.get()).build(null)
     );
+
+    public static final RegistryObject<BlockEntityType<EncasedTurretBlockEntity>> ENCASED_TURRET_TILE =
+            BLOCK_ENTITY_TYPES.register("encased_turret_tile",
+                    () -> BlockEntityType.Builder.of(EncasedTurretBlockEntity::new, BlockRegistry.ANDESITE_ENCASED_TURRET_BLOCK.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

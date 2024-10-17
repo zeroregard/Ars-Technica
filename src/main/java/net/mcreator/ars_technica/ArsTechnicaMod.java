@@ -1,5 +1,9 @@
 package net.mcreator.ars_technica;
 
+import com.hollingsworth.arsnouveau.ArsNouveau;
+import com.hollingsworth.arsnouveau.common.block.BasicSpellTurret;
+import com.simibubi.create.content.decoration.encasing.EncasableBlock;
+import com.simibubi.create.content.decoration.encasing.EncasingRegistry;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.BlockStressValues;
 import com.simibubi.create.foundation.utility.Couple;
@@ -7,6 +11,7 @@ import com.simibubi.create.foundation.utility.RegisteredObjects;
 import net.mcreator.ars_technica.client.AllPartialModels;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.common.kinetics.CustomStressValueProvider;
+import net.mcreator.ars_technica.mixin.BasicSpellTurretMixin;
 import net.mcreator.ars_technica.recipe.ConfigRecipeCondition;
 import net.mcreator.ars_technica.setup.*;
 import net.minecraft.client.Minecraft;
@@ -49,6 +54,8 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.AbstractMap;
 
+import static net.mcreator.ars_technica.setup.BlockRegistry.ANDESITE_ENCASED_TURRET_BLOCK;
+
 @Mod("ars_technica")
 public class ArsTechnicaMod {
 	public static final Logger LOGGER = LogManager.getLogger(ArsTechnicaMod.class);
@@ -83,12 +90,17 @@ public class ArsTechnicaMod {
 			NetworkHandler.registerMessages();
 		});
 		registerStressValues();
+		registerEncasing();
 	}
 
 	private static void registerStressValues() {
 		var sourceEngineId = BlockRegistry.SOURCE_ENGINE.getId();
 		BlockStressDefaults.setDefaultCapacity(sourceEngineId, 256.0);
 		BlockStressDefaults.setGeneratorSpeed(sourceEngineId, () -> Couple.create(0, 256));
+	}
+
+	private static void registerEncasing() {
+		EncasingRegistry.addVariant((Block & EncasableBlock) com.hollingsworth.arsnouveau.setup.registry.BlockRegistry.BASIC_SPELL_TURRET.get(), ANDESITE_ENCASED_TURRET_BLOCK.get());
 	}
 
 	public void clientSetup(final FMLClientSetupEvent event) {

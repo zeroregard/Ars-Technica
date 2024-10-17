@@ -11,6 +11,7 @@ import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.renderer.entity.ArcaneHammerEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePolishEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePressEntityRenderer;
+import net.mcreator.ars_technica.client.renderer.tile.EncasedBasicTurretRenderer;
 import net.mcreator.ars_technica.common.blocks.SourceEngineRenderer;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.setup.BlockRegistry;
@@ -104,5 +105,6 @@ public class ClientHandler {
         event.registerEntityRenderer(EntityRegistry.ARCANE_HAMMER_ENTITY.get(), ArcaneHammerEntityRenderer::new);
 
         event.registerBlockEntityRenderer(EntityRegistry.SOURCE_ENGINE_BLOCK_ENTITY.get(), SourceEngineRenderer::new);
+        event.registerBlockEntityRenderer(EntityRegistry.ENCASED_TURRET_TILE.get(), EncasedBasicTurretRenderer::new);
     }
 }
