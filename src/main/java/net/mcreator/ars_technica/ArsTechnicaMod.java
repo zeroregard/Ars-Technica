@@ -90,17 +90,12 @@ public class ArsTechnicaMod {
 			NetworkHandler.registerMessages();
 		});
 		registerStressValues();
-		registerEncasing();
 	}
 
 	private static void registerStressValues() {
 		var sourceEngineId = BlockRegistry.SOURCE_ENGINE.getId();
 		BlockStressDefaults.setDefaultCapacity(sourceEngineId, 256.0);
 		BlockStressDefaults.setGeneratorSpeed(sourceEngineId, () -> Couple.create(0, 256));
-	}
-
-	private static void registerEncasing() {
-		EncasingRegistry.addVariant((Block & EncasableBlock) com.hollingsworth.arsnouveau.setup.registry.BlockRegistry.BASIC_SPELL_TURRET.get(), ANDESITE_ENCASED_TURRET_BLOCK.get());
 	}
 
 	public void clientSetup(final FMLClientSetupEvent event) {
