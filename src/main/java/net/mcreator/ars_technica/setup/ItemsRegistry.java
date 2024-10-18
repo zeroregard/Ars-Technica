@@ -8,7 +8,6 @@ import net.mcreator.ars_technica.common.items.curios.TransmutationFocus;
 import net.mcreator.ars_technica.common.items.equipment.RunicSpanner;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocle;
 import net.mcreator.ars_technica.common.items.ingredients.CalibratedPrecisionMechanism;
-import net.mcreator.ars_technica.common.items.other.PocketFactoryDisc;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
