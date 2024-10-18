@@ -37,6 +37,8 @@ public class WhirlCurrent {
     private List<ItemEntity> affectedEntities;
     private float radius;
     private int tickCount = 0;
+    private double tangentialFactor = 0.2;
+    private double pullFactor = 1.4;
 
     public WhirlCurrent(WhirlEntity source) {
         this.source = source;
@@ -67,15 +69,7 @@ public class WhirlCurrent {
                 continue;
             }
 
-            Vec3 direction = source.position().subtract(entity.position()).normalize();
-            double distance = entity.position().distanceTo(source.position());
-
-            Vec3 motion = entity.getDeltaMovement();
-            Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(0.05);
-            Vec3 pull = direction.scale(0.05 * (Math.sqrt(radius) - distance));
-
-            entity.setDeltaMovement(motion.add(tangentialMotion).add(pull));
-            entity.fallDistance = 0;
+            moveItem(entity);
 
             FanProcessingType processingType = source.getProcessor();
 
@@ -99,6 +93,19 @@ public class WhirlCurrent {
                 }
             }
         }
+    }
+
+    private void moveItem(Entity entity) {
+        Vec3 direction = source.position().subtract(entity.position()).normalize();
+        double distance = entity.position().distanceTo(source.position());
+
+        Vec3 motion = entity.getDeltaMovement();
+        double heightDifference = Math.abs(entity.position().y - source.position().y);
+        double heightFactor = Math.max(0, 1 - (heightDifference));
+        Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(tangentialFactor * heightFactor * (radius / 3));
+        Vec3 pull = direction.scale(pullFactor * (Math.sqrt(radius) - distance) * heightFactor * (1.5 / radius));
+        entity.setDeltaMovement(motion.add(tangentialMotion).subtract(pull));
+        entity.fallDistance = 0;
     }
 
     private void sendProcessingSound(Vec3 itemPos, FanProcessingType processingType) {

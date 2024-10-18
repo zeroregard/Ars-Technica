@@ -144,7 +144,6 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
                 this.discard();
             }
         }
-
     }
 
     @Override
