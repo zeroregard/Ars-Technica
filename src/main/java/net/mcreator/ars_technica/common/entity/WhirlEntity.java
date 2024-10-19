@@ -58,6 +58,10 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         return world;
     }
 
+    public float getScaledSpeed() {
+        return speed / 0.05f;
+    }
+
     public FanProcessingType getProcessor() {
         return processor;
     }

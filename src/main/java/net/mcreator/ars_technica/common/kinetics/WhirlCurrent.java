@@ -37,8 +37,8 @@ public class WhirlCurrent {
     private List<ItemEntity> affectedEntities;
     private float radius;
     private int tickCount = 0;
-    private double tangentialFactor = 0.2;
-    private double pullFactor = 1.4;
+    private double tangentialFactor = 0.25;
+    private double pullFactor = 3.0;
 
     public WhirlCurrent(WhirlEntity source) {
         this.source = source;
@@ -99,11 +99,15 @@ public class WhirlCurrent {
         Vec3 direction = source.position().subtract(entity.position()).normalize();
         double distance = entity.position().distanceTo(source.position());
 
+        // I'm really sorry about my lack of physics knowledge, have some spaghetti. Do not touch the spaghetti, no one knows how it really works
         Vec3 motion = entity.getDeltaMovement();
         double heightDifference = Math.abs(entity.position().y - source.position().y);
         double heightFactor = Math.max(0, 1 - (heightDifference));
-        Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(tangentialFactor * heightFactor * (radius / 3));
-        Vec3 pull = direction.scale(pullFactor * (Math.sqrt(radius) - distance) * heightFactor * (1.5 / radius));
+        Vec3 tangentialMotion = new Vec3(-direction.z, 0, direction.x).scale(tangentialFactor * heightFactor * (radius / 3) * source.getScaledSpeed() * 0.5f );
+        Vec3 pull = direction.scale(pullFactor * (Math.sqrt(radius) - distance * 1.5) * heightFactor * (1/radius) * source.getScaledSpeed() * 0.5f);
+        if(pull.length() > 0.5) {
+            pull = pull.normalize().scale(0.1 * radius);
+        }
         entity.setDeltaMovement(motion.add(tangentialMotion).subtract(pull));
         entity.fallDistance = 0;
     }
