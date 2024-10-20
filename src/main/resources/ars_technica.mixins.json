@@ -8,8 +8,7 @@
     "RuneBlockMixin",
     "RuneTileMixin",
     "BacktankUtilMixin",
-    "AnimatedMagicArmorMixin",
-    "BasicSpellTurretMixin"
+    "AnimatedMagicArmorMixin"
   ],
   "client": [],
   "server": []
