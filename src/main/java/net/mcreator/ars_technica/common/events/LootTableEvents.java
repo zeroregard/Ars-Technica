@@ -4,6 +4,7 @@ import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,6 +20,7 @@ public class LootTableEvents {
             LootPool pool = LootPool.lootPool()
                     .add(LootItem.lootTableItem(ItemsRegistry.POCKET_FACTORY_DISC.get())
                             .setWeight(1))
+                            .when(LootItemRandomChanceCondition.randomChance(0.5f))
                     .build();
             event.getTable().addPool(pool);
         }
