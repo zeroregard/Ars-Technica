@@ -8,7 +8,10 @@
     "RuneBlockMixin",
     "RuneTileMixin",
     "BacktankUtilMixin",
-    "AnimatedMagicArmorMixin"
+    "AnimatedMagicArmorMixin",
+    "Wrench.ContainmentJarMixin",
+    "Wrench.PedestalMixin",
+    "Wrench.TurretMixin",
   ],
   "client": [],
   "server": []
