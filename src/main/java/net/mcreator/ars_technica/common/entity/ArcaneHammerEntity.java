@@ -2,20 +2,29 @@ package net.mcreator.ars_technica.common.entity;
 
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
+import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.item.ItemHelper;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
+import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.mcreator.ars_technica.setup.NetworkHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -30,6 +39,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.minecraftforge.network.NetworkDirection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -46,6 +56,8 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static net.mcreator.ars_technica.common.helpers.PlayerHelpers.getNearbyPlayers;
 
 public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     private static float UNSCALED_TIME_TILL_OBLITERATE = 0.71f;
@@ -161,8 +173,10 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
 
     protected void obliterate() {
         if(target != null) {
-            var damageSource = getDamageSource();
-            target.hurt(damageSource, getDamage());
+            if(!processItems) {
+                var damageSource = getDamageSource();
+                target.hurt(damageSource, getDamage());
+            }
             if (resolver != null) {
                 resolver.onResolveEffect(world, new EntityHitResult(target));
             }
@@ -173,7 +187,6 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
                 resolver.onResolveEffect(world, new
                         BlockHitResult(pos, Direction.UP, blockPos, false));
             }
-
         }
         var pos = getPosition(1.0f);
         world.playSound(null, pos.x, pos.y, pos.z, ArsTechnicaModSounds.OBLITERATE_SMASH.get(), SoundSource.BLOCKS, 0.75f, speed);
@@ -192,6 +205,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         List<ItemEntity> itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(1.0));
         if(processItems) {
             processItems(itemEntities);
+            sendProcessingParticles();
         }
         else {
             itemEntities.forEach(ItemEntity::discard);
@@ -232,6 +246,19 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         return hammerDamageSource;
     }
 
+    private void sendProcessingParticles() {
+        var pos = this.position();
+        List<ServerPlayer> nearbyPlayers = getNearbyPlayers(pos, world);
+        ParticleType<?> particleType = ParticleTypes.DUST;
+
+        for (ServerPlayer player : nearbyPlayers) {
+            for (int i = 0; i < 10; i++) {
+                var finalPos = pos.add(Math.random() / 2f, 0f, Math.random() / 2f);
+                ParticleEffectPacket packet = new ParticleEffectPacket(finalPos, ModParticles.SPIRAL_DUST_TYPE.get(), ParticleColor.fromInt(color.getColor()));
+                NetworkHandler.CHANNEL.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+            }
+        }
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {

@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
+import net.mcreator.ars_technica.common.helpers.PlayerHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.mcreator.ars_technica.setup.NetworkHandler;
@@ -58,7 +59,7 @@ public class WhirlCurrent {
 
     protected void tickAffectedEntities(Level world, SpellResolver whirlOwner) {
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
-        List<ServerPlayer> nearbyPlayers = getNearbyPlayers(world);
+        List<ServerPlayer> nearbyPlayers = PlayerHelpers.getNearbyPlayers(source.getPosition(1.0f), world);
         if (tickCount % 4 == 0) {
             sendWhirlParticles(nearbyPlayers, source.getProcessor());
         }
@@ -132,13 +133,6 @@ public class WhirlCurrent {
         if(event != null) {
             source.getLevel().playSound(null, pos.x, pos.y, pos.z, event, SoundSource.AMBIENT, 0.25f, 1.0f);
         }
-    }
-
-    private List<ServerPlayer> getNearbyPlayers(Level world) {
-        double playerRadius = 50;
-        AABB playerBounds = new AABB(source.position().subtract(playerRadius, playerRadius, playerRadius),
-                source.position().add(playerRadius, playerRadius, playerRadius));
-        return world.getEntitiesOfClass(ServerPlayer.class, playerBounds);
     }
 
     private void sendWhirlParticles(List<ServerPlayer> players, FanProcessingType processingType) {
