@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.DistExecutor;
 import org.apache.logging.log4j.Logger;
@@ -80,7 +81,6 @@ public class ArsTechnicaMod {
 	@OnlyIn(Dist.CLIENT)
 	private void doClientStuff(final FMLClientSetupEvent event) {
 		CuriosRendererRegistry.register(ItemsRegistry.SPY_MONOCLE.get(), () -> new SpyMonocleCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER)));
-		AllPartialModels.init();
 	}
 
 	public void setup(final FMLCommonSetupEvent event) {

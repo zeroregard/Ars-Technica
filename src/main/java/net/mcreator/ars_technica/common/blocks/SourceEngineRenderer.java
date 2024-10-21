@@ -51,8 +51,6 @@ public class SourceEngineRenderer extends KineticBlockEntityRenderer<SourceEngin
             poseStack.mulPose(getQuaternion(blockEntity, radiansAngle));
             poseStack.translate(-0.5, -0.5, -0.5);
 
-
-
             SuperByteBuffer shaft = getRotatedModel(blockEntity, blockEntity.getBlockState());
             shaft.renderInto(poseStack, bufferSource.getBuffer(RenderType.translucent()));
 
