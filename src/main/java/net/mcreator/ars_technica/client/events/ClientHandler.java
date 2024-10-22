@@ -8,6 +8,7 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 
+import net.mcreator.ars_technica.client.AllPartialModels;
 import net.mcreator.ars_technica.client.renderer.entity.ArcaneHammerEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePolishEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePressEntityRenderer;
@@ -56,6 +57,11 @@ public class ClientHandler {
 
         event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
                 ItemsRegistry.TECHNOMANCER_LEGGINGS.get());
+    }
+
+    @SubscribeEvent
+    public static void init(final FMLClientSetupEvent event) {
+        AllPartialModels.init();
     }
 
     @SubscribeEvent
