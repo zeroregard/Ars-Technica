@@ -8,7 +8,6 @@ import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.kinetics.BlockStressValues;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
-import net.mcreator.ars_technica.client.AllPartialModels;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.common.kinetics.CustomStressValueProvider;
 import net.mcreator.ars_technica.mixin.BasicSpellTurretMixin;
@@ -99,7 +98,7 @@ public class ArsTechnicaMod {
 	}
 
 	public void clientSetup(final FMLClientSetupEvent event) {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::init);
+		// FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientHandler::init);
 	}
 
 	private static final String PROTOCOL_VERSION = "1";

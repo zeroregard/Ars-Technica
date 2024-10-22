@@ -8,7 +8,6 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 
-import net.mcreator.ars_technica.client.AllPartialModels;
 import net.mcreator.ars_technica.client.renderer.entity.ArcaneHammerEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePolishEntityRenderer;
 import net.mcreator.ars_technica.client.renderer.entity.ArcanePressEntityRenderer;
@@ -60,18 +59,8 @@ public class ClientHandler {
     }
 
     @SubscribeEvent
-    public static void init(final FMLClientSetupEvent event) {
-        AllPartialModels.init();
-    }
-
-    @SubscribeEvent
     public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER, () -> SpyMonocleCurioRenderer.createBodyLayer());
-    }
-
-    @SubscribeEvent
-    public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event) {
-        AllPartialModels.registerAdditionalModels(event);
     }
 
     private static float DEFAULT_PITCH = 0.8f;
