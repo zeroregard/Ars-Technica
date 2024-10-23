@@ -128,7 +128,7 @@ public class EffectWhirl extends AbstractEffect {
 
     @Override
     public String getBookDescription() {
-        return "Creates a whirlwind in an area, causing items to be centrifuged";
+        return "Creates a whirlwind in an area, causing items to be centrifuged.";
     }
 
     @Override

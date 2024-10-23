@@ -234,7 +234,6 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
                 return false;
             return direction.getAxis() != facing.getAxis();
         }
-
     }
 
 }

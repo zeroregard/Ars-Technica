@@ -29,7 +29,11 @@ public class ItemsRegistry {
   public static final RegistryObject<Item> TECHNOMANCER_LEGGINGS = ITEMS.register("technomancer_leggings", () -> new TechnomancerArmor(ArmorItem.Type.LEGGINGS, null));
   public static final RegistryObject<Item> TECHNOMANCER_BOOTS = ITEMS.register("technomancer_boots", () -> new TechnomancerArmor(ArmorItem.Type.BOOTS, null));
 
-  public static RegistryObject<Item> TRANSMUTATION_FOCUS = ITEMS.register("transmutation_focus", () -> new TransmutationFocus(defaultItemProperties().stacksTo(1)).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus")));
+  public static RegistryObject<Item> TRANSMUTATION_FOCUS = ITEMS.register(
+          "transmutation_focus", () -> new TransmutationFocus(
+                  defaultItemProperties().stacksTo(1)
+          ).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus"))
+  );
 
   public static RegistryObject<Item> CALIBRATED_PRECISION_MECHANISM = ITEMS.register("calibrated_precision_mechanism", () -> new CalibratedPrecisionMechanism(defaultItemProperties().stacksTo(64)));
   public static RegistryObject<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(defaultItemProperties().stacksTo(1)));
