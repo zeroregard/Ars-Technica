@@ -129,6 +129,15 @@
       }
     ]
   },
+  "obliterate_swing": {
+    "subtitle": "subtitles.obliterate_swing",
+    "sounds": [
+      {
+        "name": "ars_technica:obliterate_swing",
+        "stream": false
+      }
+    ]
+  },
   "obliterate_shockwave": {
     "subtitle": "subtitles.obliterate_shockwave",
     "sounds": [

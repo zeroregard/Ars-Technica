@@ -37,11 +37,13 @@ public class ArsTechnicaModSounds {
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "whirl_process_affect_fire"), 8f));
 
 	public static final RegistryObject<SoundEvent> OBLITERATE_CHARGE = REGISTRY.register("obliterate_charge",
-			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_charge"), 8f));
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_charge"), 16f));
 	public static final RegistryObject<SoundEvent> OBLITERATE_CHARGE_LARGE = REGISTRY.register("obliterate_charge_large",
-			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_charge_large"), 8f));
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_charge_large"), 16f));
 	public static final RegistryObject<SoundEvent> OBLITERATE_SMASH = REGISTRY.register("obliterate_smash",
-			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_smash"), 8f));
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_smash"), 16f));
+	public static final RegistryObject<SoundEvent> OBLITERATE_SWING = REGISTRY.register("obliterate_swing",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_swing"), 16f));
 	public static final RegistryObject<SoundEvent> OBLITERATE_SHOCKWAVE = REGISTRY.register("obliterate_shockwave",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_shockwave"), 16f));
 
