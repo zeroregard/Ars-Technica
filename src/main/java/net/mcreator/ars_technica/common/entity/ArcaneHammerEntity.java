@@ -132,7 +132,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     }
 
     protected void setSpeed(float speed) {
-        var clamped = Math.min(0.6f, speed);
+        var clamped = Math.max(0.6f, speed);
         this.speed = clamped;
         this.entityData.set(SPEED, clamped);
     }
@@ -171,11 +171,11 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     }
 
     private float getChargeSpeed() {
-        return Math.min(0.6f, speed) * 3;
+        return speed * 3;
     }
 
     private float getLargeSoundVolume() {
-        return Math.max(1.0f, amps * (1/8f) * 0.4f);
+        return Math.min(1.0f, amps * (1/8f) * 0.4f);
     }
 
     @Override
@@ -317,8 +317,6 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             }
         });
 
-        animationController.setAnimationSpeed(getChargeSpeed());
-
         controllerRegistrar.add(animationController);
 
     }
@@ -336,6 +334,8 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             return PlayState.CONTINUE;
         }
         if(!chargeAnimationPlayed) {
+            animationController.setAnimationSpeed(getChargeSpeed());
+            ArsTechnicaMod.LOGGER.info(animationController.getAnimationSpeed());
             event.getController().setAnimation(RawAnimation.begin().thenPlay("charge"));
             chargeAnimationPlayed = true;
             return PlayState.CONTINUE;
