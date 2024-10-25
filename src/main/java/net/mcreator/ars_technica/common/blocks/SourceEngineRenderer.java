@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import com.simibubi.create.foundation.render.CachedBufferer;
 import com.simibubi.create.foundation.render.SuperByteBuffer;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
+import net.mcreator.ars_technica.client.AllPartialModels;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -19,6 +20,11 @@ import org.joml.Quaternionf;
 public class SourceEngineRenderer extends KineticBlockEntityRenderer<SourceEngineBlockEntity> {
     public SourceEngineRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
+    }
+
+    @Override
+    protected SuperByteBuffer getRotatedModel(SourceEngineBlockEntity be, BlockState state) {
+        return CachedBufferer.partialFacing(AllPartialModels.ARCANE_SHAFT_HALF, state);
     }
 
     private float getRadiansAngle(SourceEngineBlockEntity be, final BlockPos pos) {
@@ -36,10 +42,6 @@ public class SourceEngineRenderer extends KineticBlockEntityRenderer<SourceEngin
 
         super.renderSafe(blockEntity, partialTicks, poseStack, bufferSource, light, overlay);
 
-        return;
-
-        // Unfortunately the below is unsafe when used with modernfix mixins
-        /*
         if (blockEntity.isFueled()) {
 
             poseStack.pushPose();
@@ -54,7 +56,7 @@ public class SourceEngineRenderer extends KineticBlockEntityRenderer<SourceEngin
 
             poseStack.popPose();
         }
-        */
+
     }
 
     private Quaternionf getQuaternion(SourceEngineBlockEntity be, float radiansAngle) {
