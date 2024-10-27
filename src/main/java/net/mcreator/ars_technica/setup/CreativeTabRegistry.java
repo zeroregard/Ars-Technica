@@ -26,7 +26,7 @@ public class CreativeTabRegistry {
                     for (var entry : ITEMS.getEntries()) {
                         output.accept(entry.get().getDefaultInstance());
                     }
-                }).withTabsBefore(CreativeModeTabs.BUILDING_BLOCKS)
+                }).withTabsBefore(com.hollingsworth.arsnouveau.setup.registry.CreativeTabRegistry.BLOCKS.getKey().location())
                 .build());
 
 
