@@ -31,7 +31,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 @Mixin(BasicSpellTurret.class)
 public abstract class BasicSpellTurretMixin implements EncasableBlock {
 
-    @Inject(method = "use", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "use", at = @At("HEAD"), cancellable = true, remap = false)
     public void useCasing(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit,  CallbackInfoReturnable<InteractionResult> cir) {
         if (player.isShiftKeyDown() || !player.mayBuild()) {
             cir.setReturnValue(InteractionResult.PASS);

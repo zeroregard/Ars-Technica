@@ -20,6 +20,7 @@ buildscript {
 apply plugin: 'base'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
 version = "${mc_version}-${mod_version}"
@@ -32,7 +33,7 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'official', version: '1.20.1'
+    mappings channel: 'parchment', version: '2023.07.02-1.20.1'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -158,6 +159,8 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-common:${jei_version}")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
     implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:0.2.0-beta.8"))
     implementation("com.github.llamalad7.mixinextras:mixinextras-forge:0.2.0-beta.8")
 }
@@ -168,6 +171,21 @@ tasks.withType(JavaCompile).configureEach {
 
 mixin {
     add sourceSets.main, "ars_technica.refmap.json"
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "ars_technica",
+                "Specification-Vendor"    : "zeroregard",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : mod_version,
+                "Implementation-Vendor"   : "zeroregard",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "ars_technica.mixins.json"
+        ])
+    }
 }
 
 apply from: 'mcreator.gradle'

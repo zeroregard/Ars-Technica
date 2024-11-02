@@ -3,10 +3,12 @@ package net.mcreator.ars_technica.mixin;
 import com.hollingsworth.arsnouveau.common.block.RuneBlock;
 import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.api.IRuneTileModifier;
 import net.mcreator.ars_technica.common.items.equipment.RunicSpanner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +27,7 @@ import java.util.List;
 @Mixin(RuneBlock.class)
 public class RuneBlockMixin implements IWrenchable {
 
-    @Inject(method = "use", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "use", at = @At("HEAD"), cancellable = true, remap = false)
     public void useWrench(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack stack = player.getItemInHand(handIn);
         if (stack.getItem() instanceof RunicSpanner) {
@@ -33,7 +35,6 @@ public class RuneBlockMixin implements IWrenchable {
             InteractionResult result = onWrenched(state, context);
             cir.setReturnValue(result);
             cir.cancel();
-            player.playSound(SoundEvents.AMETHYST_BLOCK_STEP);
         }
     }
 
@@ -44,6 +45,7 @@ public class RuneBlockMixin implements IWrenchable {
         if (world.getBlockEntity(pos) instanceof RuneTile runeTile) {
             if (runeTile instanceof IRuneTileModifier modifiableRune) {
                 modifiableRune.incrementCustomTicksUntilCharge();
+                world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 0.25f, 1.0f);
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.FAIL;

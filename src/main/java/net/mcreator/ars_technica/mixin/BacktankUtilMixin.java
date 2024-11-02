@@ -20,7 +20,7 @@ import java.util.List;
 @Mixin(BacktankUtil.class)
 public abstract class BacktankUtilMixin {
 
-    @Inject(method="getAllWithAir", at = @At("HEAD"), cancellable = true)
+    @Inject(method="getAllWithAir", at = @At("HEAD"), cancellable = true, remap = false)
     private static void getAllWithAirFromThread(LivingEntity entity, CallbackInfoReturnable<List<ItemStack>> cir) {
         ItemStack armorWithAir = getItemForPerk(PressurePerk.INSTANCE, entity);
         if(armorWithAir != null) {

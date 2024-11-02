@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AnimatedMagicArmor.class)
 public abstract class AnimatedMagicArmorMixin {
 
-    @Inject(method = "onArmorTick", at = @At("HEAD"))
+    @Inject(method = "onArmorTick", at = @At("HEAD"), remap = false)
     private void onArmorTickInject(ItemStack stack, Level world, Player player, CallbackInfo ci) {
         if (!world.isClientSide) {
             LivingEntity playerEntity = player;

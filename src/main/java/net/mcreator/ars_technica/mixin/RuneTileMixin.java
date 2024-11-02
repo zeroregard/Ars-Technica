@@ -26,14 +26,14 @@ import java.util.List;
 @Mixin(RuneTile.class)
 public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation {
 
-    @Shadow
+    @Shadow(remap = false)
     private int ticksUntilCharge;
 
     // Normally this is hardcoded to 20 * 2 or 20 * 3 but here we introduce
     // This value to be able to customize it per rune
     private int ticksUntilChargeCount = 0;
 
-    @Inject(method = "castSpell", at = @At("TAIL"))
+    @Inject(method = "castSpell", at = @At("TAIL"), remap = false)
     private void modifyTicksUntilCharge(Entity entity, CallbackInfo ci) {
         if (entity == null) return;
 
@@ -54,10 +54,14 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
 
     @Override
     public void incrementCustomTicksUntilCharge() {
-        this.ticksUntilChargeCount += 40;
+        if(this.ticksUntilChargeCount == 20) {
+            this.ticksUntilChargeCount = 40;
+        } else {
+            this.ticksUntilChargeCount += 40;
+        }
 
         if (this.ticksUntilChargeCount >= 680) {
-            this.ticksUntilChargeCount = 40;
+            this.ticksUntilChargeCount = 20;
         }
     }
 

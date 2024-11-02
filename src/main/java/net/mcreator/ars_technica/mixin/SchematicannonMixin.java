@@ -22,13 +22,13 @@ import java.util.List;
 @Mixin(SchematicannonBlockEntity.class)
 public class SchematicannonMixin {
 
-    @Shadow
+    @Shadow(remap = false)
     private int printerCooldown;
 
-    @Shadow
+    @Shadow(remap = false)
     private SchematicannonBlockEntity.State state;
 
-    @Inject(method = "tick", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("TAIL"), remap = false)
     public void modifyCooldownEveryTick(CallbackInfo ci) {
         if(!ConfigHandler.Common.SCHEMATIC_CANNON_SPEED_BOOST_ENABLED.get()) {
             return;

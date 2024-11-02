@@ -335,7 +335,6 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         }
         if(!chargeAnimationPlayed) {
             animationController.setAnimationSpeed(getChargeSpeed());
-            ArsTechnicaMod.LOGGER.info(animationController.getAnimationSpeed());
             event.getController().setAnimation(RawAnimation.begin().thenPlay("charge"));
             chargeAnimationPlayed = true;
             return PlayState.CONTINUE;
