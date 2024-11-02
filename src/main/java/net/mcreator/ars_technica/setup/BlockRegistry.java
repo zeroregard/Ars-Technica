@@ -21,6 +21,7 @@ public class BlockRegistry {
             BLOCKS.register("source_engine", () -> new SourceEngineBlock(
                     BlockBehaviour.Properties.of()
                             .mapColor(MapColor.COLOR_PURPLE)
+                            .forceSolidOn()
                             .instrument(NoteBlockInstrument.BASEDRUM)
                             .strength(1.5F, 6.0F)
                             .sound(SoundType.STONE)));

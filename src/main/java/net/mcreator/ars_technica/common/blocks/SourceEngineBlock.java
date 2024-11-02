@@ -51,6 +51,9 @@ public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<So
         return defaultBlockState().setValue(FACING, preferred);
     }
 
+
+
+
     @Override
     public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
         return face == state.getValue(FACING);
