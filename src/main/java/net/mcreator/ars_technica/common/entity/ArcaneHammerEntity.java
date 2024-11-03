@@ -189,7 +189,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             isCharging = false;
             chargedTime = world.getGameTime();
             if (world.isClientSide) {
-                animationController.setAnimationSpeed(1.0f);
+                setAnimationSpeed(1.0f);
             }
             playWorldSound(ArsTechnicaModSounds.OBLITERATE_SWING.get(), 1.0f, 1.0f);
         }
@@ -334,12 +334,18 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             return PlayState.CONTINUE;
         }
         if(!chargeAnimationPlayed) {
-            animationController.setAnimationSpeed(getChargeSpeed());
+            setAnimationSpeed(getChargeSpeed());
             event.getController().setAnimation(RawAnimation.begin().thenPlay("charge"));
             chargeAnimationPlayed = true;
             return PlayState.CONTINUE;
         }
         return PlayState.CONTINUE;
+    }
+
+    private void setAnimationSpeed(float speed) {
+        if (animationController != null) {
+            animationController.setAnimationSpeed(speed);
+        }
     }
 
     @Override
