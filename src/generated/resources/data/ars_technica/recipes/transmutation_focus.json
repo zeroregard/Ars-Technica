@@ -13,7 +13,7 @@
   },
   "pedestalItems": [
     {
-      "item": "create:brass_ingot"
+      "tag": "forge:ingots/brass"
     },
     {
       "item": "minecraft:rabbit_foot"

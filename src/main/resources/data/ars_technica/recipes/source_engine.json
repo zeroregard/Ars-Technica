@@ -7,7 +7,7 @@
   ],
   "key": {
     "B": {
-      "item": "create:brass_ingot"
+      "tag": "forge:ingots/brass"
     },
     "C": {
       "item": "create:cogwheel"

@@ -4,19 +4,24 @@ import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatus
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 
+import com.tterrag.registrate.util.entry.ItemEntry;
 import net.mcreator.ars_technica.ConfigHandler;
 import net.mcreator.ars_technica.common.items.threads.PressurePerk;
 import net.mcreator.ars_technica.recipe.TechnomancerArmorRecipe;
 import net.mcreator.ars_technica.setup.ArsElementalModItems;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.*;
-import static com.simibubi.create.AllItems.BRASS_INGOT;
 import static com.simibubi.create.AllItems.GOGGLES;
 import static com.simibubi.create.AllItems.PRECISION_MECHANISM;
 import static com.simibubi.create.AllItems.WRENCH;
@@ -25,7 +30,8 @@ import static com.simibubi.create.AllItems.COPPER_BACKTANK;
 import java.nio.file.Path;
 
 public class ATApparatusProvider extends ApparatusRecipeProvider {
-
+    private static final TagKey<Item> BRASS_INGOT_TAG = TagKey.create(BuiltInRegistries.ITEM.key(), new ResourceLocation("forge", "ingots/brass"));
+    public static final Ingredient BRASS_INGOT = Ingredient.of(BRASS_INGOT_TAG);
     public ATApparatusProvider(DataGenerator generatorIn) {
         super(generatorIn);
     }
@@ -101,7 +107,7 @@ public class ATApparatusProvider extends ApparatusRecipeProvider {
                 .withConfigCondition(ConfigHandler.Common.RECIPE_FOCUS_TRANSMUTATION_CONFIG_OPTION)
                 .withResult(ItemsRegistry.TRANSMUTATION_FOCUS)
                 .withReagent(MANIPULATION_ESSENCE)
-                .withPedestalItem(1, Ingredient.of(BRASS_INGOT))
+                .withPedestalItem(1, BRASS_INGOT)
                 .withPedestalItem(Items.RABBIT_FOOT)
                 .withPedestalItem(ItemsRegistry.CALIBRATED_PRECISION_MECHANISM)
                 .withPedestalItem(Ingredient.of(Items.EMERALD))
