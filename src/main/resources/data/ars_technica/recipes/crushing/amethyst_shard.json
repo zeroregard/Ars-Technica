@@ -1,0 +1,19 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "minecraft:amethyst_shard"
+    }
+  ],
+  "processingTime": 100,
+  "results": [
+    {
+      "count": 3,
+      "item": "ars_technica:amethyst_dust"
+    },
+    {
+      "chance": 0.25,
+      "item": "minecraft:quartz"
+    }
+  ]
+}
