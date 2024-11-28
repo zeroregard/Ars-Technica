@@ -9,11 +9,11 @@
   "results": [
     {
       "count": 3,
-      "item": "ars_technica:amethyst_powder"
+      "item": "ars_technica:amethyst_dust"
     },
     {
       "chance": 0.25,
-      "item": "minecraft:nether_quartz"
+      "item": "minecraft:quartz"
     }
   ]
 }
