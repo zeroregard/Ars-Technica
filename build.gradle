@@ -147,6 +147,7 @@ dependencies {
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${gecko_version}")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:${curio_version}")
     implementation fg.deobf("curse.maven:ars-elemental-561470:5609198")
+    implementation fg.deobf("curse.maven:starbunclemania-746215:5908851")
 
     // Create and related
     implementation fg.deobf("com.simibubi.create:create-${mc_version}:${create_version}:slim"){transitive = false}

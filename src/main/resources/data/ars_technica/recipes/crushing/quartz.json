@@ -2,14 +2,14 @@
   "type": "create:crushing",
   "ingredients": [
     {
-      "item": "minecraft:amethyst_shard"
+      "item": "minecraft:quartz"
     }
   ],
   "processingTime": 100,
   "results": [
     {
       "count": 3,
-      "item": "ars_technica:amethyst_dust"
+      "item": "ars_technica:quartz_dust"
     }
   ]
 }

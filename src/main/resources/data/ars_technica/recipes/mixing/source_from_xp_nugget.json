@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "heated",
+  "ingredients": [
+    {
+      "item": "ars_technica:amethyst_dust"
+    },
+    {
+      "item": "create:experience_nugget"
+    }
+  ],
+  "results": [
+    {
+      "amount": 250,
+      "fluid": "starbunclemania:source_fluid"
+    }
+  ]
+}

@@ -37,6 +37,7 @@ public class ItemsRegistry {
 
   public static RegistryObject<Item> CALIBRATED_PRECISION_MECHANISM = ITEMS.register("calibrated_precision_mechanism", () -> new CalibratedPrecisionMechanism(defaultItemProperties().stacksTo(64)));
   public static RegistryObject<Item> AMETHYST_DUST = ITEMS.register("amethyst_dust", () -> new Item(defaultItemProperties().stacksTo(64)));
+  public static RegistryObject<Item> QUARTZ_DUST = ITEMS.register("quartz_dust", () -> new Item(defaultItemProperties().stacksTo(64)));
   public static RegistryObject<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(defaultItemProperties().stacksTo(1)));
   public static RegistryObject<Item> SPY_MONOCLE = ITEMS.register("spy_monocle",  () -> new SpyMonocle(defaultItemProperties().stacksTo(1)));
 
