@@ -47,6 +47,13 @@ public class ArsTechnicaModSounds {
 	public static final RegistryObject<SoundEvent> OBLITERATE_SHOCKWAVE = REGISTRY.register("obliterate_shockwave",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "obliterate_shockwave"), 16f));
 
+	public static final RegistryObject<SoundEvent> FUSE_CHARGE = REGISTRY.register("fuse_charge",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "fuse_charge"), 16f));
+	public static final RegistryObject<SoundEvent> FUSE_SWING = REGISTRY.register("fuse_swing",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "fuse_swing"), 16f));
+	public static final RegistryObject<SoundEvent> FUSE_IMPACT = REGISTRY.register("fuse_impact",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "fuse_impact"), 16f));
+
 	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_START = REGISTRY.register("source_engine_start",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "source_engine_start"), 8f));
 	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_STOP = REGISTRY.register("source_engine_stop",

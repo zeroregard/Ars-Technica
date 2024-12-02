@@ -3,10 +3,7 @@ package net.mcreator.ars_technica.setup;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.blocks.turrets.EncasedTurretBlockEntity;
 import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
-import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
-import net.mcreator.ars_technica.common.entity.ArcanePolishEntity;
-import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
-import net.mcreator.ars_technica.common.entity.WhirlEntity;
+import net.mcreator.ars_technica.common.entity.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -48,6 +45,12 @@ public class EntityRegistry {
             "arcane_hammer_entity",
             EntityType.Builder.<ArcaneHammerEntity>of(ArcaneHammerEntity::new, MobCategory.MISC)
                     .sized(1.0F, 1.0F));
+
+    public static final RegistryObject<EntityType<ArcaneFusionEntity>> ARCANE_FUSION_ENTITY = registerEntity(
+            "arcane_fusion_entity",
+            EntityType.Builder.<ArcaneFusionEntity>of(ArcaneFusionEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F));
+
 
     public static final RegistryObject<BlockEntityType<SourceEngineBlockEntity>> SOURCE_ENGINE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
             "source_engine_block_entity",

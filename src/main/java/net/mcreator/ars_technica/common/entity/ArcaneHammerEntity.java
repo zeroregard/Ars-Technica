@@ -322,7 +322,6 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     }
 
     AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return factory;

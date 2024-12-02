@@ -15,6 +15,7 @@ public class GlyphsRegistry {
     register(EffectPolish.INSTANCE);
     register(EffectWhirl.INSTANCE);
     register(EffectObliterate.INSTANCE);
+    register(EffectFuse.INSTANCE);
   }
 
   public static void register(AbstractSpellPart spellPart) {

@@ -147,6 +147,33 @@
       }
     ]
   },
+  "fuse_charge": {
+    "subtitle": "subtitles.fuse_charge",
+    "sounds": [
+      {
+        "name": "ars_technica:fuse_charge",
+        "stream": false
+      }
+    ]
+  },
+  "fuse_swing": {
+    "subtitle": "subtitles.fuse_swing",
+    "sounds": [
+      {
+        "name": "ars_technica:fuse_swing",
+        "stream": false
+      }
+    ]
+  },
+  "fuse_impact": {
+    "subtitle": "subtitles.fuse_impact",
+    "sounds": [
+      {
+        "name": "ars_technica:fuse_impact",
+        "stream": false
+      }
+    ]
+  },
   "pocket_factory": {
     "sounds": [
       {
