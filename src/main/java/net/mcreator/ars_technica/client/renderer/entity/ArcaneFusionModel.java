@@ -18,18 +18,18 @@ public class ArcaneFusionModel extends GeoModel<ArcaneFusionEntity> {
 
     @Override
     public ResourceLocation getModelResource(ArcaneFusionEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "geo/arcane_hammer.geo.json");
+        return new ResourceLocation(ArsTechnicaMod.MODID, "geo/arcane_fusion.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ArcaneFusionEntity entity) {
-        String path = "textures/entity/arcane_hammer.png";
+        String path = "textures/entity/arcane_fusion.png";
         return new ResourceLocation(ArsTechnicaMod.MODID, path);
     }
 
     @Override
     public ResourceLocation getAnimationResource(ArcaneFusionEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "animations/animations_arcane_hammer.json");
+        return new ResourceLocation(ArsTechnicaMod.MODID, "animations/animations_arcane_fusion.json");
     }
 
 

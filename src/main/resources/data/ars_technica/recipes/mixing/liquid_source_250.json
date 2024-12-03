@@ -3,10 +3,10 @@
   "heatRequirement": "heated",
   "ingredients": [
     {
-      "item": "ars_technica:amethyst_dust"
+      "tag": "forge:dusts/amethyst"
     },
     {
-      "item": "create:experience_nugget"
+      "tag": "forge:consumables/experience_3"
     }
   ],
   "results": [

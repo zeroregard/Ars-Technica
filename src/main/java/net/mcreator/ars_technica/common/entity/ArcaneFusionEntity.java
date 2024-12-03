@@ -2,8 +2,10 @@ package net.mcreator.ars_technica.common.entity;
 
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
+import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.foundation.utility.VecHelper;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
@@ -50,6 +52,7 @@ import java.util.stream.Collectors;
 public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable  {
 
     private double aoe = 1.0;
+    private int tickCount = 0;
     private Entity caster;
     private long createdTime;
     private float elapsedTime;
@@ -71,14 +74,21 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable  
     private ItemStack ingredientC;
     private ItemStack ingredientD;
 
-    private static float TIME_TO_ANGLE_MULTIPLIER = 4.5f;
+    private static float TIME_TO_ANGLE_MULTIPLIER = 1.5f;
     private static float CHARGE_TIME = 1.65f;
     private static float SWING_TIME = 0.35f;
     private static float IMPACT_TIME = CHARGE_TIME + SWING_TIME;
     private static float REMOVE_TIME = IMPACT_TIME + 1.0f;
 
+    private static ParticleColor particleColorA = new ParticleColor(210, 0, 255);
+    private static ParticleColor particleColorB = new ParticleColor(246, 25, 151);
+    private static ParticleColor particleColorC = new ParticleColor(255, 0, 99);
+    private static ParticleColor particleColorD = new ParticleColor(255, 118, 0);
+    private static List<ParticleColor> particleColors = new ArrayList<>(Arrays.asList(particleColorA, particleColorB, particleColorC, particleColorD));
+
     private boolean impacted = false;
     private boolean swung = false;
+    private boolean rendered_impact_particles = false;
 
     private AnimationController<ArcaneFusionEntity> animationController;
 
@@ -120,21 +130,30 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable  
             impacted = true;
         }
 
-
-        ArsTechnicaMod.LOGGER.info("Hello world");
         if(elapsedTime > REMOVE_TIME) {
             discard();
         }
 
         if (world.isClientSide) {
-            setClientSideIngredientList();
-            if (world == null || recipeItemStacks == null) {
-                return;
-            }
-            if(!impacted) {
-                var diameterMultiplier = swung ? 1.0f - (elapsedTime - CHARGE_TIME) * 2 : 1.0f;
-                renderCircleParticles(diameterMultiplier);
-            }
+            handleClientParticles();
+        }
+
+        tickCount++;
+    }
+
+    private void handleClientParticles() {
+        setClientSideIngredientList();
+        if (world == null || recipeItemStacks == null) {
+            return;
+        }
+        if(!impacted) {
+            var diameterMultiplier = swung ? 1.0f - (elapsedTime - CHARGE_TIME) * 2 : 1.0f;
+            renderCircleParticles(diameterMultiplier);
+            renderFusionParticles();
+        }
+        if(impacted && !rendered_impact_particles) {
+            renderImpactParticles();
+            rendered_impact_particles = true;
         }
     }
 
@@ -144,20 +163,54 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable  
         Vec3 center = getPosition(1.0f);
 
         double speedMultiplier = TIME_TO_ANGLE_MULTIPLIER * Math.exp(elapsedTime / 1.0);
-        double circleDiameter = 0.4f * Math.exp(elapsedTime) * diameterMultiplier;
+        double circleDiameter = 0.3f * Math.exp(elapsedTime) * diameterMultiplier;
         double circleRadius = circleDiameter / 2.0;
 
         for (int i = 0; i < numStacks; i++) {
             double angle = Math.toRadians(i * angleStep) + elapsedTime * speedMultiplier;
-            double offsetX = circleRadius * Math.cos(angle);
-            double offsetZ = circleRadius * Math.sin(angle);
+            double offsetX = circleRadius * Math.cos(angle) + random.nextGaussian() * 0.1;
+            double offsetZ = circleRadius * Math.sin(angle) + random.nextGaussian() * 0.1;
 
             Vec3 particlePos = center.add(offsetX, 0.25f, offsetZ);
             ItemStack itemStack = recipeItemStacks.get(i);
             ItemParticleOption data = new ItemParticleOption(ParticleTypes.ITEM, itemStack);
-            ArsTechnicaMod.LOGGER.info(itemStack);
             world.addParticle(data, particlePos.x, particlePos.y, particlePos.z, 0, 0.1, 0);
         }
+    }
+
+    private void renderFusionParticles() {
+        if(tickCount % 2 == 0) {
+            var particleColorIndex = random.nextIntBetweenInclusive(0, 3);
+            var particleColor = particleColors.get(particleColorIndex);
+            var particleData = new SpiralDustParticleTypeData(particleColor, false, 1.0f, 1.0f, 20);
+            addParticle(particleData, Math.toRadians(random.nextGaussian() * 360), 0, 0.04, 0);
+        }
+    }
+
+    private void renderImpactParticles() {
+        addParticle(ParticleTypes.EXPLOSION, 0, 0, 0, 0);
+        for (int i = 0; i < 5; i++) {
+            addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, 0, 0.0002, 0.4, 0.05);
+        }
+
+        var itemParticleCount = 16;
+        var speedMultiplier = 0.5;
+        double angleStep = 360.0 / itemParticleCount;
+        for (int i = 0; i < 16; i++) {
+            double angle = Math.toRadians(i * angleStep);
+            ItemStack itemStack = recipeItemStacks.get(i % recipeItemStacks.size());
+            ItemParticleOption data = new ItemParticleOption(ParticleTypes.ITEM, itemStack);
+            addParticle(data, angle, 0.1, 0.2, 0.2);
+        }
+    }
+
+    private void addParticle(ParticleOptions particleData, double angle, double speedMultiplier, double offsetMultiplier, double ySpeed) {
+        double offsetX = random.nextGaussian() * offsetMultiplier;
+        double offsetY = random.nextGaussian() * offsetMultiplier;
+        double offsetZ = random.nextGaussian() * offsetMultiplier;
+        double speedX =  Math.cos(angle) + random.nextGaussian() * speedMultiplier;
+        double speedZ =  Math.sin(angle) + random.nextGaussian() * speedMultiplier;
+        world.addParticle(particleData, getX() + offsetX, getY() + offsetY, getZ() + offsetZ, offsetX, ySpeed, offsetZ);
     }
 
     private void playWorldSound(SoundEvent soundEvent, float volume, float pitch) {
@@ -237,6 +290,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable  
     }
 
     private PlayState fuseAnimationPredicate(AnimationState<?> event) {
+        event.getController().setAnimation(RawAnimation.begin().thenPlay("charge"));
         return PlayState.CONTINUE;
     }
 
@@ -268,11 +322,6 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable  
 
     private void setClientSideIngredientList() {
         if (recipeItemStacks == null && ingredientA != null) {
-            ArsTechnicaMod.LOGGER.info("Setting client-side ingredient list");
-            ArsTechnicaMod.LOGGER.info(ingredientA);
-            ArsTechnicaMod.LOGGER.info(ingredientB);
-            ArsTechnicaMod.LOGGER.info(ingredientC);
-            ArsTechnicaMod.LOGGER.info(ingredientD);
             var temporaryList = new ArrayList<>(Arrays.asList(ingredientA));
             addNonNullToList(ingredientB, temporaryList);
             addNonNullToList(ingredientC, temporaryList);
@@ -334,11 +383,11 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable  
 
     @Override
     public Color getColor() {
-        return Color.GREEN;
+        return Color.WHITE;
     }
 
     @Override
     public double getAlpha() {
-        return 0;
+        return 1;
     }
 }

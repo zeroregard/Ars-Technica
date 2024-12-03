@@ -3,15 +3,15 @@
   "heatRequirement": "heated",
   "ingredients": [
     {
-      "item": "ars_technica:amethyst_dust"
+      "item": "minecraft:amethyst_shard"
     },
     {
-      "item": "ars_nouveau:experience_gem"
+      "tag": "forge:consumables/experience_12"
     }
   ],
   "results": [
     {
-      "amount": 250,
+      "amount": 1000,
       "fluid": "starbunclemania:source_fluid"
     }
   ]

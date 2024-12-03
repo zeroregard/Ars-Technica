@@ -84,7 +84,7 @@ public class EffectFuse extends AbstractEffect {
 
     @Override
     public String getBookDescription() {
-        return "Fuses items by slamming them together at breakneck speed.";
+        return "Fuses items by slamming them together at breakneck speed";
     }
 
     @Override
