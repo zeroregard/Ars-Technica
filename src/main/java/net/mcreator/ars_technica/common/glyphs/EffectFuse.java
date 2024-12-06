@@ -1,35 +1,16 @@
 package net.mcreator.ars_technica.common.glyphs;
 
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
-import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import net.mcreator.ars_technica.ArsTechnicaMod;
-import net.mcreator.ars_technica.common.crafting.DynamicCraftingContainer;
 import com.hollingsworth.arsnouveau.api.spell.*;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
 
-import net.mcreator.ars_technica.common.entity.ArcaneFusionEntity;
-import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
-import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
-import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
-import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
+import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
-import net.mcreator.ars_technica.common.helpers.CraftingHelpers;
-import net.mcreator.ars_technica.common.helpers.ItemHelpers;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.object.Color;
@@ -37,7 +18,6 @@ import software.bernie.geckolib.core.object.Color;
 import javax.annotation.Nonnull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class EffectFuse extends AbstractEffect {
     public static final EffectFuse INSTANCE = new EffectFuse();

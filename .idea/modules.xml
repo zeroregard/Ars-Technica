@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Ars-Technica.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Ars-Technica.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Ars-Technica.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Ars-Technica.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ars_technica.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ars_technica.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ars_technica.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ars_technica.test.iml" />
     </modules>

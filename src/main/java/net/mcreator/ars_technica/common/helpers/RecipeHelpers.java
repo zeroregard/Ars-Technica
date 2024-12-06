@@ -95,15 +95,11 @@ public class RecipeHelpers {
     // There has to be at least 2 items and liquids are not considered (only as output for now)
     public static Optional<Pair<MixingRecipe, List<ItemEntity>>> getFusionRecipeForItems(List<ItemEntity> items, Level world) {
         RecipeManager recipeManager = world.getRecipeManager();
-        List<ItemStack> availableStacks = items.stream()
-                .map(ItemEntity::getItem)
-                .collect(Collectors.toList());
-
         List<MixingRecipe> mixingRecipes = recipeManager.getAllRecipesFor(AllRecipeTypes.MIXING.getType());
 
         for (MixingRecipe mixingRecipe : mixingRecipes) {
             // Check if recipe matches
-            List<ItemEntity> usedEntities = new ArrayList<>();
+            ArrayList<ItemEntity> usedEntities = new ArrayList<>();
             boolean matches = fusionRecipeIngredientsMatch(mixingRecipe, items, usedEntities);
 
             if (matches) {

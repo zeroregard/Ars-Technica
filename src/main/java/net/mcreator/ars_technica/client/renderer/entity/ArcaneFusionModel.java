@@ -1,8 +1,7 @@
 package net.mcreator.ars_technica.client.renderer.entity;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
-import net.mcreator.ars_technica.common.entity.ArcaneFusionEntity;
-import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
+import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;

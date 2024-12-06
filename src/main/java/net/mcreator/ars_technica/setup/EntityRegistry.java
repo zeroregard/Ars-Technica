@@ -4,6 +4,7 @@ import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.blocks.turrets.EncasedTurretBlockEntity;
 import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
 import net.mcreator.ars_technica.common.entity.*;
+import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;

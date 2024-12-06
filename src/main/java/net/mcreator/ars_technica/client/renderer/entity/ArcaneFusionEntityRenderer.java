@@ -1,11 +1,9 @@
 package net.mcreator.ars_technica.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.mcreator.ars_technica.common.entity.ArcaneFusionEntity;
-import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
+import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import org.joml.Quaternionf;
 
 public class ArcaneFusionEntityRenderer extends ArcaneEntityRendererBase<ArcaneFusionEntity> {
 
