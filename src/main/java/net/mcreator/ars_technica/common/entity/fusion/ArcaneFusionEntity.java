@@ -3,8 +3,10 @@ package net.mcreator.ars_technica.common.entity.fusion;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.mcreator.ars_technica.common.entity.Colorable;
+import net.mcreator.ars_technica.common.entity.fusion.fluids.ArcaneFusionFluids;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
@@ -48,6 +50,7 @@ import java.util.stream.Collectors;
 public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
 
     private final ArcaneFusionParticles particleHandler;
+    private final ArcaneFusionFluids fluidHandler;
 
     private long createdTime;
     private float elapsedTime;
@@ -100,19 +103,21 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         setPos(position.x, position.y, position.z);
         this.createdTime = world.getGameTime();
         this.particleHandler = new ArcaneFusionParticles(this, world);
+        this.fluidHandler = new ArcaneFusionFluids(this, world);
     }
 
     public ArcaneFusionEntity(EntityType<ArcaneFusionEntity> entityType, Level world) {
         super(entityType, world);
         this.world = world;
         this.particleHandler = new ArcaneFusionParticles(this, world);
+        this.fluidHandler = new ArcaneFusionFluids(this, world);
     }
 
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
         createdTime = world.getGameTime();
-        handleItems();
+        handleIngredients();
     }
 
     @Override
@@ -150,11 +155,19 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     }
 
 
-    protected void handleItems() {
+    protected void handleIngredients() {
         if(world.isClientSide) {
             return;
         }
-        // TODO: try to get the nearest basin in AOE area and get ingredients from that or fall back to item entities in world
+        // TODO: actually use the fluids
+        var fluids = fluidHandler.pickupFluids();
+        for (int i = 0; i < fluids.size(); i++) {
+            var fluid = fluids.get(i);
+            var amount = fluid.getFluidStack().getAmount();
+            var type = fluid.getFluidStack().getFluid().getFluidType();
+            ArsTechnicaMod.LOGGER.info(type + ", " + amount);
+        }
+        ArsTechnicaMod.LOGGER.info(fluids);
         handleWorldItems();
     }
 
