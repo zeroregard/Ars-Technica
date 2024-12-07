@@ -3,13 +3,18 @@ package net.mcreator.ars_technica.common.entity.fusion;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
+import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.mcreator.ars_technica.common.entity.Colorable;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.ArcaneFusionFluids;
+import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
+import net.mcreator.ars_technica.common.helpers.FluidHelper;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -28,7 +33,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,9 +50,7 @@ import software.bernie.geckolib.core.object.Color;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
@@ -63,6 +69,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
 
     private final Level world;
     private ItemEntity resultEntity;
+    private List<FluidStack> resultLiquids;
 
     public static float CHARGE_TIME = 1.65f;
     public static float SWING_TIME = 0.35f;
@@ -131,9 +138,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
 
         if(elapsedTime > IMPACT_TIME && !impacted) {
             playWorldSound(ArsTechnicaModSounds.FUSE_IMPACT.get(), 0.75f, 1.0f);
-            if(resultEntity != null) {
-                world.addFreshEntity(resultEntity);
-            }
+            outputResults();
             impacted = true;
         }
 
@@ -154,45 +159,75 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         world.playSound(null, pos.x, pos.y, pos.z, soundEvent, SoundSource.BLOCKS, volume, pitch);
     }
 
+    protected void outputResults() {
+        if(resultEntity != null) {
+            world.addFreshEntity(resultEntity);
+        }
+        if(resultLiquids != null) {
+            for (FluidStack fluidStack : resultLiquids) {
+                FluidHelper.dumpFluid(fluidStack, world, getPosition(1.0f), 4);
+            }
+        }
+    }
 
     protected void handleIngredients() {
         if(world.isClientSide) {
             return;
         }
-        // TODO: actually use the fluids
         var fluids = fluidHandler.pickupFluids();
-        for (int i = 0; i < fluids.size(); i++) {
-            var fluid = fluids.get(i);
-            var amount = fluid.getFluidStack().getAmount();
-            var type = fluid.getFluidStack().getFluid().getFluidType();
-            ArsTechnicaMod.LOGGER.info(type + ", " + amount);
-        }
-        ArsTechnicaMod.LOGGER.info(fluids);
-        handleWorldItems();
-    }
-
-    protected void handleWorldItems() {
-
-        List<ItemEntity> itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(aoe));
-        if (itemEntities.isEmpty()) {
+        var itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(aoe));
+        if (itemEntities.isEmpty() && fluids.isEmpty()) {
+            // TODO: feedback sound/visuals
             return;
         }
-        var result = RecipeHelpers.getFusionRecipeForItems(itemEntities, world);
+
+        tryCombineIngredients(itemEntities, fluids);
+    }
+
+    protected void tryCombineIngredients(List<ItemEntity> itemEntities, List<FluidSourceProvider> fluids) {
+        var result = RecipeHelpers.getMixingRecipe(itemEntities, fluids, world);
 
         if(result.isPresent()) {
             var resultObj = result.get();
-            var recipe = resultObj.getFirst();
-            var ingredients = resultObj.getSecond();
+            var recipe = resultObj.recipe;
+            var ingredients = resultObj.usedEntities;
+            var fluidIngredients = resultObj.usedFluids;
 
-            // Calculate how many times we can execute the recipe by finding which ingredient is the least
-            // This assumes that all recipes have a 1:1 relationship between ingredients though!
-            int recipeIterations = ingredients.stream()
-                    .collect(Collectors.groupingBy(itemEntity -> itemEntity.getItem().getItem(),
-                            Collectors.summingInt(item -> item.getItem().getCount())))
-                    .values()
-                    .stream()
-                    .min(Integer::compare)
-                    .orElse(0);
+            int maxItemIterations = Integer.MAX_VALUE;
+
+            if(!ingredients.isEmpty()) {
+                Map<Item, Integer> itemCounts = new HashMap<>();
+
+                // Populate the map with item counts
+                for (var itemEntity : ingredients) {
+                    Item item = itemEntity.getItem().getItem();
+                    int count = itemEntity.getItem().getCount();
+                    itemCounts.put(item, itemCounts.getOrDefault(item, 0) + count);
+                }
+                maxItemIterations = itemCounts.values()
+                        .stream()
+                        .min(Integer::compare)
+                        .orElse(0);
+            }
+
+            int maxFluidIterations = recipe.getFluidIngredients().isEmpty() ? Integer.MAX_VALUE :
+                    fluidIngredients.stream()
+                            .mapToInt(fluidSource -> {
+                                var requiredFluid = recipe.getFluidIngredients().stream()
+                                        .flatMap(ingredient -> ingredient.getMatchingFluidStacks().stream())
+                                        .filter(matchingFluid -> matchingFluid.getFluid().equals(fluidSource.getFluidStack().getFluid()))
+                                        .findFirst()
+                                        .orElse(null);
+                                return (int) Math.floor(fluidSource.getMbAmount() / requiredFluid.getAmount());
+                            })
+                            .min()
+                            .orElse(0);
+            int recipeIterations = Math.min(maxItemIterations, maxFluidIterations);
+
+            if (recipeIterations <= 0) {
+                // TODO: feedback
+                return; // Not enough resources to execute the recipe
+            }
 
             if(ingredients != null && !ingredients.isEmpty()) {
                 particleHandler.setIngredientsForParticles(ingredients);
@@ -207,18 +242,45 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
                 }
             });
 
+            // Remove the used fluids
+            fluidIngredients.forEach(fluidSource -> {
+                // Find the matching fluid ingredient for this fluid source
+                var requiredFluid = recipe.getFluidIngredients().stream()
+                        .flatMap(ingredient -> ingredient.getMatchingFluidStacks().stream())
+                        .filter(matchingFluid -> matchingFluid.getFluid().equals(fluidSource.getFluidStack().getFluid()))
+                        .findFirst()
+                        .orElse(null);
 
-            // Create the output item - for now do nothing with fluids, later on try to place in nearest storage tank or basin
-            RegistryAccess registryAccess = world.registryAccess();
-            ItemStack recipeItemResult = recipe.getResultItem(registryAccess);
-            var itemOutput = recipeItemResult.copy();
-            itemOutput.setCount(itemOutput.getCount() * recipeIterations);
-            // var fluidOutput = recipe.getFluidResults();
+                if (requiredFluid != null) {
+                    int mbToDrain = requiredFluid.getAmount() * recipeIterations;
+                    fluidSource.drainFluid(mbToDrain, world);
+                }
+            });
+            setItemResult(recipe, recipeIterations);
+            setFluidResult(recipe, recipeIterations);
 
             playWorldSound(ArsTechnicaModSounds.FUSE_CHARGE.get(), 0.75f, 1.0f);
 
-            resultEntity = new ItemEntity(world, getX(), getY(), getZ(), itemOutput);
+
         }
+    }
+
+    private void setItemResult(MixingRecipe recipe, int recipeIterations) {
+        RegistryAccess registryAccess = world.registryAccess();
+        ItemStack recipeItemResult = recipe.getResultItem(registryAccess);
+        var itemOutput = recipeItemResult.copy();
+        itemOutput.setCount(itemOutput.getCount() * recipeIterations);
+        resultEntity = new ItemEntity(world, getX(), getY(), getZ(), itemOutput);
+    }
+
+    private void setFluidResult(MixingRecipe recipe, int recipeIterations) {
+        List<FluidStack> fluidResults = recipe.getFluidResults();
+        resultLiquids = fluidResults.stream()
+                .map(fluidStack -> {
+                    int newAmount = fluidStack.getAmount() * recipeIterations;
+                    return new FluidStack(fluidStack, newAmount);
+                })
+                .collect(Collectors.toList());
     }
 
 

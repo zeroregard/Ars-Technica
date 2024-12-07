@@ -12,19 +12,21 @@ import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RecipeHelpers {
@@ -91,56 +93,89 @@ public class RecipeHelpers {
     }
 
 
-    // Fusion is slightly different from regular mixing:
-    // There has to be at least 2 items and liquids are not considered (only as output for now)
-    public static Optional<Pair<MixingRecipe, List<ItemEntity>>> getFusionRecipeForItems(List<ItemEntity> items, Level world) {
+    public static Optional<MixingRecipeResult> getMixingRecipe(List<ItemEntity> items, List<FluidSourceProvider> fluids, Level world) {
         RecipeManager recipeManager = world.getRecipeManager();
         List<MixingRecipe> mixingRecipes = recipeManager.getAllRecipesFor(AllRecipeTypes.MIXING.getType());
 
         for (MixingRecipe mixingRecipe : mixingRecipes) {
-            // Check if recipe matches
             ArrayList<ItemEntity> usedEntities = new ArrayList<>();
-            boolean matches = fusionRecipeIngredientsMatch(mixingRecipe, items, usedEntities);
+            ArrayList<FluidSourceProvider> usedFluids = new ArrayList<>();
+            boolean matches = mixingRecipeIngredientsMatch(mixingRecipe, items, fluids, usedEntities, usedFluids);
 
             if (matches) {
-                return Optional.of(Pair.of(mixingRecipe, usedEntities));
+                MixingRecipeResult result = new MixingRecipeResult(mixingRecipe, usedEntities, usedFluids);
+                return Optional.of(result);
             }
         }
 
         return Optional.empty();
     }
 
-    private static boolean fusionRecipeIngredientsMatch(MixingRecipe recipe, List<ItemEntity> availableItems, List<ItemEntity> usedEntities) {
-        List<ItemStack> requiredStacks = recipe.getIngredients().stream()
-                .flatMap(ingredient -> Arrays.stream(ingredient.getItems()))
+    public static class MixingRecipeResult {
+        public MixingRecipe recipe;
+        public List<ItemEntity> usedEntities;
+        public List<FluidSourceProvider> usedFluids;
+
+        public MixingRecipeResult(MixingRecipe recipe, List<ItemEntity> usedEntities, List<FluidSourceProvider> usedFluids) {
+            this.recipe = recipe;
+            this.usedEntities = usedEntities;
+            this.usedFluids = usedFluids;
+        }
+    }
+
+    private static boolean mixingRecipeIngredientsMatch(
+            MixingRecipe recipe,
+            List<ItemEntity> availableItems,
+            List<FluidSourceProvider> availableFluids,
+            List<ItemEntity> usedEntities,
+            List<FluidSourceProvider> usedFluids
+    ) {
+        // Group available items by type for faster lookup
+        //Map<Item, List<ItemEntity>> itemMap = availableItems.stream()
+        //        .collect(Collectors.groupingBy(entity -> entity.getItem().getItem()));
+
+        // Group available fluids by type for faster lookup
+        Map<Fluid, List<FluidSourceProvider>> fluidMap = availableFluids.stream()
+                .collect(Collectors.groupingBy(provider -> provider.getFluidStack().getFluid()));
+
+
+        List<FluidStack> requiredFluidStacks = recipe.getFluidIngredients().stream()
+                .flatMap(ingredient -> ingredient.getMatchingFluidStacks().stream())
                 .collect(Collectors.toList());
 
-        // Attempt to satisfy all required ingredients
-        List<ItemEntity> remainingItems = new ArrayList<>(availableItems);
+        // Match item requirements
+        for (Ingredient itemIngredient : recipe.getIngredients()) {
+            for(ItemStack ingredientVariant : itemIngredient.getItems()) {
+                var itemCandidate = availableItems.stream().filter(item -> item.getItem().getItem() == ingredientVariant.getItem()).findFirst();
+                itemCandidate.ifPresent(usedEntities::add);
+            }
+        }
 
-        for (ItemStack requiredStack : requiredStacks) {
-            boolean satisfied = false;
+        if (usedEntities.size() < recipe.getIngredients().size()) {
+            return false;
+        }
 
-            for (ItemEntity entity : remainingItems) {
-                ItemStack entityStack = entity.getItem();
+        // Match fluid requirements
+        for (FluidStack requiredFluid : requiredFluidStacks) {
+            List<FluidSourceProvider> candidates = fluidMap.getOrDefault(requiredFluid.getFluid(), new ArrayList<>());
+            boolean matched = false;
 
-                if (entityStack.getItem() == requiredStack.getItem() && entityStack.getCount() >= requiredStack.getCount()) {
-                    usedEntities.add(entity);
-                    remainingItems.remove(entity);
-                    satisfied = true;
+            // Try to find a matching fluid
+            for (Iterator<FluidSourceProvider> it = candidates.iterator(); it.hasNext(); ) {
+                FluidSourceProvider candidate = it.next();
+                if (candidate.getMbAmount() >= requiredFluid.getAmount()) {
+                    usedFluids.add(candidate);
+                    it.remove(); // Remove from available pool
+                    matched = true;
                     break;
                 }
             }
 
-            if (!satisfied) {
-                return false;
+            if (!matched) {
+                return false; // Failed to match a fluid
             }
         }
 
-        if (usedEntities.size() < 2) {
-            return false;
-        }
-
-        return true;
+        return usedEntities.size() == recipe.getIngredients().size();
     }
 }

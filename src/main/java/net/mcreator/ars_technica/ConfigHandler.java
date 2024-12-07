@@ -14,6 +14,10 @@ public class ConfigHandler {
 
         public static ForgeConfigSpec.ConfigValue<Double> SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER;
 
+        public static ForgeConfigSpec.BooleanValue FLUID_CAN_BE_PLACED;
+        public static ForgeConfigSpec.BooleanValue FLUID_SOURCES_CAN_BE_PLACED;
+        public static ForgeConfigSpec.IntValue FLUID_MAX_PLACEMENTS_PER_FUSE;
+
         // Recipes
         public final ForgeConfigSpec.BooleanValue RECIPE_FOCUS_TRANSMUTATION_ENABLED;
         public static final String RECIPE_FOCUS_TRANSMUTATION_CONFIG_OPTION = "recipeFocusTransmutationEnabled";
@@ -73,6 +77,12 @@ public class ConfigHandler {
 
             builder.pop();
 
+            builder.comment("Fluid placement logic related to Fuse")
+                    .push("Glyph - Fuse");
+
+            FLUID_CAN_BE_PLACED = builder.define("fluidCanBePlaced", true);
+            FLUID_SOURCES_CAN_BE_PLACED = builder.define("fluidSourcesCanBePlaced", true);
+            FLUID_MAX_PLACEMENTS_PER_FUSE = builder.defineInRange("fluidMaxPlacementsPerFuse", 16, 1, 256);
         }
     }
 

@@ -1,6 +1,9 @@
 package net.mcreator.ars_technica.common.entity.fusion.fluids;
 
+import net.mcreator.ars_technica.common.helpers.FluidHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -31,15 +34,24 @@ public class FluidSourceProvider {
         return fluidStack;
     }
 
-    public BlockPos getSourcePos() {
-        return sourcePos;
+    public int getMbAmount() {
+        if (tankSource != null) {
+            // TODO: what should the index be here, do we loop over all tanks?
+            // TODO: should it also be multiplied?
+            return tankSource.getFluidInTank(0).getAmount();
+        }
+        return fluidState.getAmount() * FluidHelper.FLUID_TO_MB_MULTIPLIER;
     }
 
-    public @Nullable IFluidHandler getTankSource() {
-        return tankSource;
-    }
-
-    public FluidState getFluidState() {
-        return fluidState;
+    public void drainFluid(int mbToDrain, Level world) {
+        if (tankSource != null) {
+            tankSource.drain(mbToDrain, IFluidHandler.FluidAction.EXECUTE);
+        } else if (fluidState != null) {
+            int newAmount = fluidStack.getAmount() - (mbToDrain/ FluidHelper.FLUID_TO_MB_MULTIPLIER);
+            fluidStack.setAmount(newAmount);
+            if(newAmount == 0) {
+                world.setBlock(sourcePos, Blocks.AIR.defaultBlockState(), 3);
+            }
+        }
     }
 }

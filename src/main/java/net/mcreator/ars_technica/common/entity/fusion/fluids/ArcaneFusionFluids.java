@@ -24,13 +24,14 @@ public class ArcaneFusionFluids {
 
     /**
      * Picks up fluids from the world and returns a list of fluid data.
+     * Fluids in this case can also be storage tanks etc.
      *
      * @return List of FluidSourceProvider, representing either FluidState or IFluidHandler
      */
     public List<FluidSourceProvider> pickupFluids() {
         List<FluidSourceProvider> results = new ArrayList<>();
         BlockPos center = new BlockPos(parent.getBlockX(), parent.getBlockY(), parent.getBlockZ());
-        int range = 5; // TODO: get range from AOE
+        int range = 5; // TODO: get range from AOE ( ? )
 
         for (BlockPos pos : BlockPos.betweenClosed(center.offset(-range, -range, -range), center.offset(range, range, range))) {
             BlockState blockState = level.getBlockState(pos);
