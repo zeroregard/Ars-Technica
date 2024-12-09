@@ -11,7 +11,8 @@
     "AnimatedMagicArmorMixin",
     "Wrench.ContainmentJarMixin",
     "Wrench.PedestalMixin",
-    "Wrench.TurretMixin"
+    "Wrench.TurretMixin",
+    "Wrench.MinecartContraptionItemMixin"
   ],
   "minVersion": "0.8"
 }
