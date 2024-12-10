@@ -53,6 +53,8 @@ public class ArsTechnicaModSounds {
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "fuse_swing"), 16f));
 	public static final RegistryObject<SoundEvent> FUSE_IMPACT = REGISTRY.register("fuse_impact",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "fuse_impact"), 16f));
+	public static final RegistryObject<SoundEvent> FUSE_FAILED = REGISTRY.register("fuse_failed",
+			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "fuse_failed"), 16f));
 
 	public static final RegistryObject<SoundEvent> SOURCE_ENGINE_START = REGISTRY.register("source_engine_start",
 			() -> SoundEvent.createFixedRangeEvent(new ResourceLocation("ars_technica", "source_engine_start"), 8f));

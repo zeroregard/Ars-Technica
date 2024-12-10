@@ -5,6 +5,7 @@ import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.ConfigHandler;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.mcreator.ars_technica.common.entity.ArcaneProcessEntity;
 import net.mcreator.ars_technica.common.entity.Colorable;
@@ -21,6 +22,7 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -31,6 +33,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -67,6 +70,9 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     private int tickCount = 0;
     private boolean impacted = false;
     private boolean swung = false;
+    private boolean failed = false;
+    private static final EntityDataAccessor<Boolean> FAILED = SynchedEntityData.defineId(ArcaneFusionEntity.class, EntityDataSerializers.BOOLEAN);
+
 
     private double aoe = 1.0;
     private Entity caster;
@@ -140,6 +146,19 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     @Override
     public void tick() {
         elapsedTime = (world.getGameTime() - createdTime) / 20.0f;
+        tickCount++;
+
+        if(elapsedTime > REMOVE_TIME) {
+            discard();
+        }
+
+        if (world.isClientSide && fusionType != null) {
+            particleHandler.handleParticles();
+        }
+
+        if (failed) {
+            return;
+        }
 
         if(elapsedTime > CHARGE_TIME && !swung) {
             playWorldSound(ArsTechnicaModSounds.FUSE_SWING.get(), 0.75f, 1.0f);
@@ -152,15 +171,6 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             impacted = true;
         }
 
-        if(elapsedTime > REMOVE_TIME) {
-            discard();
-        }
-
-        if (world.isClientSide && fusionType != null) {
-            particleHandler.handleParticles();
-        }
-
-        tickCount++;
     }
 
 
@@ -187,7 +197,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         var fluids = fluidHandler.pickupFluids();
         var itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(aoe));
         if (itemEntities.isEmpty() && fluids.isEmpty()) {
-            // TODO: feedback sound/visuals
+            onFailure("no nearby items/fluids were found");
             return;
         }
 
@@ -235,7 +245,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             int recipeIterations = Math.min(maxItemIterations, maxFluidIterations);
 
             if (recipeIterations <= 0) {
-                // TODO: feedback
+                onFailure("there were not enough resources for a found recipe");
                 return; // Not enough resources to execute the recipe
             }
 
@@ -271,6 +281,18 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
 
             playWorldSound(ArsTechnicaModSounds.FUSE_CHARGE.get(), 0.75f, 1.0f);
         }
+        else {
+            onFailure("no recipes were found for nearby items/fluids");
+        }
+    }
+
+    private void onFailure(String failureReason) {
+        failed = true;
+        entityData.set(FAILED, true);
+        playWorldSound(ArsTechnicaModSounds.FUSE_FAILED.get(), 0.75f, 1.0f);
+        if (caster instanceof Player player && ConfigHandler.Common.FUSE_FAILURE_CHAT_MESSAGE_ENABLED.get()) {
+            player.sendSystemMessage(Component.literal("Fuse failed because " + failureReason));
+        }
     }
 
     private void setItemResult(MixingRecipe recipe, int recipeIterations) {
@@ -299,7 +321,11 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     }
 
     private PlayState fuseAnimationPredicate(AnimationState<?> event) {
-        event.getController().setAnimation(RawAnimation.begin().thenPlay("charge"));
+        if(failed) {
+            event.getController().setAnimation(RawAnimation.begin().thenPlay("fail"));
+        } else {
+            event.getController().setAnimation(RawAnimation.begin().thenPlay("charge"));
+        }
         return PlayState.CONTINUE;
     }
 
@@ -313,6 +339,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     @Override
     protected void defineSynchedData() {
         this.entityData.define(TYPE, "");
+        this.entityData.define(FAILED, false);
     }
 
     @Override
@@ -322,6 +349,9 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         if(TYPE.equals(key)) {
             String typeId = this.entityData.get(TYPE);
             this.fusionType = AllArcaneFusionTypes.getTypeFromId(typeId);
+        }
+        if(FAILED.equals(key)) {
+            this.failed = this.entityData.get(FAILED);
         }
     }
 
