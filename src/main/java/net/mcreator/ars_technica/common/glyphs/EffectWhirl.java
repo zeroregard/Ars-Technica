@@ -105,9 +105,7 @@ public class EffectWhirl extends AbstractEffect {
 
         WhirlEntity whirl = new WhirlEntity(world, position, DEFAULT_RADIUS + aoeAmplifier * 0.33f, DEFAULT_DURATION + extraDurationTicks, processingType, resolver);
         world.addFreshEntity(whirl);
-
     }
-
 
     @Override
     public int getDefaultManaCost() {

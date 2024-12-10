@@ -6,6 +6,7 @@ import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
+import net.mcreator.ars_technica.common.entity.ArcaneProcessEntity;
 import net.mcreator.ars_technica.common.entity.Colorable;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.ArcaneFusionFluids;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
@@ -55,6 +56,9 @@ import java.util.stream.Collectors;
 
 public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
 
+    private static final EntityDataAccessor<String> TYPE = SynchedEntityData.defineId(ArcaneFusionEntity.class, EntityDataSerializers.STRING);
+    private ArcaneFusionType fusionType;
+
     private final ArcaneFusionParticles particleHandler;
     private final ArcaneFusionFluids fluidHandler;
 
@@ -102,7 +106,11 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         return tickCount;
     }
 
-    public ArcaneFusionEntity(@Nullable() Entity target, Vec3 position, Level world, Entity caster, Color color, SpellResolver resolver, SpellStats spellStats) {
+    public ArcaneFusionType getFusionType() {
+        return fusionType;
+    }
+
+    public ArcaneFusionEntity(@Nullable() Entity target, Vec3 position, Level world, Entity caster, Color color, SpellResolver resolver, SpellStats spellStats, String fusionTypeId) {
         super(EntityRegistry.ARCANE_FUSION_ENTITY.get(), world);
         this.world = world;
         this.aoe = 1.0 + spellStats.getAoeMultiplier();
@@ -111,6 +119,8 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         this.createdTime = world.getGameTime();
         this.particleHandler = new ArcaneFusionParticles(this, world);
         this.fluidHandler = new ArcaneFusionFluids(this, world);
+        this.entityData.set(TYPE, fusionTypeId);
+        this.fusionType = AllArcaneFusionTypes.getTypeFromId(fusionTypeId);
     }
 
     public ArcaneFusionEntity(EntityType<ArcaneFusionEntity> entityType, Level world) {
@@ -146,7 +156,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             discard();
         }
 
-        if (world.isClientSide) {
+        if (world.isClientSide && fusionType != null) {
             particleHandler.handleParticles();
         }
 
@@ -171,7 +181,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     }
 
     protected void handleIngredients() {
-        if(world.isClientSide) {
+        if(world.isClientSide || fusionType == null) {
             return;
         }
         var fluids = fluidHandler.pickupFluids();
@@ -185,7 +195,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     }
 
     protected void tryCombineIngredients(List<ItemEntity> itemEntities, List<FluidSourceProvider> fluids) {
-        var result = RecipeHelpers.getMixingRecipe(itemEntities, fluids, world);
+        var result = RecipeHelpers.getMixingRecipe(itemEntities, fluids, world, fusionType);
 
         if(result.isPresent()) {
             var resultObj = result.get();
@@ -260,8 +270,6 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             setFluidResult(recipe, recipeIterations);
 
             playWorldSound(ArsTechnicaModSounds.FUSE_CHARGE.get(), 0.75f, 1.0f);
-
-
         }
     }
 
@@ -304,13 +312,17 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
 
     @Override
     protected void defineSynchedData() {
-        //
+        this.entityData.define(TYPE, "");
     }
 
     @Override
     public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         particleHandler.onSyncedDataUpdated(key);
+        if(TYPE.equals(key)) {
+            String typeId = this.entityData.get(TYPE);
+            this.fusionType = AllArcaneFusionTypes.getTypeFromId(typeId);
+        }
     }
 
     @Override

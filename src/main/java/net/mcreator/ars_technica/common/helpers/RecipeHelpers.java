@@ -9,9 +9,11 @@ import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionType;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -93,13 +95,21 @@ public class RecipeHelpers {
     }
 
 
-    public static Optional<MixingRecipeResult> getMixingRecipe(List<ItemEntity> items, List<FluidSourceProvider> fluids, Level world) {
+    public static Optional<MixingRecipeResult> getMixingRecipe(List<ItemEntity> items, List<FluidSourceProvider> fluids, Level world, ArcaneFusionType fusionType) {
         RecipeManager recipeManager = world.getRecipeManager();
-        List<MixingRecipe> mixingRecipes = recipeManager.getAllRecipesFor(AllRecipeTypes.MIXING.getType());
+        List<MixingRecipe> mixingRecipes = recipeManager
+                .getAllRecipesFor(AllRecipeTypes.MIXING.getType())
+                .stream()
+                .filter(MixingRecipe.class::isInstance)
+                .map(MixingRecipe.class::cast)
+                .filter(x -> x.getRequiredHeat() == fusionType.getSuppliedHeat())
+                .toList();
 
         for (MixingRecipe mixingRecipe : mixingRecipes) {
             ArrayList<ItemEntity> usedEntities = new ArrayList<>();
             ArrayList<FluidSourceProvider> usedFluids = new ArrayList<>();
+
+
             boolean matches = mixingRecipeIngredientsMatch(mixingRecipe, items, fluids, usedEntities, usedFluids);
 
             if (matches) {
@@ -130,11 +140,6 @@ public class RecipeHelpers {
             List<ItemEntity> usedEntities,
             List<FluidSourceProvider> usedFluids
     ) {
-        // Group available items by type for faster lookup
-        //Map<Item, List<ItemEntity>> itemMap = availableItems.stream()
-        //        .collect(Collectors.groupingBy(entity -> entity.getItem().getItem()));
-
-        // Group available fluids by type for faster lookup
         Map<Fluid, List<FluidSourceProvider>> fluidMap = availableFluids.stream()
                 .collect(Collectors.groupingBy(provider -> provider.getFluidStack().getFluid()));
 

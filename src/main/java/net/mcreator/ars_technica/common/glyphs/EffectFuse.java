@@ -1,10 +1,16 @@
 package net.mcreator.ars_technica.common.glyphs;
 
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectConjureWater;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectFlare;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectHex;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 
+import net.mcreator.ars_technica.ConfigHandler;
 import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -39,10 +45,29 @@ public class EffectFuse extends AbstractEffect {
 
     private void resolve(@Nullable Entity target, Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         var color = new Color(spellContext.getColors().getColor());
+        String fusionTypeId = getFusionType(spellContext);
         SpellContext newContext = spellContext.makeChildContext();
         spellContext.setCanceled(true);
-        ArcaneFusionEntity arcaneFusionEntity = new ArcaneFusionEntity(target, position, world, shooter, color, resolver.getNewResolver(newContext), spellStats);
+        ArcaneFusionEntity arcaneFusionEntity = new ArcaneFusionEntity(target, position, world, shooter, color, resolver.getNewResolver(newContext), spellStats, fusionTypeId);
         world.addFreshEntity(arcaneFusionEntity);
+    }
+
+    private String getFusionType(SpellContext spellContext) {
+        String fusionType = "regular";
+        if (spellContext.hasNextPart()) {
+            while (spellContext.hasNextPart()) {
+                AbstractSpellPart next = spellContext.nextPart();
+                if (next instanceof AbstractEffect) {
+                    if (next == EffectFlare.INSTANCE) {
+                        fusionType = "heated";
+                    } else if (next == EffectSmelt.INSTANCE && ConfigHandler.Common.SUPER_HEATED_FUSE_ALLOWED.get()) {
+                        fusionType = "super";
+                    }
+                    break;
+                }
+            }
+        }
+        return fusionType;
     }
 
     @Override

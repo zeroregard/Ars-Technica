@@ -41,11 +41,6 @@ public class ArcaneFusionParticles {
 
     private List<ItemStack> recipeItemStacks;
 
-    private static ParticleColor particleColorA = new ParticleColor(210, 0, 255);
-    private static ParticleColor particleColorB = new ParticleColor(246, 25, 151);
-    private static ParticleColor particleColorC = new ParticleColor(255, 0, 99);
-    private static ParticleColor particleColorD = new ParticleColor(255, 118, 0);
-    private static ArrayList<ParticleColor> particleColors = new ArrayList<>(Arrays.asList(particleColorA, particleColorB, particleColorC, particleColorD));
     private boolean rendered_impact_particles = false;
     private static float TIME_TO_ANGLE_MULTIPLIER = 1.5f;
 
@@ -163,8 +158,8 @@ public class ArcaneFusionParticles {
 
     private void renderFusionParticles() {
         if(parent.getTickCount() % 2 == 0) {
-            var particleColorIndex = parent.getRandom().nextIntBetweenInclusive(0, 3);
-            var particleColor = particleColors.get(particleColorIndex);
+            var particleColorIndex = parent.getRandom().nextIntBetweenInclusive(0, 2);
+            var particleColor = parent.getFusionType().getParticleColors().get(particleColorIndex);
             var particleData = new SpiralDustParticleTypeData(particleColor, false, 1.0f, 1.0f, 20);
             addParticle(particleData, Math.toRadians(parent.getRandom().nextGaussian() * 360), 0, 0.04, 0);
         }
