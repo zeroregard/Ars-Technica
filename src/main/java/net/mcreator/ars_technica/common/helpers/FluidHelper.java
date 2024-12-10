@@ -53,7 +53,6 @@ public class FluidHelper {
             return;
         }
 
-
         // If there is still liquid left, try to place on air blocks nearby
         int fluidsPlaced = 0;
         if (remainingAmount.get() > 0) {

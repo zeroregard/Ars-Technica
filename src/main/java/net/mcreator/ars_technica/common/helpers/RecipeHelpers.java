@@ -1,23 +1,19 @@
 package net.mcreator.ars_technica.common.helpers;
 
-import com.mojang.datafixers.util.Pair;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
-import com.simibubi.create.content.kinetics.crusher.CrushingRecipe;
+import com.simibubi.create.content.fluids.transfer.FillingRecipe;
+import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
 import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
-import com.simibubi.create.content.processing.basin.BasinRecipe;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.foundation.recipe.RecipeFinder;
 import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionType;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -92,6 +88,47 @@ public class RecipeHelpers {
     private static <C extends Container, T extends Recipe<C>> Optional<T> getRecipeFor(
             RecipeManager recipeManager, RecipeType<T> recipeType, C container, Level world) {
         return recipeManager.getRecipeFor(recipeType, container, world);
+    }
+
+    public static class FillingResult {
+        public final ItemStack output;
+        public final int fluidAmount;
+
+        public FillingResult(ItemStack output, int fluidAmount) {
+            this.output = output;
+            this.fluidAmount = fluidAmount;
+        }
+    }
+
+    public static Optional<FillingResult> getSpoutFillingRecipe(FluidStack fluidIngredient, ItemStack itemIngredient, Level world) {
+        RecipeManager recipeManager = world.getRecipeManager();
+        var allFillingRecipes = recipeManager.getAllRecipesFor(AllRecipeTypes.FILLING.getType());
+
+        // Check for registered FillingRecipes
+        var staticRecipe = allFillingRecipes
+                .stream()
+                .filter(FillingRecipe.class::isInstance)
+                .map(FillingRecipe.class::cast)
+                .filter(recipe -> recipe.getFluidIngredients().get(0).getMatchingFluidStacks().stream()
+                        .anyMatch(stack -> stack.getFluid().isSame(fluidIngredient.getFluid())))
+                .filter(recipe -> recipe.getIngredients().get(0).getItems()[0].getItem() == itemIngredient.getItem())
+                .findFirst();
+        if (staticRecipe.isPresent()) {
+            var recipe = staticRecipe.get();
+            var result = new FillingResult(recipe.getResultItem(world.registryAccess()).copy(), recipe.getRequiredFluid().getRequiredAmount());
+            return Optional.of(result);
+        }
+
+        if(GenericItemFilling.canItemBeFilled(world, itemIngredient)) {
+            int requiredAmount = GenericItemFilling.getRequiredAmountForItem(world, itemIngredient, fluidIngredient);
+            if (requiredAmount <= fluidIngredient.getAmount()) {
+                var itemResult = GenericItemFilling.fillItem(world, requiredAmount, itemIngredient, fluidIngredient);
+                var result = new FillingResult(itemResult, 0); // 0 because fillItem already drained the fluid
+                return Optional.of(result);
+            }
+        }
+
+        return Optional.empty();
     }
 
 
