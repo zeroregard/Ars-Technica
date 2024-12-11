@@ -121,9 +121,12 @@ public class RecipeHelpers {
 
         if(GenericItemFilling.canItemBeFilled(world, itemIngredient)) {
             int requiredAmount = GenericItemFilling.getRequiredAmountForItem(world, itemIngredient, fluidIngredient);
-            if (requiredAmount <= fluidIngredient.getAmount()) {
+            if (requiredAmount != -1 && requiredAmount <= fluidIngredient.getAmount()) {
+                // filling an item will remove from the fluid stack, but we want to set the amount back on the stack
+                // and then later drain the storage tank, so we get the updated storage tank visuals
                 var itemResult = GenericItemFilling.fillItem(world, requiredAmount, itemIngredient, fluidIngredient);
-                var result = new FillingResult(itemResult, 0); // 0 because fillItem already drained the fluid
+                fluidIngredient.setAmount(fluidIngredient.getAmount() + requiredAmount);
+                var result = new FillingResult(itemResult, requiredAmount);
                 return Optional.of(result);
             }
         }

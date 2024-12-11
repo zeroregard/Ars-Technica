@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.client.events;
 
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.perk.ArmorPerkHolder;
 import com.hollingsworth.arsnouveau.api.perk.IPerkHolder;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
@@ -20,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 import net.minecraft.world.entity.EntityType;
@@ -103,6 +105,8 @@ public class ClientHandler {
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_HAMMER_ENTITY.get(), ArcaneHammerEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_FUSION_ENTITY.get(), ArcaneFusionEntityRenderer::new);
+
+        event.registerEntityRenderer(EntityRegistry.ITEM_PROJECTILE_ENTITY.get(), ItemProjectileRenderer::new);
 
         event.registerBlockEntityRenderer(EntityRegistry.SOURCE_ENGINE_BLOCK_ENTITY.get(), SourceEngineRenderer::new);
         event.registerBlockEntityRenderer(EntityRegistry.ENCASED_TURRET_TILE.get(), EncasedBasicTurretRenderer::new);

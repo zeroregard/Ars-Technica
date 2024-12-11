@@ -10,7 +10,7 @@
   "ars_technica.glyph_desc.glyph_pack": "Condenses identical items, crafting them into 2x2 recipes. Augment for 3x3, Dampen for 1x1",
   "ars_technica.glyph_desc.glyph_polish": "Refines items into their polished variants",
   "ars_technica.glyph_desc.glyph_press": "Flattens items into their pressed variants",
-  "ars_technica.glyph_desc.glyph_telefeast": "Consumes the first edible/potion, or some amount of liquid, found in the container/tank this was cast on. Augment with Sensitive for also targeting 'usable' items.",
+  "ars_technica.glyph_desc.glyph_telefeast": "Consumes the first edible/potion, or some amount of liquid, found in the container/tank this was cast on. Use Sensitive for also targeting 'usable' items, and use Pierce to shoot out items from inventories instead of consuming directly.",
   "ars_technica.glyph_desc.glyph_whirl": "Creates a whirlwind in an area, causing items to be centrifuged. Combine with water/flare/smelt/hex to wash/smoke/blast/haunt items",
   "ars_technica.glyph_desc.glyph_obliterate": "Obliterates foes by sheer force with an arcane hammer. Use Sensitive to crush items instead of destroying them",
   "ars_technica.glyph_name.glyph_carve": "Carve",

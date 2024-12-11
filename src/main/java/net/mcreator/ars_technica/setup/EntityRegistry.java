@@ -52,6 +52,11 @@ public class EntityRegistry {
             EntityType.Builder.<ArcaneFusionEntity>of(ArcaneFusionEntity::new, MobCategory.MISC)
                     .sized(1.0F, 1.0F));
 
+    public static final RegistryObject<EntityType<ItemProjectileEntity>> ITEM_PROJECTILE_ENTITY = registerEntity(
+            "item_projectile_entity",
+            EntityType.Builder.<ItemProjectileEntity>of(ItemProjectileEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F));
+
 
     public static final RegistryObject<BlockEntityType<SourceEngineBlockEntity>> SOURCE_ENGINE_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
             "source_engine_block_entity",
