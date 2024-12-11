@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.setup;
 
+import com.hollingsworth.arsnouveau.common.items.ExperienceGem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.armor.IGoggleHelmet;
@@ -40,6 +41,29 @@ public class ItemsRegistry {
   public static RegistryObject<Item> QUARTZ_DUST = ITEMS.register("quartz_dust", () -> new Item(defaultItemProperties().stacksTo(64)));
   public static RegistryObject<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(defaultItemProperties().stacksTo(1)));
   public static RegistryObject<Item> SPY_MONOCLE = ITEMS.register("spy_monocle",  () -> new SpyMonocle(defaultItemProperties().stacksTo(1)));
+
+  public static int GREATER_EXPERIENCE_VALUE = 12;
+  public static RegistryObject<ExperienceGem> GIANT_EXPERIENCE_GEM = ITEMS.register("giant_experience_gem", () -> {
+    ExperienceGem gem = new ExperienceGem() {
+      @Override
+      public int getValue() {
+        return GREATER_EXPERIENCE_VALUE * 4;
+      }
+    };
+    gem.withTooltip(Component.translatable("ars_nouveau.tooltip.exp_gem"));
+    return gem;
+  });
+
+  public static RegistryObject<ExperienceGem> GARGANTUAN_EXPERIENCE_GEM = ITEMS.register("gargantuan_experience_gem", () -> {
+    ExperienceGem gem = new ExperienceGem() {
+      @Override
+      public int getValue() {
+        return GREATER_EXPERIENCE_VALUE * 4 * 4;
+      }
+    };
+    gem.withTooltip(Component.translatable("ars_nouveau.tooltip.exp_gem"));
+    return gem;
+  });
 
   public static RegistryObject<Item> POCKET_FACTORY_DISC = ITEMS.register("pocket_factory_disc", () -> new RecordItem(3, () -> ArsTechnicaModSounds.POCKET_FACTORY_DISC.get(), defaultItemProperties().stacksTo(1), 3072));
 
