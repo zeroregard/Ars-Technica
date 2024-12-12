@@ -1,27 +1,25 @@
 package net.mcreator.ars_technica.common.helpers;
 
-import alexthw.starbunclemania.starbuncle.fluid.StarbyFluidBehavior;
-import net.mcreator.ars_technica.ArsTechnicaMod;
+import alexthw.starbunclemania.common.item.DirectionScroll;
 import net.mcreator.ars_technica.ConfigHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.ticks.LevelTickAccess;
-import net.minecraft.world.ticks.LevelTicks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -88,7 +86,7 @@ public class FluidHelper {
         BlockPos.betweenClosedStream(searchArea).forEach(pos -> {
             BlockEntity be = world.getBlockEntity(pos);
             if (be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
-                IFluidHandler handler = StarbyFluidBehavior.getHandlerFromCap(pos, world, 0);
+                IFluidHandler handler = getHandlerFromCap(pos, world, 0);
                 if (handler != null && (handler.getFluidInTank(0).isEmpty() || handler.getFluidInTank(0).getAmount() <= handler.getTankCapacity(0) - FLUID_MB_MAX_IN_BLOCK)) {
                     handlers.add(handler);
                 }
@@ -124,5 +122,28 @@ public class FluidHelper {
 
         airBlocks.sort(comparingDouble(pos -> position.distanceToSqr(new Vec3(pos.getX(), pos.getY(), pos.getZ()))));
         return airBlocks;
+    }
+
+    // Below methods were copied directly from Starbunclemania, to avoid not having to depend directly on another mod.
+    public static @Nullable IFluidHandler getHandlerFromCap(BlockPos pos, Level level, int sideOrdinal) {
+        BlockEntity be = level.getBlockEntity(pos);
+        sideOrdinal = checkItemFramesForSide(pos, level, sideOrdinal, be);
+        Direction side = sideOrdinal < 0 ? null : Direction.values()[sideOrdinal];
+        return be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER, side).isPresent() && be.getCapability(ForgeCapabilities.FLUID_HANDLER, side).resolve().isPresent() ? (IFluidHandler)be.getCapability(ForgeCapabilities.FLUID_HANDLER, side).resolve().get() : null;
+    }
+
+    private static int checkItemFramesForSide(BlockPos pos, Level level, int sideOrdinal, BlockEntity be) {
+        for(ItemFrame i : level.getEntitiesOfClass(ItemFrame.class, (new AABB(pos)).inflate((double)1.0F))) {
+            BlockEntity adjTile = level.getBlockEntity(i.blockPosition().relative(i.getDirection().getOpposite()));
+            if (adjTile != null && adjTile.equals(be) && !i.getItem().isEmpty()) {
+                ItemStack stackInFrame = i.getItem();
+                if (stackInFrame.getItem() instanceof DirectionScroll && stackInFrame.hasTag()) {
+                    sideOrdinal = stackInFrame.getOrCreateTag().getInt("side");
+                    break;
+                }
+            }
+        }
+
+        return sideOrdinal;
     }
 }

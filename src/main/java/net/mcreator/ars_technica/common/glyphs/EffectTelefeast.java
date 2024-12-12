@@ -1,20 +1,18 @@
 package net.mcreator.ars_technica.common.glyphs;
 
-import alexthw.starbunclemania.starbuncle.fluid.StarbyFluidBehavior;
 import com.hollingsworth.arsnouveau.api.spell.*;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.ItemProjectileEntity;
 import net.mcreator.ars_technica.common.helpers.ConsumptionHelper;
+import net.mcreator.ars_technica.common.helpers.FluidHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -65,7 +63,7 @@ public class EffectTelefeast extends AbstractEffect {
         Vec3 inverseDirection = new Vec3(dir.getStepX(), dir.getStepY(), dir.getStepZ()).scale(-1).normalize();
 
         if (be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
-            IFluidHandler fluidHandler = StarbyFluidBehavior.getHandlerFromCap(pos, world, 0);
+            IFluidHandler fluidHandler = FluidHelper.getHandlerFromCap(pos, world, 0);
             if (fluidHandler != null) {
                 handleFluid(shooter, fluidHandler.getFluidInTank(0), fluidHandler, world, inverseDirection, be.getBlockPos(), forwardItem);
             }
