@@ -1,6 +1,7 @@
 package net.mcreator.ars_technica.setup;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.common.blocks.ConfigureSourceEnginePacket;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
@@ -23,6 +24,12 @@ public class NetworkHandler {
                 .encoder(ParticleEffectPacket::encode)
                 .decoder(ParticleEffectPacket::decode)
                 .consumerMainThread(ParticleEffectPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(ConfigureSourceEnginePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ConfigureSourceEnginePacket::write)
+                .decoder(ConfigureSourceEnginePacket::new)
+                .consumerMainThread((p, c) -> p.handle(c.get()))
                 .add();
     }
 }

@@ -1,13 +1,19 @@
 package net.mcreator.ars_technica.common.blocks;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.gui.ScreenOpener;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -20,8 +26,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,8 +61,21 @@ public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<So
         return defaultBlockState().setValue(FACING, preferred);
     }
 
+    @Override
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
+                                 BlockHitResult hit) {
+        if (player != null && AllItems.WRENCH.isIn(player.getItemInHand(handIn)))
+            return InteractionResult.PASS;
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> withBlockEntityDo(worldIn, pos, be -> this.displayScreen(be, player)));
+        return InteractionResult.SUCCESS;
+    }
 
-
+    @OnlyIn(value = Dist.CLIENT)
+    protected void displayScreen(SourceEngineBlockEntity be, Player player) {
+        if (player instanceof LocalPlayer)
+            ScreenOpener.open(new SourceEngineScreen(be));
+    }
 
     @Override
     public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
