@@ -2,31 +2,22 @@ package net.mcreator.ars_technica.common.entity.fusion;
 
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
-import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.ConfigHandler;
-import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
-import net.mcreator.ars_technica.common.entity.ArcaneProcessEntity;
 import net.mcreator.ars_technica.common.entity.Colorable;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.ArcaneFusionFluids;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
 import net.mcreator.ars_technica.common.helpers.FluidHelper;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
+import net.mcreator.ars_technica.common.helpers.recipe.MixingRecipeHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -37,11 +28,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -205,7 +193,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
     }
 
     protected void tryCombineIngredients(List<ItemEntity> itemEntities, List<FluidSourceProvider> fluids) {
-        var result = RecipeHelpers.getMixingRecipe(itemEntities, fluids, world, fusionType);
+        var result = MixingRecipeHelpers.getMixingRecipe(itemEntities, fluids, world, fusionType);
 
         if(result.isPresent()) {
             var resultObj = result.get();
