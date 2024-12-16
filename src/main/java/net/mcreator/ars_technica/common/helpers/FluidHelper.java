@@ -1,11 +1,8 @@
 package net.mcreator.ars_technica.common.helpers;
 
-import alexthw.starbunclemania.common.item.DirectionScroll;
 import net.mcreator.ars_technica.ConfigHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.decoration.ItemFrame;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -124,26 +121,10 @@ public class FluidHelper {
         return airBlocks;
     }
 
-    // Below methods were copied directly from Starbunclemania, to avoid not having to depend directly on another mod.
     public static @Nullable IFluidHandler getHandlerFromCap(BlockPos pos, Level level, int sideOrdinal) {
         BlockEntity be = level.getBlockEntity(pos);
-        sideOrdinal = checkItemFramesForSide(pos, level, sideOrdinal, be);
         Direction side = sideOrdinal < 0 ? null : Direction.values()[sideOrdinal];
         return be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER, side).isPresent() && be.getCapability(ForgeCapabilities.FLUID_HANDLER, side).resolve().isPresent() ? (IFluidHandler)be.getCapability(ForgeCapabilities.FLUID_HANDLER, side).resolve().get() : null;
     }
 
-    private static int checkItemFramesForSide(BlockPos pos, Level level, int sideOrdinal, BlockEntity be) {
-        for(ItemFrame i : level.getEntitiesOfClass(ItemFrame.class, (new AABB(pos)).inflate((double)1.0F))) {
-            BlockEntity adjTile = level.getBlockEntity(i.blockPosition().relative(i.getDirection().getOpposite()));
-            if (adjTile != null && adjTile.equals(be) && !i.getItem().isEmpty()) {
-                ItemStack stackInFrame = i.getItem();
-                if (stackInFrame.getItem() instanceof DirectionScroll && stackInFrame.hasTag()) {
-                    sideOrdinal = stackInFrame.getOrCreateTag().getInt("side");
-                    break;
-                }
-            }
-        }
-
-        return sideOrdinal;
-    }
 }
