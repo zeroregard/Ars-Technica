@@ -38,17 +38,12 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
 
     protected boolean fueled = false;
     protected boolean hasRedstoneSignal = false;
-    public int generatedSpeed = 0;
+    protected ScrollValueBehaviour generatedSpeed;
     public int generatedStressUnitsRatio = 100;
     protected int tickCount = 0;
 
     public boolean isFueled() {
         return fueled;
-    }
-
-    public void setGeneratedSpeed(int speed) {
-        generatedSpeed = speed;
-        this.updateGeneratedRotation();
     }
 
     public void setGeneratedStressUnitsRatio(int ratio) {
@@ -83,9 +78,21 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
         super(EntityRegistry.SOURCE_ENGINE_BLOCK_ENTITY.get(), pos, state);
     }
 
+
+    @Override
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        super.addBehaviours(behaviours);
+        int max = MAX_SPEED;
+        generatedSpeed = new KineticScrollValueBehaviour(Lang.translateDirect("kinetics.creative_motor.rotation_speed"),
+                this, new MotorValueBox());
+        generatedSpeed.between(-max, max);
+        generatedSpeed.value = 0;
+        generatedSpeed.withCallback(i -> this.updateGeneratedRotation());
+        behaviours.add(generatedSpeed);
+    }
+
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
-        generatedSpeed = compound.getInt("GeneratedSpeed");
         generatedStressUnitsRatio = compound.getInt("GeneratedStressUnitsRatio");
         this.fueled = compound.getBoolean("Fueled");
         this.hasRedstoneSignal = compound.getBoolean("HasRedstoneSignal");
@@ -93,7 +100,6 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
     }
 
     protected void writeCommon(CompoundTag compound) {
-        compound.putInt("GeneratedSpeed", generatedSpeed);
         compound.putInt("GeneratedStressUnitsRatio", generatedStressUnitsRatio);
         compound.putBoolean("Fueled", this.fueled);
         compound.putBoolean("HasRedstoneSignal", this.hasRedstoneSignal);
@@ -189,7 +195,7 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
         if(overStressed) {
             return 0;
         }
-        var absoluteSpeed = Math.abs(generatedSpeed);
+        var absoluteSpeed = Math.abs(generatedSpeed.value);
         var rawSourceCost = absoluteSpeed * ConfigHandler.Common.SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER.get();
         var sourceCost = (int)Math.round(getStressCapacityMultiplier() * rawSourceCost);
         return sourceCost;
@@ -202,7 +208,42 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
         }
         if (!BlockRegistry.SOURCE_ENGINE.get().defaultBlockState().is(getBlockState().getBlock()))
             return 0;
-        return convertToDirection(generatedSpeed, getBlockState().getValue(SourceEngineBlock.FACING));
+        return convertToDirection(generatedSpeed.value, getBlockState().getValue(SourceEngineBlock.FACING));
+    }
+
+    class MotorValueBox extends ValueBoxTransform.Sided {
+
+        @Override
+        protected Vec3 getSouthLocation() {
+            return VecHelper.voxelSpace(8, 8, 12.5);
+        }
+
+        @Override
+        public Vec3 getLocalOffset(BlockState state) {
+            Direction facing = state.getValue(SourceEngineBlock.FACING);
+            return super.getLocalOffset(state).add(Vec3.atLowerCornerOf(facing.getNormal())
+                    .scale(-1 / 16f));
+        }
+
+        @Override
+        public void rotate(BlockState state, PoseStack ms) {
+            super.rotate(state, ms);
+            Direction facing = state.getValue(SourceEngineBlock.FACING);
+            if (facing.getAxis() == Direction.Axis.Y)
+                return;
+            if (getSide() != Direction.UP)
+                return;
+            TransformStack.cast(ms)
+                    .rotateZ(-AngleHelper.horizontalAngle(facing) + 180);
+        }
+
+        @Override
+        protected boolean isSideActive(BlockState state, Direction direction) {
+            Direction facing = state.getValue(SourceEngineBlock.FACING);
+            if (facing.getAxis() != Direction.Axis.Y && direction == Direction.DOWN)
+                return false;
+            return direction.getAxis() != facing.getAxis();
+        }
     }
 
 }

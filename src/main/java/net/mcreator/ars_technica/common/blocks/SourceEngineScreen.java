@@ -13,9 +13,7 @@ import net.minecraft.client.gui.GuiGraphics;
 public class SourceEngineScreen extends AbstractSimiScreen {
 
     private final SourceEngineBlockEntity blockEntity;
-    private ScrollInput speedSlider;
     private ScrollInput stressRatioSlider;
-    private int lastModification = -1;
 
     private final AllGuiTextures background = AllGuiTextures.SOURCE_MOTOR_SCREEN;
 
@@ -33,16 +31,7 @@ public class SourceEngineScreen extends AbstractSimiScreen {
         int x = guiLeft;
         int y = guiTop;
 
-        speedSlider = new RenderableScrollInput(x + 8, y + 25, 213, 8)
-                .withRange(-SourceEngineBlockEntity.MAX_SPEED, SourceEngineBlockEntity.MAX_SPEED + 1)
-                .titled(Lang.translateDirect("gui.source_engine.generated_speed"))
-                .calling(state -> {
-                    blockEntity.setGeneratedSpeed(state);
-                    speedSlider.titled(Lang.translateDirect("gui.source_engine.generated_speed", state));
-                })
-                .setState(blockEntity.generatedSpeed);
-
-        stressRatioSlider = new RenderableScrollInput(x + 8, y + 53, 213, 9)
+        stressRatioSlider = new RenderableScrollInput(x + 8, y + 39, 213, 9)
                 .withRange(0, 101)
                 .titled(Lang.translateDirect("gui.source_engine.stress_units_ratio"))
                 .calling(state -> {
@@ -50,9 +39,7 @@ public class SourceEngineScreen extends AbstractSimiScreen {
                     stressRatioSlider.titled(Lang.translateDirect("gui.source_engine.stress_units_ratio", state));
                 })
                 .setState(blockEntity.generatedStressUnitsRatio);
-        speedSlider.visible = true;
-        speedSlider.active = true;
-        addRenderableWidget(speedSlider);
+
         addRenderableWidget(stressRatioSlider);
 
         var confirmButton = new IconButton(x + 202, y + 75, AllIcons.I_CONFIRM);
@@ -71,21 +58,7 @@ public class SourceEngineScreen extends AbstractSimiScreen {
 
         graphics.drawString(font, title, x + (background.width - 8) / 2 - font.width(title) / 2, y + 4, 0x592424, false);
 
-        ((RenderableScrollInput)speedSlider).renderSlider(graphics, font, "");
         ((RenderableScrollInput)stressRatioSlider).renderSlider(graphics, font, "%");
-    }
-
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (lastModification >= 0)
-            lastModification++;
-
-        if (lastModification >= 20) {
-            lastModification = -1;
-            send();
-        }
     }
 
     @Override
@@ -95,8 +68,7 @@ public class SourceEngineScreen extends AbstractSimiScreen {
 
     protected void send() {
         NetworkHandler.CHANNEL
-                .sendToServer(new ConfigureSourceEnginePacket(blockEntity.getBlockPos(), speedSlider.getState(),
-                        stressRatioSlider.getState()));
+                .sendToServer(new ConfigureSourceEnginePacket(blockEntity.getBlockPos(), stressRatioSlider.getState()));
     }
 
 }
