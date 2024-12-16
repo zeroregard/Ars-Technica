@@ -204,18 +204,21 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             int maxItemIterations = Integer.MAX_VALUE;
 
             if(!ingredients.isEmpty()) {
-                Map<Item, Integer> itemCounts = new HashMap<>();
+                Map<ItemEntity, Integer> usageMap = new HashMap<>();
 
-                // Populate the map with item counts
-                for (var itemEntity : ingredients) {
-                    Item item = itemEntity.getItem().getItem();
-                    int count = itemEntity.getItem().getCount();
-                    itemCounts.put(item, itemCounts.getOrDefault(item, 0) + count);
+                for (var ingredient : ingredients) {
+                    usageMap.put(ingredient, usageMap.getOrDefault(ingredient, 0) + 1);
                 }
-                maxItemIterations = itemCounts.values()
-                        .stream()
-                        .min(Integer::compare)
-                        .orElse(0);
+
+                for (var entry : usageMap.entrySet()) {
+                    ItemEntity itemEntity = entry.getKey();
+                    int usedCount = entry.getValue();
+                    int totalAvailable = itemEntity.getItem().getCount();
+
+                    int entityMaxIterations = totalAvailable / usedCount;
+
+                    maxItemIterations = Math.min(maxItemIterations, entityMaxIterations);
+                }
             }
 
             int maxFluidIterations = recipe.getFluidIngredients().isEmpty() ? Integer.MAX_VALUE :
@@ -234,7 +237,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
 
             if (recipeIterations <= 0) {
                 onFailure("there were not enough resources for a found recipe");
-                return; // Not enough resources to execute the recipe
+                return;
             }
 
             if(ingredients != null && !ingredients.isEmpty()) {

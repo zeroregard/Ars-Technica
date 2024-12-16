@@ -2,9 +2,9 @@ package net.mcreator.ars_technica.common.helpers.recipe;
 
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
+import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionType;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
-import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -63,19 +63,24 @@ public class MixingRecipeHelpers {
             List<ItemEntity> usedEntities,
             List<FluidSourceProvider> usedFluids
     ) {
-        Map<Fluid, List<FluidSourceProvider>> fluidMap = availableFluids.stream()
-                .collect(Collectors.groupingBy(provider -> provider.getFluidStack().getFluid()));
 
-
-        List<FluidStack> requiredFluidStacks = recipe.getFluidIngredients().stream()
-                .flatMap(ingredient -> ingredient.getMatchingFluidStacks().stream())
-                .collect(Collectors.toList());
+        // Dictionary to track how many times each item entity has been used, because some recipes call for the same or similar ingredient many times
+        Map<ItemEntity, Integer> usageMap = new HashMap<>();
 
         // Match item requirements
         for (Ingredient itemIngredient : recipe.getIngredients()) {
             for(ItemStack ingredientVariant : itemIngredient.getItems()) {
                 var itemCandidate = availableItems.stream().filter(item -> item.getItem().getItem() == ingredientVariant.getItem()).findFirst();
-                itemCandidate.ifPresent(usedEntities::add);
+                if(itemCandidate.isPresent()) {
+                    var candidateUnwrapped = itemCandidate.get();
+                    int usedCount = usageMap.getOrDefault(candidateUnwrapped, 0);
+                    var candidateItemCount = candidateUnwrapped.getItem().getCount();
+                    if(candidateItemCount >= ingredientVariant.getCount() && candidateItemCount > usedCount) {
+                        usedEntities.add(candidateUnwrapped);
+                        usageMap.put(candidateUnwrapped, usedCount + 1);
+                        break;
+                    }
+                }
             }
         }
 
@@ -84,26 +89,19 @@ public class MixingRecipeHelpers {
         }
 
         // Match fluid requirements
-        for (FluidStack requiredFluid : requiredFluidStacks) {
-            List<FluidSourceProvider> candidates = fluidMap.getOrDefault(requiredFluid.getFluid(), new ArrayList<>());
-            boolean matched = false;
-
-            // Try to find a matching fluid
-            for (Iterator<FluidSourceProvider> it = candidates.iterator(); it.hasNext(); ) {
-                FluidSourceProvider candidate = it.next();
-                if (candidate.getMbAmount() >= requiredFluid.getAmount()) {
-                    usedFluids.add(candidate);
-                    it.remove(); // Remove from available pool
-                    matched = true;
-                    break;
+        for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
+            for(FluidStack ingredientVariant : fluidIngredient.getMatchingFluidStacks()) {
+                var fluidCandidate = availableFluids.stream().filter(fluid -> fluid.getFluidStack().getFluid() == ingredientVariant.getFluid()).findFirst();
+                if(fluidCandidate.isPresent()) {
+                    var candidateUnwrapped = fluidCandidate.get();
+                    if(candidateUnwrapped.getMbAmount() >= ingredientVariant.getAmount()) {
+                        usedFluids.add(candidateUnwrapped);
+                        break;
+                    }
                 }
-            }
-
-            if (!matched) {
-                return false; // Failed to match a fluid
             }
         }
 
-        return usedEntities.size() == recipe.getIngredients().size();
+        return usedEntities.size() == recipe.getIngredients().size() && usedFluids.size() == recipe.getFluidIngredients().size();
     }
 }

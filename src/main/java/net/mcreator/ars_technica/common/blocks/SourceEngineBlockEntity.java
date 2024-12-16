@@ -78,7 +78,6 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
         super(EntityRegistry.SOURCE_ENGINE_BLOCK_ENTITY.get(), pos, state);
     }
 
-
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
