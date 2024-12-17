@@ -84,12 +84,12 @@ public class EffectFuse extends AbstractEffect {
     @Nonnull
     @Override
     public Set<SpellSchool> getSchools() {
-        return setOf(SpellSchools.MANIPULATION, SpellSchools.ELEMENTAL_FIRE);
+        return setOf(SpellSchools.MANIPULATION);
     }
 
     @Override
     public String getBookDescription() {
-        return "Fuses items by slamming them together at breakneck speed. Use Ignite for heated mixing, use Smelt for super-heated mixing (if enabled)";
+        return "Fuses items by slamming them together at breakneck speed. Use Ignite for heated mixing, use Smelt for super-heated mixing (if enabled in config)";
     }
 
     @Override

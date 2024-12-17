@@ -17,43 +17,43 @@ public class SourceEngineScenes {
 
         scene.world.showSection(sourceEngine, Direction.DOWN);
 
-        scene.overlay.showText(20)
+        scene.overlay.showText(40)
                 .attachKeyFrame()
                 .text("This block can be used to convert source into rotational force.")
                 .pointAt(sourceEngine.getCenter())
                 .placeNearTarget();
 
-        scene.idle(30);
+        scene.idle(60);
 
 
-        scene.overlay.showText(20)
+        scene.overlay.showText(40)
                 .attachKeyFrame()
                 .text("It must be supplied with a nearby source jar.")
                 .pointAt(sourceJar.getCenter())
                 .placeNearTarget();
 
         scene.world.showSection(sourceJar, Direction.DOWN);
-        scene.idle(30);
+        scene.idle(60);
 
         scene.rotateCameraY(90);
         scene.world.showSection(cog, Direction.EAST);
 
-        scene.idle(30);
+        scene.idle(60);
 
-        scene.overlay.showText(20)
+        scene.overlay.showText(80)
                 .attachKeyFrame()
                 .text("Adjust the RPM on the sides of the motor, right-click elsewhere to adjust the SU-to-RPM ratio")
                 .pointAt(sourceEngine.getCenter())
                 .placeNearTarget();
 
-        scene.idle(30);
+        scene.idle(100);
 
-        scene.overlay.showText(20)
+        scene.overlay.showText(80)
                 .attachKeyFrame()
                 .text("Adjusting the SU-to-RPM ratio will conversely adjust the amount of source required")
                 .pointAt(sourceEngine.getCenter())
                 .placeNearTarget();
 
-        scene.idle(30);
+        scene.idle(100);
     }
 }
