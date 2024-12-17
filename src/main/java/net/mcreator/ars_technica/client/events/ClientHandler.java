@@ -14,6 +14,7 @@ import net.mcreator.ars_technica.client.renderer.entity.*;
 import net.mcreator.ars_technica.client.renderer.tile.EncasedBasicTurretRenderer;
 import net.mcreator.ars_technica.common.blocks.SourceEngineRenderer;
 import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
+import net.mcreator.ars_technica.ponder.PonderIndex;
 import net.mcreator.ars_technica.setup.BlockRegistry;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.client.Minecraft;
@@ -60,7 +61,9 @@ public class ClientHandler {
 
     @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
+
         AllPartialModels.init();
+        PonderIndex.register();
     }
 
     @SubscribeEvent

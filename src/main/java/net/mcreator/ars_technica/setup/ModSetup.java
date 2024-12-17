@@ -1,6 +1,7 @@
 package net.mcreator.ars_technica.setup;
 
 import net.mcreator.ars_technica.client.events.ModParticles;
+import net.mcreator.ars_technica.ponder.PonderIndex;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 public class ModSetup {
