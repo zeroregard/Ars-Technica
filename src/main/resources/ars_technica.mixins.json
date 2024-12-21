@@ -12,7 +12,8 @@
     "Wrench.ContainmentJarMixin",
     "Wrench.PedestalMixin",
     "Wrench.TurretMixin",
-    "Wrench.MinecartContraptionItemMixin"
+    "ItemProviderEntryMixin",
+    "RegistryEntryAccessorMixin"
   ],
   "minVersion": "0.8"
 }
