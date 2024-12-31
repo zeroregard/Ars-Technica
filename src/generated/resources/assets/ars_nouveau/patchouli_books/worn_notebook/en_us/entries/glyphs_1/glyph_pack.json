@@ -1,0 +1,16 @@
+{
+  "category": "ars_nouveau:glyphs_1",
+  "icon": "ars_technica:glyph_pack",
+  "name": "ars_technica.glyph_name.glyph_pack",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_technica.glyph_desc.glyph_pack"
+    },
+    {
+      "type": "ars_nouveau:glyph_recipe",
+      "recipe": "ars_technica:glyph_pack"
+    }
+  ],
+  "sortnum": 2
+}

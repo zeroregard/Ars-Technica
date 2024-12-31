@@ -24,7 +24,7 @@ public class Datagen {
         gen.addProvider(event.includeServer(), new ATTagsProvider.ATItemTagsProvider(gen, provider, BTP, existingFileHelper));
         gen.addProvider(event.includeServer(), new ATApparatusProvider(gen));
         gen.addProvider(event.includeClient(), new ModBlockStateProvider(gen.getPackOutput(), ArsTechnicaMod.MODID, existingFileHelper));
-
+        gen.addProvider(event.includeServer(), new ATPatchouliProvider(gen));
     }
 
 }

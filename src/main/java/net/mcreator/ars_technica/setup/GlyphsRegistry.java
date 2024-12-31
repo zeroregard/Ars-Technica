@@ -5,7 +5,11 @@ import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 
 import net.mcreator.ars_technica.common.glyphs.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GlyphsRegistry {
+  public static final List<AbstractSpellPart> registeredSpells = new ArrayList<>();
 
   public static void registerGlyphs() {
     register(EffectPack.INSTANCE);
@@ -20,6 +24,7 @@ public class GlyphsRegistry {
   }
 
   public static void register(AbstractSpellPart spellPart) {
+    registeredSpells.add(spellPart);
     GlyphRegistry.registerSpell(spellPart);
   }
 

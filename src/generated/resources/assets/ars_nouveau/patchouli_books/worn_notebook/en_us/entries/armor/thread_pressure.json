@@ -1,0 +1,16 @@
+{
+  "category": "ars_nouveau:armor",
+  "icon": "ars_technica:thread_pressure",
+  "name": "item.ars_technica.thread_pressure",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_technica.perk_desc.thread_pressure"
+    },
+    {
+      "type": "ars_nouveau:apparatus_recipe",
+      "recipe": "ars_technica:thread_pressure"
+    }
+  ],
+  "sortnum": 99
+}

@@ -1,0 +1,16 @@
+{
+  "category": "ars_nouveau:glyphs_2",
+  "icon": "ars_technica:glyph_whirl",
+  "name": "ars_technica.glyph_name.glyph_whirl",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_technica.glyph_desc.glyph_whirl"
+    },
+    {
+      "type": "ars_nouveau:glyph_recipe",
+      "recipe": "ars_technica:glyph_whirl"
+    }
+  ],
+  "sortnum": 2
+}

@@ -1,0 +1,16 @@
+{
+  "category": "ars_nouveau:glyphs_3",
+  "icon": "ars_technica:glyph_obliterate",
+  "name": "ars_technica.glyph_name.glyph_obliterate",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ars_technica.glyph_desc.glyph_obliterate"
+    },
+    {
+      "type": "ars_nouveau:glyph_recipe",
+      "recipe": "ars_technica:glyph_obliterate"
+    }
+  ],
+  "sortnum": 2
+}
