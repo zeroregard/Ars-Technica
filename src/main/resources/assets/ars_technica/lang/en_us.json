@@ -35,6 +35,7 @@
   "ars_technica.ponder.source_motor.text_2": "It must be supplied with a nearby Source Jar.",
   "ars_technica.ponder.source_motor.text_3": "Adjust the RPM on the sides of the motor, right-click elsewhere to adjust the SU-to-RPM ratio",
   "ars_technica.ponder.source_motor.text_4": "Adjusting the SU-to-RPM ratio will conversely adjust the amount of source required",
+  "ars_nouveau.relay.average_transfer_rate": "%d source per second",
   "block.ars_technica.source_engine": "Source Motor",
   "create.ars_nouveau.has_redstone_signal": "Deactivated by redstone signal",
   "create.ars_nouveau.lacks_source": "No source nearby",

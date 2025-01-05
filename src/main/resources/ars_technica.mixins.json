@@ -13,7 +13,10 @@
     "Wrench.PedestalMixin",
     "Wrench.TurretMixin",
     "ItemProviderEntryMixin",
-    "RegistryEntryAccessorMixin"
+    "RegistryEntryAccessorMixin",
+    "Relay.AbstractSourceMachineMixin",
+    "Relay.RelayTileMixin",
+    "Relay.SplitterRelayTileMixin"
   ],
   "minVersion": "0.8"
 }
