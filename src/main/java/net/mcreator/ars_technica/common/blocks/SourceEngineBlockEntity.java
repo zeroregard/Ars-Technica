@@ -174,6 +174,9 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
 
     protected void consumeSource() {
         var sourceCost = getSourceCost();
+        if (sourceCost == 0) {
+            return;
+        }
         var success = SourceUtil.takeSourceWithParticles(worldPosition, level, 10, sourceCost) != null;
         var fueledStateChanged = success != fueled;
         fueled = success;
