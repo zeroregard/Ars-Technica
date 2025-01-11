@@ -5,6 +5,7 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.gui.ScreenOpener;
+import net.mcreator.ars_technica.client.gui.SourceEngineScreen;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.client.player.LocalPlayer;

@@ -4,16 +4,24 @@ import com.hollingsworth.arsnouveau.common.block.RuneBlock;
 import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.Lang;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.client.gui.SourceEngineScreen;
+import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
+import net.mcreator.ars_technica.common.helpers.CooldownHelper;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +38,7 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
     private int ticksUntilCharge;
 
     // Normally this is hardcoded to 20 * 2 or 20 * 3 but here we introduce
-    // This value to be able to customize it per rune
+    // this value to be able to customize it per rune
     private int ticksUntilChargeCount = 0;
 
     @Inject(method = "castSpell", at = @At("TAIL"), remap = false)
@@ -52,24 +60,23 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
         this.ticksUntilChargeCount = tag.getInt("ticksUntilChargeCount");
     }
 
-    @Override
-    public void incrementCustomTicksUntilCharge() {
-        if(this.ticksUntilChargeCount == 20) {
-            this.ticksUntilChargeCount = 40;
-        } else {
-            this.ticksUntilChargeCount += 40;
-        }
-
-        if (this.ticksUntilChargeCount >= 680) {
-            this.ticksUntilChargeCount = 20;
-        }
-    }
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         Lang.text("Cooldown: ").forGoggles(tooltip);
-        double cooldownSeconds = (ticksUntilChargeCount == 0 ? 20 * 2 : ticksUntilChargeCount) / 20;
-        Lang.number(cooldownSeconds).add(Lang.text(" s")).forGoggles(tooltip);
+        int ticksUntilCharge = ticksUntilChargeCount == 0 ? 20 * 2 : ticksUntilChargeCount;
+        Lang.text(CooldownHelper.getCooldownText(ticksUntilCharge)).forGoggles(tooltip);
         return true;
     }
+
+    @Override
+    public void setTicksUntilChargeCount(int ticks) {
+        this.ticksUntilChargeCount = ticks;
+    }
+
+    @Override
+    public int getTicksUntilChargeCount() {
+        return this.ticksUntilChargeCount;
+    }
+
 }

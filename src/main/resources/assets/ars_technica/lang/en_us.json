@@ -45,6 +45,8 @@
   "create.gui.source_engine.title": "Source Motor",
   "create.gui.source_engine.generated_speed": "Generated Speed (RPM)",
   "create.gui.source_engine.stress_units_ratio": "SU to RPM ratio",
+  "create.gui.ars_technica.rune": "Rune",
+  "create.gui.ars_technica.cooldown": "Cooldown",
   "item.ars_technica.amethyst_dust": "Amethyst Dust",
   "item.ars_technica.calibrated_precision_mechanism": "Calibrated Precision Mechanism",
   "item.ars_technica.giant_experience_gem": "Giant Experience Gem",

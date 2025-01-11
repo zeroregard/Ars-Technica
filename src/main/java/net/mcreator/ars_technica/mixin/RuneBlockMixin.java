@@ -3,9 +3,14 @@ package net.mcreator.ars_technica.mixin;
 import com.hollingsworth.arsnouveau.common.block.RuneBlock;
 import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.foundation.gui.ScreenOpener;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.client.gui.RuneTileScreen;
+import net.mcreator.ars_technica.client.gui.SourceEngineScreen;
 import net.mcreator.ars_technica.common.api.IRuneTileModifier;
+import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
 import net.mcreator.ars_technica.common.items.equipment.RunicSpanner;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,6 +22,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,14 +50,17 @@ public class RuneBlockMixin implements IWrenchable {
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         if (world.getBlockEntity(pos) instanceof RuneTile runeTile) {
-            if (runeTile instanceof IRuneTileModifier modifiableRune) {
-                modifiableRune.incrementCustomTicksUntilCharge();
-                world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 0.25f, 1.0f);
-                return InteractionResult.SUCCESS;
-            }
-            return InteractionResult.FAIL;
+            displayScreen(runeTile, context.getPlayer());
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 0.25f, 1.0f);
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;
+    }
+
+    @OnlyIn(value = Dist.CLIENT)
+    protected void displayScreen(RuneTile be, Player player) {
+        if (player instanceof LocalPlayer)
+            ScreenOpener.open(new RuneTileScreen(be));
     }
 
 }

@@ -1,6 +1,7 @@
-package net.mcreator.ars_technica.common.blocks;
+package net.mcreator.ars_technica.common.packets;
 
 import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
+import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 

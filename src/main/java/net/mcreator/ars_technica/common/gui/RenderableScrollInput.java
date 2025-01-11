@@ -13,12 +13,12 @@ public class RenderableScrollInput extends ScrollInput {
         super(xIn, yIn, widthIn, heightIn);
     }
 
-    public void renderSlider(GuiGraphics graphics, Font font, String textAmend) {
+    public void renderSlider(String value, GuiGraphics graphics, Font font, String textAmend) {
 
         int range = max - min;
         if (range <= 0) return;
 
-        Component cursorText = Component.literal(state + textAmend);
+        Component cursorText = Component.literal(value + textAmend);
         int cursorWidth = font.width(cursorText) + 3;
         int coordinateX = getX() + (int) ((width - 4) * (state - min) / (float) range);
         int coordinateY = getY() + height / 2;
