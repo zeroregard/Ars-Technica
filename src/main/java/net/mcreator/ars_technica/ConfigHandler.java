@@ -55,8 +55,8 @@ public class ConfigHandler {
 
             builder.comment("Adjust these variables for block settings")
                     .push("Blocks");
-            SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER = builder.comment("Determines the multiplier used in the cost for generating rotation, defaults to 7.5")
-                    .defineInRange("sourceMotorSpeedToSourceMultiplier", 7.5f, 0f, 100f);
+            SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER = builder.comment("Determines the multiplier used in the cost for generating rotation, defaults to 4.0")
+                    .defineInRange("sourceMotorSpeedToSourceMultiplier", 4f, 0f, 100f);
             builder.pop();
 
             builder.comment("Set these variables to false/true to disable/enable recipes")

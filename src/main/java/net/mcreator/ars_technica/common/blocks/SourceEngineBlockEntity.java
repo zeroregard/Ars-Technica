@@ -199,7 +199,14 @@ public class SourceEngineBlockEntity extends GeneratingKineticBlockEntity {
         }
         var absoluteSpeed = Math.abs(generatedSpeed.value);
         var rawSourceCost = absoluteSpeed * ConfigHandler.Common.SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER.get();
-        var sourceCost = (int)Math.round(getStressCapacityMultiplier() * rawSourceCost);
+        var stressCapacityMultiplier = getStressCapacityMultiplier();
+        if(stressCapacityMultiplier == 0) {
+            return 0;
+        }
+        var sourceCost = (int)Math.round(stressCapacityMultiplier * rawSourceCost);
+        if (sourceCost == 0) {
+            return 1;
+        }
         return sourceCost;
     }
 
