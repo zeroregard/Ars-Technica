@@ -25,7 +25,7 @@ import static net.mcreator.ars_technica.common.helpers.CooldownHelper.getCooldow
 @Mixin(RelaySplitterTile.class)
 public class SplitterRelayTileMixin implements IModifiableCooldown {
 
-    private int customCooldownTicks = 0;
+    private int splitterCustomCooldownTicks = 0;
 
     @Inject(method = "getTooltip", at = @At("TAIL"), remap = false)
     private void modifyGetTooltip(List<Component> tooltip, CallbackInfo ci) {
@@ -41,10 +41,10 @@ public class SplitterRelayTileMixin implements IModifiableCooldown {
 
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getGameTime()J"), remap = false)
     private long redirectGameTime(Level instance, Operation<Long> original) {
-        if(this.customCooldownTicks == 0) {
+        if(this.splitterCustomCooldownTicks == 0) {
             return instance.getGameTime();
         }
-        if(instance.getGameTime() % customCooldownTicks == 0) {
+        if(instance.getGameTime() % splitterCustomCooldownTicks == 0) {
             return 20;
         }
         return -1;
@@ -52,27 +52,27 @@ public class SplitterRelayTileMixin implements IModifiableCooldown {
 
     @Inject(method = "saveAdditional", at = @At("HEAD"))
     private void saveTicksUntilChargeCount(CompoundTag tag, CallbackInfo ci) {
-        if(this.customCooldownTicks != 0) {
-            tag.putInt("CustomCooldown", customCooldownTicks);
+        if(this.splitterCustomCooldownTicks != 0) {
+            tag.putInt("SplitterCustomCooldown", splitterCustomCooldownTicks);
         }
 
     }
 
     @Inject(method = "load", at = @At("HEAD"))
     private void loadTicksUntilChargeCount(CompoundTag tag, CallbackInfo ci) {
-        var coolDown = tag.getInt("CustomCooldown");
+        var coolDown = tag.getInt("SplitterCustomCooldown");
         if(coolDown != 0) {
-            this.customCooldownTicks = coolDown;
+            this.splitterCustomCooldownTicks = coolDown;
         }
     }
 
     @Override
     public void setCooldownTicks(int ticks) {
-        this.customCooldownTicks = ticks;
+        this.splitterCustomCooldownTicks = ticks;
     }
 
     @Override
     public int getCooldownTicks() {
-        return this.customCooldownTicks;
+        return this.splitterCustomCooldownTicks;
     }
 }
