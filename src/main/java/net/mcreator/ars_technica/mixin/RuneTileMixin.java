@@ -35,7 +35,7 @@ import java.util.List;
 public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation {
 
     @Shadow(remap = false)
-    private int ticksUntilCharge;
+    public int ticksUntilCharge;
 
     // Normally this is hardcoded to 20 * 2 or 20 * 3 but here we introduce
     // this value to be able to customize it per rune
