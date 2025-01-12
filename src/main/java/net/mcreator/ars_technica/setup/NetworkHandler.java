@@ -2,6 +2,7 @@ package net.mcreator.ars_technica.setup;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.packets.ConfigureSourceEnginePacket;
+import net.mcreator.ars_technica.common.packets.CustomCooldownPacket;
 import net.mcreator.ars_technica.common.packets.TicksUntilChargePacket;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -37,6 +38,12 @@ public class NetworkHandler {
                 .encoder(TicksUntilChargePacket::encode)
                 .decoder(TicksUntilChargePacket::decode)
                 .consumerMainThread(TicksUntilChargePacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(CustomCooldownPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(CustomCooldownPacket::encode)
+                .decoder(CustomCooldownPacket::decode)
+                .consumerMainThread(CustomCooldownPacket::handle)
                 .add();
     }
 }

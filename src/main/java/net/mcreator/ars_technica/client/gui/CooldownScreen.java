@@ -40,7 +40,6 @@ public abstract class CooldownScreen<T> extends AbstractSimiScreen {
                 .titled(Lang.translateDirect("gui.ars_technica.cooldown"))
                 .calling(state -> {
                     updateEntity(state);
-                    send(state);
                     slider.titled(Lang.translateDirect("gui.ars_technica.cooldown", state));
                 })
                 .setState(getInitialEntityStateValue());

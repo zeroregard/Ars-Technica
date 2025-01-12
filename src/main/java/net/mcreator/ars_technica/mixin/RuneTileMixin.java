@@ -1,27 +1,12 @@
 package net.mcreator.ars_technica.mixin;
 
-import com.hollingsworth.arsnouveau.common.block.RuneBlock;
 import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.equipment.wrench.IWrenchable;
-import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.Lang;
-import net.mcreator.ars_technica.ArsTechnicaMod;
-import net.mcreator.ars_technica.client.gui.SourceEngineScreen;
-import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
 import net.mcreator.ars_technica.common.helpers.CooldownHelper;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -68,6 +53,7 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
         Lang.text(CooldownHelper.getCooldownText(ticksUntilCharge)).forGoggles(tooltip);
         return true;
     }
+
 
     @Override
     public void setTicksUntilChargeCount(int ticks) {
