@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -25,12 +26,15 @@ import static net.mcreator.ars_technica.common.helpers.CooldownHelper.getCooldow
 @Mixin(RelaySplitterTile.class)
 public class SplitterRelayTileMixin implements IModifiableCooldown {
 
-    private int splitterCustomCooldownTicks = 0;
+    private int splitterCustomCooldownTicks = -1;
 
     @Inject(method = "getTooltip", at = @At("TAIL"), remap = false)
     private void modifyGetTooltip(List<Component> tooltip, CallbackInfo ci) {
         var entity = (RelaySplitterTile) (Object)this;
         var cooldownTicks = getCooldownTicks();
+        if(cooldownTicks == -1) {
+            cooldownTicks = 20;
+        }
         int transferRate = entity.getTransferRate();
         String coolDownText = getCooldownText(cooldownTicks);
         tooltip.add(Component.empty());
@@ -39,10 +43,13 @@ public class SplitterRelayTileMixin implements IModifiableCooldown {
         tooltip.add(transferRateComponent);
     }
 
-    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getGameTime()J"), remap = false)
-    private long redirectGameTime(Level instance, Operation<Long> original) {
-        if(this.splitterCustomCooldownTicks == 0) {
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getGameTime()J"), remap = true)
+    private long redirectGameTime(Level instance) {
+        if(this.splitterCustomCooldownTicks == -1) {
             return instance.getGameTime();
+        }
+        if(splitterCustomCooldownTicks == 0) {
+            return 20;
         }
         if(instance.getGameTime() % splitterCustomCooldownTicks == 0) {
             return 20;
@@ -52,7 +59,7 @@ public class SplitterRelayTileMixin implements IModifiableCooldown {
 
     @Inject(method = "saveAdditional", at = @At("HEAD"))
     private void saveTicksUntilChargeCount(CompoundTag tag, CallbackInfo ci) {
-        if(this.splitterCustomCooldownTicks != 0) {
+        if(this.splitterCustomCooldownTicks != -1) {
             tag.putInt("SplitterCustomCooldown", splitterCustomCooldownTicks);
         }
 
@@ -61,7 +68,7 @@ public class SplitterRelayTileMixin implements IModifiableCooldown {
     @Inject(method = "load", at = @At("HEAD"))
     private void loadTicksUntilChargeCount(CompoundTag tag, CallbackInfo ci) {
         var coolDown = tag.getInt("SplitterCustomCooldown");
-        if(coolDown != 0) {
+        if(coolDown != -1) {
             this.splitterCustomCooldownTicks = coolDown;
         }
     }

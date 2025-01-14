@@ -2,6 +2,9 @@ package net.mcreator.ars_technica.common.helpers;
 
 public class CooldownHelper {
     public static String getCooldownText(int ticksValue) {
+        if (ticksValue == 0) {
+            return "0";
+        }
         String text = "";
         var seconds = (int) Math.floor(ticksValue / 20.0);
         if (seconds > 0) {

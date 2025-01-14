@@ -3,6 +3,7 @@ package net.mcreator.ars_technica.mixin;
 import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.utility.Lang;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.CooldownHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,15 +25,13 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
 
     // Normally this is hardcoded to 20 * 2 or 20 * 3 but here we introduce
     // this value to be able to customize it per rune
-    private int ticksUntilChargeCount = 0;
+    private int ticksUntilChargeCount = -1;
 
     @Inject(method = "castSpell", at = @At("TAIL"), remap = false)
     private void modifyTicksUntilCharge(Entity entity, CallbackInfo ci) {
         if (entity == null) return;
-
-        if (ticksUntilChargeCount > 0) {
-            this.ticksUntilCharge = ticksUntilChargeCount;
-        }
+        ArsTechnicaMod.LOGGER.info(entity.level().getGameTime());
+        this.ticksUntilCharge = ticksUntilChargeCount;
     }
 
     @Inject(method = "saveAdditional", at = @At("HEAD"))
@@ -49,7 +48,7 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
         Lang.text("Cooldown: ").forGoggles(tooltip);
-        int ticksUntilCharge = ticksUntilChargeCount == 0 ? 20 * 2 : ticksUntilChargeCount;
+        int ticksUntilCharge = ticksUntilChargeCount == -1 ? 20 * 2 : ticksUntilChargeCount;
         Lang.text(CooldownHelper.getCooldownText(ticksUntilCharge)).forGoggles(tooltip);
         return true;
     }

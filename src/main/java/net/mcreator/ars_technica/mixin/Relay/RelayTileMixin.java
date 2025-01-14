@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -28,6 +29,9 @@ public class RelayTileMixin implements IModifiableCooldown {
     private void modifyGetTooltip(List<Component> tooltip, CallbackInfo ci) {
         var entity = (RelayTile) (Object)this;
         var cooldownTicks = getCooldownTicks();
+        if(cooldownTicks == -1) {
+            cooldownTicks = 20;
+        }
         int transferRate = entity.getTransferRate();
         String coolDownText = getCooldownText(cooldownTicks);
         tooltip.add(Component.empty());
@@ -36,10 +40,13 @@ public class RelayTileMixin implements IModifiableCooldown {
         tooltip.add(transferRateComponent);
     }
 
-    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getGameTime()J"), remap = false)
-    private long redirectGameTime(Level instance, Operation<Long> original) {
-        if(customCooldownTicks == 0) {
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;getGameTime()J"), remap = true)
+    private long redirectGameTime(Level instance) {
+        if(customCooldownTicks == -1) {
             return instance.getGameTime();
+        }
+        if(customCooldownTicks == 0) {
+            return 20;
         }
         if(instance.getGameTime() % customCooldownTicks == 0) {
             return 20;
@@ -49,7 +56,7 @@ public class RelayTileMixin implements IModifiableCooldown {
 
     @Inject(method = "saveAdditional", at = @At("HEAD"))
     private void saveTicksUntilChargeCount(CompoundTag tag, CallbackInfo ci) {
-        if(customCooldownTicks != 0) {
+        if(customCooldownTicks != -1) {
             tag.putInt("CustomCooldown", customCooldownTicks);
         }
 
@@ -58,7 +65,7 @@ public class RelayTileMixin implements IModifiableCooldown {
     @Inject(method = "load", at = @At("HEAD"))
     private void loadTicksUntilChargeCount(CompoundTag tag, CallbackInfo ci) {
         var coolDown = tag.getInt("CustomCooldown");
-        if(coolDown != 0) {
+        if(coolDown != -1) {
             this.customCooldownTicks = coolDown;
         }
     }
