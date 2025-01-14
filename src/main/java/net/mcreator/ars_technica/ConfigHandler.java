@@ -20,6 +20,12 @@ public class ConfigHandler {
         public static ForgeConfigSpec.BooleanValue SUPER_HEATED_FUSE_ALLOWED;
         public static ForgeConfigSpec.BooleanValue FUSE_FAILURE_CHAT_MESSAGE_ENABLED;
 
+        public static ForgeConfigSpec.IntValue RUNE_MIN_COOLDOWN_VALUE;
+        public static ForgeConfigSpec.IntValue RUNE_MAX_COOLDOWN_VALUE;
+
+        public static ForgeConfigSpec.IntValue RELAY_MIN_COOLDOWN_VALUE;
+        public static ForgeConfigSpec.IntValue RELAY_MAX_COOLDOWN_VALUE;
+
         // Recipes
         public final ForgeConfigSpec.BooleanValue RECIPE_FOCUS_TRANSMUTATION_ENABLED;
         public static final String RECIPE_FOCUS_TRANSMUTATION_CONFIG_OPTION = "recipeFocusTransmutationEnabled";
@@ -87,6 +93,17 @@ public class ConfigHandler {
             FLUID_MAX_PLACEMENTS_PER_FUSE = builder.defineInRange("fluidMaxPlacementsPerFuse", 16, 1, 256);
             SUPER_HEATED_FUSE_ALLOWED = builder.define("superHeatedFuseAllowed", false);
             FUSE_FAILURE_CHAT_MESSAGE_ENABLED = builder.define("fuseFailureChatMessageEnabled", false);
+
+            builder.pop();
+
+            builder.comment("Entity tweakable (Wrench) cooldown settings for source relays and spell runes")
+                    .push("Entity cooldown");
+
+            RUNE_MIN_COOLDOWN_VALUE = builder.defineInRange("runeMinCooldown", 0, 0, 40);
+            RUNE_MAX_COOLDOWN_VALUE = builder.defineInRange("runeMaxCooldown", 600, 40, 6000);
+
+            RELAY_MIN_COOLDOWN_VALUE = builder.defineInRange("relayMinCooldown", 0, 0, 40);
+            RELAY_MAX_COOLDOWN_VALUE = builder.defineInRange("relayMaxCooldown", 600, 40, 6000);
         }
     }
 
