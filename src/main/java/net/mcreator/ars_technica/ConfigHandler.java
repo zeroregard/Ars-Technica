@@ -99,10 +99,10 @@ public class ConfigHandler {
             builder.comment("Entity tweakable (Wrench) cooldown settings for source relays and spell runes")
                     .push("Entity cooldown");
 
-            RUNE_MIN_COOLDOWN_VALUE = builder.defineInRange("runeMinCooldown", 0, 0, 40);
+            RUNE_MIN_COOLDOWN_VALUE = builder.defineInRange("runeMinCooldown", 5, 0, 40);
             RUNE_MAX_COOLDOWN_VALUE = builder.defineInRange("runeMaxCooldown", 600, 40, 6000);
 
-            RELAY_MIN_COOLDOWN_VALUE = builder.defineInRange("relayMinCooldown", 0, 0, 40);
+            RELAY_MIN_COOLDOWN_VALUE = builder.defineInRange("relayMinCooldown", 5, 0, 40);
             RELAY_MAX_COOLDOWN_VALUE = builder.defineInRange("relayMaxCooldown", 600, 40, 6000);
         }
     }
