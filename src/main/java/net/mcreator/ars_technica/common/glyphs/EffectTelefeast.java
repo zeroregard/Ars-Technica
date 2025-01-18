@@ -178,4 +178,9 @@ public class EffectTelefeast extends AbstractEffect {
     public String getBookDescription() {
         return "Consumes the first edible/potion, or some amount of liquid, found in the container/tank this was cast on. Augment with Sensitive for also targeting 'usable' items";
     }
+
+    @Override
+    public SpellTier defaultTier() {
+        return SpellTier.TWO;
+    }
 }
