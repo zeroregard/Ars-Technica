@@ -15,6 +15,7 @@ import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.mcreator.ars_technica.setup.NetworkHandler;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleType;
@@ -24,6 +25,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -33,6 +35,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -213,6 +216,13 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             if(!processItems) {
                 var damageSource = getDamageSource();
                 target.hurt(damageSource, getDamage());
+                if (target instanceof Witch witch) {
+                    if(witch.getHealth() <= 0) {
+                        if(caster != null && caster instanceof ServerPlayer serverPlayer) {
+                            triggerAdvancement(serverPlayer);
+                        }
+                    }
+                }
             }
             if (resolver != null) {
                 resolver.onResolveEffect(world, new EntityHitResult(target));
@@ -230,6 +240,11 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         playWorldSound(ArsTechnicaModSounds.OBLITERATE_SHOCKWAVE.get(), getLargeSoundVolume(), 1.0f);
         didObliterate = true;
         handleItems();
+    }
+
+    private void triggerAdvancement(ServerPlayer player) {
+        Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(ArsTechnicaMod.MODID, "hammered_witch"));
+        player.getAdvancements().award(advancement, "triggered_by_obliterate");
     }
 
     protected float getDamage() {

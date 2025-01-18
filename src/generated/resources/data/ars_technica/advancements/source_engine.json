@@ -1,0 +1,38 @@
+{
+  "parent": "ars_technica:calibrated_precision_mechanism",
+  "criteria": {
+    "has_source_engine": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "ars_technica:source_engine"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "ars_technica.adv.desc.source_engine"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "ars_technica:source_engine"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "ars_technica.adv.title.source_engine"
+    }
+  },
+  "requirements": [
+    [
+      "has_source_engine"
+    ]
+  ],
+  "sends_telemetry_event": false
+}
