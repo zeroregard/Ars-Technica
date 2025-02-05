@@ -14,10 +14,7 @@
     "Wrench.TurretMixin",
     "ItemProviderEntryMixin",
     "RegistryEntryAccessorMixin",
-    "Relay.RelayTileMixin",
-    "Relay.RelayBlockMixin",
-    "Relay.SplitterRelayBlockMixin",
-    "Relay.SplitterRelayTileMixin"
+    "Relay.RelayBlockMixin"
   ],
   "minVersion": "0.8"
 }

@@ -34,7 +34,7 @@ public class RunicSpanner extends WrenchItem {
         if (player != null) {
             Block block = level.getBlockState(pos).getBlock();
             if (block instanceof IArsTechnicaWrenchAdjustable adjustableBlock) {
-                adjustableBlock.openAdjustmentGUI(level, pos, player);
+                adjustableBlock.handleWrenching(level, pos, player);
                 return InteractionResult.SUCCESS;
             }
         }
