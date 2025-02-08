@@ -58,9 +58,9 @@ public class EffectFuse extends AbstractEffect {
             while (spellContext.hasNextPart()) {
                 AbstractSpellPart next = spellContext.nextPart();
                 if (next instanceof AbstractEffect) {
-                    if (next == EffectFlare.INSTANCE) {
+                    if (next == EffectSmelt.INSTANCE) {
                         fusionType = "heated";
-                    } else if (next == EffectSmelt.INSTANCE && ConfigHandler.Common.SUPER_HEATED_FUSE_ALLOWED.get()) {
+                    } else if (next == EffectSuperheat.INSTANCE) {
                         fusionType = "super";
                     }
                     break;
@@ -72,7 +72,7 @@ public class EffectFuse extends AbstractEffect {
 
     @Override
     public int getDefaultManaCost() {
-        return 150;
+        return 75;
     }
 
     @Nonnull
@@ -89,11 +89,11 @@ public class EffectFuse extends AbstractEffect {
 
     @Override
     public String getBookDescription() {
-        return "Fuses items by slamming them together at breakneck speed. Use Ignite for heated mixing, use Smelt for super-heated mixing (if enabled in config)";
+        return "Fuses items by slamming them together at breakneck speed. Use Smelt for heated mixing, use Superheat for super-heated mixing (if enabled in config)";
     }
 
     @Override
     public SpellTier defaultTier() {
-        return SpellTier.THREE;
+        return SpellTier.ONE;
     }
 }

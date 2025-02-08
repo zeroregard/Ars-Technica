@@ -17,7 +17,6 @@ public class ConfigHandler {
         public static ForgeConfigSpec.BooleanValue FLUID_CAN_BE_PLACED;
         public static ForgeConfigSpec.BooleanValue FLUID_SOURCES_CAN_BE_PLACED;
         public static ForgeConfigSpec.IntValue FLUID_MAX_PLACEMENTS_PER_FUSE;
-        public static ForgeConfigSpec.BooleanValue SUPER_HEATED_FUSE_ALLOWED;
         public static ForgeConfigSpec.BooleanValue FUSE_FAILURE_CHAT_MESSAGE_ENABLED;
 
         public static ForgeConfigSpec.IntValue RUNE_MIN_COOLDOWN_VALUE;
@@ -91,7 +90,6 @@ public class ConfigHandler {
             FLUID_CAN_BE_PLACED = builder.define("fluidCanBePlaced", true);
             FLUID_SOURCES_CAN_BE_PLACED = builder.define("fluidSourcesCanBePlaced", true);
             FLUID_MAX_PLACEMENTS_PER_FUSE = builder.defineInRange("fluidMaxPlacementsPerFuse", 16, 1, 256);
-            SUPER_HEATED_FUSE_ALLOWED = builder.define("superHeatedFuseAllowed", false);
             FUSE_FAILURE_CHAT_MESSAGE_ENABLED = builder.define("fuseFailureChatMessageEnabled", false);
 
             builder.pop();

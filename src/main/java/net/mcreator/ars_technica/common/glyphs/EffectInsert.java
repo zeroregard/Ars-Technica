@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class EffectInsert extends AbstractItemResolveEffect {
-    public static EffectInsert INSTANCE = new EffectInsert();
+    public static final EffectInsert INSTANCE = new EffectInsert();
 
     private EffectInsert() {
         super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_insert"), "Insert");

@@ -21,6 +21,7 @@ public class GlyphsRegistry {
     register(EffectObliterate.INSTANCE);
     register(EffectFuse.INSTANCE);
     register(EffectTelefeast.INSTANCE);
+    register(EffectSuperheat.INSTANCE);
   }
 
   public static void register(AbstractSpellPart spellPart) {
