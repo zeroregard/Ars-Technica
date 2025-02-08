@@ -1,5 +1,6 @@
 package net.mcreator.ars_technica.common.glyphs;
 
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectConjureWater;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectFlare;
@@ -78,7 +79,7 @@ public class EffectFuse extends AbstractEffect {
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentSensitive.INSTANCE, AugmentAmplify.INSTANCE);
+        return augmentSetOf(AugmentAOE.INSTANCE);
     }
 
     @Nonnull

@@ -183,7 +183,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             return;
         }
         var fluids = fluidHandler.pickupFluids();
-        var itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(aoe));
+        var itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(this.aoe));
         if (itemEntities.isEmpty() && fluids.isEmpty()) {
             onFailure("no nearby items/fluids were found");
             return;
@@ -234,8 +234,9 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
                             .min()
                             .orElse(0);
             int recipeIterations = Math.min(maxItemIterations, maxFluidIterations);
+            int clampedRecipeIterations = Math.min(recipeIterations, (int)Math.round(this.aoe * 4));
 
-            if (recipeIterations <= 0) {
+            if (clampedRecipeIterations <= 0) {
                 onFailure("there were not enough resources for a found recipe");
                 return;
             }
@@ -247,7 +248,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             // Remove the used items based on count
             ingredients.forEach(itemEntity -> {
                 var item = itemEntity.getItem();
-                item.setCount(item.getCount() - recipeIterations);
+                item.setCount(item.getCount() - clampedRecipeIterations);
                 if (item.getCount() <= 0) {
                     itemEntity.discard();
                 }
@@ -263,12 +264,12 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
                         .orElse(null);
 
                 if (requiredFluid != null) {
-                    int mbToDrain = requiredFluid.getAmount() * recipeIterations;
+                    int mbToDrain = requiredFluid.getAmount() * clampedRecipeIterations;
                     fluidSource.drainFluid(mbToDrain, world);
                 }
             });
-            setItemResult(recipe, recipeIterations);
-            setFluidResult(recipe, recipeIterations);
+            setItemResult(recipe, clampedRecipeIterations);
+            setFluidResult(recipe, clampedRecipeIterations);
 
             playWorldSound(ArsTechnicaModSounds.FUSE_CHARGE.get(), 0.75f, 1.0f);
         }
