@@ -31,7 +31,9 @@ public class PreciseRelay extends Relay implements IArsTechnicaWrenchAdjustable 
 
     public void handleWrenching(Level world, BlockPos pos, Player player) {
         if (world.getBlockEntity(pos) instanceof RelayTile relayTile) {
-            displayScreen(relayTile, player);
+            if(world.isClientSide()) {
+                displayScreen(relayTile, player);
+            }
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 0.25f, 1.0f);
         }
     }
