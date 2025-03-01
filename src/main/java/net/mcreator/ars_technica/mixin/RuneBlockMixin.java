@@ -46,7 +46,9 @@ public class RuneBlockMixin implements IWrenchable {
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         if (world.getBlockEntity(pos) instanceof RuneTile runeTile) {
-            displayScreen(runeTile, context.getPlayer());
+            if(world.isClientSide()) {
+                displayScreen(runeTile, context.getPlayer());
+            }
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 0.25f, 1.0f);
             return InteractionResult.SUCCESS;
         }
