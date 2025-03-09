@@ -1,20 +1,12 @@
 {
   "required": true,
-  "package": "net.mcreator.ars_technica.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "package": "com.zeroregard.ars_technica.mixin",
+  "compatibilityLevel": "JAVA_21",
   "refmap": "ars_technica.refmap.json",
   "mixins": [
-    "SchematicannonMixin",
-    "RuneBlockMixin",
-    "RuneTileMixin",
-    "BacktankUtilMixin",
-    "AnimatedMagicArmorMixin",
-    "Wrench.ContainmentJarMixin",
-    "Wrench.PedestalMixin",
-    "Wrench.TurretMixin",
-    "ItemProviderEntryMixin",
-    "RegistryEntryAccessorMixin",
-    "Relay.RelayBlockMixin"
+    "SchematicannonMixin"
   ],
-  "minVersion": "0.8"
+  "minVersion": "0.8",
+  "client": [
+  ]
 }

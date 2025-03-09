@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "enclosed=false": { "model": "ars_nouveau:block/basic_spell_turret" },
-    "enclosed=true": { "model": "ars_nouveau:block/purple_archwood_log" }
-  }
-}

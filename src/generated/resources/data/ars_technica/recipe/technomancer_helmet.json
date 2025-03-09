@@ -1,0 +1,25 @@
+{
+  "type": "ars_technica:armor_upgrade",
+  "pedestalItems": [
+    {
+      "item": "ars_elemental:mark_of_mastery"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "create:brass_ingot"
+    },
+    {
+      "item": "create:goggles"
+    }
+  ],
+  "reagent": {
+    "tag": "ars_nouveau:hood"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_technica:technomancer_helmet"
+  },
+  "sourceCost": 7000
+}

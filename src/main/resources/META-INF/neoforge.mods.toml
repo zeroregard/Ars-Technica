@@ -1,0 +1,49 @@
+# This is an example mods.toml file. It contains the data relating to the loading mods.
+# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
+# The overall format is standard TOML format, v0.5.0.
+# Note that there are a couple of TOML lists in this file.
+# Find more information on toml format here:  https://github.com/toml-lang/toml
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml" #mandatory
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[4,)" #mandatory (28 is current forge version)
+# A URL to refer people to when problems occur with this mod
+issueTrackerURL="http://my.issue.tracker/" #optional
+
+license="GNU Lesser General Public License v3.0"
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+# The modid of the mod
+modId="ars_technica" #mandatory
+# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
+version="${file.jarVersion}" #mandatory
+ # A display name for the mod
+displayName="Ars Technica" #mandatory
+# A URL to query for updates for this mod. See the JSON update specification <here>
+#updateJSONURL="http://myurl.me/" #optional
+# A URL for the "homepage" for this mod, displayed in the mod UI
+#displayURL="http://example.com/" #optional
+# A file name (in the root of the mod JAR) containing a logo for display
+#logoFile="examplemod.png" #optional
+# A text field displayed in the mod UI
+credits="A bunch of Starbuncles" #optional
+# A text field displayed in the mod UI
+authors="Alexthw & BaileyHoll for base example, zeroregard for the rest" #optional
+# The description text for the mod (multi line!) (#mandatory)
+description='''
+Starbuncles will conquer the world.
+'''
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[mixins]]
+config="ars_technica.mixins.json"
+[[dependencies.ars_technica]]
+modId = "minecraft"
+versionRange = "[1.21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.ars_technica]]
+modId = "ars_nouveau"
+versionRange = "[1.21.1-5.4,)"
+ordering = "AFTER"
+side = "BOTH"
