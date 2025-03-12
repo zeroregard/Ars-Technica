@@ -36,6 +36,9 @@ public class ArsTechnica {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ArsNouveauRegistry.postInit();
+        });
         ArsNouveauRegistry.registerSounds();
     }
 
