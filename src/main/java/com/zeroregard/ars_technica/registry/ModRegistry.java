@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.zeroregard.ars_technica.ArsTechnica.MODID;
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
+import static com.zeroregard.ars_technica.registry.EntityRegistry.ENTITIES;
 import static net.minecraft.core.registries.Registries.SOUND_EVENT;
 
 public class ModRegistry {
@@ -28,6 +29,7 @@ public class ModRegistry {
     public static void registerRegistries(IEventBus bus) {
         ATMaterials.A_MATERIALS.register(bus);
         BLOCKS.register(bus);
+        ENTITIES.register(bus);
         ItemRegistry.register(bus);
         RecipeRegistry.register(bus);
 

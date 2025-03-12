@@ -6,6 +6,7 @@ import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
 import com.zeroregard.ars_technica.glyphs.EffectCarve;
 import com.zeroregard.ars_technica.glyphs.EffectPack;
+import com.zeroregard.ars_technica.glyphs.EffectPolish;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import com.zeroregard.ars_technica.registry.ModRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
@@ -29,6 +30,7 @@ public class ArsNouveauRegistry {
     public static void registerGlyphs(){
         register(EffectCarve.INSTANCE);
         register(EffectPack.INSTANCE);
+        register(EffectPolish.INSTANCE);
     }
     public static void registerSounds(){
         SpellSoundRegistry.registerSpellSound(ModRegistry.EXAMPLE_SPELL_SOUND);

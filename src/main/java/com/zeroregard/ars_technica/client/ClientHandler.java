@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
 import com.zeroregard.ars_technica.ArsTechnica;
 
+import com.zeroregard.ars_technica.client.entity.ArcanePolishEntityRenderer;
+import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.DyeColor;
@@ -55,6 +57,11 @@ public class ClientHandler {
         if (!(holder instanceof ArmorPerkHolder armorPerkHolder))
             return FastColor.ABGR32.opaque(DyeColor.PURPLE.getTextColor());
         return FastColor.ABGR32.opaque(DyeColor.byName(armorPerkHolder.getColor(), DyeColor.PURPLE).getTextColor());
+    }
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
     }
 
     @SubscribeEvent
