@@ -11,6 +11,7 @@ import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
 import com.zeroregard.ars_technica.network.ParticleEffectPacket;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
+import com.zeroregard.ars_technica.registry.ParticleRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
@@ -299,6 +300,10 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         for (int i = 0; i < 10; i++) {
             var finalPos = position.add(Math.random(), 0.25f, Math.random());
             ParticleEffectPacket.send(world, ParticleColor.fromInt(color.getColor()), ParticleTypes.DUST, finalPos);
+        }
+        for (int i = 0; i < 8; i++) {
+            var finalPos = position.add(Math.random() / 2f, 0, Math.random() / 2f);
+            ParticleEffectPacket.send(world, ParticleColor.fromInt(color.getColor()), ParticleRegistry.SPIRAL_DUST_TYPE.get(), finalPos);
         }
     }
 

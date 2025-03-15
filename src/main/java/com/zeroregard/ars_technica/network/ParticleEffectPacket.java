@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.hollingsworth.arsnouveau.common.network.AbstractPacket;
 import com.hollingsworth.arsnouveau.common.network.Networking;
 import com.zeroregard.ars_technica.ArsTechnica;
+import com.zeroregard.ars_technica.client.particles.SpiralDustParticleTypeData;
+import com.zeroregard.ars_technica.registry.ParticleRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -82,10 +84,10 @@ public class ParticleEffectPacket extends AbstractPacket {
             } else if (this.particleType == ParticleTypes.POOF) {
                 clientWorld.addParticle(ParticleTypes.POOF, this.position.x, this.position.y + 0.25, this.position.z, 0.0, 0.0625, 0.0);
             }
-            // else if (this.particleType == ModParticles.SPIRAL_DUST_TYPE.get()) {
-                // SpiralDustParticleTypeData data = new SpiralDustParticleTypeData(ModParticles.SPIRAL_DUST_TYPE.get(), packet.particleColor, false);
-                // clientWorld.addParticle(data, packet.position.x, packet.position.y + 0.25, packet.position.z, 0, 0, 0);
-            //}
+            else if (this.particleType == ParticleRegistry.SPIRAL_DUST_TYPE.get()) {
+                SpiralDustParticleTypeData data = new SpiralDustParticleTypeData(ParticleRegistry.SPIRAL_DUST_TYPE.get(), this.particleColor, false);
+                clientWorld.addParticle(data, this.position.x, this.position.y + 0.25, this.position.z, 0, 0, 0);
+            }
         }
     }
 

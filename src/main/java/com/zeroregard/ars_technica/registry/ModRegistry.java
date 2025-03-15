@@ -1,23 +1,17 @@
 package com.zeroregard.ars_technica.registry;
 
 import com.hollingsworth.arsnouveau.setup.registry.CreativeTabRegistry;
-import com.hollingsworth.arsnouveau.api.sound.SpellSound;
 import com.zeroregard.ars_technica.armor.ATMaterials;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import org.jetbrains.annotations.NotNull;
 
 import static com.zeroregard.ars_technica.ArsTechnica.MODID;
-import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 import static com.zeroregard.ars_technica.registry.EntityRegistry.ENTITIES;
-import static net.minecraft.core.registries.Registries.SOUND_EVENT;
 
 public class ModRegistry {
 
@@ -32,6 +26,7 @@ public class ModRegistry {
         ItemRegistry.register(bus);
         RecipeRegistry.register(bus);
         SoundRegistry.SOUNDS.register(bus);
+        ParticleRegistry.PARTICLES.register(bus);
 
 
         TABS.register(bus);
