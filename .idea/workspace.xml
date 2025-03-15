@@ -5,8 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectSuperheat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_superheat.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcaneFusionEntityRenderer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcaneFusionModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/fusion/AllArcaneFusionTypes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/fusion/ArcaneFusionEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/fusion/ArcaneFusionParticles.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/fusion/ArcaneFusionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/fusion/fluids/ArcaneFusionFluids.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/fusion/fluids/FluidSourceProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectFuse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/FluidHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/MixingRecipeHelpers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/animations/animations_arcane_fusion.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/item/glyph_fuse.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/arcane_fusion_heated.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/arcane_fusion_regular.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/arcane_fusion_super.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_fuse.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_fuse.png.mcmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/glyph_fuse.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/ArcaneHammerEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/ArcaneHammerEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectSuperheat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/AugmentSuperheat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/glyph_superheat.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/glyph_superheat.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +124,7 @@
   "keyToString": {
     "Gradle.Ars-Technica [build].executor": "Run",
     "Gradle.Ars-Technica [createMcpToSrg].executor": "Run",
-    "Gradle.Ars-Technica [runClient].executor": "Debug",
+    "Gradle.Ars-Technica [runClient].executor": "Run",
     "Gradle.Ars-Technica [runData].executor": "Run",
     "Gradle.Ars-Technica [runServer].executor": "Run",
     "Gradle.Ars-Technica.executor": "Run",
@@ -112,30 +137,30 @@
     "git-widget-placeholder": "1.21.X",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/textures/item",
+    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/textures/entity",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\entity" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\java\com\zeroregard\ars_technica\client\entity" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\java\com\zeroregard\ars_technica\entity" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\animations" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\ars_technica\recipe" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\geo" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\ars_technica\recipe" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\Ars-Technica-NeoForge" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\gui" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\animations" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zeroregard.ars_technica.helpers" />
       <recent name="com.zeroregard.ars_technica.glyphs" />
       <recent name="com.zeroregard.ars_technica.entity" />
       <recent name="com.zeroregard.ars_technica.client.entity" />
-      <recent name="com.zeroregard.ars_technica.helpers" />
       <recent name="com.zeroregard.ars_technica.registry" />
     </key>
   </component>

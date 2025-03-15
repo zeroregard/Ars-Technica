@@ -4,6 +4,7 @@ import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
 import com.zeroregard.ars_technica.ArsTechnica;
 
+import com.zeroregard.ars_technica.client.entity.ArcaneFusionEntityRenderer;
 import com.zeroregard.ars_technica.client.entity.ArcaneHammerEntityRenderer;
 import com.zeroregard.ars_technica.client.entity.ArcanePolishEntityRenderer;
 import com.zeroregard.ars_technica.client.entity.ArcanePressEntityRenderer;
@@ -61,6 +62,7 @@ public class ClientHandler {
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_HAMMER_ENTITY.get(), ArcaneHammerEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.ARCANE_FUSION_ENTITY.get(), ArcaneFusionEntityRenderer::new);
     }
 
     @SubscribeEvent

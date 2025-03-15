@@ -50,9 +50,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static com.zeroregard.ars_technica.helpers.PlayerHelpers.getNearbyPlayers;
 
 public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     private static float UNSCALED_CHARGE_TIME = 2.0f;

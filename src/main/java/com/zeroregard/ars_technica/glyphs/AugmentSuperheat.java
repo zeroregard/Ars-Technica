@@ -10,10 +10,10 @@ import java.util.Set;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
-public class EffectSuperheat extends AbstractAugment {
-    public static EffectSuperheat INSTANCE = new EffectSuperheat(prefix("glyph_superheat"), "Superheat");
+public class AugmentSuperheat extends AbstractAugment {
+    public static AugmentSuperheat INSTANCE = new AugmentSuperheat(prefix("glyph_superheat"), "Superheat");
 
-    private EffectSuperheat(ResourceLocation resourceLocation, String description) {
+    private AugmentSuperheat(ResourceLocation resourceLocation, String description) {
         super(resourceLocation, description);
     }
     @Override

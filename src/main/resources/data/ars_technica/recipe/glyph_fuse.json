@@ -1,12 +1,9 @@
 {
   "type": "ars_nouveau:glyph",
-  "exp": 160,
+  "exp": 55,
   "inputs": [
     {
-        "item": "ars_nouveau:fire_essence"
-    },
-    {
-        "item": "ars_nouveau:fire_essence"
+        "item": "ars_nouveau:manipulation_essence"
     },
     {
         "item": "ars_nouveau:fire_essence"
@@ -15,11 +12,14 @@
         "item": "minecraft:blaze_rod"
     },
     {
-        "item": "create:blaze_cake"
+        "item": "minecraft:blaze_rod"
+    },
+    {
+        "item": "minecraft:blaze_rod"
     }
   ],
   "output": {
     "count": 1,
-    "id": "ars_technica:glyph_superheat"
+    "id": "ars_technica:glyph_fuse"
   }
 }
