@@ -111,6 +111,14 @@ public class EffectPack extends AbstractItemResolveEffect {
     return 10;
   }
 
+  @Override
+  public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
+    super.addAugmentDescriptions(map);
+    map.put(AugmentAmplify.INSTANCE, "Changes recipe grid size to 3x3");
+    map.put(AugmentDampen.INSTANCE, "Changes recipe grid size to 1x1");
+    map.put(AugmentAOE.INSTANCE, "Increases the area in which items get collected for processing");
+  }
+
   @Nonnull
   @Override
   public Set<AbstractAugment> getCompatibleAugments() {
@@ -131,7 +139,7 @@ public class EffectPack extends AbstractItemResolveEffect {
 
   @Override
   public String getBookDescription() {
-    return "Condenses identical items, crafting them into 2x2 recipes. May be augmented with Amplify to use 3x3 recipes instead, or Dampen to craft 1x1 recipes.";
+    return "Condenses identical items, crafting them into 2x2 recipes.";
   }
 
   @Override

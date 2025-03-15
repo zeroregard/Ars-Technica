@@ -55,10 +55,11 @@ public class EffectObliterate extends AbstractEffect {
         arcaneHammerEntity.setYaw(yaw);
     }
 
+    @Override
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
         map.put(AugmentSensitive.INSTANCE, "Processes items instead of destroying them");
-        map.put(AugmentAmplify.INSTANCE, "Increases damage");
+        map.put(AugmentAmplify.INSTANCE, "Increases the size and damage of the hammer");
     }
 
     @Override

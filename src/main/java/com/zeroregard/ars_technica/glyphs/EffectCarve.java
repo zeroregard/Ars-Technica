@@ -115,6 +115,14 @@ public class EffectCarve extends AbstractItemResolveEffect {
         return 10;
     }
 
+    @Override
+    public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
+        super.addAugmentDescriptions(map);
+        map.put(AugmentAmplify.INSTANCE, "Changes recipe to walls");
+        map.put(AugmentDampen.INSTANCE, "Changes recipe to slabs");
+        map.put(AugmentAOE.INSTANCE, "Increases the area in which items get collected for processing");
+    }
+
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {

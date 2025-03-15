@@ -3,7 +3,6 @@ package com.zeroregard.ars_technica.glyphs;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
-import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.entity.ArcanePolishEntity;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
 import net.minecraft.core.BlockPos;
@@ -67,6 +66,12 @@ public class EffectPolish extends AbstractItemResolveEffect {
     @Override
     public int getDefaultManaCost() {
         return 120;
+    }
+
+    @Override
+    public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
+        super.addAugmentDescriptions(map);
+        map.put(AugmentAOE.INSTANCE, "Increases the amount of items processed");
     }
 
     @Nonnull
