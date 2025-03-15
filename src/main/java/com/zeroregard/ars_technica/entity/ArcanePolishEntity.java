@@ -16,7 +16,6 @@ import software.bernie.geckolib.util.Color;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ArcanePolishEntity extends ArcaneProcessEntity implements GeoEntity {
     protected double distanceToItem = 0.5;

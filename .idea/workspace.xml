@@ -4,7 +4,54 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="" />
+    <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcaneHammerEntityRenderer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcaneHammerModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/ArcaneHammerEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectObliterate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/PlayerHelpers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/SoundRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/animations/animations_arcane_hammer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/geo/arcane_hammer.geo.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/item/glyph_obliterate.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/click.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/equip_set.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/fuse_charge.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/fuse_failed.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/fuse_impact.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/fuse_swing.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/obliterate_charge.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/obliterate_charge_large.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/obliterate_shockwave.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/obliterate_smash.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/obliterate_swing.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/pocket_factory.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/source_engine_start.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/source_engine_stop.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/spy_monocle_use.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/whirl_haunt.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/whirl_none.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/whirl_process_affect_fire.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/whirl_process_affect_water.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/whirl_smelt.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/whirl_splash.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_obliterate.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_obliterate.png.mcmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/glyph_obliterate.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/Ars-Technica.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Ars-Technica.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/Ars-Technica.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Ars-Technica.test.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsNouveauRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsNouveauRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsTechnica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsTechnica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/ArcanePolishEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/ArcanePolishEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/RecipeHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/RecipeHelpers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,6 +110,24 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/com/hollingsworth/ars_nouveau/ars_nouveau-1.20.1/4.12.6.253_mapped_parchment_2023.07.02-1.20.1/ars_nouveau-1.20.1-4.12.6.253_mapped_parchment_2023.07.02-1.20.1-sources.jar!/com/hollingsworth/arsnouveau/api/source/AbstractSourceMachine.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/com/hollingsworth/ars_nouveau/ars_nouveau-1.20.1/4.12.6.253_mapped_parchment_2023.07.02-1.20.1/ars_nouveau-1.20.1-4.12.6.253_mapped_parchment_2023.07.02-1.20.1-sources.jar!/com/hollingsworth/arsnouveau/common/block/ModBlock.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/com/hollingsworth/ars_nouveau/ars_nouveau-1.20.1/4.12.6.253_mapped_parchment_2023.07.02-1.20.1/ars_nouveau-1.20.1-4.12.6.253_mapped_parchment_2023.07.02-1.20.1-sources.jar!/com/hollingsworth/arsnouveau/common/block/Relay.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/com/hollingsworth/ars_nouveau/ars_nouveau-1.20.1/4.12.6.253_mapped_parchment_2023.07.02-1.20.1/ars_nouveau-1.20.1-4.12.6.253_mapped_parchment_2023.07.02-1.20.1-sources.jar!/com/hollingsworth/arsnouveau/common/block/RelayCollectorBlock.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/com/hollingsworth/ars_nouveau/ars_nouveau-1.20.1/4.12.6.253_mapped_parchment_2023.07.02-1.20.1/ars_nouveau-1.20.1-4.12.6.253_mapped_parchment_2023.07.02-1.20.1-sources.jar!/com/hollingsworth/arsnouveau/common/block/TickableModBlock.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/com/simibubi/create/create-1.20.1/0.5.1.f-26_mapped_parchment_2023.07.02-1.20.1/create-1.20.1-0.5.1.f-26_mapped_parchment_2023.07.02-1.20.1-sources.jar!/com/simibubi/create/content/equipment/sandPaper/SandPaperPolishingRecipe.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/com/simibubi/create/create-1.20.1/0.5.1.f-26_mapped_parchment_2023.07.02-1.20.1/create-1.20.1-0.5.1.f-26_mapped_parchment_2023.07.02-1.20.1-sources.jar!/com/simibubi/create/content/kinetics/motor/CreativeMotorRenderer.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/software/bernie/geckolib/geckolib-forge-1.20.1/4.2.2_mapped_parchment_2023.07.02-1.20.1/geckolib-forge-1.20.1-4.2.2_mapped_parchment_2023.07.02-1.20.1-sources.jar!/software/bernie/geckolib/renderer/GeoBlockRenderer.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/deobf_dependencies/software/bernie/geckolib/geckolib-forge-1.20.1/4.4.4_mapped_parchment_2023.07.02-1.20.1/geckolib-forge-1.20.1-4.4.4_mapped_parchment_2023.07.02-1.20.1-sources.jar!/software/bernie/geckolib/util/GeckoLibUtil.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/client/renderer/RenderStateShard.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/client/renderer/RenderType.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/client/renderer/blockentity/BlockEntityRenderer.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/core/registries/BuiltInRegistries.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/world/inventory/AbstractContainerMenu.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/world/item/crafting/RecipeManager.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/world/level/block/Block.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -90,17 +155,17 @@
     "git-widget-placeholder": "1.21.X",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica",
+    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/textures/item",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\ponder" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\run\schematics" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\animations" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\geo" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\ars_technica\recipe" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\Ars-Technica-NeoForge" />
@@ -110,10 +175,11 @@
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\animations" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="net.mcreator.ars_technica.common.packets" />
-      <recent name="net.mcreator.ars_technica.common.api" />
-      <recent name="net.mcreator.ars_technica.client.gui" />
-      <recent name="net.mcreator.ars_technica.mixin.Relay" />
+      <recent name="com.zeroregard.ars_technica.helpers" />
+      <recent name="com.zeroregard.ars_technica.registry" />
+      <recent name="com.zeroregard.ars_technica.glyphs" />
+      <recent name="com.zeroregard.ars_technica.entity" />
+      <recent name="com.zeroregard.ars_technica.client.entity" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Ars-Technica [runClient]">

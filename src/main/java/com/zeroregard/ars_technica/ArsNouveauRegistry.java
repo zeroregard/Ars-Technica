@@ -21,25 +21,13 @@ import java.util.List;
 
 public class ArsNouveauRegistry {
 
-    public static List<AbstractSpellPart> registeredSpells = new ArrayList<>();
-
     public static void postInit() {
         addPerkSlots();
     }
 
-    public static void registerGlyphs(){
-        register(EffectCarve.INSTANCE);
-        register(EffectPack.INSTANCE);
-        register(EffectPolish.INSTANCE);
-    }
     public static void registerSounds(){
         SpellSoundRegistry.registerSpellSound(ModRegistry.EXAMPLE_SPELL_SOUND);
     }
-    public static void register(AbstractSpellPart spellPart){
-        GlyphRegistry.registerSpell(spellPart);
-        registeredSpells.add(spellPart);
-    }
-
     private static void addPerkSlots() {
         List<PerkSlot> perkSlots = Arrays.asList(PerkSlot.ONE, PerkSlot.TWO, PerkSlot.THREE);
         List<ItemLike> armors = List.of(ItemRegistry.TECHNOMANCER_HELMET.get(),

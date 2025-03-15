@@ -1,5 +1,6 @@
 package com.zeroregard.ars_technica;
 
+import com.zeroregard.ars_technica.registry.GlyphRegistry;
 import com.zeroregard.ars_technica.registry.ModRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -23,7 +24,7 @@ public class ArsTechnica {
 
     public ArsTechnica(IEventBus modEventBus, ModContainer modContainer) {
         ModRegistry.registerRegistries(modEventBus);
-        ArsNouveauRegistry.registerGlyphs();
+        GlyphRegistry.registerGlyphs();
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
         modEventBus.addListener(this::setup);

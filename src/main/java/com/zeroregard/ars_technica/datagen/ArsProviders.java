@@ -19,6 +19,7 @@ import com.zeroregard.ars_technica.ArsNouveauRegistry;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.glyphs.TestEffect;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
+import com.zeroregard.ars_technica.registry.GlyphRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
@@ -218,11 +219,9 @@ public class ArsProviders {
         @Override
         public void collectJsons(CachedOutput cache) {
 
-            for (AbstractSpellPart spell : ArsNouveauRegistry.registeredSpells) {
+            for (AbstractSpellPart spell : GlyphRegistry.registeredSpells) {
                 addGlyphPage(spell);
             }
-
-            //check the superclass for examples
 
             for (PatchouliPage patchouliPage : pages) {
                 DataProvider.saveStable(cache, patchouliPage.build(), patchouliPage.path());
