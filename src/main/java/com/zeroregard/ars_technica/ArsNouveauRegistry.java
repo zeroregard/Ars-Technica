@@ -25,9 +25,6 @@ public class ArsNouveauRegistry {
         addPerkSlots();
     }
 
-    public static void registerSounds(){
-        SpellSoundRegistry.registerSpellSound(ModRegistry.EXAMPLE_SPELL_SOUND);
-    }
     private static void addPerkSlots() {
         List<PerkSlot> perkSlots = Arrays.asList(PerkSlot.ONE, PerkSlot.TWO, PerkSlot.THREE);
         List<ItemLike> armors = List.of(ItemRegistry.TECHNOMANCER_HELMET.get(),

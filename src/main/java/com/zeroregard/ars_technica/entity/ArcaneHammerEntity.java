@@ -81,11 +81,11 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     private float speed = 1.0f;
     private AnimationController<ArcaneHammerEntity> animationController;
 
-    private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> YAW = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> ALPHA = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(ArcaneHammerEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> YAW = SynchedEntityData.defineId(ArcaneHammerEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(ArcaneHammerEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> ALPHA = SynchedEntityData.defineId(ArcaneHammerEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(ArcaneHammerEntity.class, EntityDataSerializers.FLOAT);
 
     private static Vec3 getTargetPosition(Entity target) {
         return target.getPosition(1.0f).add(0, 0.5, 0);

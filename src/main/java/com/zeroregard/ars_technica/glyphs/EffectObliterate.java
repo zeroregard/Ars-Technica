@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.util.Color;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.Set;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
@@ -50,9 +51,14 @@ public class EffectObliterate extends AbstractEffect {
 
     private void setYaw(Vec3 position, @NotNull LivingEntity shooter, ArcaneHammerEntity arcaneHammerEntity) {
         Vec3 direction = position.subtract(shooter.position()).normalize();
-        Vec3 rotation = new Vec3(0, 0, 0);
         float yaw = (float)(-Math.atan2(direction.z(), direction.x()) + Math.PI/2);
         arcaneHammerEntity.setYaw(yaw);
+    }
+
+    public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
+        super.addAugmentDescriptions(map);
+        map.put(AugmentSensitive.INSTANCE, "Processes items instead of destroying them");
+        map.put(AugmentAmplify.INSTANCE, "Increases damage");
     }
 
     @Override

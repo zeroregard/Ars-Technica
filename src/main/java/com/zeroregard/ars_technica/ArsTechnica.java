@@ -40,7 +40,6 @@ public class ArsTechnica {
         event.enqueueWork(() -> {
             ArsNouveauRegistry.postInit();
         });
-        ArsNouveauRegistry.registerSounds();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
