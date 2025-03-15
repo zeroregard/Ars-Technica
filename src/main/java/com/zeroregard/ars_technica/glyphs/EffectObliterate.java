@@ -23,7 +23,6 @@ import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
 public class EffectObliterate extends AbstractEffect {
     public static EffectObliterate INSTANCE = new EffectObliterate(prefix("glyph_obliterate"), "Obliterate");
-    private static float DEFAULT_SPEED = 4.0f;
 
     private EffectObliterate(ResourceLocation resourceLocation, String description) {
         super(resourceLocation, description);

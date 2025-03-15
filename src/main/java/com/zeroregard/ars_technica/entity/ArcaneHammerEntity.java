@@ -9,6 +9,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
+import com.zeroregard.ars_technica.network.ParticleEffectPacket;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
 import net.minecraft.advancements.Advancement;
@@ -245,12 +246,18 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
 
     protected void handleItems() {
         List<ItemEntity> itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(1.0));
+        if (itemEntities.isEmpty()) {
+            return;
+        }
+        Vec3 midPoint = itemEntities.stream()
+                .map(ItemEntity::position)
+                .reduce(Vec3.ZERO, Vec3::add)
+                .scale(1.0 / itemEntities.size());
         if(processItems) {
             processItems(itemEntities);
-            sendProcessingParticles();
+            sendProcessingParticles(midPoint);
         }
-        else {
-            itemEntities.forEach(ItemEntity::discard);
+        else {itemEntities.forEach(ItemEntity::discard);
         }
     }
 
@@ -288,17 +295,10 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         return hammerDamageSource;
     }
 
-    private void sendProcessingParticles() {
-        var pos = this.position();
-        List<ServerPlayer> nearbyPlayers = getNearbyPlayers(pos, world);
-        ParticleType<?> particleType = ParticleTypes.DUST;
-
-        for (ServerPlayer player : nearbyPlayers) {
-            for (int i = 0; i < 10; i++) {
-                var finalPos = pos.add(Math.random() / 2f, 0f, Math.random() / 2f);
-                // ParticleEffectPacket packet = new ParticleEffectPacket(finalPos, ModParticles.SPIRAL_DUST_TYPE.get(), ParticleColor.fromInt(color.getColor()));
-                // NetworkHandler.CHANNEL.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-            }
+    private void sendProcessingParticles(Vec3 position) {
+        for (int i = 0; i < 10; i++) {
+            var finalPos = position.add(Math.random(), 0.25f, Math.random());
+            ParticleEffectPacket.send(world, ParticleColor.fromInt(color.getColor()), ParticleTypes.DUST, finalPos);
         }
     }
 
