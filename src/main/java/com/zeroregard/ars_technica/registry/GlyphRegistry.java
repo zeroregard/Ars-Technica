@@ -1,10 +1,7 @@
 package com.zeroregard.ars_technica.registry;
 
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
-import com.zeroregard.ars_technica.glyphs.EffectCarve;
-import com.zeroregard.ars_technica.glyphs.EffectObliterate;
-import com.zeroregard.ars_technica.glyphs.EffectPack;
-import com.zeroregard.ars_technica.glyphs.EffectPolish;
+import com.zeroregard.ars_technica.glyphs.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +14,7 @@ public class GlyphRegistry {
         register(EffectPack.INSTANCE);
         register(EffectPolish.INSTANCE);
         register(EffectObliterate.INSTANCE);
+        register(EffectPress.INSTANCE);
     }
 
     public static void register(AbstractSpellPart spellPart){

@@ -2,12 +2,14 @@ package com.zeroregard.ars_technica.helpers;
 
 
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
@@ -41,4 +43,12 @@ public class RecipeHelpers {
                 .filter(recipe -> recipe instanceof ProcessingRecipe)
                 .map(recipe -> (ProcessingRecipe<RecipeWrapper>) recipe);
     }
+
+
+    public static Optional<RecipeHolder<Recipe<SingleRecipeInput>>> getPressingRecipeForItemStack(ItemStack input, Level world) {
+        SingleRecipeInput wrapper = new SingleRecipeInput(input);
+
+        return world.getRecipeManager().getRecipeFor(AllRecipeTypes.PRESSING.getType(), wrapper, world);
+    }
+
 }

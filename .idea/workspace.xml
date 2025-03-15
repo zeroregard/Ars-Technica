@@ -5,8 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcanePressEntityRenderer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcanePressModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/ArcanePressEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectPress.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/animations/animations_arcane_press.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/animations/animations_whirl.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/geo/arcane_fusion.geo.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/geo/arcane_press.geo.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/geo/whirl.geo.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/item/glyph_press.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_press.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_press.png.mcmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/glyph_press.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/mixin/SchematicannonMixin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/mixin/SchematicannonMixin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/RecipeHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/RecipeHelpers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,10 +118,11 @@
   "keyToString": {
     "Gradle.Ars-Technica [build].executor": "Run",
     "Gradle.Ars-Technica [createMcpToSrg].executor": "Run",
-    "Gradle.Ars-Technica [runClient].executor": "Run",
+    "Gradle.Ars-Technica [runClient].executor": "Debug",
     "Gradle.Ars-Technica [runData].executor": "Run",
     "Gradle.Ars-Technica [runServer].executor": "Run",
     "Gradle.Ars-Technica.executor": "Run",
+    "Gradle.Build Ars-Technica.executor": "Run",
     "Gradle.C:/Users/mathi/Documents/Projects/Mods/Ars-Technica [createMcpToSrg].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -111,17 +131,17 @@
     "git-widget-placeholder": "1.21.X",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/java/com/zeroregard/ars_technica/item",
+    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/animations",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\java\com\zeroregard\ars_technica\item" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\java\com\zeroregard\ars_technica\client" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\entity" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\animations" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\ars_technica\recipe" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\geo" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\Ars-Technica-NeoForge" />
@@ -131,11 +151,11 @@
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\animations" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zeroregard.ars_technica.glyphs" />
+      <recent name="com.zeroregard.ars_technica.entity" />
       <recent name="com.zeroregard.ars_technica.client.entity" />
       <recent name="com.zeroregard.ars_technica.helpers" />
       <recent name="com.zeroregard.ars_technica.registry" />
-      <recent name="com.zeroregard.ars_technica.glyphs" />
-      <recent name="com.zeroregard.ars_technica.entity" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Ars-Technica [runClient]">

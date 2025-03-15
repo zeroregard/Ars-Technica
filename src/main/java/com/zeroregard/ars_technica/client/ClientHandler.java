@@ -6,6 +6,7 @@ import com.zeroregard.ars_technica.ArsTechnica;
 
 import com.zeroregard.ars_technica.client.entity.ArcaneHammerEntityRenderer;
 import com.zeroregard.ars_technica.client.entity.ArcanePolishEntityRenderer;
+import com.zeroregard.ars_technica.client.entity.ArcanePressEntityRenderer;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.util.FastColor;
@@ -59,6 +60,7 @@ public class ClientHandler {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_HAMMER_ENTITY.get(), ArcaneHammerEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
     }
 
     @SubscribeEvent
