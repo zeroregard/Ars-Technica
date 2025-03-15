@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.schematics.cannon.SchematicannonBlockEntity;
 import com.zeroregard.ars_technica.Config;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
+import com.zeroregard.ars_technica.network.ParticleEffectPacket;
+import com.zeroregard.ars_technica.registry.ParticleRegistry;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -38,7 +40,7 @@ public class SchematicannonMixin {
         boolean technomancerNearby = nearbyPlayers.stream().anyMatch(TechnomancerArmor::isWearingFullSet);
 
         if(technomancerNearby && world.getGameTime() % 8 == 0) {
-            sendBoostParticles(entity, nearbyPlayers);
+            sendBoostParticles(entity, world);
         }
 
         if(state != SchematicannonBlockEntity.State.RUNNING) {
@@ -53,11 +55,7 @@ public class SchematicannonMixin {
         }
     }
 
-    private void sendBoostParticles(SchematicannonBlockEntity entity, List<ServerPlayer> players) {
-        ParticleColor color = ParticleColor.PURPLE;
-        for (ServerPlayer player : players) {
-            // ParticleEffectPacket packet = new ParticleEffectPacket(entity.getBlockPos().getCenter(), ModParticles.SPIRAL_DUST_TYPE.get(), color);
-            // NetworkHandler.CHANNEL.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-        }
+    private void sendBoostParticles(SchematicannonBlockEntity entity, Level world) {
+        ParticleEffectPacket.send(world, ParticleColor.fromInt(ParticleColor.PURPLE.getColor()), ParticleRegistry.SPIRAL_DUST_TYPE.get(), entity.getBlockPos().getCenter());
     }
 }

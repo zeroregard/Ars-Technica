@@ -28,11 +28,6 @@ public class ClientHandler {
     }
 
     @SubscribeEvent
-    public static void registerParticles(RegisterParticleProvidersEvent event) {
-        // event.registerSpriteSet(ModParticles.SPARK.get(), SparkParticle::factory);
-    }
-
-    @SubscribeEvent
     public static void bindRenderers(final EntityRenderersEvent.RegisterRenderers event) {
 
     }
