@@ -60,10 +60,10 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> FUSE_FAILED = registerSound("fuse_failed",
 			SoundEvent.createFixedRangeEvent(prefix("fuse_failed"), 16f));
 
-	public static final DeferredHolder<SoundEvent, SoundEvent> SOURCE_ENGINE_START = registerSound("source_engine_start",
-			SoundEvent.createFixedRangeEvent(prefix("source_engine_start"), 8f));
-	public static final DeferredHolder<SoundEvent, SoundEvent> SOURCE_ENGINE_STOP = registerSound("source_engine_stop",
-			SoundEvent.createFixedRangeEvent(prefix("source_engine_stop"), 8f));
+	public static final DeferredHolder<SoundEvent, SoundEvent> SOURCE_MOTOR_START = registerSound("source_motor_start",
+			SoundEvent.createFixedRangeEvent(prefix("source_motor_start"), 8f));
+	public static final DeferredHolder<SoundEvent, SoundEvent> SOURCE_MOTOR_STOP = registerSound("source_motor_stop",
+			SoundEvent.createFixedRangeEvent(prefix("source_motor_stop"), 8f));
 
 	public static final DeferredHolder<SoundEvent, SoundEvent> POCKET_FACTORY_DISC = registerSound("pocket_factory",
 			SoundEvent.createVariableRangeEvent(prefix("pocket_factory")));

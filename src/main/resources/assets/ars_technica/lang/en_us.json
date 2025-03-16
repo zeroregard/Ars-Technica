@@ -38,5 +38,15 @@
 	"ars_technica.armor_set.technomancer": "Technomancer\u0027s Set",
 	"ars_technica.armor_set.technomancer.desc": "Reduces damage from Create machinery, increases speed of nearby schematic cannons",
 	"ars_technica.armor_set.shift_info": "Hold %s for set info",
-	"ars_technica.create_goggles_info": "Augments your HUD with miscellaneous information about placed Create components"
+	"ars_technica.create_goggles_info": "Augments your HUD with miscellaneous information about placed Create components",
+
+	"ars_technica.ponder.source_motor.header": "Using the Source Motor",
+	"ars_technica.ponder.source_motor.text_1": "This block can be used to convert Source into rotational force.",
+	"ars_technica.ponder.source_motor.text_2": "It must be supplied with a nearby Source Jar.",
+	"ars_technica.ponder.source_motor.text_3": "Adjust the RPM on the sides of the motor, right-click elsewhere to adjust the SU-to-RPM ratio",
+	"ars_technica.ponder.source_motor.text_4": "Adjusting the SU-to-RPM ratio will conversely adjust the amount of source required",
+	"create.gui.source_motor.title": "Source Motor",
+	"create.gui.source_motor.generated_speed": "Generated Speed (RPM)",
+	"create.gui.source_motor.stress_units_ratio": "SU to RPM ratio",
+	"block.ars_technica.source_motor": "Source Motor"
 }
