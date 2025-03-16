@@ -8,6 +8,7 @@ import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -18,10 +19,10 @@ public class MixingRecipeHelpers {
 
     public static Optional<MixingRecipeResult> getMixingRecipe(List<ItemEntity> items, List<FluidSourceProvider> fluids, Level world, ArcaneFusionType fusionType) {
         RecipeManager recipeManager = world.getRecipeManager();
-        List<MixingRecipe> mixingRecipes = recipeManager
-                .getAllRecipesFor(AllRecipeTypes.MIXING.getType())
+        var mixingRecipes = recipeManager.getAllRecipesFor(AllRecipeTypes.MIXING.getType())
                 .stream()
-                .filter(MixingRecipe.class::isInstance)
+                .map(RecipeHolder::value)
+                .filter(recipe -> recipe instanceof MixingRecipe)
                 .map(MixingRecipe.class::cast)
                 .filter(x -> x.getRequiredHeat() == fusionType.getSuppliedHeat())
                 .toList();
