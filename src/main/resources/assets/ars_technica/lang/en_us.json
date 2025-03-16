@@ -15,6 +15,8 @@
 	"ars_technica.glyph_name.glyph_superheat": "Superheat",
 	"ars_technica.glyph_desc.glyph_fuse": "Fuses items by slamming them together at breakneck speed. Use Smelt for heated mixing or use Superheat for super-heated mixing (if enabled in config)",
 	"ars_technica.glyph_name.glyph_fuse": "Fuse",
+	"ars_technica.glyph_desc.glyph_whirl": "Creates a whirlwind in an area, causing items to be centrifuged. Combine with water/flare/smelt/hex to wash/smoke/blast/haunt items",
+	"ars_technica.glyph_name.glyph_whirl": "Whirl",
 	"ars_nouveau.augment_desc.glyph_obliterate_glyph_amplify": "Increases the size and damage of the hammer",
 	"ars_nouveau.augment_desc.glyph_obliterate_glyph_sensitive": "Processes items instead of destroying them",
 	"ars_nouveau.augment_desc.glyph_carve_glyph_amplify": "Changes recipe to walls",

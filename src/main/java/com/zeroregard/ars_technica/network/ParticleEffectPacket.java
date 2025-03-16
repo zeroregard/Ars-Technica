@@ -62,6 +62,10 @@ public class ParticleEffectPacket extends AbstractPacket {
         return new ParticleEffectPacket(position, particleType, color);
     }
 
+    public static void send(@Nonnull Level level, @Nonnull ParticleType<?> particleType, @Nonnull Vec3 position) {
+        send(level, ParticleColor.WHITE, particleType, position);
+    }
+
     public static void send(@Nonnull Level level, @Nonnull ParticleColor particleColor, @Nonnull ParticleType<?> particleType, @Nonnull Vec3 position) {
         if (level instanceof ServerLevel serverLevel) {
             ParticleEffectPacket packet = new ParticleEffectPacket(position, particleType, particleColor);

@@ -17,6 +17,7 @@ public class GlyphRegistry {
         register(EffectPress.INSTANCE);
         register(AugmentSuperheat.INSTANCE);
         register(EffectFuse.INSTANCE);
+        register(EffectWhirl.INSTANCE);
     }
 
     public static void register(AbstractSpellPart spellPart){
