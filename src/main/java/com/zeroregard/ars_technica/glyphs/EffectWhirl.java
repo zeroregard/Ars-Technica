@@ -23,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.Set;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
@@ -110,6 +111,13 @@ public class EffectWhirl extends AbstractEffect {
     @Override
     public int getDefaultManaCost() {
         return 40;
+    }
+
+    @Override
+    public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
+        super.addAugmentDescriptions(map);
+        map.put(AugmentAOE.INSTANCE, "Increases the size and the range of items being processed");
+        map.put(AugmentExtendTime.INSTANCE, "Increases the duration of processing");
     }
 
     @Nonnull

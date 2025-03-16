@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtendTime;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.zeroregard.ars_technica.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.util.Color;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 import java.util.Set;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
@@ -74,6 +76,13 @@ public class EffectFuse extends AbstractEffect {
     @Override
     public int getDefaultManaCost() {
         return 75;
+    }
+
+    @Override
+    public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
+        super.addAugmentDescriptions(map);
+        map.put(AugmentAOE.INSTANCE, "Increases the amount of items being processed");
+        map.put(AugmentSuperheat.INSTANCE, "Switches to super-heated mixing");
     }
 
     @Nonnull

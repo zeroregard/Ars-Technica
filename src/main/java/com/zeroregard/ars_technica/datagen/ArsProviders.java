@@ -15,9 +15,7 @@ import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
 import com.mojang.serialization.JsonOps;
 import com.zeroregard.ars_technica.ArsElementalModItems;
-import com.zeroregard.ars_technica.ArsNouveauRegistry;
 import com.zeroregard.ars_technica.ArsTechnica;
-import com.zeroregard.ars_technica.glyphs.TestEffect;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
 import com.zeroregard.ars_technica.registry.GlyphRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
@@ -45,35 +43,6 @@ import static com.zeroregard.ars_technica.datagen.Setup.provider;
 public class ArsProviders {
 
     static String root = ArsTechnica.MODID;
-
-    public static class GlyphProvider extends GlyphRecipeProvider {
-
-        public GlyphProvider(DataGenerator generatorIn) {
-            super(generatorIn);
-        }
-
-        @Override
-        public void collectJsons(CachedOutput cache) {
-
-            Path output = this.generator.getPackOutput().getOutputFolder();
-
-            recipes.add(get(TestEffect.INSTANCE).withItem(Items.DIRT));
-
-            for (GlyphRecipe recipe : recipes) {
-                Path path = getScribeGlyphPath(output, recipe.output.getItem());
-                saveStable(cache, GlyphRecipe.CODEC.encodeStart(JsonOps.INSTANCE, recipe).getOrThrow(), path);
-            }
-        }
-
-        protected static Path getScribeGlyphPath(Path pathIn, Item glyph) {
-            return pathIn.resolve("data/" + root + "/recipe/" + getRegistryName(glyph).getPath() + ".json");
-        }
-
-        @Override
-        public @NotNull String getName() {
-            return "Example Glyph Recipes";
-        }
-    }
 
     public static class EnchantingAppProvider extends ApparatusRecipeProvider implements IConditionBuilder {
 

@@ -5,28 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcaneWhirlEntityRenderer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/entity/ArcaneWhirlModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/sound/EntityLoopingSound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/entity/ArcaneWhirlEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectWhirl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/kinetics/WhirlCurrent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/kinetics/WhirlProcessing.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/item/glyph_whirl.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/whirl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/whirl_blast.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/whirl_haunt.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/whirl_smoke.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/entity/whirl_wash.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_whirl.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/glyph_whirl.png.mcmeta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/glyph_whirl.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/RecipeHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/RecipeHelpers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ParticleEffectPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ParticleEffectPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectFuse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectFuse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectWhirl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectWhirl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/TestEffect.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
