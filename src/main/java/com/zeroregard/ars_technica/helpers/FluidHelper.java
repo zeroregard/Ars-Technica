@@ -1,5 +1,6 @@
 package com.zeroregard.ars_technica.helpers;
 
+import com.zeroregard.ars_technica.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -40,13 +41,14 @@ public class FluidHelper {
             remainingAmount.addAndGet(-filled);
         });
 
-        // TODO
-        boolean canPlaceFluids = true; // ConfigHandler.Common.FLUID_CAN_BE_PLACED.get();
-        boolean canPlaceSources = true; // ConfigHandler.Common.FLUID_SOURCES_CAN_BE_PLACED.get();
-        int maxFluidsToPlace = 16; // ConfigHandler.Common.FLUID_MAX_PLACEMENTS_PER_FUSE.get();
+        boolean canPlaceFluids = Config.Common.FLUID_CAN_BE_PLACED.get();
+
         if(!canPlaceFluids) {
             return;
         }
+
+        boolean canPlaceSources = Config.Common.FLUID_SOURCES_CAN_BE_PLACED.get();
+        int maxFluidsToPlace = Config.Common.FLUID_MAX_PLACEMENTS_PER_FUSE.get();
 
         // If there is still liquid left, try to place on air blocks nearby
         int fluidsPlaced = 0;

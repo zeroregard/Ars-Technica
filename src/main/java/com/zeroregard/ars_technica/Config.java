@@ -14,6 +14,10 @@ public class Config {
         public static ModConfigSpec.IntValue ARMOR_MAX_MANA;
         public static ModConfigSpec.IntValue ARMOR_MANA_REGEN;
 
+        public static ModConfigSpec.BooleanValue FLUID_CAN_BE_PLACED;
+        public static ModConfigSpec.BooleanValue FLUID_SOURCES_CAN_BE_PLACED;
+        public static ModConfigSpec.IntValue FLUID_MAX_PLACEMENTS_PER_FUSE;
+
         public static ModConfigSpec.BooleanValue SCHEMATIC_CANNON_SPEED_BOOST_ENABLED;
         public static ModConfigSpec.ConfigValue<Double> SCHEMATIC_CANNON_SPEED_BOOST_RANGE;
 
@@ -29,6 +33,14 @@ public class Config {
             SCHEMATIC_CANNON_SPEED_BOOST_RANGE = builder.comment("Range for above-mentioned perk, if enabled.")
                     .define("schematicCannonSpeedBoostRange", 8D);
 
+            builder.pop();
+
+            builder.comment("Logic related to Fuse")
+                    .push("Glyph - Fuse");
+
+            FLUID_CAN_BE_PLACED = builder.define("fluidCanBePlaced", true);
+            FLUID_SOURCES_CAN_BE_PLACED = builder.define("fluidSourcesCanBePlaced", true);
+            FLUID_MAX_PLACEMENTS_PER_FUSE = builder.defineInRange("fluidMaxPlacementsPerFuse", 16, 1, 256);
 
             builder.pop();
         }
