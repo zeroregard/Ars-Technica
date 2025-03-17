@@ -218,7 +218,8 @@ public class SourceMotorBlockEntity extends GeneratingKineticBlockEntity {
         }
         if (!BlockRegistry.SOURCE_MOTOR.get().defaultBlockState().is(getBlockState().getBlock()))
             return 0;
-        return convertToDirection(generatedSpeed.value, getBlockState().getValue(SourceMotorBlock.FACING));
+        var speed = convertToDirection(generatedSpeed.value, getBlockState().getValue(SourceMotorBlock.FACING));
+        return speed;
     }
 
     class MotorValueBox extends ValueBoxTransform.Sided {

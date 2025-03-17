@@ -1,13 +1,11 @@
 package com.zeroregard.ars_technica.network;
 
 import com.simibubi.create.foundation.networking.BlockEntityConfigurationPacket;
-import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.block.SourceMotorBlockEntity;
 import io.netty.buffer.ByteBuf;
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ConfigureSourceMotorPacket extends BlockEntityConfigurationPacket<SourceMotorBlockEntity> {

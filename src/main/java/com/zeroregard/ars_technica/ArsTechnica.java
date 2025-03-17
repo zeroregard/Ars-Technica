@@ -1,9 +1,12 @@
 package com.zeroregard.ars_technica;
 
+import com.simibubi.create.api.stress.BlockStressValues;
 import com.zeroregard.ars_technica.network.ATPackets;
+import com.zeroregard.ars_technica.registry.BlockRegistry;
 import com.zeroregard.ars_technica.registry.GlyphRegistry;
 import com.zeroregard.ars_technica.registry.ModRegistry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -38,10 +41,17 @@ public class ArsTechnica {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 
+    private static void registerStressValues() {
+        Block sourceMotorBlock = BlockRegistry.SOURCE_MOTOR.get();
+        BlockStressValues.CAPACITIES.register(sourceMotorBlock, () -> 256.0);
+        BlockStressValues.setGeneratorSpeed(256).accept(sourceMotorBlock);
+    }
+
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             ArsNouveauRegistry.postInit();
         });
+        registerStressValues();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {

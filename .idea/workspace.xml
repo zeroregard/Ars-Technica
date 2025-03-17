@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsTechnica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsTechnica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorBlockEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorBlockEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ConfigureSourceMotorPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ConfigureSourceMotorPacket.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +96,7 @@
   "keyToString": {
     "Gradle.Ars-Technica [build].executor": "Run",
     "Gradle.Ars-Technica [createMcpToSrg].executor": "Run",
-    "Gradle.Ars-Technica [runClient].executor": "Run",
+    "Gradle.Ars-Technica [runClient].executor": "Debug",
     "Gradle.Ars-Technica [runData].executor": "Run",
     "Gradle.Ars-Technica [runServer].executor": "Run",
     "Gradle.Ars-Technica.executor": "Run",
@@ -336,6 +339,11 @@
           <url>jar://$USER_HOME$/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1/forge-1.20.1-47.1.43_mapped_parchment_2023.07.02-1.20.1-sources.jar!/net/minecraft/core/registries/BuiltInRegistries.java</url>
           <line>120</line>
           <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorBlockEntity.java</url>
+          <line>121</line>
+          <option name="timeStamp" value="59" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
