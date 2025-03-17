@@ -48,5 +48,10 @@
 	"create.gui.source_motor.title": "Source Motor",
 	"create.gui.source_motor.generated_speed": "Generated Speed (RPM)",
 	"create.gui.source_motor.stress_units_ratio": "SU to RPM ratio",
-	"block.ars_technica.source_motor": "Source Motor"
+	"block.ars_technica.source_motor": "Source Motor",
+	"create.ars_nouveau.has_redstone_signal": "Deactivated by redstone signal",
+	"create.ars_nouveau.lacks_source": "No source nearby",
+	"create.ars_nouveau.unit.source": "source",
+	"create.gui.goggles.per_second": "per second",
+	"create.gui.goggles.source_consumption": "Source Consumption:"
 }

@@ -223,6 +223,7 @@ public class SourceMotorBlockEntity extends GeneratingKineticBlockEntity {
 
     class MotorValueBox extends ValueBoxTransform.Sided {
 
+
         @Override
         protected Vec3 getSouthLocation() {
             return VecHelper.voxelSpace(8, 8, 12.5);
@@ -244,8 +245,9 @@ public class SourceMotorBlockEntity extends GeneratingKineticBlockEntity {
             if (getSide() != Direction.UP)
                 return;
             TransformStack.of(ms)
-                    .rotateZ(-AngleHelper.horizontalAngle(facing) + 180);
+                    .rotateZDegrees(-AngleHelper.horizontalAngle(facing) + 180);
         }
+
         @Override
         protected boolean isSideActive(BlockState state, Direction direction) {
             Direction facing = state.getValue(SourceMotorBlock.FACING);

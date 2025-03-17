@@ -5,33 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorBlock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorBlockEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorRenderer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/block/AllPartialModels.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/gui/AllGuiTextures.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/gui/RenderableScrollInput.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/gui/SourceMotorScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/BlockRegistry.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/blockstates/source_motor.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsTechnicaClient.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/item/source_motor.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/ponder/source_motor.nbt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/block/arcane_axis.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/block/ars_nouveau_axis.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/block/source_motor.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/source_motor.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/source_motor.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/gui/source_motor_screen.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorBlockEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/block/SourceMotorBlockEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/EntityRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ModRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ModRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/SoundRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/SoundRegistry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/source_engine_start.ogg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/source_motor_start.ogg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/source_engine_stop.ogg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/sounds/source_motor_stop.ogg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/block/source_motor/item.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/block/source_motor/item.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,31 +118,31 @@
     "git-widget-placeholder": "1.21.X",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/models/item",
+    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/textures",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\blockstates" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\ponder" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\block" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\ars_technica\recipe" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\block\source_motor" />
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\block\item" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\ars_technica\recipe" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\Ars-Technica-NeoForge" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\gui" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zeroregard.ars_technica" />
       <recent name="com.zeroregard.ars_technica.client.gui" />
       <recent name="com.zeroregard.ars_technica.client.block" />
       <recent name="com.zeroregard.ars_technica.registry" />
       <recent name="com.zeroregard.ars_technica.glyphs" />
-      <recent name="com.zeroregard.ars_technica.client.sound" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Ars-Technica [runClient]">

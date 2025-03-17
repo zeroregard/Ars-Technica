@@ -1,5 +1,4 @@
 package com.zeroregard.ars_technica.client;
-import com.hollingsworth.arsnouveau.api.perk.IPerkHolder;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
@@ -23,16 +22,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import net.neoforged.neoforge.client.event.*;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-
 
 @EventBusSubscriber(modid = ArsTechnica.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientHandler {
-
-
-    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-
-    }
 
     @SubscribeEvent
     public static void bindRenderers(final EntityRenderersEvent.RegisterRenderers event) {
