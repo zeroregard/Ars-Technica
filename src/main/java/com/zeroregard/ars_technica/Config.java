@@ -18,6 +18,8 @@ public class Config {
         public static ModConfigSpec.BooleanValue FLUID_SOURCES_CAN_BE_PLACED;
         public static ModConfigSpec.IntValue FLUID_MAX_PLACEMENTS_PER_FUSE;
 
+        public static ModConfigSpec.ConfigValue<Double> SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER;
+
         public static ModConfigSpec.BooleanValue SCHEMATIC_CANNON_SPEED_BOOST_ENABLED;
         public static ModConfigSpec.ConfigValue<Double> SCHEMATIC_CANNON_SPEED_BOOST_RANGE;
 
@@ -33,6 +35,12 @@ public class Config {
             SCHEMATIC_CANNON_SPEED_BOOST_RANGE = builder.comment("Range for above-mentioned perk, if enabled.")
                     .define("schematicCannonSpeedBoostRange", 8D);
 
+            builder.pop();
+
+            builder.comment("Adjust these variables for block settings")
+                    .push("Blocks");
+            SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER = builder.comment("Determines the multiplier used in the cost for generating rotation, defaults to 4.0")
+                    .defineInRange("sourceMotorSpeedToSourceMultiplier", 4f, 0f, 100f);
             builder.pop();
 
             builder.comment("Logic related to Fuse")

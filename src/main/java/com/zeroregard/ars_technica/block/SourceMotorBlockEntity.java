@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollValueBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
+import com.zeroregard.ars_technica.Config;
 import com.zeroregard.ars_technica.registry.BlockRegistry;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
@@ -198,13 +199,12 @@ public class SourceMotorBlockEntity extends GeneratingKineticBlockEntity {
             return 0;
         }
         var absoluteSpeed = Math.abs(generatedSpeed.value);
-        // TODO
-        var rawSourceCost = absoluteSpeed * 2; // ConfigHandler.Common.SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER.get();
+        var rawSourceCost = absoluteSpeed * Config.Common.SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER.get();
         var stressCapacityMultiplier = getStressCapacityMultiplier();
         if(stressCapacityMultiplier == 0) {
             return 0;
         }
-        var sourceCost = Math.round(stressCapacityMultiplier * rawSourceCost);
+        var sourceCost = (int)Math.round(stressCapacityMultiplier * rawSourceCost);
         if (sourceCost == 0) {
             return 1;
         }

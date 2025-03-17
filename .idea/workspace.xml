@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ATPackets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ConfigureSourceMotorPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/gui/SourceMotorScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/gui/SourceMotorScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/NetworkManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/NetworkManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/Config.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
