@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/source_motor.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/recipe/source_motor.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ATPackets.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/ConfigureSourceMotorPacket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/gui/SourceMotorScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/gui/SourceMotorScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/NetworkManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/NetworkManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +56,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -125,11 +130,11 @@
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zeroregard.ars_technica.network" />
       <recent name="com.zeroregard.ars_technica" />
       <recent name="com.zeroregard.ars_technica.client.gui" />
       <recent name="com.zeroregard.ars_technica.client.block" />
       <recent name="com.zeroregard.ars_technica.registry" />
-      <recent name="com.zeroregard.ars_technica.glyphs" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Ars-Technica [runClient]">

@@ -5,7 +5,9 @@ import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import com.simibubi.create.foundation.utility.CreateLang;
 import com.zeroregard.ars_technica.block.SourceMotorBlockEntity;
+import com.zeroregard.ars_technica.network.ConfigureSourceMotorPacket;
 import net.createmod.catnip.gui.AbstractSimiScreen;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class SourceMotorScreen extends AbstractSimiScreen {
@@ -65,9 +67,8 @@ public class SourceMotorScreen extends AbstractSimiScreen {
     }
 
     protected void send() {
-        // TODO
-/*        NetworkHandler.CHANNEL
-                .sendToServer(new ConfigureSourceEnginePacket(blockEntity.getBlockPos(), stressRatioSlider.getState()));*/
+        var packet = new ConfigureSourceMotorPacket(blockEntity.getBlockPos(), stressRatioSlider.getState());
+        CatnipServices.NETWORK.sendToServer(packet);
     }
 
 }

@@ -27,8 +27,6 @@ public class NetworkManager {
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar reg = event.registrar(PROTOCOL_VERSION);
         reg.playToClient(ParticleEffectPacket.TYPE, ParticleEffectPacket.CODEC, NetworkManager::handle);
-        // reg.playToServer(OpenCurioBagPacket.TYPE, OpenCurioBagPacket.CODEC, NetworkManager::handle);
-        // reg.playToClient(DischargeEffectPacket.TYPE, DischargeEffectPacket.CODEC, NetworkManager::handle);
 
     }
 
@@ -36,8 +34,6 @@ public class NetworkManager {
         if (ctx.flow().getReceptionSide() == LogicalSide.SERVER) {
             handleServer(message, ctx);
         } else {
-            //separate class to avoid loading client code on server.
-            //Using OnlyIn on a method in this class would work too, but is discouraged
             ClientMessageHandler.handleClient(message, ctx);
         }
     }
