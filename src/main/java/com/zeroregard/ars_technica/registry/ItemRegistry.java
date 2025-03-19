@@ -3,6 +3,7 @@ package com.zeroregard.ars_technica.registry;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.zeroregard.ars_technica.armor.IGoggleHelmet;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
+import com.zeroregard.ars_technica.item.RunicSpanner;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -20,6 +21,8 @@ public class ItemRegistry {
     public static final DeferredItem<Item> TECHNOMANCER_CHESTPLATE = ITEMS.register("technomancer_chestplate", () -> new TechnomancerArmor(ArmorItem.Type.CHESTPLATE, null));
     public static final DeferredItem<Item> TECHNOMANCER_LEGGINGS = ITEMS.register("technomancer_leggings", () -> new TechnomancerArmor(ArmorItem.Type.LEGGINGS, null));
     public static final DeferredItem<Item> TECHNOMANCER_BOOTS = ITEMS.register("technomancer_boots", () -> new TechnomancerArmor(ArmorItem.Type.BOOTS, null));
+
+    public static final DeferredItem<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(new Item.Properties().stacksTo(64)));
 
     public static final DeferredItem<BlockItem> SOURCE_MOTOR =
             ITEMS.register("source_motor", () -> new BlockItem(BlockRegistry.SOURCE_MOTOR.get(), new Item.Properties().stacksTo(64)));

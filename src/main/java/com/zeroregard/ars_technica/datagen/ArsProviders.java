@@ -6,14 +6,11 @@ import com.hollingsworth.arsnouveau.api.spell.AbstractCastMethod;
 import com.hollingsworth.arsnouveau.api.spell.AbstractEffect;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.EnchantingApparatusRecipe;
-import com.hollingsworth.arsnouveau.common.crafting.recipes.GlyphRecipe;
 import com.hollingsworth.arsnouveau.common.crafting.recipes.ImbuementRecipe;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
-import com.hollingsworth.arsnouveau.common.datagen.GlyphRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
-import com.mojang.serialization.JsonOps;
 import com.zeroregard.ars_technica.ArsElementalModItems;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
@@ -23,7 +20,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -35,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE;
 import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM;
 import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
 import static com.simibubi.create.AllItems.*;
@@ -52,15 +50,9 @@ public class ArsProviders {
 
         @Override
         public void collectJsons(CachedOutput cache) {
-            recipes.add(builder()
-                    .withResult(ItemRegistry.CALIBRATED_PRECISION_MECHANISM)
-                    .withReagent(PRECISION_MECHANISM)
-                    .withPedestalItem(4, Ingredient.of(Items.AMETHYST_SHARD))
-                    .withPedestalItem(4, Ingredient.of(SOURCE_GEM))
-                    .withSourceCost(500)
-                    .build());
-
+            addIngredientRecipes();
             addTechnomancerArmorRecipes();
+            addEquipmentRecipes();
 
             Path output = this.generator.getPackOutput().getOutputFolder();
             for (ApparatusRecipeBuilder.RecipeWrapper<? extends EnchantingApparatusRecipe> g : recipes) {
@@ -71,6 +63,29 @@ public class ArsProviders {
             }
 
         }
+
+        protected void addIngredientRecipes() {
+            recipes.add(builder()
+                    .withResult(ItemRegistry.CALIBRATED_PRECISION_MECHANISM)
+                    .withReagent(PRECISION_MECHANISM)
+                    .withPedestalItem(4, Ingredient.of(Items.AMETHYST_SHARD))
+                    .withPedestalItem(4, Ingredient.of(SOURCE_GEM))
+                    .withSourceCost(500)
+                    .build());
+        }
+
+        protected void addEquipmentRecipes() {
+            recipes.add(builder()
+                    .withResult(ItemRegistry.RUNIC_SPANNER)
+                    .withReagent(WRENCH)
+                    .withPedestalItem(Ingredient.of(Items.GOLD_INGOT))
+                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
+                    .withPedestalItem(Ingredient.of(MANIPULATION_ESSENCE))
+                    .withSourceCost(500)
+                    .build());
+
+        }
+
 
         ArmorBuilder Abuilder() {
             return new ArmorBuilder();
