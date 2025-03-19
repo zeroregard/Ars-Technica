@@ -54,5 +54,9 @@
 	"create.ars_nouveau.lacks_source": "No source nearby",
 	"create.ars_nouveau.unit.source": "source",
 	"create.gui.goggles.per_second": "per second",
-	"create.gui.goggles.source_consumption": "Source Consumption:"
+	"create.gui.goggles.source_consumption": "Source Consumption:",
+
+	"create.gui.ars_technica.rune": "Rune",
+	"create.gui.ars_technica.relay": "Precision Relay",
+	"create.gui.ars_technica.cooldown": "Cooldown"
 }

@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "ars_technica.refmap.json",
   "mixins": [
-    "SchematicannonMixin"
+    "SchematicannonMixin",
+    "RuneBlockMixin",
+    "RuneTileMixin"
   ],
   "minVersion": "0.8",
   "client": [

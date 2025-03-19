@@ -23,6 +23,10 @@ public class Config {
         public static ModConfigSpec.BooleanValue SCHEMATIC_CANNON_SPEED_BOOST_ENABLED;
         public static ModConfigSpec.ConfigValue<Double> SCHEMATIC_CANNON_SPEED_BOOST_RANGE;
 
+
+        public static ModConfigSpec.IntValue RUNE_MIN_COOLDOWN_VALUE;
+        public static ModConfigSpec.IntValue RUNE_MAX_COOLDOWN_VALUE;
+
         public Common(ModConfigSpec.Builder builder) {
 
             builder.comment("Adjust these variables for Technomancer armor settings")
@@ -51,6 +55,15 @@ public class Config {
             FLUID_MAX_PLACEMENTS_PER_FUSE = builder.defineInRange("fluidMaxPlacementsPerFuse", 16, 1, 256);
 
             builder.pop();
+
+            builder.comment("Entity tweakable (Wrench) cooldown settings for source relays and spell runes")
+                    .push("Entity cooldown");
+
+            RUNE_MIN_COOLDOWN_VALUE = builder.defineInRange("runeMinCooldown", 5, 0, 40);
+            RUNE_MAX_COOLDOWN_VALUE = builder.defineInRange("runeMaxCooldown", 600, 40, 6000);
+
+            builder.pop();
+
         }
     }
 
