@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectInsert.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/StorageHelpers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/GlyphRegistry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,11 +129,11 @@
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\ars_technica\recipe" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zeroregard.ars_technica.helpers" />
+      <recent name="com.zeroregard.ars_technica.glyphs" />
       <recent name="com.zeroregard.ars_technica.events" />
       <recent name="com.zeroregard.ars_technica.item" />
       <recent name="com.zeroregard.ars_technica.mixin" />
-      <recent name="com.zeroregard.ars_technica.network" />
-      <recent name="com.zeroregard.ars_technica.api" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Ars-Technica [runClient]">
