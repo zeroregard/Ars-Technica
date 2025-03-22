@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "tag": "forge:consumables/experience_12"
+    }
+  ],
+  "results": [
+    {
+      "amount": 1000,
+      "id": "starbunclemania:source_fluid"
+    }
+  ]
+}
