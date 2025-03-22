@@ -71,5 +71,7 @@
 	"ars_technica.tooltip.transmutation_focus_shift_info_speed": "2x speed for Press, Polish and Whirl" ,
 	"ars_technica.tooltip.transmutation_focus_shift_info_process": "2x items processed by Press and Polish",
 	"ars_technica.tooltip.transmutation_focus_shift_info_chance": "2x chance-based item outputs from Obliterate and Whirl",
-	"ars_technica.tooltip.transmutation_focus_shift_info_damage": "2x damage dealt by Obliterate"
+	"ars_technica.tooltip.transmutation_focus_shift_info_damage": "2x damage dealt by Obliterate",
+	"item.ars_technica.giant_experience_gem": "Giant Experience Gem",
+	"item.ars_technica.gargantuan_experience_gem": "Gargantuan Experience Gem"
 }

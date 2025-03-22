@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ars_technica:giant_experience_gem"
+    },
+    {
+      "item": "ars_technica:giant_experience_gem"
+    },
+    {
+      "item": "ars_technica:giant_experience_gem"
+    },
+    {
+      "item": "ars_technica:giant_experience_gem"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "ars_technica:gargantuan_experience_gem"
+  }
+}

@@ -1,5 +1,6 @@
 package com.zeroregard.ars_technica.registry;
 
+import com.hollingsworth.arsnouveau.common.items.ExperienceGem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.zeroregard.ars_technica.armor.IGoggleHelmet;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
@@ -30,6 +31,29 @@ public class ItemRegistry {
                     new Item.Properties().stacksTo(1)
             ).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus"))
     );
+
+    public static int GREATER_EXPERIENCE_VALUE = 12;
+    public static DeferredItem<ExperienceGem> GIANT_EXPERIENCE_GEM = ITEMS.register("giant_experience_gem", () -> {
+        ExperienceGem gem = new ExperienceGem() {
+            @Override
+            public int getValue() {
+                return GREATER_EXPERIENCE_VALUE * 4;
+            }
+        };
+        gem.withTooltip(Component.translatable("ars_nouveau.tooltip.exp_gem"));
+        return gem;
+    });
+
+    public static DeferredItem<ExperienceGem> GARGANTUAN_EXPERIENCE_GEM = ITEMS.register("gargantuan_experience_gem", () -> {
+        ExperienceGem gem = new ExperienceGem() {
+            @Override
+            public int getValue() {
+                return GREATER_EXPERIENCE_VALUE * 4 * 4;
+            }
+        };
+        gem.withTooltip(Component.translatable("ars_nouveau.tooltip.exp_gem"));
+        return gem;
+    });
 
     public static final DeferredItem<BlockItem> SOURCE_MOTOR =
             ITEMS.register("source_motor", () -> new BlockItem(BlockRegistry.SOURCE_MOTOR.get(), new Item.Properties().stacksTo(64)));
