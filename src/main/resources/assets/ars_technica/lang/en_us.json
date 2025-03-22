@@ -64,6 +64,9 @@
 	"ars_nouveau.relay.average_transfer_rate": "%d source per second",
 	"ars_nouveau.relay.transfer_rate": "~%d source / %d",
 
+	"item.ars_technica.pocket_factory": "§bMusic Disc",
+	"item.ars_technica.pocket_factory.desc": "zeroregard - pocket factory",
+
 	"item.ars_technica.transmutation_focus": "Focus of Transmutation",
 	"ars_technica.focus_of_transmutation.shift_info": "Hold %s for more info",
 	"ars_technica.tooltip.transmutation_focus": "Augments spells with Luck and improves various glyphs",

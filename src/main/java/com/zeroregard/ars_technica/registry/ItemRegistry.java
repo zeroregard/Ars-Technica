@@ -15,6 +15,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static com.zeroregard.ars_technica.ArsTechnica.MODID;
+import static com.zeroregard.ars_technica.registry.SoundRegistry.POCKET_FACTORY_KEY;
 
 public class ItemRegistry {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
@@ -57,6 +58,9 @@ public class ItemRegistry {
 
     public static final DeferredItem<BlockItem> SOURCE_MOTOR =
             ITEMS.register("source_motor", () -> new BlockItem(BlockRegistry.SOURCE_MOTOR.get(), new Item.Properties().stacksTo(64)));
+
+    public static DeferredItem<Item> POCKET_FACTORY = ITEMS.register("pocket_factory", () -> new Item(new Item.Properties().jukeboxPlayable(POCKET_FACTORY_KEY).stacksTo(1)));
+
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
