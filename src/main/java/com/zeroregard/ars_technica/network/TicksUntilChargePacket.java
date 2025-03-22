@@ -37,9 +37,6 @@ public class TicksUntilChargePacket extends AbstractPacket {
         return new TicksUntilChargePacket(ticks, pos);
     }
 
-    /**
-     * This method is called when the packet is received on the server.
-     */
     @Override
     public void onServerReceived(@Nonnull MinecraftServer server, @Nonnull ServerPlayer player) {
         if (player == null) return;

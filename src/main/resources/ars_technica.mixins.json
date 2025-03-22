@@ -6,7 +6,8 @@
   "mixins": [
     "SchematicannonMixin",
     "RuneBlockMixin",
-    "RuneTileMixin"
+    "RuneTileMixin",
+    "RelayBlockMixin"
   ],
   "minVersion": "0.8",
   "client": [

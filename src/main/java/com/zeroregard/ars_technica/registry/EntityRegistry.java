@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.registry;
 
 
 import com.zeroregard.ars_technica.ArsTechnica;
+import com.zeroregard.ars_technica.block.PreciseRelayTile;
 import com.zeroregard.ars_technica.block.SourceMotorBlockEntity;
 import com.zeroregard.ars_technica.entity.ArcaneHammerEntity;
 import com.zeroregard.ars_technica.entity.ArcanePolishEntity;
@@ -56,6 +57,12 @@ public class EntityRegistry {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SourceMotorBlockEntity>> SOURCE_MOTOR_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("source_motor_block_entity", () -> {
                 return BlockEntityType.Builder.of(SourceMotorBlockEntity::new, BlockRegistry.SOURCE_MOTOR.get())
+                        .build(null);
+            });
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PreciseRelayTile>> PRECISE_RELAY_TILE =
+            BLOCK_ENTITIES.register("precise_relay_tile", () -> {
+                return BlockEntityType.Builder.of(PreciseRelayTile::new, BlockRegistry.PRECISE_RELAY.get())
                         .build(null);
             });
 }

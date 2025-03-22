@@ -28,6 +28,7 @@ public class NetworkManager {
         final PayloadRegistrar reg = event.registrar(PROTOCOL_VERSION);
         reg.playToClient(ParticleEffectPacket.TYPE, ParticleEffectPacket.CODEC, NetworkManager::handle);
         reg.playToServer(TicksUntilChargePacket.TYPE, TicksUntilChargePacket.CODEC, NetworkManager::handle);
+        reg.playToServer(CustomCooldownPacket.TYPE, CustomCooldownPacket.CODEC, NetworkManager::handle);
 
     }
 

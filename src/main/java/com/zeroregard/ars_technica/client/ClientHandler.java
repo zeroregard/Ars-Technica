@@ -5,6 +5,7 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.zeroregard.ars_technica.ArsTechnica;
 
+import com.zeroregard.ars_technica.block.PreciseRelayRenderer;
 import com.zeroregard.ars_technica.block.SourceMotorRenderer;
 import com.zeroregard.ars_technica.client.entity.*;
 import com.zeroregard.ars_technica.client.sound.EntityLoopingSound;
@@ -62,6 +63,7 @@ public class ClientHandler {
         event.registerEntityRenderer(EntityRegistry.ARCANE_FUSION_ENTITY.get(), ArcaneFusionEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_WHIRL_ENTITY.get(), ArcaneWhirlEntityRenderer::new);
         event.registerBlockEntityRenderer(EntityRegistry.SOURCE_MOTOR_BLOCK_ENTITY.get(), SourceMotorRenderer::new);
+        event.registerBlockEntityRenderer(EntityRegistry.PRECISE_RELAY_TILE.get(), PreciseRelayRenderer::new);
     }
 
     private static float DEFAULT_PITCH = 0.8f;

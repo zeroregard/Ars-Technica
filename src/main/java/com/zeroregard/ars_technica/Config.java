@@ -26,6 +26,8 @@ public class Config {
 
         public static ModConfigSpec.IntValue RUNE_MIN_COOLDOWN_VALUE;
         public static ModConfigSpec.IntValue RUNE_MAX_COOLDOWN_VALUE;
+        public static ModConfigSpec.IntValue RELAY_MIN_COOLDOWN_VALUE;
+        public static ModConfigSpec.IntValue RELAY_MAX_COOLDOWN_VALUE;
 
         public Common(ModConfigSpec.Builder builder) {
 
@@ -61,6 +63,9 @@ public class Config {
 
             RUNE_MIN_COOLDOWN_VALUE = builder.defineInRange("runeMinCooldown", 5, 0, 40);
             RUNE_MAX_COOLDOWN_VALUE = builder.defineInRange("runeMaxCooldown", 600, 40, 6000);
+
+            RELAY_MIN_COOLDOWN_VALUE = builder.defineInRange("relayMinCooldown", 5, 0, 40);
+            RELAY_MAX_COOLDOWN_VALUE = builder.defineInRange("relayMaxCooldown", 600, 40, 6000);
 
             builder.pop();
 

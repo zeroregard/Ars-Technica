@@ -57,6 +57,10 @@
 	"create.gui.goggles.source_consumption": "Source Consumption:",
 
 	"create.gui.ars_technica.rune": "Rune",
-	"create.gui.ars_technica.relay": "Precision Relay",
-	"create.gui.ars_technica.cooldown": "Cooldown"
+	"create.gui.ars_technica.cooldown": "Cooldown",
+
+	"block.ars_technica.precise_relay": "Precise Relay",
+	"create.gui.ars_technica.relay": "Precise Relay",
+	"ars_nouveau.relay.average_transfer_rate": "%d source per second",
+	"ars_nouveau.relay.transfer_rate": "~%d source / %d"
 }
