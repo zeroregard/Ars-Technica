@@ -1,7 +1,8 @@
-// 1.21.1	2025-03-19T20:15:56.7164341	Example Apparatus
+// 1.21.1	2025-03-22T12:19:45.955859	Example Apparatus
 5bbd85ace804da46821977a6436410ca057e64d2 data/ars_technica/recipe/calibrated_precision_mechanism.json
 343de6962399e16e11c3a65bf3c4fd1c5db1e276 data/ars_technica/recipe/runic_spanner.json
 a0baa81fae6f26edc89bf4eda4e6ed5cf91936a8 data/ars_technica/recipe/technomancer_boots.json
 01804a707bdbeee85d14763d7db587ef10e1de59 data/ars_technica/recipe/technomancer_chestplate.json
 11b324b87df769503d6469269725b8c2952049d5 data/ars_technica/recipe/technomancer_helmet.json
 01a6b02f8a1a474450fe73c24f2505a4c48499be data/ars_technica/recipe/technomancer_leggings.json
+b52ce5f195da9ebf3ef8a13ed808867a1bc9415d data/ars_technica/recipe/transmutation_focus.json

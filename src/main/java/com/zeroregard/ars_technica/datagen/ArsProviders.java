@@ -53,6 +53,7 @@ public class ArsProviders {
             addIngredientRecipes();
             addTechnomancerArmorRecipes();
             addEquipmentRecipes();
+            addCurioRecipes();
 
             Path output = this.generator.getPackOutput().getOutputFolder();
             for (ApparatusRecipeBuilder.RecipeWrapper<? extends EnchantingApparatusRecipe> g : recipes) {
@@ -84,6 +85,18 @@ public class ArsProviders {
                     .withSourceCost(500)
                     .build());
 
+        }
+
+
+        protected void addCurioRecipes() {
+            recipes.add(builder()
+                    .withResult(ItemRegistry.TRANSMUTATION_FOCUS)
+                    .withReagent(MANIPULATION_ESSENCE)
+                    .withPedestalItem(1, BRASS_INGOT)
+                    .withPedestalItem(Items.RABBIT_FOOT)
+                    .withPedestalItem(ItemRegistry.CALIBRATED_PRECISION_MECHANISM)
+                    .withPedestalItem(Ingredient.of(Items.EMERALD))
+                    .build());
         }
 
 

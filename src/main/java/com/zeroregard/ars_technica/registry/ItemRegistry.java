@@ -4,6 +4,8 @@ import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.zeroregard.ars_technica.armor.IGoggleHelmet;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
 import com.zeroregard.ars_technica.item.RunicSpanner;
+import com.zeroregard.ars_technica.item.TransmutationFocus;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -23,6 +25,11 @@ public class ItemRegistry {
     public static final DeferredItem<Item> TECHNOMANCER_BOOTS = ITEMS.register("technomancer_boots", () -> new TechnomancerArmor(ArmorItem.Type.BOOTS, null));
 
     public static final DeferredItem<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(new Item.Properties().stacksTo(64)));
+    public static DeferredItem<Item> TRANSMUTATION_FOCUS = ITEMS.register(
+            "transmutation_focus", () -> new TransmutationFocus(
+                    new Item.Properties().stacksTo(1)
+            ).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus"))
+    );
 
     public static final DeferredItem<BlockItem> SOURCE_MOTOR =
             ITEMS.register("source_motor", () -> new BlockItem(BlockRegistry.SOURCE_MOTOR.get(), new Item.Properties().stacksTo(64)));

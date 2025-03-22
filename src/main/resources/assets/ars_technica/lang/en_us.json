@@ -62,5 +62,14 @@
 	"block.ars_technica.precise_relay": "Precise Relay",
 	"create.gui.ars_technica.relay": "Precise Relay",
 	"ars_nouveau.relay.average_transfer_rate": "%d source per second",
-	"ars_nouveau.relay.transfer_rate": "~%d source / %d"
+	"ars_nouveau.relay.transfer_rate": "~%d source / %d",
+
+	"item.ars_technica.transmutation_focus": "Focus of Transmutation",
+	"ars_technica.focus_of_transmutation.shift_info": "Hold %s for more info",
+	"ars_technica.tooltip.transmutation_focus": "Augments spells with Luck and improves various glyphs",
+	"ars_technica.tooltip.transmutation_focus_shift_info_title": "Provides the following bonuses",
+	"ars_technica.tooltip.transmutation_focus_shift_info_speed": "2x speed for Press, Polish and Whirl" ,
+	"ars_technica.tooltip.transmutation_focus_shift_info_process": "2x items processed by Press and Polish",
+	"ars_technica.tooltip.transmutation_focus_shift_info_chance": "2x chance-based item outputs from Obliterate and Whirl",
+	"ars_technica.tooltip.transmutation_focus_shift_info_damage": "2x damage dealt by Obliterate"
 }
