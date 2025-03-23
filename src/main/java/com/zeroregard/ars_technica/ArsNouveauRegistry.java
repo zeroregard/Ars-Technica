@@ -7,6 +7,7 @@ import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
 import com.zeroregard.ars_technica.glyphs.EffectCarve;
 import com.zeroregard.ars_technica.glyphs.EffectPack;
 import com.zeroregard.ars_technica.glyphs.EffectPolish;
+import com.zeroregard.ars_technica.item.PressurePerk;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import com.zeroregard.ars_technica.registry.ModRegistry;
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
@@ -20,6 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ArsNouveauRegistry {
+
+    public static void init() {
+        registerThreads();
+    }
 
     public static void postInit() {
         addPerkSlots();
@@ -36,5 +41,9 @@ public class ArsNouveauRegistry {
         }
 
         ArsNouveauAPI.getInstance().getEnchantingRecipeTypes().add(RecipeRegistry.TECHNOMANCER_ARMOR_UP.get());
+    }
+
+    private static void registerThreads() {
+        PerkRegistry.registerPerk(PressurePerk.INSTANCE);
     }
 }

@@ -13,6 +13,7 @@ import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
 import com.zeroregard.ars_technica.ArsElementalModItems;
 import com.zeroregard.ars_technica.ArsTechnica;
+import com.zeroregard.ars_technica.item.PressurePerk;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
 import com.zeroregard.ars_technica.registry.GlyphRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
@@ -32,8 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.MANIPULATION_ESSENCE;
-import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.SOURCE_GEM;
+import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.*;
+import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.AIR_ESSENCE;
 import static com.hollingsworth.arsnouveau.setup.registry.RegistryHelper.getRegistryName;
 import static com.simibubi.create.AllItems.*;
 import static com.zeroregard.ars_technica.datagen.Setup.provider;
@@ -96,6 +97,16 @@ public class ArsProviders {
                     .withPedestalItem(Items.RABBIT_FOOT)
                     .withPedestalItem(ItemRegistry.CALIBRATED_PRECISION_MECHANISM)
                     .withPedestalItem(Ingredient.of(Items.EMERALD))
+                    .build());
+        }
+
+        protected void addThreadRecipes() {
+            recipes.add(builder()
+                    .withResult(getPerkItem(PressurePerk.INSTANCE.getRegistryName()))
+                    .withReagent(BLANK_THREAD)
+                    .withPedestalItem(3, Ingredient.of(AIR_ESSENCE))
+                    .withPedestalItem(Ingredient.of(COPPER_BACKTANK))
+                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
                     .build());
         }
 

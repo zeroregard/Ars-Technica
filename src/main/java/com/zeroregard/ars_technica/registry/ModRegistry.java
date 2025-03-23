@@ -26,6 +26,7 @@ public class ModRegistry {
         RecipeRegistry.register(bus);
         SoundRegistry.SOUNDS.register(bus);
         ParticleRegistry.PARTICLES.register(bus);
+        DataComponentRegistry.DATA.register(bus);
 
 
         TABS.register(bus);

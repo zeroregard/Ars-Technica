@@ -80,5 +80,9 @@
 	"ars_technica.tooltip.transmutation_focus_shift_info_chance": "2x chance-based item outputs from Obliterate and Whirl",
 	"ars_technica.tooltip.transmutation_focus_shift_info_damage": "2x damage dealt by Obliterate",
 	"item.ars_technica.giant_experience_gem": "Giant Experience Gem",
-	"item.ars_technica.gargantuan_experience_gem": "Gargantuan Experience Gem"
+	"item.ars_technica.gargantuan_experience_gem": "Gargantuan Experience Gem",
+
+	"ars_technica.perk_desc.thread_pressure": "Grants the wielder ultra-high-pressure air. Air refills over time - higher levels means more capacity and faster fill rate.",
+	"ars_technica.thread_of": "Thread of %s",
+	"item.ars_technica.thread_pressure": "Pressure"
 }

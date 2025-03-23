@@ -28,6 +28,7 @@ public class ArsTechnica {
 
     public ArsTechnica(IEventBus modEventBus, ModContainer modContainer) {
         ModRegistry.registerRegistries(modEventBus);
+        ArsNouveauRegistry.init();
         GlyphRegistry.registerGlyphs();
         ATPackets.register();
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);

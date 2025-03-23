@@ -7,7 +7,9 @@
     "SchematicannonMixin",
     "RuneBlockMixin",
     "RuneTileMixin",
-    "RelayBlockMixin"
+    "RelayBlockMixin",
+    "AnimatedMagicArmorMixin",
+    "BacktankUtilMixin"
   ],
   "minVersion": "0.8",
   "client": [
