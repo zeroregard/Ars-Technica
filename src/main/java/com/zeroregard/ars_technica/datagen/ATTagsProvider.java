@@ -32,7 +32,6 @@ public class ATTagsProvider {
       return ItemTags.create(ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, key));
     }
 
-    public static final TagKey<Item> MAGIC_ARMOR = ItemTags.create(ArsNouveau.prefix("magic_armor"));
     public static final TagKey<Item> MAGIC_HOOD = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "hood"));
     public static final TagKey<Item> MAGIC_ROBE = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "robe"));
     public static final TagKey<Item> MAGIC_LEG = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "legs"));
@@ -49,7 +48,6 @@ public class ATTagsProvider {
       tag(MAGIC_ROBE).add(ItemRegistry.TECHNOMANCER_CHESTPLATE.get());
       tag(MAGIC_LEG).add(ItemRegistry.TECHNOMANCER_LEGGINGS.get());
       tag(MAGIC_BOOT).add(ItemRegistry.TECHNOMANCER_BOOTS.get());
-      tag(MAGIC_ARMOR).add(ItemRegistry.TECHNOMANCER_HELMET.get(),ItemRegistry.TECHNOMANCER_CHESTPLATE.get(),ItemRegistry.TECHNOMANCER_LEGGINGS.get(), ItemRegistry.TECHNOMANCER_BOOTS.get());
     }
 
     @Override
