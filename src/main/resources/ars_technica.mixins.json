@@ -9,7 +9,10 @@
     "RuneTileMixin",
     "RelayBlockMixin",
     "AnimatedMagicArmorMixin",
-    "BacktankUtilMixin"
+    "BacktankUtilMixin",
+    "TurretMixin",
+    "ContainmentJarMixin",
+    "PedestalMixin"
   ],
   "minVersion": "0.8",
   "client": [
