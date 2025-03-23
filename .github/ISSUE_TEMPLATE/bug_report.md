@@ -9,6 +9,7 @@ assignees: ''
 
 ####  Description
 A clear and concise description of what the bug is.
+Note: If the bug is about incompatability with Create 6.0.0, please read the description on CurseForge first.
 
 **To Reproduce**
 Steps to reproduce the behavior:
