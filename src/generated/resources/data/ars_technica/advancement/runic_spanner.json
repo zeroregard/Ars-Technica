@@ -1,0 +1,32 @@
+{
+  "parent": "ars_technica:calibrated_precision_mechanism",
+  "criteria": {
+    "has_runic_spanner": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_technica:runic_spanner"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_technica.adv.desc.runic_spanner"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_technica:runic_spanner"
+    },
+    "title": {
+      "translate": "ars_technica.adv.title.runic_spanner"
+    }
+  },
+  "requirements": [
+    [
+      "has_runic_spanner"
+    ]
+  ]
+}

@@ -1,10 +1,13 @@
 package com.zeroregard.ars_technica.datagen;
 
 import com.hollingsworth.arsnouveau.ArsNouveau;
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry;
 import com.zeroregard.ars_technica.ArsTechnica;
+import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -21,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ATTagsProvider {
 
-  public static class ATItemTagsProvider extends ItemTagsProvider {
+  public static class ATItemTagsProvider extends IntrinsicHolderTagsProvider<Item> {
     private static final Logger LOGGER = ArsTechnica.LOGGER;
     String[] curioSlots = {"curio", "back", "belt", "body", "bracelet", "charm", "feet", "head", "hands", "necklace", "ring", "spellbook"};
 
@@ -29,26 +32,24 @@ public class ATTagsProvider {
       return ItemTags.create(ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, key));
     }
 
+    public static final TagKey<Item> MAGIC_ARMOR = ItemTags.create(ArsNouveau.prefix("magic_armor"));
     public static final TagKey<Item> MAGIC_HOOD = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "hood"));
     public static final TagKey<Item> MAGIC_ROBE = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "robe"));
     public static final TagKey<Item> MAGIC_LEG = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "legs"));
     public static final TagKey<Item> MAGIC_BOOT = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "boot"));
 
 
-    public ATItemTagsProvider(DataGenerator gen, CompletableFuture<HolderLookup.Provider> provider, BlockTagsProvider blockTagsProvider, @Nullable ExistingFileHelper existingFileHelper) {
-      super(gen.getPackOutput(), provider, blockTagsProvider.contentsGetter(), ArsTechnica.MODID, existingFileHelper);
+    public ATItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> future, ExistingFileHelper helper) {
+      super(output, Registries.ITEM, future, item -> item.builtInRegistryHolder().key(), ArsTechnica.MODID, helper);
     }
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-      tag(MAGIC_HOOD).add(ItemsRegistry.BATTLEMAGE_HOOD.get(), ItemsRegistry.ARCANIST_HOOD.get(),
-              ItemsRegistry.SORCERER_HOOD.get());
-      tag(MAGIC_ROBE).add(ItemsRegistry.BATTLEMAGE_ROBES.get(), ItemsRegistry.ARCANIST_ROBES.get(),
-              ItemsRegistry.SORCERER_ROBES.get());
-      tag(MAGIC_LEG).add(ItemsRegistry.BATTLEMAGE_LEGGINGS.get(), ItemsRegistry.ARCANIST_LEGGINGS.get(),
-              ItemsRegistry.SORCERER_LEGGINGS.get());
-      tag(MAGIC_BOOT).add(ItemsRegistry.BATTLEMAGE_BOOTS.get(), ItemsRegistry.ARCANIST_BOOTS.get(),
-              ItemsRegistry.SORCERER_BOOTS.get());
+      tag(MAGIC_HOOD).add(ItemRegistry.TECHNOMANCER_HELMET.get());
+      tag(MAGIC_ROBE).add(ItemRegistry.TECHNOMANCER_CHESTPLATE.get());
+      tag(MAGIC_LEG).add(ItemRegistry.TECHNOMANCER_LEGGINGS.get());
+      tag(MAGIC_BOOT).add(ItemRegistry.TECHNOMANCER_BOOTS.get());
+      tag(MAGIC_ARMOR).add(ItemRegistry.TECHNOMANCER_HELMET.get(),ItemRegistry.TECHNOMANCER_CHESTPLATE.get(),ItemRegistry.TECHNOMANCER_LEGGINGS.get(), ItemRegistry.TECHNOMANCER_BOOTS.get());
     }
 
     @Override

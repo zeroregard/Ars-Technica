@@ -6,6 +6,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
@@ -25,6 +26,8 @@ public class Setup {
         output = gen.getPackOutput();
 
         gen.addProvider(event.includeServer(), new ArsProviders.EnchantingAppProvider(gen));
+        gen.addProvider(event.includeServer(), new ATTagsProvider.ATItemTagsProvider(output, provider, existingFileHelper));
+        gen.addProvider(event.includeServer(), new ATAdvancementsProvider(output, provider, existingFileHelper));
         // gen.addProvider(event.includeServer(), new ArsProviders.ImbuementProvider(gen));
 
 

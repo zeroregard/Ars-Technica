@@ -1,0 +1,32 @@
+{
+  "parent": "ars_technica:calibrated_precision_mechanism",
+  "criteria": {
+    "has_transmutation_focus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_technica:transmutation_focus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_technica.adv.desc.transmutation_focus"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_technica:transmutation_focus"
+    },
+    "title": {
+      "translate": "ars_technica.adv.title.transmutation_focus"
+    }
+  },
+  "requirements": [
+    [
+      "has_transmutation_focus"
+    ]
+  ]
+}

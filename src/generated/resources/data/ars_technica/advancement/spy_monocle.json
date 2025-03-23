@@ -1,0 +1,32 @@
+{
+  "parent": "ars_technica:calibrated_precision_mechanism",
+  "criteria": {
+    "has_spy_monocle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_technica:spy_monocle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_technica.adv.desc.spy_monocle"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_technica:spy_monocle"
+    },
+    "title": {
+      "translate": "ars_technica.adv.title.spy_monocle"
+    }
+  },
+  "requirements": [
+    [
+      "has_spy_monocle"
+    ]
+  ]
+}

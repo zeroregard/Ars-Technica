@@ -92,5 +92,18 @@
 	"item.ars_technica.thread_pressure": "Pressure",
 
 	"item.ars_technica.spy_monocle": "Spy Monocle",
-	"item.ars_technica.spy_monocle.tooltip": "Press %s to zoom in"
+	"item.ars_technica.spy_monocle.tooltip": "Press %s to zoom in",
+
+	"ars_technica.adv.title.calibrated_precision_mechanism": "Beyond Atomic Clocks",
+	"ars_technica.adv.desc.calibrated_precision_mechanism": "Acquire a Calibrated Precision Mechanism",
+	"ars_technica.adv.title.runic_spanner": "Abracadabratchet",
+	"ars_technica.adv.desc.runic_spanner": "Acquire a Runic Spanner",
+	"ars_technica.adv.title.source_motor": "Turning the Spell",
+	"ars_technica.adv.desc.source_motor": "Acquire a Source Motor",
+	"ars_technica.adv.title.spy_monocle": "Inspector Gadget",
+	"ars_technica.adv.desc.spy_monocle": "Acquire a Spy Monocle",
+	"ars_technica.adv.title.transmutation_focus": "Matter Over Mind",
+	"ars_technica.adv.desc.transmutation_focus": "Acquire a Focus of Transmutation",
+	"ars_technica.adv.title.hammered_witch": "Might & Magic",
+	"ars_technica.adv.desc.hammered_witch": "Kill a Witch with Obliterate"
 }

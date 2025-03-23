@@ -1,0 +1,32 @@
+{
+  "parent": "ars_nouveau:enchanting_apparatus",
+  "criteria": {
+    "has_calibrated_precision_mechanism": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_technica:calibrated_precision_mechanism"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_technica.adv.desc.calibrated_precision_mechanism"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_technica:calibrated_precision_mechanism"
+    },
+    "title": {
+      "translate": "ars_technica.adv.title.calibrated_precision_mechanism"
+    }
+  },
+  "requirements": [
+    [
+      "has_calibrated_precision_mechanism"
+    ]
+  ]
+}
