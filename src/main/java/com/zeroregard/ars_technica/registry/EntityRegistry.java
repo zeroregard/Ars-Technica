@@ -4,10 +4,7 @@ package com.zeroregard.ars_technica.registry;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.block.PreciseRelayTile;
 import com.zeroregard.ars_technica.block.SourceMotorBlockEntity;
-import com.zeroregard.ars_technica.entity.ArcaneHammerEntity;
-import com.zeroregard.ars_technica.entity.ArcanePolishEntity;
-import com.zeroregard.ars_technica.entity.ArcanePressEntity;
-import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
+import com.zeroregard.ars_technica.entity.*;
 import com.zeroregard.ars_technica.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
@@ -51,6 +48,11 @@ public class EntityRegistry {
     public static final DeferredHolder<EntityType<?>, EntityType<ArcaneWhirlEntity>> ARCANE_WHIRL_ENTITY = registerEntity(
             "arcane_whirl_entity",
             EntityType.Builder.<ArcaneWhirlEntity>of(ArcaneWhirlEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ItemProjectileEntity>> ITEM_PROJECTILE_ENTITY = registerEntity(
+            "item_projectile_entity",
+            EntityType.Builder.<ItemProjectileEntity>of(ItemProjectileEntity::new, MobCategory.MISC)
                     .sized(1.0F, 1.0F));
 
 

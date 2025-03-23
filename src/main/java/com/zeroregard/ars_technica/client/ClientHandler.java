@@ -69,6 +69,7 @@ public class ClientHandler {
         event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_FUSION_ENTITY.get(), ArcaneFusionEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_WHIRL_ENTITY.get(), ArcaneWhirlEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.ITEM_PROJECTILE_ENTITY.get(), ItemProjectileRenderer::new);
         event.registerBlockEntityRenderer(EntityRegistry.SOURCE_MOTOR_BLOCK_ENTITY.get(), SourceMotorRenderer::new);
         event.registerBlockEntityRenderer(EntityRegistry.PRECISE_RELAY_TILE.get(), PreciseRelayRenderer::new);
     }

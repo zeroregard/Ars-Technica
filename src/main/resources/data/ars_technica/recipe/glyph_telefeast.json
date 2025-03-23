@@ -1,0 +1,25 @@
+{
+  "type": "ars_nouveau:glyph",
+  "exp": 55,
+  "inputs": [
+    {
+        "item": "ars_nouveau:manipulation_essence"
+    },
+    {
+        "item": "minecraft:golden_apple"
+    },
+    {
+        "item": "minecraft:bucket"
+    },
+    {
+        "item": "minecraft:glass_bottle"
+    },
+    {
+        "item": "minecraft:ender_pearl"
+    }
+  ],
+  "output": {
+    "id": "ars_technica:glyph_telefeast",
+    "count": 1
+  }
+}

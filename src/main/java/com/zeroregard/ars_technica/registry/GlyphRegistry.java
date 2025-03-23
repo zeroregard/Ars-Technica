@@ -19,6 +19,7 @@ public class GlyphRegistry {
         register(EffectFuse.INSTANCE);
         register(EffectWhirl.INSTANCE);
         register(EffectInsert.INSTANCE);
+        register(EffectTelefeast.INSTANCE);
     }
 
     public static void register(AbstractSpellPart spellPart){

@@ -19,6 +19,9 @@
 	"ars_technica.glyph_name.glyph_whirl": "Whirl",
 	"ars_technica.glyph_desc.glyph_insert": "Inserts nearby items into nearby containers in a medium radius where this spell is activated",
 	"ars_technica.glyph_name.glyph_insert": "Insert",
+	"ars_technica.glyph_desc.glyph_telefeast": "Consumes the first edible/potion, or some amount of liquid, found in the container/tank this was cast on.",
+	"ars_technica.glyph_name.glyph_telefeast": "Telefeast",
+
 	"ars_nouveau.augment_desc.glyph_obliterate_glyph_amplify": "Increases the size and damage of the hammer",
 	"ars_nouveau.augment_desc.glyph_obliterate_glyph_sensitive": "Processes items instead of destroying them",
 	"ars_nouveau.augment_desc.glyph_carve_glyph_amplify": "Changes recipe to walls",
@@ -35,6 +38,8 @@
 	"ars_nouveau.augment_desc.glyph_fuse_glyph_superheat": "Switches to super-heated mixing",
 	"ars_nouveau.augment_desc.glyph_insert_glyph_aoe": "Expands the range",
 	"ars_nouveau.augment_desc.glyph_insert_glyph_split": "Evenly distributes items across all valid containers for balanced deposit",
+	"ars_nouveau.augment_desc.glyph_telefeast_glyph_pierce": "Instead of consuming, carries the item in a bubble, which will 'use' the item on contact with a living entity",
+	"ars_nouveau.augment_desc.glyph_telefeast_glyph_sensitive": "Will try to 'use' an item even if it's not a drink/food (e.g. experience gems)",
 	"item.ars_technica.technomancer_boots": "Technomancer\u0027s Boots",
 	"item.ars_technica.technomancer_chestplate": "Technomancer\u0027s Robes",
 	"item.ars_technica.technomancer_helmet": "Technomancer\u0027s Hat",
