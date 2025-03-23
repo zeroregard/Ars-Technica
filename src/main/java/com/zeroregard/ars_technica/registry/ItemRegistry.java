@@ -5,6 +5,7 @@ import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.zeroregard.ars_technica.armor.IGoggleHelmet;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
 import com.zeroregard.ars_technica.item.RunicSpanner;
+import com.zeroregard.ars_technica.item.SpyMonocle;
 import com.zeroregard.ars_technica.item.TransmutationFocus;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
@@ -32,6 +33,7 @@ public class ItemRegistry {
                     new Item.Properties().stacksTo(1)
             ).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus"))
     );
+    public static final DeferredItem<Item> SPY_MONOCLE = ITEMS.register("spy_monocle", () -> new SpyMonocle(new Item.Properties().stacksTo(1)));
 
     public static int GREATER_EXPERIENCE_VALUE = 12;
     public static DeferredItem<ExperienceGem> GIANT_EXPERIENCE_GEM = ITEMS.register("giant_experience_gem", () -> {

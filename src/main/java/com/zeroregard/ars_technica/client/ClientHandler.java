@@ -8,6 +8,7 @@ import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.block.PreciseRelayRenderer;
 import com.zeroregard.ars_technica.block.SourceMotorRenderer;
 import com.zeroregard.ars_technica.client.entity.*;
+import com.zeroregard.ars_technica.client.item.SpyMonocleCurioRenderer;
 import com.zeroregard.ars_technica.client.sound.EntityLoopingSound;
 import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
@@ -47,6 +48,12 @@ public class ClientHandler {
         event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
                 ItemRegistry.TECHNOMANCER_LEGGINGS.get());
     }
+
+    @SubscribeEvent
+    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER, () -> SpyMonocleCurioRenderer.createBodyLayer());
+    }
+
 
     public static int colorFromArmor(ItemStack stack) {
         ArmorPerkHolder holder = PerkUtil.getPerkHolder(stack);

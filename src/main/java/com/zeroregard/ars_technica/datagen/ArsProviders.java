@@ -55,6 +55,7 @@ public class ArsProviders {
             addTechnomancerArmorRecipes();
             addEquipmentRecipes();
             addCurioRecipes();
+            addThreadRecipes();
 
             Path output = this.generator.getPackOutput().getOutputFolder();
             for (ApparatusRecipeBuilder.RecipeWrapper<? extends EnchantingApparatusRecipe> g : recipes) {
@@ -97,6 +98,12 @@ public class ArsProviders {
                     .withPedestalItem(Items.RABBIT_FOOT)
                     .withPedestalItem(ItemRegistry.CALIBRATED_PRECISION_MECHANISM)
                     .withPedestalItem(Ingredient.of(Items.EMERALD))
+                    .build());
+
+            recipes.add(builder()
+                    .withResult(ItemRegistry.SPY_MONOCLE)
+                    .withReagent(Items.SPYGLASS)
+                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
                     .build());
         }
 
