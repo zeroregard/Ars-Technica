@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/events/SpyMonocleEvents.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/item/SpyMonocleCurioRenderer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/item/SpyMonocleModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/item/SpyMonocle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/item/spy_monocle.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/spy_monocle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/data/curios/tags/item/head.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/DataComponentRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/DataComponentRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +95,7 @@
   "keyToString": {
     "Gradle.Ars-Technica [build].executor": "Run",
     "Gradle.Ars-Technica [createMcpToSrg].executor": "Run",
-    "Gradle.Ars-Technica [runClient].executor": "Debug",
+    "Gradle.Ars-Technica [runClient].executor": "Run",
     "Gradle.Ars-Technica [runData].executor": "Run",
     "Gradle.Ars-Technica [runServer].executor": "Run",
     "Gradle.Ars-Technica.executor": "Run",
@@ -118,17 +108,17 @@
     "git-widget-placeholder": "1.21.X",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/textures/item",
+    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/main/resources/assets/ars_technica/textures/entity",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\entity" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\textures\item" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\assets\ars_technica\models\item" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\resources\data\curios\tags\item" />
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\java\com\zeroregard\ars_technica\item" />
-      <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\java\com\zeroregard\ars_technica\mixin" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\main\java\com\zeroregard\ars_technica\client\item" />
@@ -358,11 +348,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/glyphs/EffectInsert.java</url>
           <line>88</line>
           <option name="timeStamp" value="60" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/item/SpyMonocleCurioRenderer.java</url>
-          <line>47</line>
-          <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/item/SpyMonocleCurioRenderer.java</url>
