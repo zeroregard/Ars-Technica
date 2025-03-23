@@ -26,20 +26,18 @@ public class StorageHelpers {
         if (handler == null)
             return ItemScroll.SortPref.INVALID;
 
+        boolean foundFrame = false;
         for (ItemFrame itemFrame : level.getEntitiesOfClass(ItemFrame.class, new AABB(tile.getBlockPos()).inflate(1))) {
-
             BlockPos framePos = itemFrame.blockPosition();
             Direction facing = itemFrame.getDirection();
-
             BlockPos attachedBlockPos = framePos.relative(facing.getOpposite());
             BlockEntity adjTile = level.getBlockEntity(attachedBlockPos);
 
             if (adjTile != null && adjTile.equals(tile)) {
+                foundFrame = true;
                 ItemStack stackInFrame = itemFrame.getItem();
-
                 if (stackInFrame.isEmpty())
                     continue;
-
                 if (stackInFrame.getItem() instanceof ItemScroll scrollItem) {
                     pref = scrollItem.getSortPref(stack, stackInFrame, handler);
                 } else if (stackInFrame.getItem().equals(stack.getItem())) {
@@ -49,9 +47,12 @@ public class StorageHelpers {
                 }
             }
         }
-
+        if (foundFrame) {
+            return pref;
+        }
         return !ItemStack.matches(ItemHandlerHelper.insertItemStacked(handler, stack.copy(), true), stack) ? pref : ItemScroll.SortPref.INVALID;
     }
+
 
     public static BlockPos getValidStorePos(Level level, List<BlockPos> containerPosTargets, ItemStack stack) {
         if (containerPosTargets.isEmpty() || stack.isEmpty())

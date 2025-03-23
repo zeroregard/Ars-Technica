@@ -39,7 +39,9 @@ public class EffectInsert extends AbstractItemResolveEffect {
         double expansion = 2 + spellStats.getAoeMultiplier();
         List<BlockEntity> containers = getContainersInArea(pos, world, (int) expansion);
         boolean split = !spellStats.getAugments().stream().filter(x -> x == AugmentSplit.INSTANCE).findFirst().isEmpty();
-        processItemEntities(world, entityList, containers, split);
+        if (containers.size() > 0) {
+            processItemEntities(world, entityList, containers, split);
+        }
     }
 
     public void processItemEntities(Level world, List<ItemEntity> entityList, List<BlockEntity> containers, boolean split) {
