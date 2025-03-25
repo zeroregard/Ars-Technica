@@ -11,7 +11,6 @@ import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
-import com.zeroregard.ars_technica.ArsElementalModItems;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.item.PressurePerk;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
@@ -135,7 +134,7 @@ public class ArsProviders {
             recipes.add(Abuilder()
                             .withResult(ItemRegistry.TECHNOMANCER_HELMET.get())
                             .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_HOOD))
-                            .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get())
+                            //
                             .withPedestalItem(Items.NETHERITE_INGOT)
                             .withPedestalItem(BRASS_INGOT)
                             .withPedestalItem(GOGGLES)
@@ -146,7 +145,7 @@ public class ArsProviders {
                     Abuilder()
                             .withResult(ItemRegistry.TECHNOMANCER_CHESTPLATE.get())
                             .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_ROBE))
-                            .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get())
+                            //
                             .withPedestalItem(Items.NETHERITE_INGOT)
                             .withPedestalItem(2, BRASS_INGOT)
                             .withSourceCost(7000)
@@ -156,7 +155,7 @@ public class ArsProviders {
                     Abuilder()
                             .withResult((ItemRegistry.TECHNOMANCER_LEGGINGS.get()))
                             .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_LEG))
-                            .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get())
+                            //
                             .withPedestalItem(Items.NETHERITE_INGOT)
                             .withPedestalItem(2, BRASS_INGOT)
                             .withSourceCost(7000)
@@ -166,7 +165,7 @@ public class ArsProviders {
                     Abuilder()
                             .withResult(ItemRegistry.TECHNOMANCER_BOOTS.get())
                             .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_BOOT))
-                            .withPedestalItem(ArsElementalModItems.MARK_OF_MASTERY.get())
+                           //
                             .withPedestalItem(Items.NETHERITE_INGOT)
                             .withPedestalItem(2, BRASS_INGOT)
                             .withSourceCost(7000)

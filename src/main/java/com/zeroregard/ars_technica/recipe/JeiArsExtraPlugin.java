@@ -1,6 +1,5 @@
 package com.zeroregard.ars_technica.recipe;
 
-import alexthw.ars_elemental.ArsElemental;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
 import com.zeroregard.ars_technica.ArsTechnica;
 import mezz.jei.api.IModPlugin;
@@ -26,7 +25,7 @@ public class JeiArsExtraPlugin implements IModPlugin {
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ArsElemental.MODID, "main");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnica.MODID, "main");
     }
 
     @Override

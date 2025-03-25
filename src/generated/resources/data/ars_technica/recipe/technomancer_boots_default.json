@@ -1,14 +1,8 @@
 {
-  "neoforge:conditions": [
-    {
-      "type": "neoforge:mod_loaded",
-      "modid": "ars_elemental"
-    }
-  ],
   "type": "ars_technica:armor_upgrade",
   "pedestalItems": [
     {
-      "item": "ars_elemental:mark_of_mastery"
+      "item": "ars_technica:mark_of_technomancy"
     },
     {
       "item": "minecraft:netherite_ingot"
@@ -17,15 +11,15 @@
       "item": "create:brass_ingot"
     },
     {
-      "item": "create:goggles"
+      "item": "create:brass_ingot"
     }
   ],
   "reagent": {
-    "tag": "ars_nouveau:hood"
+    "tag": "ars_nouveau:boot"
   },
   "result": {
     "count": 1,
-    "id": "ars_technica:technomancer_helmet"
+    "id": "ars_technica:technomancer_boots"
   },
   "sourceCost": 7000
 }

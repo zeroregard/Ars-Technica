@@ -1,6 +1,7 @@
 {
 	"itemGroup.ars_technica": "Ars Technica",
 	"item.ars_technica.calibrated_precision_mechanism": "Calibrated Precision Mechanism",
+	"item.ars_technica.mark_of_technomancy": "Mark of Technomancy",
 	"ars_technica.glyph_desc.glyph_carve": "Shapes identical items, crafting them into stairs",
 	"ars_technica.glyph_name.glyph_carve": "Carve",
 	"ars_technica.glyph_desc.glyph_pack": "Condenses identical items, crafting them into 2x2 recipes",

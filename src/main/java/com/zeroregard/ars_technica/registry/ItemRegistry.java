@@ -63,6 +63,8 @@ public class ItemRegistry {
 
     public static DeferredItem<Item> POCKET_FACTORY = ITEMS.register("pocket_factory", () -> new Item(new Item.Properties().jukeboxPlayable(POCKET_FACTORY_KEY).stacksTo(1)));
 
+    public static final DeferredItem<Item> MARK_OF_TECHNOMANCY = ITEMS.registerSimpleItem("mark_of_technomancy", new Item.Properties().stacksTo(64));
+
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
