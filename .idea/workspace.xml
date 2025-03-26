@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/mark_of_technomancy.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_boots_default.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_chestplate_default.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_helmet_default.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_leggings_default.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/item/mark_of_technomancy.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/item/mark_of_technomancy.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_boots.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_boots.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_chestplate.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_chestplate.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_helmet.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_helmet.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_leggings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_leggings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsElementalModItems.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/datagen/ArsProviders.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/recipe/JeiArsExtraPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/recipe/JeiArsExtraPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/lang/en_us.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,27 +89,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Ars-Technica [build].executor": "Run",
-    "Gradle.Ars-Technica [createMcpToSrg].executor": "Run",
-    "Gradle.Ars-Technica [runClient].executor": "Run",
-    "Gradle.Ars-Technica [runData].executor": "Run",
-    "Gradle.Ars-Technica [runServer].executor": "Run",
-    "Gradle.Ars-Technica.executor": "Run",
-    "Gradle.Build Ars-Technica.executor": "Run",
-    "Gradle.C:/Users/mathi/Documents/Projects/Mods/Ars-Technica [createMcpToSrg].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "1.21.X",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/generated/resources/data/ars_technica/recipe",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Ars-Technica [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Ars-Technica [createMcpToSrg].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Ars-Technica [runClient].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Ars-Technica [runData].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Ars-Technica [runServer].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Ars-Technica.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build Ars-Technica.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.C:/Users/mathi/Documents/Projects/Mods/Ars-Technica [createMcpToSrg].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;1.21.X&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mathi/Documents/Projects/Mods/Ars-Technica/src/generated/resources/data/ars_technica/recipe&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\mathi\Documents\Projects\Mods\Ars-Technica\src\generated\resources\data\ars_technica\recipe" />
