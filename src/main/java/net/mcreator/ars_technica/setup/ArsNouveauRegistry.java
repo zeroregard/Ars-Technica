@@ -1,16 +1,14 @@
 package net.mcreator.ars_technica.setup;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hollingsworth.arsnouveau.api.ArsNouveauAPI;
+import com.hollingsworth.arsnouveau.api.perk.ArmorPerkHolder;
+import com.hollingsworth.arsnouveau.api.perk.PerkSlot;
 import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
-
 import net.mcreator.ars_technica.common.items.threads.PressurePerk;
 import net.minecraft.world.level.ItemLike;
 
-import com.hollingsworth.arsnouveau.api.perk.ArmorPerkHolder;
-import com.hollingsworth.arsnouveau.api.perk.PerkSlot;
+import java.util.Arrays;
+import java.util.List;
 
 public class ArsNouveauRegistry {
 

@@ -1,11 +1,7 @@
 package net.mcreator.ars_technica.common.items.equipment;
 
-import com.hollingsworth.arsnouveau.api.perk.IPerkProvider;
-import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import com.hollingsworth.arsnouveau.client.registry.ModKeyBindings;
-import net.mcreator.ars_technica.client.TooltipUtils;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -19,7 +15,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.List;

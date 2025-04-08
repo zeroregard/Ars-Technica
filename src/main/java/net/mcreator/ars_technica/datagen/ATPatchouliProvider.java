@@ -10,14 +10,12 @@ import com.hollingsworth.arsnouveau.common.datagen.PatchouliProvider;
 import com.hollingsworth.arsnouveau.common.datagen.patchouli.*;
 import com.hollingsworth.arsnouveau.common.items.PerkItem;
 import net.mcreator.ars_technica.common.items.threads.PressurePerk;
-import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-
 
 import static net.mcreator.ars_technica.setup.GlyphsRegistry.registeredSpells;
 

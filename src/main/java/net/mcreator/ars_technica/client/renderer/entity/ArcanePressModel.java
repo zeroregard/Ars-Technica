@@ -17,17 +17,17 @@ public class ArcanePressModel extends GeoModel<ArcanePressEntity> {
 
     @Override
     public ResourceLocation getModelResource(ArcanePressEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "geo/arcane_press.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "geo/arcane_press.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ArcanePressEntity entity) {
         String path = "textures/entity/arcane_press.png";
-        return new ResourceLocation(ArsTechnicaMod.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, path);
     }
 
     @Override
     public ResourceLocation getAnimationResource(ArcanePressEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "animations/animations_arcane_press.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "animations/animations_arcane_press.json");
     }
 }

@@ -8,7 +8,6 @@ import net.mcreator.ars_technica.common.entity.Colorable;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.ArcaneFusionFluids;
 import net.mcreator.ars_technica.common.entity.fusion.fluids.FluidSourceProvider;
 import net.mcreator.ars_technica.common.helpers.FluidHelper;
-import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.common.helpers.recipe.MixingRecipeHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.setup.EntityRegistry;
@@ -25,7 +24,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -42,7 +40,9 @@ import software.bernie.geckolib.core.object.Color;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static java.util.Comparator.*;
+import static java.util.Comparator.comparingDouble;
 
 public class FluidHelper {
     public static int BLOCK_MAX_FLUID_LEVEL = 8;

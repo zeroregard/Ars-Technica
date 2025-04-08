@@ -32,11 +32,11 @@ public class ATAdvancementsProvider extends ForgeAdvancementProvider {
         static Consumer<Advancement> advancementConsumer;
 
         static Advancement ars_parent(String name) {
-            return new Advancement(new ResourceLocation(ArsNouveau.MODID, name), null, null, AdvancementRewards.EMPTY, ImmutableMap.of(), null, false);
+            return new Advancement(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, name), null, null, AdvancementRewards.EMPTY, ImmutableMap.of(), null, false);
         }
 
         static Advancement technica_parent(String name) {
-            return new Advancement(new ResourceLocation(ArsTechnicaMod.MODID, name), null, null, AdvancementRewards.EMPTY, ImmutableMap.of(), null, false);
+            return new Advancement(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, name), null, null, AdvancementRewards.EMPTY, ImmutableMap.of(), null, false);
         }
 
         @Override

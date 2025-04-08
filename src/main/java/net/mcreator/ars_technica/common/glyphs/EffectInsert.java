@@ -2,9 +2,6 @@ package net.mcreator.ars_technica.common.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
-
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSplit;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.StorageHelpers;
@@ -19,16 +16,18 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class EffectInsert extends AbstractItemResolveEffect {
     public static final EffectInsert INSTANCE = new EffectInsert();
 
     private EffectInsert() {
-        super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_insert"), "Insert");
+        super(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "glyph_insert"), "Insert");
     }
 
     @Override

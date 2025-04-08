@@ -9,7 +9,6 @@ import com.hollingsworth.arsnouveau.api.perk.ArmorPerkHolder;
 import com.hollingsworth.arsnouveau.api.perk.IPerkHolder;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.block.tile.EnchantingApparatusTile;
-
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.setup.RecipeRegistry;
 import net.minecraft.network.FriendlyByteBuf;

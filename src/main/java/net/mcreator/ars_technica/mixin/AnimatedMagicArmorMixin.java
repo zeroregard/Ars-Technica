@@ -2,7 +2,6 @@ package net.mcreator.ars_technica.mixin;
 
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.armor.AnimatedMagicArmor;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.items.threads.PressurePerk;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;

@@ -2,11 +2,9 @@ package net.mcreator.ars_technica.common.entity;
 
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;

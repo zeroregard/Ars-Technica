@@ -1,58 +1,51 @@
 package net.mcreator.ars_technica.armor;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+import com.hollingsworth.arsnouveau.ArsNouveau;
 import com.hollingsworth.arsnouveau.api.item.ISpellModifierItem;
+import com.hollingsworth.arsnouveau.api.perk.*;
+import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.api.spell.Spell;
 import com.hollingsworth.arsnouveau.api.spell.SpellSchools;
-import net.minecraft.Util;
-import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
-
-import com.hollingsworth.arsnouveau.ArsNouveau;
-import com.hollingsworth.arsnouveau.api.perk.ArmorPerkHolder;
-import com.hollingsworth.arsnouveau.api.perk.IPerkHolder;
-import com.hollingsworth.arsnouveau.api.perk.IPerkProvider;
-import com.hollingsworth.arsnouveau.api.registry.PerkRegistry;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.armor.AnimatedMagicArmor;
-
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.TooltipUtils;
 import net.mcreator.ars_technica.client.renderer.item.TechnomancerArmorRenderer;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
-import net.minecraft.world.level.Level;
-
-import java.util.EnumMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import com.hollingsworth.arsnouveau.api.perk.*;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static net.mcreator.ars_technica.ConfigHandler.Common.ARMOR_MANA_REGEN;
 import static net.mcreator.ars_technica.ConfigHandler.Common.ARMOR_MAX_MANA;
@@ -82,7 +75,7 @@ public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModif
   public @Nullable String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
     String color = getColor(stack);
     String location = "textures/armor/technomancer_medium_armor_" + color + ".png";
-    return new ResourceLocation(ArsTechnicaMod.MODID, location).toString();
+    return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, location).toString();
   }
 
   @Override

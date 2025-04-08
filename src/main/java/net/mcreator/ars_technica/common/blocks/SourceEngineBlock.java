@@ -4,7 +4,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.gui.ScreenOpener;
+import net.createmod.catnip.gui.ScreenOpener;
 import net.mcreator.ars_technica.client.gui.SourceEngineScreen;
 import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.mcreator.ars_technica.setup.ItemsRegistry;
@@ -33,10 +33,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<SourceEngineBlockEntity> {
 
     public SourceEngineBlock(BlockBehaviour.Properties properties) {
@@ -44,12 +47,12 @@ public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<So
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return AllShapes.MOTOR_BLOCK.get(state.getValue(FACING));
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return Collections.singletonList(new ItemStack(ItemsRegistry.SOURCE_ENGINE.get()));
     }
 
@@ -63,7 +66,7 @@ public class SourceEngineBlock extends DirectionalKineticBlock implements IBE<So
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
+    public @NotNull InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
                                  BlockHitResult hit) {
         if (player != null && AllItems.WRENCH.isIn(player.getItemInHand(handIn)))
             return InteractionResult.PASS;

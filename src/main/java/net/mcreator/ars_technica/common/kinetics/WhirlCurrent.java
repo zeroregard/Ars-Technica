@@ -4,14 +4,12 @@ import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
 import net.mcreator.ars_technica.common.helpers.PlayerHelpers;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
 import net.mcreator.ars_technica.network.ParticleEffectPacket;
 import net.mcreator.ars_technica.setup.NetworkHandler;
-
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -20,7 +18,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -76,7 +73,7 @@ public class WhirlCurrent {
 
             entity.hurtMarked = true;
 
-            if (processingType == AllFanProcessingTypes.NONE)
+            if (processingType == null)
                 continue;
 
             if (entity instanceof ItemEntity itemEntity) {
@@ -136,7 +133,7 @@ public class WhirlCurrent {
     }
 
     private void sendWhirlParticles(List<ServerPlayer> players, FanProcessingType processingType) {
-        if (processingType == AllFanProcessingTypes.NONE) {
+        if (processingType == null) {
             return;
         }
         ParticleColor color = ParticleColor.WHITE;

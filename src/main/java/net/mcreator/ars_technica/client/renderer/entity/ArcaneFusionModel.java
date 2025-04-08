@@ -22,7 +22,7 @@ public class ArcaneFusionModel extends GeoModel<ArcaneFusionEntity> {
 
     @Override
     public ResourceLocation getModelResource(ArcaneFusionEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "geo/arcane_fusion.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "geo/arcane_fusion.geo.json");
     }
 
     @Override
@@ -31,12 +31,12 @@ public class ArcaneFusionModel extends GeoModel<ArcaneFusionEntity> {
         if(type != null) {
             textureLocation = type.getTextureLocation();
         }
-        return new ResourceLocation(ArsTechnicaMod.MODID, textureLocation);
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, textureLocation);
     }
 
     @Override
     public ResourceLocation getAnimationResource(ArcaneFusionEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "animations/animations_arcane_fusion.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "animations/animations_arcane_fusion.json");
     }
 
 

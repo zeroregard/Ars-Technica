@@ -1,6 +1,5 @@
 package net.mcreator.ars_technica.common.entity.fusion;
 
-import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -113,7 +112,7 @@ public class ArcaneFusionParticles {
         if (registryName.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        ResourceLocation resourceLocation = new ResourceLocation(registryName);
+        ResourceLocation resourceLocation = ResourceLocation.parse(registryName);
         Item item = ForgeRegistries.ITEMS.getValue(resourceLocation);
         return item != null ? new ItemStack(item) : ItemStack.EMPTY;
     }

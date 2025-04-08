@@ -1,14 +1,14 @@
 package net.mcreator.ars_technica.common.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
-import com.simibubi.create.foundation.gui.element.ScreenElement;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.ScreenElement;
+import net.createmod.catnip.theme.Color;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
-import com.simibubi.create.foundation.utility.Color;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum AllGuiTextures implements ScreenElement {
     SOURCE_MOTOR_SCREEN("source_motor_screen",235, 99);
@@ -32,7 +32,7 @@ public enum AllGuiTextures implements ScreenElement {
     }
 
     private AllGuiTextures(String namespace, String location, int startX, int startY, int width, int height) {
-        this.location = new ResourceLocation(namespace, "textures/gui/" + location + ".png");
+        this.location = ResourceLocation.fromNamespaceAndPath(namespace, "textures/gui/" + location + ".png");
         this.width = width;
         this.height = height;
         this.startX = startX;

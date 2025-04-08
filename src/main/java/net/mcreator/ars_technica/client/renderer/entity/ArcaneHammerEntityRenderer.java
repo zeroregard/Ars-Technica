@@ -1,17 +1,10 @@
 package net.mcreator.ars_technica.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
-import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
-import software.bernie.geckolib.core.object.Color;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 public class ArcaneHammerEntityRenderer extends ArcaneEntityRendererBase<ArcaneHammerEntity> {
 

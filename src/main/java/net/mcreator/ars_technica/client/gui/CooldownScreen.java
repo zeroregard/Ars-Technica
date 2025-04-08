@@ -1,10 +1,10 @@
 package net.mcreator.ars_technica.client.gui;
 
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.mcreator.ars_technica.common.gui.AllGuiTextures;
 import net.mcreator.ars_technica.common.gui.RenderableScrollInput;
 import net.mcreator.ars_technica.common.helpers.CooldownHelper;
@@ -20,7 +20,7 @@ public abstract class CooldownScreen<T> extends AbstractSimiScreen {
     private final AllGuiTextures background = AllGuiTextures.SOURCE_MOTOR_SCREEN;
 
     public CooldownScreen(String titleKey, T blockEntity, int min, int max) {
-        super(Lang.translateDirect(titleKey));
+        super(CreateLang.translateDirect(titleKey));
         this.blockEntity = blockEntity;
         this.min = min;
         this.max = max;
@@ -37,10 +37,10 @@ public abstract class CooldownScreen<T> extends AbstractSimiScreen {
 
         slider = new RenderableScrollInput(x + 8, y + 39, 213, 9)
                 .withRange(min, max + 1)
-                .titled(Lang.translateDirect("gui.ars_technica.cooldown"))
+                .titled(CreateLang.translateDirect("gui.ars_technica.cooldown"))
                 .calling(state -> {
                     updateEntity(state);
-                    slider.titled(Lang.translateDirect("gui.ars_technica.cooldown", state));
+                    slider.titled(CreateLang.translateDirect("gui.ars_technica.cooldown", state));
                 })
                 .setState(getInitialEntityStateValue());
 

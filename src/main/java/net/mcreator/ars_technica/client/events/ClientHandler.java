@@ -3,37 +3,33 @@ package net.mcreator.ars_technica.client.events;
 import com.hollingsworth.arsnouveau.api.perk.ArmorPerkHolder;
 import com.hollingsworth.arsnouveau.api.perk.IPerkHolder;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
-
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.mcreator.ars_technica.ArsTechnicaMod;
-
 import net.mcreator.ars_technica.client.AllPartialModels;
 import net.mcreator.ars_technica.client.renderer.entity.*;
 import net.mcreator.ars_technica.client.renderer.tile.EncasedBasicTurretRenderer;
+import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
 import net.mcreator.ars_technica.common.blocks.PreciseRelayRenderer;
 import net.mcreator.ars_technica.common.blocks.SourceEngineRenderer;
-import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
-import net.mcreator.ars_technica.ponder.PonderIndex;
-import net.mcreator.ars_technica.setup.EntityRegistry;
-import net.minecraft.client.Minecraft;
-
-import net.mcreator.ars_technica.client.sound.EntityLoopingSound;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
+import net.mcreator.ars_technica.common.items.equipment.SpyMonocleCurioRenderer;
 import net.mcreator.ars_technica.init.ArsTechnicaModSounds;
+import net.mcreator.ars_technica.ponder.ArsTechnicaPlugin;
+import net.mcreator.ars_technica.setup.EntityRegistry;
+import net.mcreator.ars_technica.setup.ItemsRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
-
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.mcreator.ars_technica.setup.ItemsRegistry;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ArsTechnicaMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @OnlyIn(Dist.CLIENT)
@@ -59,7 +55,7 @@ public class ClientHandler {
     public static void init(final FMLClientSetupEvent event) {
 
         AllPartialModels.init();
-        PonderIndex.register();
+        PonderIndex.addPlugin(new ArsTechnicaPlugin());
     }
 
     @SubscribeEvent

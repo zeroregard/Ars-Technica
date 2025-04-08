@@ -2,10 +2,10 @@ package net.mcreator.ars_technica.datagen;
 
 import net.mcreator.ars_technica.common.blocks.SourceEngineBlock;
 import net.mcreator.ars_technica.setup.BlockRegistry;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;

@@ -23,7 +23,7 @@ public class RecipeRegistry {
 
   public static final RegistryObject<RecipeType<TechnomancerArmorRecipe>> TECHNOMANCER_ARMOR_UP = RECIPES.register(
       "technomancer_armor_up",
-      () -> RecipeType.simple(new ResourceLocation(ArsTechnicaMod.MODID, "technomancer_armor_up")));
+      () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "technomancer_armor_up")));
   public static final RegistryObject<RecipeSerializer<TechnomancerArmorRecipe>> TECHNOMANCER_ARMOR_UP_SERIALIZER = SERIALIZERS
       .register("armor_upgrade", TechnomancerArmorRecipe.Serializer::new);
 

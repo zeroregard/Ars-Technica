@@ -4,11 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
 import org.joml.Quaternionf;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 public class ArcanePressEntityRenderer extends ArcaneEntityRendererBase<ArcanePressEntity> {
     private static float accumulatedTime = 0.0f;

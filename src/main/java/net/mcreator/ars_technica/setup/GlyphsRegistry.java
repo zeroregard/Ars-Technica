@@ -2,7 +2,6 @@ package net.mcreator.ars_technica.setup;
 
 import com.hollingsworth.arsnouveau.api.registry.GlyphRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
-
 import net.mcreator.ars_technica.common.glyphs.*;
 
 import java.util.ArrayList;

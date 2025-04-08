@@ -44,7 +44,7 @@ public class EffectTelefeast extends AbstractEffect {
     public static final EffectTelefeast INSTANCE = new EffectTelefeast();
 
     private EffectTelefeast() {
-        super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_telefeast"), "Telefeast");
+        super(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "glyph_telefeast"), "Telefeast");
     }
 
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {

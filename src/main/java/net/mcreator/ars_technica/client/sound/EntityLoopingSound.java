@@ -1,6 +1,5 @@
 package net.mcreator.ars_technica.client.sound;
 
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.sounds.SoundEvent;

@@ -1,12 +1,10 @@
 package net.mcreator.ars_technica.client.renderer.entity;
 
-import com.hollingsworth.arsnouveau.client.registry.ShaderRegistry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.ItemProjectileEntity;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,7 +16,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Matrix4f;
 
 public class ItemProjectileRenderer extends EntityRenderer<ItemProjectileEntity> {
-    public static ResourceLocation TEXTURE = new ResourceLocation(ArsTechnicaMod.MODID,"textures/entity/magic_bubble.png");
+    public static ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID,"textures/entity/magic_bubble.png");
 
     public ItemProjectileRenderer(EntityRendererProvider.Context renderManagerIn) {
         super(renderManagerIn);
@@ -61,6 +59,6 @@ public class ItemProjectileRenderer extends EntityRenderer<ItemProjectileEntity>
 
     @Override
     public ResourceLocation getTextureLocation(ItemProjectileEntity entity) {
-        return new ResourceLocation("ars_nouveau","textures/entity/spell_proj.png");
+        return ResourceLocation.fromNamespaceAndPath("ars_nouveau","textures/entity/spell_proj.png");
     }
 }

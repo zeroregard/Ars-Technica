@@ -2,7 +2,6 @@ package net.mcreator.ars_technica.client.renderer.entity;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
-import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
@@ -18,18 +17,18 @@ public class ArcaneHammerModel extends GeoModel<ArcaneHammerEntity> {
 
     @Override
     public ResourceLocation getModelResource(ArcaneHammerEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "geo/arcane_hammer.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "geo/arcane_hammer.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ArcaneHammerEntity entity) {
         String path = "textures/entity/arcane_hammer.png";
-        return new ResourceLocation(ArsTechnicaMod.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, path);
     }
 
     @Override
     public ResourceLocation getAnimationResource(ArcaneHammerEntity entity) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "animations/animations_arcane_hammer.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "animations/animations_arcane_hammer.json");
     }
 
 

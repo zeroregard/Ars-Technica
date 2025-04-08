@@ -74,7 +74,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.spellResolver = null;
     }
 
-    public WhirlEntity(Level world, Vec3 position, float radius, int duration, FanProcessingType processor, SpellResolver spellResolver) {
+    public WhirlEntity(Level world, Vec3 position, float radius, int duration, @Nullable FanProcessingType processor, SpellResolver spellResolver) {
         super(EntityRegistry.WHIRL_ENTITY.get(), world);
         this.setPos(position.x, position.y, position.z);
         this.duration = duration;
@@ -111,7 +111,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.entityData.set(SPEED, speed);
     }
 
-    private void setProcessor(FanProcessingType processor) {
+    private void setProcessor(@Nullable FanProcessingType processor) {
         this.entityData.set(PROCESSOR_TYPE, getProcessorLegacyId(processor));
     }
 
@@ -119,7 +119,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         this.entityData.set(RADIUS, radius);
     }
 
-    private String getProcessorLegacyId(FanProcessingType processor) {
+    private String getProcessorLegacyId(@Nullable FanProcessingType processor) {
         if (processor == AllFanProcessingTypes.BLASTING) {
             return "BLASTING";
         }
@@ -152,7 +152,7 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(PROCESSOR_TYPE, AllFanProcessingTypes.NONE.toString());
+        this.entityData.define(PROCESSOR_TYPE, "");
         this.entityData.define(SPEED, 0.05f);
         this.entityData.define(RADIUS, 1.5f);
     }
@@ -166,7 +166,12 @@ public class WhirlEntity extends Entity implements IAirCurrentSource, GeoEntity 
         }
 
         if (PROCESSOR_TYPE.equals(key)) {
-            this.processor = AllFanProcessingTypes.parseLegacy(this.entityData.get(PROCESSOR_TYPE));
+            var val = this.entityData.get(PROCESSOR_TYPE);
+            if(val.isEmpty()) {
+                this.processor = null;
+            } else {
+                this.processor = AllFanProcessingTypes.parseLegacy(this.entityData.get(PROCESSOR_TYPE));
+            }
             initSound();
         }
 

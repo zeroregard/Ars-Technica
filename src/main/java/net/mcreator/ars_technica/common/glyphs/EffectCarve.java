@@ -1,12 +1,13 @@
 package net.mcreator.ars_technica.common.glyphs;
 
-import net.mcreator.ars_technica.ArsTechnicaMod;
-import net.mcreator.ars_technica.common.crafting.DynamicCraftingContainer;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
-
+import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.common.crafting.DynamicCraftingContainer;
+import net.mcreator.ars_technica.common.helpers.CraftingHelpers;
+import net.mcreator.ars_technica.common.helpers.ItemHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,12 +19,9 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.mcreator.ars_technica.common.helpers.CraftingHelpers;
-import net.mcreator.ars_technica.common.helpers.ItemHelpers;
 
-import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
-
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +32,7 @@ public class EffectCarve extends AbstractItemResolveEffect {
   public static final EffectCarve INSTANCE = new EffectCarve();
 
   private EffectCarve() {
-    super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_carve"), "Carve");
+    super(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "glyph_carve"), "Carve");
   }
 
   @Override

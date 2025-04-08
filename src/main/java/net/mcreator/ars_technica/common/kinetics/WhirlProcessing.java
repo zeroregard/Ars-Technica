@@ -1,11 +1,12 @@
 package net.mcreator.ars_technica.common.kinetics;
 
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
-import com.simibubi.create.content.kinetics.fan.processing.*;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
+import com.simibubi.create.api.registry.CreateBuiltInRegistries;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
 import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
 import net.minecraft.nbt.CompoundTag;
@@ -88,7 +89,7 @@ public class WhirlProcessing extends FanProcessing {
         CompoundTag processing = createData.getCompound("Processing");
 
         if (!processing.contains("Type") || AllFanProcessingTypes.parseLegacy(processing.getString("Type")) != type) {
-            processing.putString("Type", FanProcessingTypeRegistry.getIdOrThrow(type).toString());
+            processing.putString("Type", String.valueOf(CreateBuiltInRegistries.FAN_PROCESSING_TYPE.getId(type)));
             int timeModifierForStackSize = ((entity.getItem().getCount() - 1) / 16) + 1;
             int baseProcessingTime = (int) (AllConfigs.server().kinetics.fanProcessingTime.get() * timeModifierForStackSize) + 1;
 
