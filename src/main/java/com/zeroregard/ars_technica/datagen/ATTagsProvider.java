@@ -5,21 +5,16 @@ import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
-
 import java.util.concurrent.CompletableFuture;
 
 public class ATTagsProvider {
@@ -44,11 +39,31 @@ public class ATTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-      tag(MAGIC_HOOD).add(ItemRegistry.TECHNOMANCER_HELMET.get());
-      tag(MAGIC_ROBE).add(ItemRegistry.TECHNOMANCER_CHESTPLATE.get());
-      tag(MAGIC_LEG).add(ItemRegistry.TECHNOMANCER_LEGGINGS.get());
-      tag(MAGIC_BOOT).add(ItemRegistry.TECHNOMANCER_BOOTS.get());
+      var hat = ItemRegistry.TECHNOMANCER_HELMET.get();
+      var chest = ItemRegistry.TECHNOMANCER_CHESTPLATE.get();
+      var legs = ItemRegistry.TECHNOMANCER_LEGGINGS.get();
+      var boots = ItemRegistry.TECHNOMANCER_BOOTS.get();
+
+      tag(MAGIC_HOOD).add(hat);
+      tag(MAGIC_ROBE).add(chest);
+      tag(MAGIC_LEG).add(legs);
+      tag(MAGIC_BOOT).add(boots);
+
+      tag(ItemTags.ARMOR_ENCHANTABLE).add(hat, chest, legs, boots);
+      tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(hat, chest, legs, boots);
+      tag(ItemTags.DURABILITY_ENCHANTABLE).add(hat, chest, legs, boots);
+
+      tag(ItemTags.HEAD_ARMOR_ENCHANTABLE).add(hat);
+      tag(ItemTags.HEAD_ARMOR).add(hat);
+      tag(ItemTags.CHEST_ARMOR_ENCHANTABLE).add(chest);
+      tag(ItemTags.CHEST_ARMOR).add(chest);
+      tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(legs);
+      tag(ItemTags.LEG_ARMOR).add(legs);
+      tag(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(boots);
+      tag(ItemTags.FOOT_ARMOR).add(boots);
     }
+
+
 
     @Override
     public @NotNull String getName() {
