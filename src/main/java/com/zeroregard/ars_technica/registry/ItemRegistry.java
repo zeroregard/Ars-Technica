@@ -27,7 +27,7 @@ public class ItemRegistry {
     public static final DeferredItem<Item> TECHNOMANCER_LEGGINGS = ITEMS.register("technomancer_leggings", () -> new TechnomancerArmor(ArmorItem.Type.LEGGINGS, null));
     public static final DeferredItem<Item> TECHNOMANCER_BOOTS = ITEMS.register("technomancer_boots", () -> new TechnomancerArmor(ArmorItem.Type.BOOTS, null));
 
-    public static final DeferredItem<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(new Item.Properties().stacksTo(64)));
+    public static final DeferredItem<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(new Item.Properties().stacksTo(1)));
     public static DeferredItem<Item> TRANSMUTATION_FOCUS = ITEMS.register(
             "transmutation_focus", () -> new TransmutationFocus(
                     new Item.Properties().stacksTo(1)
