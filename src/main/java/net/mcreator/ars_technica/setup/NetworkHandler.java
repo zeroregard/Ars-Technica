@@ -14,7 +14,7 @@ public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(ArsTechnicaMod.MODID, "network"),
+            ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "network"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

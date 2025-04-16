@@ -3,8 +3,6 @@ package net.mcreator.ars_technica.common.entity;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
-import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
-import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.item.ItemHelper;
 import net.mcreator.ars_technica.ArsTechnicaMod;
@@ -17,6 +15,7 @@ import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.mcreator.ars_technica.setup.NetworkHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
@@ -39,7 +38,6 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.core.Direction;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -243,7 +241,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     }
 
     private void triggerAdvancement(ServerPlayer player) {
-        Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(ArsTechnicaMod.MODID, "hammered_witch"));
+        Advancement advancement = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "hammered_witch"));
         player.getAdvancements().award(advancement, "triggered_by_obliterate");
     }
 

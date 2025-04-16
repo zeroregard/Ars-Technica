@@ -8,7 +8,7 @@ import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 public class ConfigRecipeCondition implements ICondition {
-    private static final ResourceLocation NAME = new ResourceLocation(ArsTechnicaMod.MODID, "config_enabled");
+    private static final ResourceLocation NAME = ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "config_enabled");
     private final String configKey;
 
     public ConfigRecipeCondition(String configKey) {

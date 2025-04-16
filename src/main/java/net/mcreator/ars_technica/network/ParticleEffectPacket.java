@@ -1,7 +1,6 @@
 package net.mcreator.ars_technica.network;
 
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.client.events.ModParticles;
 import net.mcreator.ars_technica.client.particles.SpiralDustParticleTypeData;
 import net.minecraft.client.Minecraft;
@@ -12,7 +11,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector3f;

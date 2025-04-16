@@ -24,7 +24,7 @@ public class WhirlModel extends GeoModel<WhirlEntity> {
 
     @Override
     public ResourceLocation getModelResource(WhirlEntity whirl) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "geo/whirl.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "geo/whirl.geo.json");
     }
 
     @Override
@@ -40,11 +40,11 @@ public class WhirlModel extends GeoModel<WhirlEntity> {
             suffix = "_wash";
         }
         String path = "textures/entity/whirl" + suffix + ".png";
-        return new ResourceLocation(ArsTechnicaMod.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, path);
     }
 
     @Override
     public ResourceLocation getAnimationResource(WhirlEntity whirl) {
-        return new ResourceLocation(ArsTechnicaMod.MODID, "animations/animations_whirl.json");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "animations/animations_whirl.json");
     }
 }

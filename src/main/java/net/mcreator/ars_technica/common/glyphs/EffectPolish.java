@@ -25,7 +25,7 @@ public class EffectPolish extends AbstractItemResolveEffect {
     private static float DEFAULT_SPEED = 2.0f;
 
     private EffectPolish() {
-        super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_polish"), "Polish");
+        super(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "glyph_polish"), "Polish");
     }
 
     @Override

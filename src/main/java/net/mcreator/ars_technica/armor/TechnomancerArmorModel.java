@@ -1,7 +1,6 @@
 package net.mcreator.ars_technica.armor;
 
 import com.hollingsworth.arsnouveau.ArsNouveau;
-
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -14,12 +13,12 @@ public class TechnomancerArmorModel<T extends GeoAnimatable> extends GeoModel<T>
   public ResourceLocation animationLoc;
 
   public TechnomancerArmorModel(String name) {
-    this.modelLocation = new ResourceLocation(ArsTechnicaMod.MODID, "geo/" + name + ".geo.json");
-    this.textLoc = new ResourceLocation(ArsTechnicaMod.MODID, "textures/armor/" + name + ".png");
+    this.modelLocation = ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "geo/" + name + ".geo.json");
+    this.textLoc = ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "textures/armor/" + name + ".png");
   }
 
   public TechnomancerArmorModel<T> withEmptyAnim() {
-    this.animationLoc = new ResourceLocation(ArsNouveau.MODID, "animations/empty.json");
+    this.animationLoc = ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "animations/empty.json");
     return this;
   }
 

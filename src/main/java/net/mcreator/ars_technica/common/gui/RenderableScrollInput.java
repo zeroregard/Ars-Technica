@@ -1,8 +1,8 @@
 package net.mcreator.ars_technica.common.gui;
 
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.gui.UIRenderHelper;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
+import net.createmod.catnip.gui.UIRenderHelper;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

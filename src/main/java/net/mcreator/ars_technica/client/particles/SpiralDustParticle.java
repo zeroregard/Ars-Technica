@@ -1,9 +1,10 @@
 package net.mcreator.ars_technica.client.particles;
+
 import com.hollingsworth.arsnouveau.client.particle.ParticleUtil;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
 import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 
 public class SpiralDustParticle extends TextureSheetParticle {
     private final float radius;

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hollingsworth.arsnouveau.api.enchanting_apparatus.EnchantingApparatusRecipe;
+
 import java.util.List;
 
 public class EnchantingApparatusRecipeWithConditions extends EnchantingApparatusRecipe {

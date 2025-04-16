@@ -1,9 +1,7 @@
 package net.mcreator.ars_technica.ponder;
 
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

@@ -13,7 +13,7 @@ public class TechnomancerArmorRenderer extends ArmorRenderer {
 
   @Override
   public ResourceLocation getTextureLocation(AnimatedMagicArmor instance) {
-    return new ResourceLocation(ArsTechnicaMod.MODID,
+    return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID,
         "textures/armor/technomancer_medium_armor_" + instance.getColor(getCurrentStack()) + ".png");
   }
 }

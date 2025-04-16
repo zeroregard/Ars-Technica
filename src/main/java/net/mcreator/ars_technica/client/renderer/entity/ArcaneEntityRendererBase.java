@@ -1,6 +1,5 @@
 package net.mcreator.ars_technica.client.renderer.entity;
 
-import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
 import net.mcreator.ars_technica.common.entity.Colorable;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

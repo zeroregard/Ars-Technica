@@ -8,6 +8,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(RegistryEntry.class)
 public interface RegistryEntryAccessorMixin<T extends ItemLike> {
-    @Accessor("delegate")
+    @Accessor(value = "delegate", remap = false)
     RegistryObject<T> getDelegate();
 }

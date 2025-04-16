@@ -1,12 +1,10 @@
 package net.mcreator.ars_technica.mixin;
 
-import com.hollingsworth.arsnouveau.api.spell.ISpellCaster;
 import com.hollingsworth.arsnouveau.api.spell.TurretSpellCaster;
 import com.hollingsworth.arsnouveau.common.block.BasicSpellTurret;
 import com.hollingsworth.arsnouveau.common.block.tile.BasicSpellTurretTile;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.decoration.encasing.EncasableBlock;
-import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import net.mcreator.ars_technica.common.blocks.turrets.EncasedTurretBlock;
 import net.mcreator.ars_technica.common.blocks.turrets.EncasedTurretBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -14,7 +12,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;

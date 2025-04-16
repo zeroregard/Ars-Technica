@@ -2,8 +2,8 @@ package net.mcreator.ars_technica.setup;
 
 import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.blocks.PreciseRelayTile;
-import net.mcreator.ars_technica.common.blocks.turrets.EncasedTurretBlockEntity;
 import net.mcreator.ars_technica.common.blocks.SourceEngineBlockEntity;
+import net.mcreator.ars_technica.common.blocks.turrets.EncasedTurretBlockEntity;
 import net.mcreator.ars_technica.common.entity.*;
 import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.world.entity.Entity;

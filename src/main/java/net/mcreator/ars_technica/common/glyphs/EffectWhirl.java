@@ -11,30 +11,30 @@ import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.mcreator.ars_technica.common.entity.WhirlEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
 
-import net.mcreator.ars_technica.common.entity.WhirlEntity;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 
-
+@SuppressWarnings("removal")
 public class EffectWhirl extends AbstractEffect {
     public static final EffectWhirl INSTANCE = new EffectWhirl();
     public final float DEFAULT_RADIUS  = 1.5f;
     public final int DEFAULT_DURATION = 360;
 
     private EffectWhirl() {
-        super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_whirl"), "Whirl");
+        super(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "glyph_whirl"), "Whirl");
     }
 
     @Override
@@ -59,22 +59,14 @@ public class EffectWhirl extends AbstractEffect {
         BlockPos blockPos = rayTraceResult.getBlockPos();
         Direction hitFace = rayTraceResult.getDirection();
         Vec3 center = Vec3.atCenterOf(blockPos);
-        switch (hitFace) {
-            case UP:
-                return center.add(0, 0.5, 0);
-            case DOWN:
-                return center.add(0, -1, 0);
-            case NORTH:
-                return center.add(0, 0, -1);
-            case SOUTH:
-                return center.add(0, 0, 1);
-            case WEST:
-                return center.add(-1, 0, 0);
-            case EAST:
-                return center.add(1, 0, 0);
-            default:
-                return center;
-        }
+        return switch (hitFace) {
+            case UP -> center.add(0, 0.5, 0);
+            case DOWN -> center.add(0, -1, 0);
+            case NORTH -> center.add(0, 0, -1);
+            case SOUTH -> center.add(0, 0, 1);
+            case WEST -> center.add(-1, 0, 0);
+            case EAST -> center.add(1, 0, 0);
+        };
     }
 
     protected void resolve(Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
@@ -83,7 +75,7 @@ public class EffectWhirl extends AbstractEffect {
         double durationAmplifier = spellStats.getDurationMultiplier();
         int extraDurationTicks = Math.toIntExact(Math.round(durationAmplifier * 40));
 
-        FanProcessingType processingType = AllFanProcessingTypes.NONE;
+        FanProcessingType processingType = null;
 
         if (spellContext.hasNextPart()) {
             while (spellContext.hasNextPart()) {

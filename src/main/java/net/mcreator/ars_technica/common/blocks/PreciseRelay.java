@@ -3,7 +3,7 @@ package net.mcreator.ars_technica.common.blocks;
 import com.hollingsworth.arsnouveau.common.block.Relay;
 import com.hollingsworth.arsnouveau.common.block.tile.RelayTile;
 import com.hollingsworth.arsnouveau.setup.registry.BlockRegistry;
-import com.simibubi.create.foundation.gui.ScreenOpener;
+import net.createmod.catnip.gui.ScreenOpener;
 import net.mcreator.ars_technica.client.gui.RelayTileScreen;
 import net.mcreator.ars_technica.common.helpers.mixins.IArsTechnicaWrenchAdjustable;
 import net.minecraft.client.player.LocalPlayer;
@@ -19,7 +19,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,12 +48,12 @@ public class PreciseRelay extends Relay implements IArsTechnicaWrenchAdjustable 
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        var tile = new PreciseRelayTile(pos, state);
-        return tile;
+        return new PreciseRelayTile(pos, state);
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    @ParametersAreNonnullByDefault
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
         return Collections.singletonList(new ItemStack(BlockRegistry.RELAY.asItem()));
     }
 }

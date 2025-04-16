@@ -4,10 +4,8 @@ import com.hollingsworth.arsnouveau.common.block.Relay;
 import net.mcreator.ars_technica.common.blocks.PreciseRelay;
 import net.mcreator.ars_technica.common.blocks.PreciseRelayTile;
 import net.mcreator.ars_technica.common.helpers.mixins.IArsTechnicaWrenchAdjustable;
-
 import net.mcreator.ars_technica.setup.BlockRegistry;
 import net.minecraft.core.BlockPos;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

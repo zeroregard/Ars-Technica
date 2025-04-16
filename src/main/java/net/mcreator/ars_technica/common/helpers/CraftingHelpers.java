@@ -1,6 +1,5 @@
 package net.mcreator.ars_technica.common.helpers;
 
-import net.mcreator.ars_technica.common.crafting.DynamicCraftingContainer;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

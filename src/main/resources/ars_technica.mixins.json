@@ -4,17 +4,17 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "ars_technica.refmap.json",
   "mixins": [
-    "SchematicannonMixin",
-    "RuneBlockMixin",
-    "RuneTileMixin",
-    "BacktankUtilMixin",
     "AnimatedMagicArmorMixin",
-    "Wrench.ContainmentJarMixin",
-    "Wrench.PedestalMixin",
-    "Wrench.TurretMixin",
+    "BacktankUtilMixin",
     "ItemProviderEntryMixin",
     "RegistryEntryAccessorMixin",
-    "Relay.RelayBlockMixin"
+    "RuneBlockMixin",
+    "RuneTileMixin",
+    "SchematicannonMixin",
+    "Relay.RelayBlockMixin",
+    "Wrench.ContainmentJarMixin",
+    "Wrench.PedestalMixin",
+    "Wrench.TurretMixin"
   ],
   "minVersion": "0.8"
 }

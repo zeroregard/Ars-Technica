@@ -1,6 +1,5 @@
 package net.mcreator.ars_technica.common.entity;
 
-import net.mcreator.ars_technica.setup.EntityRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

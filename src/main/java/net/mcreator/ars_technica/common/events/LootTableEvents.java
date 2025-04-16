@@ -2,7 +2,6 @@ package net.mcreator.ars_technica.common.events;
 
 import net.mcreator.ars_technica.setup.ItemsRegistry;
 import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraftforge.event.LootTableLoadEvent;

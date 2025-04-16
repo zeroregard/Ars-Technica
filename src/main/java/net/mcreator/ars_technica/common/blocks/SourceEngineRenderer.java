@@ -1,23 +1,16 @@
 package net.mcreator.ars_technica.common.blocks;
 
-import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import net.mcreator.ars_technica.ArsTechnicaMod;
+import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.mcreator.ars_technica.client.AllPartialModels;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.joml.Quaternionf;
 
 public class SourceEngineRenderer extends KineticBlockEntityRenderer<SourceEngineBlockEntity> {
     public SourceEngineRenderer(BlockEntityRendererProvider.Context context) {
@@ -26,7 +19,7 @@ public class SourceEngineRenderer extends KineticBlockEntityRenderer<SourceEngin
 
     @Override
     protected SuperByteBuffer getRotatedModel(SourceEngineBlockEntity be, BlockState state) {
-        return CachedBufferer.partialFacing(AllPartialModels.ARCANE_SHAFT_HALF, state);
+        return CachedBuffers.partialFacing(AllPartialModels.ARCANE_SHAFT_HALF, state);
     }
 
     @Override
@@ -39,10 +32,10 @@ public class SourceEngineRenderer extends KineticBlockEntityRenderer<SourceEngin
 
             Direction.Axis axis = ((IRotate) be.getBlockState()
                     .getBlock()).getRotationAxis(be.getBlockState());
-            float angle = getAngleForTe(be, be.getBlockPos(), axis);
+            float angle = getAngleForBe(be, be.getBlockPos(), axis);
             SuperByteBuffer shaft = getRotatedModel(be, state);
             shaft.light(light);
-            shaft.rotateCentered(Direction.get(Direction.AxisDirection.POSITIVE, axis), angle);
+            shaft.rotateCentered(angle, Direction.get(Direction.AxisDirection.POSITIVE, axis));
             shaft.renderInto(poseStack, bufferSource.getBuffer(RenderType.translucent()));
         }
 

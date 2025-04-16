@@ -1,10 +1,10 @@
 package net.mcreator.ars_technica.common.crafting;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 

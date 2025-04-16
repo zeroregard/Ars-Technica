@@ -1,36 +1,29 @@
 package net.mcreator.ars_technica.common.glyphs;
 
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
-import com.hollingsworth.arsnouveau.common.spell.effect.EffectConjureWater;
-import com.hollingsworth.arsnouveau.common.spell.effect.EffectFlare;
-import com.hollingsworth.arsnouveau.common.spell.effect.EffectHex;
-import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
-import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
-import net.mcreator.ars_technica.ArsTechnicaMod;
 import com.hollingsworth.arsnouveau.api.spell.*;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
-
-import net.mcreator.ars_technica.ConfigHandler;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.object.Color;
 
 import javax.annotation.Nonnull;
-
-import java.util.*;
+import java.util.Set;
 
 public class EffectFuse extends AbstractEffect {
     public static final EffectFuse INSTANCE = new EffectFuse();
 
     private EffectFuse() {
-        super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_fuse"), "Fuse");
+        super(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "glyph_fuse"), "Fuse");
     }
 
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {

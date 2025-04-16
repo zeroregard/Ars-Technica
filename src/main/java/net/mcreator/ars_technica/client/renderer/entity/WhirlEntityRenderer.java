@@ -3,7 +3,6 @@ package net.mcreator.ars_technica.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.mcreator.ars_technica.common.entity.WhirlEntity;
-
 import net.mcreator.ars_technica.common.glyphs.EffectWhirl;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

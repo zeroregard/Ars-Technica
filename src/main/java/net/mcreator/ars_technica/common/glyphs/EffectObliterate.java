@@ -1,49 +1,30 @@
 package net.mcreator.ars_technica.common.glyphs;
 
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
-import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
-import net.mcreator.ars_technica.ArsTechnicaMod;
-import net.mcreator.ars_technica.common.crafting.DynamicCraftingContainer;
 import com.hollingsworth.arsnouveau.api.spell.*;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
-
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
+import net.mcreator.ars_technica.ArsTechnicaMod;
 import net.mcreator.ars_technica.common.entity.ArcaneHammerEntity;
-import net.mcreator.ars_technica.common.entity.ArcanePressEntity;
-import net.mcreator.ars_technica.common.helpers.RecipeHelpers;
-import net.mcreator.ars_technica.common.helpers.SpellResolverHelpers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.*;
-import net.mcreator.ars_technica.common.helpers.CraftingHelpers;
-import net.mcreator.ars_technica.common.helpers.ItemHelpers;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.object.Color;
 
 import javax.annotation.Nonnull;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class EffectObliterate extends AbstractEffect {
     public static final EffectObliterate INSTANCE = new EffectObliterate();
     private static float DEFAULT_SPEED = 4.0f;
 
     private EffectObliterate() {
-        super(new ResourceLocation(ArsTechnicaMod.MODID, "glyph_obliterate"), "Obliterate");
+        super(ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "glyph_obliterate"), "Obliterate");
     }
 
     public void onResolveEntity(EntityHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
