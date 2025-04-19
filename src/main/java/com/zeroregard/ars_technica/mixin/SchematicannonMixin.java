@@ -1,11 +1,18 @@
 package com.zeroregard.ars_technica.mixin;
 
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
+import com.hollingsworth.arsnouveau.common.network.Networking;
 import com.simibubi.create.content.schematics.cannon.SchematicannonBlockEntity;
+import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.Config;
+import com.zeroregard.ars_technica.api.ITechnomancerAware;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
+import com.zeroregard.ars_technica.helpers.CurioHelper;
 import com.zeroregard.ars_technica.network.ParticleEffectPacket;
+import com.zeroregard.ars_technica.network.TechnomancerNearbyPacket;
 import com.zeroregard.ars_technica.registry.ParticleRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -17,14 +24,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
+import static com.zeroregard.ars_technica.ArsTechnica.prefix;
+
 @Mixin(SchematicannonBlockEntity.class)
-public class SchematicannonMixin {
+public class SchematicannonMixin implements ITechnomancerAware {
 
     @Shadow(remap = false)
     private int printerCooldown;
 
     @Shadow(remap = false)
     public SchematicannonBlockEntity.State state;
+
+    private boolean technomancerNearby = false;
 
     @Inject(method = "tick", at = @At("TAIL"), remap = false)
     public void modifyCooldownEveryTick(CallbackInfo ci) {
@@ -37,17 +48,24 @@ public class SchematicannonMixin {
         AABB aabb = new AABB(entity.getBlockPos()).inflate(range);
         Level world = entity.getLevel();
         List<ServerPlayer> nearbyPlayers = world.getEntitiesOfClass(ServerPlayer.class, aabb);
-        boolean technomancerNearby = nearbyPlayers.stream().anyMatch(TechnomancerArmor::isWearingFullSet);
+        boolean foundTechnomancer  = nearbyPlayers.stream().anyMatch(player ->
+                TechnomancerArmor.isWearingFullSet(player) ||
+                        CurioHelper.hasTaggedCurio(player, prefix("technomancer_perk"))
+        );
 
-        if(technomancerNearby && world.getGameTime() % 8 == 0) {
-            sendBoostParticles(entity, world);
+        this.setTechnomancerNearby(foundTechnomancer);
+
+        if(!world.isClientSide()) {
+            TechnomancerNearbyPacket packet = new TechnomancerNearbyPacket(foundTechnomancer, entity.getBlockPos());
+            Networking.sendToNearbyClient(world, entity.getBlockPos(), packet);
         }
+
 
         if(state != SchematicannonBlockEntity.State.RUNNING) {
             return;
         }
 
-        if (technomancerNearby) {
+        if (foundTechnomancer) {
             boolean subtractCooldown = world.getGameTime() % 2 == 0;
             if (printerCooldown > 0 && subtractCooldown) {
                 printerCooldown--;
@@ -57,5 +75,15 @@ public class SchematicannonMixin {
 
     private void sendBoostParticles(SchematicannonBlockEntity entity, Level world) {
         ParticleEffectPacket.send(world, ParticleColor.fromInt(ParticleColor.PURPLE.getColor()), ParticleRegistry.SPIRAL_DUST_TYPE.get(), entity.getBlockPos().getCenter());
+    }
+
+    @Override
+    public boolean isTechnomancerNearby() {
+        return technomancerNearby;
+    }
+
+    @Override
+    public void setTechnomancerNearby(boolean value) {
+        this.technomancerNearby = value;
     }
 }

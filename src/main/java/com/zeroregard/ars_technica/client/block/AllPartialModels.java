@@ -6,6 +6,7 @@ import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
 public class AllPartialModels {
     public static final PartialModel ARCANE_SHAFT_HALF = PartialModel.of(prefix("block/arcane_shaft_half"));
+    public static final PartialModel ARCANE_PIPE = PartialModel.of(prefix("block/arcane_pipe"));
 
     public static void init() {
     	

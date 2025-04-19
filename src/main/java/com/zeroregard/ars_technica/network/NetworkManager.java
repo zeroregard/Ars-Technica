@@ -29,6 +29,7 @@ public class NetworkManager {
         reg.playToClient(ParticleEffectPacket.TYPE, ParticleEffectPacket.CODEC, NetworkManager::handle);
         reg.playToServer(TicksUntilChargePacket.TYPE, TicksUntilChargePacket.CODEC, NetworkManager::handle);
         reg.playToServer(CustomCooldownPacket.TYPE, CustomCooldownPacket.CODEC, NetworkManager::handle);
+        reg.playToClient(TechnomancerNearbyPacket.TYPE, TechnomancerNearbyPacket.CODEC, NetworkManager::handle);
 
     }
 
