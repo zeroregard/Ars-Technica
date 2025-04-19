@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/api/ITechnomancerAware.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/block/ArcaneSchematiccannonRenderer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/helpers/CurioHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/TechnomancerNearbyPacket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/models/block/arcane_pipe.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/ars_technica/textures/block/arcane_cannon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/data/ars_technica/tags/item/technomancer_perk.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Ars-Technica.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Ars-Technica.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Ars-Technica.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Ars-Technica.test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsTechnicaClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/ArsTechnicaClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/block/AllPartialModels.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/client/block/AllPartialModels.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/mixin/SchematicannonMixin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/mixin/SchematicannonMixin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/NetworkManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/network/NetworkManager.java" afterDir="false" />
-    </list>
+    <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
