@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[47,)"
+loaderVersion="[47.3.33,)"
 license="GNU GENERAL PUBLIC LICENSE"
 logoFile = "ars_technica_logo.png"
 description = '''
