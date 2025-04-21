@@ -26,8 +26,7 @@ public class JeiArsExtraPlugin implements IModPlugin {
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        //noinspection removal
-        return new ResourceLocation(ArsTechnicaMod.MODID, "main");
+        return ResourceLocation.fromNamespaceAndPath(ArsTechnicaMod.MODID, "main");
     }
 
     @Override
