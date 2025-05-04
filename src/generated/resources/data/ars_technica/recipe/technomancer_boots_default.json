@@ -5,13 +5,13 @@
       "item": "ars_technica:mark_of_technomancy"
     },
     {
-      "item": "minecraft:netherite_ingot"
+      "tag": "c:ingots/netherite"
     },
     {
-      "item": "create:brass_ingot"
+      "tag": "c:ingots/brass"
     },
     {
-      "item": "create:brass_ingot"
+      "tag": "c:ingots/brass"
     }
   ],
   "reagent": {

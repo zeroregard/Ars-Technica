@@ -6,8 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/armor/IGoggleHelmet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/armor/ATGogglesItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/zeroregard/ars_technica/registry/ItemRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/runic_spanner.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/runic_spanner.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_boots.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_boots.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_boots_default.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_boots_default.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_chestplate.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_chestplate.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_chestplate_default.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_chestplate_default.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_helmet.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_helmet.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_helmet_default.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_helmet_default.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_leggings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_leggings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_leggings_default.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/technomancer_leggings_default.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/transmutation_focus.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/generated/resources/data/ars_technica/recipe/transmutation_focus.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
