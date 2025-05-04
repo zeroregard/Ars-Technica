@@ -1,8 +1,10 @@
 package com.zeroregard.ars_technica.item;
 
 import com.hollingsworth.arsnouveau.client.registry.ModKeyBindings;
+import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.registry.DataComponentRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -17,6 +19,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.List;
@@ -39,6 +42,7 @@ public class SpyMonocle extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
         tooltipComponents.add(Component.translatable("item.ars_technica.spy_monocle.tooltip", KeyMapping.createNameSupplier(ModKeyBindings.HEAD_CURIO_HOTKEY.getName()).get()));
+        tooltipComponents.add(Component.translatable(ArsTechnica.MODID + ".create_goggles_info").withStyle(ChatFormatting.GOLD));
     }
 
     @Override

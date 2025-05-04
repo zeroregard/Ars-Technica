@@ -2,7 +2,7 @@ package com.zeroregard.ars_technica.registry;
 
 import com.hollingsworth.arsnouveau.common.items.ExperienceGem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
-import com.zeroregard.ars_technica.armor.IGoggleHelmet;
+import com.zeroregard.ars_technica.armor.ATGogglesItem;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
 import com.zeroregard.ars_technica.item.RunicSpanner;
 import com.zeroregard.ars_technica.item.SpyMonocle;
@@ -68,6 +68,7 @@ public class ItemRegistry {
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
-        GogglesItem.addIsWearingPredicate(IGoggleHelmet::isGoggleHelmet);
+        GogglesItem.addIsWearingPredicate(ATGogglesItem::isWearingTechnomancerHelmet);
+        GogglesItem.addIsWearingPredicate(ATGogglesItem::isWearingSpyMonocle);
     }
 }
