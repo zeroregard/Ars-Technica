@@ -3,6 +3,7 @@ package com.zeroregard.ars_technica.block;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
+import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.client.block.AllPartialModels;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -19,8 +20,11 @@ public class SourceMotorRenderer extends KineticBlockEntityRenderer<SourceMotorB
 
     @Override
     protected SuperByteBuffer getRotatedModel(SourceMotorBlockEntity be, BlockState state) {
-
-        return CachedBuffers.partialFacing(AllPartialModels.ARCANE_SHAFT_HALF, state);
+        try {
+            return CachedBuffers.partialFacing(AllPartialModels.ARCANE_SHAFT_HALF, state);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -35,9 +39,12 @@ public class SourceMotorRenderer extends KineticBlockEntityRenderer<SourceMotorB
                     .getBlock()).getRotationAxis(be.getBlockState());
             float angle = getAngleForBe(be, be.getBlockPos(), axis);
             SuperByteBuffer shaft = getRotatedModel(be, state);
-            shaft.light(light);
-            shaft.rotateCentered(angle, Direction.get(Direction.AxisDirection.POSITIVE, axis));
-            shaft.renderInto(poseStack, bufferSource.getBuffer(RenderType.translucent()));
+            if(shaft != null) {
+                shaft.light(light);
+                shaft.rotateCentered(angle, Direction.get(Direction.AxisDirection.POSITIVE, axis));
+                shaft.renderInto(poseStack, bufferSource.getBuffer(RenderType.translucent()));
+            }
+
         }
 
     }
