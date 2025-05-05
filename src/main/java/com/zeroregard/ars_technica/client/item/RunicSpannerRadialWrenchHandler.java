@@ -1,0 +1,58 @@
+package com.zeroregard.ars_technica.client.item;
+
+import com.simibubi.create.AllKeys;
+import com.simibubi.create.content.contraptions.wrench.RadialWrenchMenu;
+import com.zeroregard.ars_technica.registry.ItemRegistry;
+import net.createmod.catnip.gui.ScreenOpener;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+
+public class RunicSpannerRadialWrenchHandler {
+
+    public static int COOLDOWN = 0;
+
+    public static void clientTick() {
+        if (COOLDOWN > 0 && !AllKeys.ROTATE_MENU.isPressed())
+            COOLDOWN--;
+    }
+
+    public static void onKeyInput(int key, boolean pressed) {
+        if (!pressed)
+            return;
+
+        if (key != AllKeys.ROTATE_MENU.getBoundCode())
+            return;
+
+        if (COOLDOWN > 0)
+            return;
+
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gameMode == null || mc.gameMode.getPlayerMode() == GameType.SPECTATOR)
+            return;
+
+        LocalPlayer player = mc.player;
+        if (player == null)
+            return;
+
+        Level level = player.level();
+
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.getItem() != ItemRegistry.RUNIC_SPANNER.get())
+            return;
+
+        HitResult objectMouseOver = mc.hitResult;
+        if (!(objectMouseOver instanceof BlockHitResult blockHitResult))
+            return;
+
+        BlockState state = level.getBlockState(blockHitResult.getBlockPos());
+
+        RadialWrenchMenu.tryCreateFor(state, blockHitResult.getBlockPos(), level).ifPresent(ScreenOpener::open);
+    }
+
+}

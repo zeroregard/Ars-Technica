@@ -1,14 +1,12 @@
 package com.zeroregard.ars_technica.client;
+
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
-import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.zeroregard.ars_technica.ArsTechnica;
-
 import com.zeroregard.ars_technica.block.PreciseRelayRenderer;
 import com.zeroregard.ars_technica.block.SourceMotorRenderer;
-import com.zeroregard.ars_technica.client.block.ArcaneSchematiccannonRenderer;
 import com.zeroregard.ars_technica.client.entity.*;
 import com.zeroregard.ars_technica.client.item.SpyMonocleCurioRenderer;
 import com.zeroregard.ars_technica.client.sound.EntityLoopingSound;
@@ -16,6 +14,7 @@ import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FastColor;
