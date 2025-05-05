@@ -5,11 +5,14 @@ import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
 
+import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
 import com.zeroregard.ars_technica.helpers.CraftingHelpers;
 import com.zeroregard.ars_technica.helpers.ItemHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -17,6 +20,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
@@ -42,32 +47,104 @@ public class EffectCarve extends AbstractItemResolveEffect {
                                   @Nullable LivingEntity shooter,
                                   SpellStats spellStats,
                                   SpellContext spellContext, SpellResolver resolver) {
+
         double amplifier = spellStats.getAmpMultiplier();
 
         Map<Item, List<ItemEntity>> groupedItems = entityList.stream()
                 .collect(Collectors.groupingBy(itemEntity -> itemEntity.getItem().getItem()));
 
-        Map<Item, List<ItemEntity>> carveableItems = groupedItems.entrySet().stream()
-                .filter(entry -> hasCraftingRecipe(entry.getKey(), world, amplifier))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        for (Map.Entry<Item, List<ItemEntity>> entry : groupedItems.entrySet()) {
+            List<ItemEntity> itemEntities = entry.getValue();
+            ItemStack exampleStack = itemEntities.get(0).getItem();
 
-        for (Map.Entry<Item, List<ItemEntity>> entry : carveableItems.entrySet()) {
-            carveItems(entry.getKey(), entry.getValue(), spellStats, world, pos, amplifier);
+            Optional<StonecutterRecipe> cuttingRecipe = getStonecuttingRecipe(exampleStack, world, amplifier);
+            if (cuttingRecipe.isPresent()) {
+                carveItemStonecutting(cuttingRecipe.get(), itemEntities, world, pos);
+            } else {
+                var sawingRecipe = getSawingRecipe(exampleStack, world, amplifier);
+                if(sawingRecipe.isPresent()) {
+                    carveItemSawing(sawingRecipe.get(), itemEntities, world, pos);
+                }
+            }
         }
     }
 
-    private boolean hasCraftingRecipe(Item item, Level world, double amplifier) {
-        NonNullList<ItemStack> mutableItems = NonNullList.withSize(9, ItemStack.EMPTY);
-        setContainerShape(mutableItems, new ItemStack(item), amplifier);
+    private Optional<StonecutterRecipe> getStonecuttingRecipe(ItemStack input, Level world, double amplifier) {
+        SingleRecipeInput inputWrapper = new SingleRecipeInput(input);
+        String targetType = amplifier < 0 ? "slab" : amplifier > 0 ? "wall" : "stairs";
 
-        CraftingInput container = CraftingInput.of(3, 3, mutableItems);
-
-        Optional<CraftingRecipe> recipe = world.getRecipeManager()
-                .getRecipeFor(RecipeType.CRAFTING, container, world)
-                .map(RecipeHolder::value);
-
-        return recipe.isPresent();
+        return world.getRecipeManager()
+                .getAllRecipesFor(RecipeType.STONECUTTING)
+                .stream()
+                .filter(holder -> holder.value().matches(inputWrapper, world))
+                .map(RecipeHolder::value)
+                .filter(recipe -> {
+                    String resultName = recipe.getResultItem(world.registryAccess()).getItem().getDescriptionId().toLowerCase();
+                    return resultName.contains(targetType);
+                })
+                .findFirst();
     }
+
+
+    private Optional<Recipe<RecipeInput>> getSawingRecipe(ItemStack input, Level world, double amplifier) {
+        ItemStackHandler itemHandler = new ItemStackHandler(1);
+        itemHandler.setStackInSlot(0, input);
+
+        RecipeWrapper inputWrapper = new RecipeWrapper(itemHandler);
+        String targetType = amplifier < 0 ? "slab" : "stairs"; // no wood walls
+
+        return world.getRecipeManager()
+                .getAllRecipesFor(AllRecipeTypes.CUTTING.getType())
+                .stream()
+                .filter(holder -> {
+                    Recipe<?> recipe = holder.value();
+                    return recipe instanceof CuttingRecipe && ((CuttingRecipe) recipe).matches(inputWrapper, world);
+                })
+                .map(RecipeHolder::value)
+                .filter(recipe -> {
+                    String resultName = recipe.getResultItem(world.registryAccess()).getItem().getDescriptionId().toLowerCase();
+                    return resultName.contains(targetType);
+                })
+                .findFirst();
+    }
+
+
+
+    private void carveItemStonecutting(StonecutterRecipe cuttingRecipe, List<ItemEntity> itemEntities, Level world, BlockPos pos) {
+        ItemStack inputItem = cuttingRecipe.getIngredients().get(0).getItems()[0];
+        ItemStack outputItem = cuttingRecipe.assemble(new SingleRecipeInput(inputItem), world.registryAccess());
+        processItemEntities(itemEntities, outputItem, world, pos);
+    }
+
+    private void carveItemSawing(Recipe<RecipeInput> sawingRecipe, List<ItemEntity> itemEntities, Level world, BlockPos pos) {
+        ItemStack inputItem = sawingRecipe.getIngredients().get(0).getItems()[0];
+        ItemStack outputItem = sawingRecipe.assemble(new SingleRecipeInput(inputItem), world.registryAccess());
+        processItemEntities(itemEntities, outputItem, world, pos);
+    }
+
+    private void processItemEntities(List<ItemEntity> itemEntities, ItemStack outputItem, Level world, BlockPos pos) {
+        for (ItemEntity entity : itemEntities) {
+            int inputCount = entity.getItem().getCount();
+            if (!outputItem.isEmpty()) {
+                int outputCount = outputItem.getCount();
+                int totalOutput = inputCount * outputCount;
+
+                int maxStackSize = outputItem.getMaxStackSize();
+
+                while (totalOutput > 0) {
+                    int countToSpawn = Math.min(totalOutput, maxStackSize);
+                    ItemStack outputStack = outputItem.copy();
+                    outputStack.setCount(countToSpawn);
+
+                    ItemHelpers.createItemEntity(outputStack, world, pos);
+                    totalOutput -= countToSpawn;
+                }
+
+                entity.discard();
+            }
+        }
+    }
+
 
     private void setContainerShape(NonNullList<ItemStack> items, ItemStack itemStack, double amplifier) {
         if (amplifier < 0.0) {
