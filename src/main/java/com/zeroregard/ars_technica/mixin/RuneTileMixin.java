@@ -3,6 +3,7 @@ package com.zeroregard.ars_technica.mixin;
 import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.utility.CreateLang;
+import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.api.IRuneTileModifier;
 import com.zeroregard.ars_technica.helpers.CooldownHelper;
 import net.minecraft.core.HolderLookup;
@@ -30,7 +31,9 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
     @Inject(method = "castSpell", at = @At("TAIL"), remap = false)
     private void modifyTicksUntilCharge(Entity entity, CallbackInfo ci) {
         if (entity == null) return;
-        this.ticksUntilCharge = ticksUntilChargeCount;
+        if(ticksUntilChargeCount != -1) {
+            this.ticksUntilCharge = ticksUntilChargeCount;
+        }
     }
 
     @Inject(method = "saveAdditional", at = @At("HEAD"))
@@ -41,6 +44,7 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
     @Inject(method = "loadAdditional", at = @At("HEAD"))
     private void loadTicksUntilChargeCount(CompoundTag tag, HolderLookup.Provider pRegistries, CallbackInfo ci) {
         this.ticksUntilChargeCount = tag.getInt("ticksUntilChargeCount");
+        ArsTechnica.LOGGER.info(this.ticksUntilChargeCount);
     }
 
 
@@ -60,6 +64,9 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
 
     @Override
     public int getTicksUntilChargeCount() {
+        if(this.ticksUntilChargeCount == -1) {
+            return 20 * 2;
+        }
         return this.ticksUntilChargeCount;
     }
 
