@@ -2,11 +2,15 @@
   "name": "curseforge-comments-processor",
   "version": "1.0.0",
   "description": "GitHub workflow to process Curseforge comments",
-  "main": "process_comments.js",
+  "main": "dist/process_comments.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "node process_comments.js",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "start": "node dist/process_comments.js",
+    "build": "tsc",
+    "test": "jest --config jest.config.js",
+    "test:watch": "jest --config jest.config.js --watch",
+    "lint": "eslint . --ext .ts",
+    "dev": "ts-node src/process_comments.ts"
   },
   "keywords": [
     "github",
@@ -24,22 +28,17 @@
     "openai": "^4.0.0"
   },
   "devDependencies": {
-    "jest": "^29.5.0"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ],
-    "collectCoverage": true,
-    "coverageReporters": [
-      "text",
-      "lcov"
-    ],
-    "coverageDirectory": "coverage"
+    "@jest/globals": "^29.7.0",
+    "@types/cheerio": "^0.22.35",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.8.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.50.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.3.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.8.3"
   }
-} 
+}

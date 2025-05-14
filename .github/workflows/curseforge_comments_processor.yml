@@ -29,6 +29,11 @@ jobs:
             npm install openai
           fi
 
+      - name: Build TypeScript
+        run: |
+          cd .github/scripts
+          npm run build
+
       - name: Run tests
         run: |
           cd .github/scripts
@@ -41,4 +46,4 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           cd .github/scripts
-          node process_comments.js 
+          node dist/process_comments.js 
