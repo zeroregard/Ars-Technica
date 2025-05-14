@@ -1,12 +1,13 @@
 import { describe, expect, test, jest, beforeEach } from '@jest/globals';
 import axios from 'axios';
+import type { Mocked } from 'jest-mock';
 import { fetchCurseforgeComments } from '../src/services/curseforge';
 import { Comment } from '../src/types';
 import type { AxiosResponse } from 'axios';
 
 // Mock axios
 jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockedAxios = axios as Mocked<typeof axios>;
 
 // Mock cheerio
 jest.mock('cheerio', () => {
