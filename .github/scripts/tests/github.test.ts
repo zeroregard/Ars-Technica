@@ -7,18 +7,54 @@ import { Comment } from '../src/types';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+jest.mock('cheerio', () => ({
+  load: () => {
+    // Return a fake cheerio object with the methods your code expects
+    return {
+      // Simulate the structure your code expects
+      // For example, if your code does $('div.comment'), return an array-like object
+      // You may need to adjust this based on your actual implementation
+      // Here's a generic example:
+      root: () => ({
+        find: () => [
+          {
+            attribs: { id: 'comment-123' },
+            children: [],
+            // ...add more as needed for your code
+          },
+          {
+            attribs: { id: 'comment-456' },
+            children: [],
+          }
+        ]
+      }),
+      // If your code uses $ directly, you may need to mock that too
+      find: () => [
+        {
+          attribs: { id: 'comment-123' },
+          children: [],
+        },
+        {
+          attribs: { id: 'comment-456' },
+          children: [],
+        }
+      ]
+    };
+  }
+}));
+
 describe('GitHub Service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  
+
   describe('createGithubIssue', () => {
     test('should create a GitHub issue from a comment', async () => {
       // Mock axios response
       mockedAxios.post.mockResolvedValue({
         status: 201,
         data: { number: 123 }
-      });
+      } as any);
       
       const comment: Comment = {
         id: '12345',
@@ -34,7 +70,6 @@ describe('GitHub Service', () => {
       
       // Check that the API call was made with the right data
       const postCallArgs = mockedAxios.post.mock.calls[0];
-      // Type assertion to safely access the parameters
       const params = postCallArgs[1] as {
         title: string;
         body: string;
@@ -42,7 +77,7 @@ describe('GitHub Service', () => {
       };
       
       expect(params.title).toContain('[BUG]');
-      expect(params.body).toContain('commentId: 12345');
+      expect(params.body).toContain('**commentId:** 12345');
       expect(params.labels).toContain('bug');
       expect(params.labels).toContain('curseforge-comment');
     });
