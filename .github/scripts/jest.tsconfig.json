@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "jest", "@jest/globals"]
+  },
+  "include": ["jest.config.ts"]
+} 
