@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 import { Comment, IssueParams } from '../types';
+import * as logger from '../utils/logger';
 
 /**
  * Fetch all GitHub issues and extract comment IDs
@@ -11,7 +12,7 @@ export async function getGithubIssues(): Promise<Set<string>> {
   
   try {
     while (true) {
-      console.log(`Fetching GitHub issues page ${page}...`);
+      logger.debug(`Fetching GitHub issues page ${page}...`);
       
       const response = await axios.get(
         `https://api.github.com/repos/${config.REPO_OWNER}/${config.REPO_NAME}/issues`,
@@ -41,20 +42,22 @@ export async function getGithubIssues(): Promise<Set<string>> {
         
         if (commentIdMatch) {
           commentIds.add(commentIdMatch[1]);
+          logger.debug(`Found existing issue #${issue.number} for comment ID ${commentIdMatch[1]}`);
         }
       }
+      
+      logger.debug(`Processed ${issues.length} issues on page ${page}`);
       
       page++;
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error(`Error fetching GitHub issues: ${error.message}`);
+      logger.error(`Error fetching GitHub issues: ${error.message}`, error);
       if (error.response) {
-        console.error(`Status: ${error.response.status}`);
-        console.error(error.response.data);
+        logger.error(`API Response: ${error.response.status}`, error);
       }
     } else {
-      console.error(`Unexpected error: ${error}`);
+      logger.error('Unexpected error fetching GitHub issues', error instanceof Error ? error : new Error(String(error)));
     }
   }
   
@@ -90,6 +93,8 @@ ${comment.content}
       labels: ['bug', 'curseforge-comment']
     };
     
+    logger.debug(`Creating GitHub issue for comment ${comment.id} with title: ${issueParams.title}`);
+    
     const response = await axios.post(
       `https://api.github.com/repos/${config.REPO_OWNER}/${config.REPO_NAME}/issues`,
       issueParams,
@@ -102,22 +107,23 @@ ${comment.content}
     );
     
     if (response.status === 201) {
-      console.log(`Successfully created GitHub issue for comment ${comment.id}`);
+      const issueNumber = response.data.number;
+      const issueUrl = response.data.html_url;
+      
+      logger.success(`Created GitHub issue #${issueNumber} for comment ${comment.id}: ${issueUrl}`);
       return true;
     } else {
-      console.error(`Unexpected response creating GitHub issue: ${response.status}`);
-      console.error(response.data);
+      logger.error(`Unexpected response creating GitHub issue: ${response.status}`);
       return false;
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error(`Error creating GitHub issue: ${error.message}`);
+      logger.error(`Error creating GitHub issue for comment ${comment.id}: ${error.message}`, error);
       if (error.response) {
-        console.error(`Status: ${error.response.status}`);
-        console.error(error.response.data);
+        logger.error(`API Response: ${error.response.status}`, error);
       }
     } else {
-      console.error(`Unexpected error: ${error}`);
+      logger.error(`Error creating GitHub issue for comment ${comment.id}`, error instanceof Error ? error : new Error(String(error)));
     }
     return false;
   }

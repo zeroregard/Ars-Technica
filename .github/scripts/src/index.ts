@@ -3,6 +3,7 @@ import * as path from 'path';
 import { getGithubIssues, createGithubIssue } from './services/github';
 import { fetchCurseforgeComments } from './services/curseforge';
 import { isBugReport } from './services/analyzer';
+import * as logger from './utils/logger';
 
 /**
  * Main function to process comments
@@ -16,41 +17,64 @@ export async function main(): Promise<void> {
     }
     
     // Get existing GitHub issues with comment IDs
-    console.log('Fetching existing GitHub issues...');
+    logger.info('Starting CurseForge comments processing workflow');
+    logger.info('Fetching existing GitHub issues...');
     const existingCommentIds = await getGithubIssues();
-    console.log(`Found ${existingCommentIds.size} existing comments in GitHub issues`);
+    logger.info(`Found ${existingCommentIds.size} existing comments in GitHub issues`);
     
     // Fetch comments from CurseForge
-    console.log('Fetching comments from CurseForge...');
+    logger.info('Fetching comments from CurseForge...');
     const allComments = await fetchCurseforgeComments();
-    console.log(`Fetched ${allComments.length} comments from CurseForge`);
+    logger.info(`Fetched ${allComments.length} comments from CurseForge`);
     
     // Process each comment
+    let processedCount = 0;
+    let bugReportCount = 0;
+    
     for (const comment of allComments) {
-      console.log(`Processing comment ${comment.id}...`);
+      logger.debug(`Processing comment ${comment.id} from ${comment.author}...`);
       
       // Skip if already processed
       if (existingCommentIds.has(comment.id)) {
-        console.log(`Comment ${comment.id} already processed. Skipping.`);
+        logger.debug(`Comment ${comment.id} already processed. Skipping.`);
         continue;
       }
       
       // Check if it's a bug report
-      console.log(`Checking if comment ${comment.id} is a bug report...`);
+      logger.debug(`Checking if comment ${comment.id} is a bug report...`);
       if (await isBugReport(comment.content)) {
-        console.log(`Comment ${comment.id} appears to be a bug report. Creating GitHub issue...`);
-        await createGithubIssue(comment);
+        logger.info(`Found bug report in comment ${comment.id} by ${comment.author}. Creating GitHub issue...`);
+        const success = await createGithubIssue(comment);
+        if (success) {
+          bugReportCount++;
+          logger.success(`Created GitHub issue for bug report in comment ${comment.id}`);
+        } else {
+          logger.error(`Failed to create GitHub issue for comment ${comment.id}`);
+        }
       } else {
-        console.log(`Comment ${comment.id} does not appear to be a bug report. Skipping.`);
+        logger.debug(`Comment ${comment.id} does not appear to be a bug report. Skipping.`);
       }
+      
+      processedCount++;
       
       // Add a small delay to avoid hitting API rate limits
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
     
-    console.log('Finished processing comments.');
+    logger.success(`Finished processing ${processedCount} comments. Created ${bugReportCount} new GitHub issues for bug reports.`);
+    
+    // Ensure logs are flushed before exiting
+    logger.flushAndExit(0);
   } catch (error) {
-    console.error(`Error in main process: ${error instanceof Error ? error.message : String(error)}`);
-    process.exit(1);
+    logger.error('Error in main process', error instanceof Error ? error : new Error(String(error)));
+    logger.flushAndExit(1);
   }
+}
+
+// Call main function if this is the entry point
+if (require.main === module) {
+  main().catch(error => {
+    logger.error('Unhandled exception in main function', error instanceof Error ? error : new Error(String(error)));
+    logger.flushAndExit(1);
+  });
 } 

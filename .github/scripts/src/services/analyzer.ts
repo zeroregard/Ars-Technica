@@ -1,5 +1,6 @@
 import config from '../config';
 import { ChatMessage } from '../types';
+import * as logger from '../utils/logger';
 
 // Define the minimal OpenAI interface we need
 interface OpenAIInstance {
@@ -30,13 +31,13 @@ if (config.OPENAI_API_KEY) {
     openai = new OpenAI({
       apiKey: config.OPENAI_API_KEY
     });
-    console.log('OpenAI client initialized successfully');
+    logger.info('OpenAI client initialized successfully');
   } catch (error) {
-    console.warn(`OpenAI module not available: ${error instanceof Error ? error.message : String(error)}`);
-    console.log('Will use keyword-based detection only');
+    logger.warn(`OpenAI module not available: ${error instanceof Error ? error.message : String(error)}`);
+    logger.info('Will use keyword-based detection only');
   }
 } else {
-  console.log('No OpenAI API key provided, using keyword-based detection only');
+  logger.info('No OpenAI API key provided, using keyword-based detection only');
 }
 
 /**
@@ -66,6 +67,7 @@ export function containsBugKeywords(text: string): boolean {
   // Check for single keywords
   for (const keyword of bugKeywords) {
     if (lowercaseText.includes(keyword)) {
+      logger.debug(`Comment contains bug keyword: "${keyword}"`);
       return true;
     }
   }
@@ -73,10 +75,12 @@ export function containsBugKeywords(text: string): boolean {
   // Check for specific phrases
   for (const phrase of minecraftBugPhrases) {
     if (lowercaseText.includes(phrase)) {
+      logger.debug(`Comment contains Minecraft bug phrase: "${phrase}"`);
       return true;
     }
   }
   
+  logger.debug('No bug keywords or phrases found in comment');
   return false;
 }
 
@@ -87,7 +91,7 @@ export async function isBugReport(commentContent: string): Promise<boolean> {
   // Try OpenAI if API key is available
   if (openai) {
     try {
-      console.log('Using OpenAI to classify comment');
+      logger.info('Using OpenAI to classify comment as bug report');
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [
@@ -104,14 +108,19 @@ export async function isBugReport(commentContent: string): Promise<boolean> {
       });
       
       const answer = response.choices[0].message.content.trim().toLowerCase();
-      return answer.includes('yes');
+      const isBug = answer.includes('yes');
+      
+      logger.info(`OpenAI classification result: ${isBug ? 'IS a bug report' : 'NOT a bug report'}`);
+      return isBug;
     } catch (error) {
-      console.error(`Error calling OpenAI API: ${error instanceof Error ? error.message : String(error)}`);
-      console.log('Falling back to keyword detection');
+      logger.error('Error calling OpenAI API', error instanceof Error ? error : new Error(String(error)));
+      logger.warn('Falling back to keyword detection for bug classification');
     }
   }
   
   // If OpenAI failed or is not available, use keyword detection
-  console.log('Using keyword detection to classify comment');
-  return containsBugKeywords(commentContent);
+  logger.info('Using keyword detection to classify comment as bug report');
+  const result = containsBugKeywords(commentContent);
+  logger.info(`Keyword detection result: ${result ? 'IS a bug report' : 'NOT a bug report'}`);
+  return result;
 } 

@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import config from '../config';
 import { Comment } from '../types';
+import * as logger from '../utils/logger';
 
 /**
  * Fetch comments from CurseForge
@@ -12,7 +13,7 @@ export async function fetchCurseforgeComments(): Promise<Comment[]> {
   
   try {
     while (true) {
-      console.log(`Fetching page ${page} of comments...`);
+      logger.info(`Fetching page ${page} of comments from CurseForge...`);
       
       const response = await axios.get(`${config.CURSEFORGE_URL}?page=${page}`);
       const $ = cheerio.load(response.data);
@@ -20,17 +21,18 @@ export async function fetchCurseforgeComments(): Promise<Comment[]> {
       const commentsSection = $('section.comments-section');
       
       if (!commentsSection.length) {
-        console.log(`No comments section found on page ${page}`);
+        logger.warn(`No comments section found on page ${page}`);
         break;
       }
       
       const commentElements = commentsSection.find('li.comment');
       
       if (!commentElements.length) {
-        console.log(`No more comments found on page ${page}`);
+        logger.info(`No more comments found on page ${page}`);
         break;
       }
       
+      let pageCommentsCount = 0;
       commentElements.each((_, element) => {
         try {
           const comment = $(element);
@@ -52,29 +54,38 @@ export async function fetchCurseforgeComments(): Promise<Comment[]> {
               date,
               content
             });
+            pageCommentsCount++;
+            logger.debug(`Found comment ${id} by ${author} from ${date}`);
+          } else {
+            logger.warn('Found comment without ID, skipping');
           }
         } catch (error) {
-          console.error(`Error parsing comment: ${error instanceof Error ? error.message : String(error)}`);
+          logger.error(`Error parsing comment`, error instanceof Error ? error : new Error(String(error)));
         }
       });
+      
+      logger.info(`Processed ${pageCommentsCount} comments on page ${page}`);
       
       // Check if there's a next page
       const nextPage = $('a.pagination-item').filter((_, el) => $(el).text() === 'Next');
       
       if (!nextPage.length) {
+        logger.debug('No next page link found, ending pagination');
         break;
       }
       
       page++;
     }
+    
+    logger.info(`Found a total of ${allComments.length} comments from CurseForge`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error(`Error fetching comments from CurseForge: ${error.message}`);
+      logger.error(`Error fetching comments from CurseForge: ${error.message}`, error);
       if (error.response) {
-        console.error(`Status: ${error.response.status}`);
+        logger.error(`API Response: ${error.response.status}`, error);
       }
     } else {
-      console.error(`Unexpected error: ${error instanceof Error ? error.message : String(error)}`);
+      logger.error('Unexpected error fetching comments', error instanceof Error ? error : new Error(String(error)));
     }
   }
   

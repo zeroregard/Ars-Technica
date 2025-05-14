@@ -5,6 +5,9 @@ on:
     - cron: '0 */6 * * *'  # Run every 6 hours
   workflow_dispatch:  # Allow manual triggering
 
+env:
+  DEBUG: 'true'  # Enable debug logging
+
 jobs:
   process-comments:
     runs-on: ubuntu-latest
@@ -36,6 +39,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DEBUG: 'true'  # Enable debug logs
+          FORCE_COLOR: '1'  # Enable colored output
         run: |
           cd .github/scripts
-          node dist/index.js 
+          node --unhandled-rejections=strict dist/index.js
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## CurseForge Comment Processor Summary" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Workflow completed" >> $GITHUB_STEP_SUMMARY
+          echo "Check the logs above for details on processed comments and any issues created." >> $GITHUB_STEP_SUMMARY 
