@@ -1,0 +1,45 @@
+{
+  "name": "curseforge-comments-processor",
+  "version": "1.0.0",
+  "description": "GitHub workflow to process Curseforge comments",
+  "main": "process_comments.js",
+  "scripts": {
+    "start": "node process_comments.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [
+    "github",
+    "workflow",
+    "curseforge",
+    "comments"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "optionalDependencies": {
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ],
+    "coverageDirectory": "coverage"
+  }
+} 
