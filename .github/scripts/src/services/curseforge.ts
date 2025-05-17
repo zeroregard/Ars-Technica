@@ -603,37 +603,10 @@ export async function fetchCurseforgeComments(): Promise<Comment[]> {
 
     logger.info('Fetching comments from CurseForge...');
     
-    // Try to fetch the page, falling back to Puppeteer if needed
-    let html: string;
-    try {
-      // First attempt: direct HTTP request
-      logger.info('Attempting direct HTTP request...');
-      const response = await axios.get(config.CURSEFORGE_URL, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.5',
-          'Referer': 'https://www.curseforge.com/',
-          'DNT': '1',
-          'Connection': 'keep-alive',
-          'Upgrade-Insecure-Requests': '1',
-          'Cache-Control': 'max-age=0'
-        },
-        timeout: 30000
-      });
-      
-      html = response.data;
-      
-      // Check if we hit Cloudflare protection
-      if (html.includes('cf-browser-verification') || html.includes('Just a moment...')) {
-        logger.warn('Cloudflare protection detected, falling back to Puppeteer');
-        html = await fetchWithPuppeteer(config.CURSEFORGE_URL);
-      }
-    } catch (error) {
-      logger.warn(`Error with direct request: ${error}, falling back to Puppeteer`);
-      html = await fetchWithPuppeteer(config.CURSEFORGE_URL);
-    }
-    
+ 
+    // Since we're dealing with a dynamic site that loads comments via JavaScript,
+    // prioritize Puppeteer for reliable comment fetching
+    const html = await fetchWithPuppeteer(config.CURSEFORGE_URL);
     // Save the HTML for debugging
     if (process.env.DEBUG) {
       Debug.saveHtml(html, 'curseforge_page.html');
