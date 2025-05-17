@@ -441,8 +441,13 @@ function extractComments(html: string): Comment[] {
           logger.debug(`Element ${index}: ID=${id}, Author=${author}, Content length=${content.length}`);
           
           if (id && author && content) {
-            logger.debug(`Found comment from ${author} with ID ${id}: ${content.substring(0, 50)}...`);
-            comments.push({ id, author, date, content });
+            // Skip comments from 'zerobuncle'
+            if (author.toLowerCase() === 'zerobuncle') {
+              logger.debug(`Ignoring comment from zerobuncle with ID ${id}`);
+            } else {
+              logger.debug(`Found comment from ${author} with ID ${id}: ${content.substring(0, 50)}...`);
+              comments.push({ id, author, date, content });
+            }
           } else if (process.env.DEBUG) {
             // Debug missing fields
             const elHtml = el.html();
