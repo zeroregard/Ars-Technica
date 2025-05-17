@@ -2,6 +2,8 @@ name: Process Curseforge Comments
 
 on:
   workflow_dispatch:  # Allow manual triggering
+  schedule:
+    - cron: '0 0 * * *'  # Run once per day at midnight UTC
 
 env:
   DEBUG: 'true'  # Enable debug logging
