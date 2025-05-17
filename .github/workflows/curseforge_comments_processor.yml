@@ -38,6 +38,10 @@ jobs:
           cd .github/scripts
           npm run build
 
+      - name: Create debug directory
+        run: |
+          mkdir -p .github/scripts/debug
+
       - name: Run comments processor
         run: |
           cd .github/scripts
@@ -45,6 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DEBUG: 'true'
+          PUPPETEER_EXECUTABLE_PATH: '/usr/bin/google-chrome'
 
       - name: Upload debug artifacts
         if: always()
@@ -59,4 +65,14 @@ jobs:
         run: |
           echo "## CurseForge Comment Processor Summary" >> $GITHUB_STEP_SUMMARY
           echo "✅ Workflow completed" >> $GITHUB_STEP_SUMMARY
+          
+          # Add debug info to summary
+          echo "### Debug Information" >> $GITHUB_STEP_SUMMARY
+          echo "Check the uploaded artifacts for detailed logs." >> $GITHUB_STEP_SUMMARY
+          
+          if [ -d ".github/scripts/debug" ]; then
+            echo "#### Debug Files" >> $GITHUB_STEP_SUMMARY
+            ls -la .github/scripts/debug/ | awk '{print "* " $9}' >> $GITHUB_STEP_SUMMARY
+          fi
+          
           echo "Check the logs above for details on processed comments and any issues created." >> $GITHUB_STEP_SUMMARY 
