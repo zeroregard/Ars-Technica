@@ -35,41 +35,75 @@ async function fetchWithPuppeteer(url: string): Promise<string> {
     // Check if we're in GitHub Actions
     if (process.env.GITHUB_ACTIONS) {
       logger.debug('Running in GitHub Actions, using pre-installed Chrome');
+      logger.debug(`GITHUB_ACTIONS=${process.env.GITHUB_ACTIONS}`);
+      logger.debug(`PUPPETEER_EXECUTABLE_PATH=${process.env.PUPPETEER_EXECUTABLE_PATH || 'not set'}`);
+      logger.debug(`Runner Environment: Node ${process.version}`);
+      
+      // Try to check if Chrome is available
+      try {
+        const { execSync } = require('child_process');
+        const chromePath = '/usr/bin/google-chrome';
+        const result = execSync(`ls -la ${chromePath} 2>&1 || echo "Chrome not found"`).toString();
+        logger.debug(`Chrome check: ${result.trim()}`);
+      } catch (error) {
+        logger.debug(`Error checking Chrome: ${error}`);
+      }
+      
       options.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome';
     }
 
+    logger.debug(`Puppeteer options: ${JSON.stringify(options)}`);
     browser = await puppeteer.launch(options);
+    logger.debug('Puppeteer browser launched successfully');
+    
     const page = await browser.newPage();
+    logger.debug('New page created');
     
     // Set a realistic user agent
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+    logger.debug('User agent set');
     
     logger.debug(`Navigating to ${url}...`);
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+    logger.debug('Page navigation completed');
     
     // Wait for any protection to clear
     await page.waitForTimeout(3000);
+    logger.debug('Waited for protection to clear');
     
     // Get the page content
     const content = await page.content();
+    logger.debug(`Retrieved page content (length: ${content.length})`);
     
     // Save the HTML for debugging purposes
     if (process.env.DEBUG) {
       const debugDir = path.join(process.cwd(), 'debug');
       if (!fs.existsSync(debugDir)) {
-        fs.mkdirSync(debugDir);
+        fs.mkdirSync(debugDir, { recursive: true });
       }
       fs.writeFileSync(path.join(debugDir, 'puppeteer_page.html'), content);
       logger.debug('Saved puppeteer page HTML to debug/puppeteer_page.html');
+      
+      // Save response headers
+      try {
+        const client = await page.target().createCDPSession();
+        const responseHeaders = await client.send('Network.getAllCookies');
+        fs.writeFileSync(path.join(debugDir, 'puppeteer_cookies.json'), JSON.stringify(responseHeaders, null, 2));
+        logger.debug('Saved puppeteer cookies to debug/puppeteer_cookies.json');
+      } catch (error) {
+        logger.debug(`Error saving headers: ${error}`);
+      }
     }
     
     return content;
   } catch (error) {
     logger.error(`Error fetching page with Puppeteer: ${error}`);
+    logger.error(`Error details: ${error instanceof Error ? error.stack : 'Unknown error'}`);
     throw error;
   } finally {
     if (browser) {
       await browser.close();
+      logger.debug('Browser closed');
     }
   }
 }
@@ -86,8 +120,25 @@ function extractComments(html: string): Comment[] {
     // Based on the new HTML structure we observed in puppeteer_page.html
     logger.debug('Looking for comments in the HTML...');
     
+    // Log the HTML structure for debugging
+    logger.debug(`HTML length: ${html.length}`);
+    
+    // Check for common elements to see if the page loaded correctly
+    const pageTitle = $('title').text().trim();
+    logger.debug(`Page title: ${pageTitle}`);
+    
+    // Log the number of elements found
+    const commentElements = $('.comment');
+    logger.debug(`Found ${commentElements.length} .comment elements in the HTML`);
+    
+    // Try to log other potential comment selectors
+    logger.debug(`Found ${$('.comments-list li').length} .comments-list li elements`);
+    logger.debug(`Found ${$('[data-comment]').length} [data-comment] elements`);
+    logger.debug(`Found ${$('.comment-body').length} .comment-body elements`);
+    logger.debug(`Found ${$('.commentList').length} .commentList elements`);
+    
     // Find the comment elements
-    $('.comment').each((index, element) => {
+    commentElements.each((index, element) => {
       try {
         const commentElement = $(element);
         
@@ -102,6 +153,11 @@ function extractComments(html: string): Comment[] {
         
         // Extract the content (from the text div)
         const content = commentElement.find('.text div p').text().trim();
+        
+        // Log more details about each element's structure
+        if (!id) logger.debug(`Missing ID for comment #${index+1}`);
+        if (!author) logger.debug(`Missing author for comment #${index+1}`);
+        if (!content) logger.debug(`Missing content for comment #${index+1}`);
         
         if (id && author && content) {
           logger.debug(`Found comment from ${author} with ID ${id}: ${content.substring(0, 50)}...`);
@@ -119,6 +175,24 @@ function extractComments(html: string): Comment[] {
     
     if (comments.length === 0) {
       logger.warn('No comments found in the HTML using the current selector');
+      
+      // When no comments found, save the HTML structure for deeper debugging
+      if (process.env.DEBUG) {
+        const debugDir = path.join(process.cwd(), 'debug');
+        if (!fs.existsSync(debugDir)) {
+          fs.mkdirSync(debugDir, { recursive: true });
+        }
+        
+        // Save the HTML for more detailed inspection
+        fs.writeFileSync(path.join(debugDir, 'no_comments_found.html'), html);
+        logger.debug('Saved full HTML to debug/no_comments_found.html for inspection');
+        
+        // Save a summary of the HTML structure
+        const bodyContent = $('body').html();
+        const structureSummary = bodyContent ? bodyContent.substring(0, 5000) : 'No body content found';
+        fs.writeFileSync(path.join(debugDir, 'html_structure_summary.txt'), structureSummary);
+        logger.debug('Saved HTML structure summary to debug/html_structure_summary.txt');
+      }
     }
   } catch (error) {
     logger.error(`Error extracting comments: ${error}`);
