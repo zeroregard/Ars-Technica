@@ -11,3 +11,4 @@ node_modules/
 .github/scripts/node_modules/
 .github/scripts/dist/
 .github/scripts/coverage/
+.github/scripts/debug/
