@@ -71,6 +71,59 @@ async function fetchWithPuppeteer(url: string): Promise<string> {
     await page.waitForTimeout(3000);
     logger.debug('Waited for protection to clear');
     
+    // Wait for comments to load
+    logger.debug('Waiting for comments to load...');
+    try {
+      // Try various comment container selectors
+      const selectors = [
+        '.comments-list',
+        '.comment',
+        '[data-comments-container]',
+        '.commentList',
+        '.comments'
+      ];
+      
+      // Wait for at least one of the selectors to appear
+      let commentsFound = false;
+      for (const selector of selectors) {
+        try {
+          logger.debug(`Looking for comments with selector: ${selector}`);
+          
+          // Wait for a maximum of 10 seconds for the comments to load
+          await page.waitForSelector(selector, { timeout: 10000 });
+          logger.debug(`Found comments with selector: ${selector}`);
+          commentsFound = true;
+          break;
+        } catch (e) {
+          logger.debug(`Selector ${selector} not found on page`);
+        }
+      }
+      
+      if (!commentsFound) {
+        logger.warn('Could not find comments container with any selector, proceeding anyway');
+        // Try scrolling to reveal lazy-loaded content
+        logger.debug('Scrolling page to reveal any lazy-loaded content...');
+        await page.evaluate(() => {
+          window.scrollBy(0, 1000);
+        });
+        await page.waitForTimeout(2000);
+      } else {
+        logger.info('Comments container found on page');
+      }
+    } catch (error) {
+      logger.warn(`Error waiting for comments: ${error}. Will continue with page extraction.`);
+    }
+    
+    // Take a screenshot for debugging
+    if (process.env.DEBUG) {
+      const debugDir = path.join(process.cwd(), 'debug');
+      if (!fs.existsSync(debugDir)) {
+        fs.mkdirSync(debugDir, { recursive: true });
+      }
+      await page.screenshot({ path: path.join(debugDir, 'page_screenshot.png'), fullPage: true });
+      logger.debug('Saved page screenshot to debug/page_screenshot.png');
+    }
+    
     // Get the page content
     const content = await page.content();
     logger.debug(`Retrieved page content (length: ${content.length})`);
@@ -127,54 +180,85 @@ function extractComments(html: string): Comment[] {
     const pageTitle = $('title').text().trim();
     logger.debug(`Page title: ${pageTitle}`);
     
-    // Log the number of elements found
-    const commentElements = $('.comment');
-    logger.debug(`Found ${commentElements.length} .comment elements in the HTML`);
+    // Define possible selectors to try
+    const possibleSelectors = [
+      '.comment',                 // Original selector
+      '.comments-list li',        // Alternative list format
+      '[data-comment]',           // Data attribute format
+      '.comment-body',            // Common comment class
+      '.commentList .comment-item', // Nested format
+      '.commentThread .comment',   // Threaded comments
+      '.userComments .commentBody' // Another common pattern
+    ];
     
-    // Try to log other potential comment selectors
-    logger.debug(`Found ${$('.comments-list li').length} .comments-list li elements`);
-    logger.debug(`Found ${$('[data-comment]').length} [data-comment] elements`);
-    logger.debug(`Found ${$('.comment-body').length} .comment-body elements`);
-    logger.debug(`Found ${$('.commentList').length} .commentList elements`);
+    let foundComments = false;
     
-    // Find the comment elements
-    commentElements.each((index, element) => {
-      try {
-        const commentElement = $(element);
+    // Try each selector until we find comments
+    for (const selector of possibleSelectors) {
+      logger.debug(`Trying selector: ${selector}`);
+      const elements = $(selector);
+      logger.debug(`Found ${elements.length} elements with selector "${selector}"`);
+      
+      if (elements.length > 0) {
+        // Found some elements, try to extract comments
+        elements.each((index, element) => {
+          try {
+            const el = $(element);
+            
+            // Try different patterns for extracting data
+            // Strategy 1: Standard structure
+            let id = el.find('.num').text().trim() || 
+                     el.attr('data-comment-id') || 
+                     el.attr('id')?.replace('comment-', '') || '';
+            
+            let author = el.find('.author-name .ellipsis').text().trim() || 
+                         el.find('.username').text().trim() || 
+                         el.find('.comment-author').text().trim() || '';
+            
+            let date = el.find('.date span').text().trim() || 
+                       el.find('.comment-date').text().trim() || 
+                       el.find('time').text().trim() || '';
+            
+            let content = el.find('.text div p').text().trim() || 
+                          el.find('.comment-content').text().trim() || 
+                          el.find('.text').text().trim() || '';
+            
+            // Clean up IDs
+            id = id.replace('#', '');
+            
+            // Log what we found
+            logger.debug(`Element ${index} using "${selector}": ID=${id}, Author=${author}, Content length=${content.length}`);
+            
+            if (id && author && content) {
+              logger.debug(`Found comment from ${author} with ID ${id}: ${content.substring(0, 50)}...`);
+              comments.push({
+                id,
+                author,
+                date,
+                content
+              });
+              foundComments = true;
+            } else {
+              // If we found elements but couldn't extract data, log the HTML for debugging
+              if (process.env.DEBUG) {
+                logger.debug(`Element HTML: ${el.html()?.substring(0, 300)}...`);
+              }
+            }
+          } catch (error) {
+            logger.error(`Error extracting comment details with selector "${selector}": ${error}`);
+          }
+        });
         
-        // Extract the comment ID (from the 'num' class element)
-        const id = commentElement.find('.num').text().trim();
-        
-        // Extract the author name (from the author-name span)
-        const author = commentElement.find('.author-name .ellipsis').text().trim();
-        
-        // Extract the date (from the date span)
-        const date = commentElement.find('.date span').text().trim();
-        
-        // Extract the content (from the text div)
-        const content = commentElement.find('.text div p').text().trim();
-        
-        // Log more details about each element's structure
-        if (!id) logger.debug(`Missing ID for comment #${index+1}`);
-        if (!author) logger.debug(`Missing author for comment #${index+1}`);
-        if (!content) logger.debug(`Missing content for comment #${index+1}`);
-        
-        if (id && author && content) {
-          logger.debug(`Found comment from ${author} with ID ${id}: ${content.substring(0, 50)}...`);
-          comments.push({
-            id,
-            author,
-            date,
-            content
-          });
+        // If we found comments with this selector, break the loop
+        if (comments.length > 0) {
+          logger.info(`Successfully extracted ${comments.length} comments using selector "${selector}"`);
+          break;
         }
-      } catch (error) {
-        logger.error(`Error extracting comment details: ${error}`);
       }
-    });
+    }
     
     if (comments.length === 0) {
-      logger.warn('No comments found in the HTML using the current selector');
+      logger.warn('No comments found in the HTML using any of the selectors');
       
       // When no comments found, save the HTML structure for deeper debugging
       if (process.env.DEBUG) {
