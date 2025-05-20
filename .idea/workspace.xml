@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="" />
+    <list default="true" id="620069ad-138d-4700-8350-d9518151918f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/neoforge.mods.toml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -109,7 +114,7 @@
   "keyToString": {
     "Gradle.Ars-Technica [build].executor": "Run",
     "Gradle.Ars-Technica [createMcpToSrg].executor": "Run",
-    "Gradle.Ars-Technica [runClient].executor": "Debug",
+    "Gradle.Ars-Technica [runClient].executor": "Run",
     "Gradle.Ars-Technica [runData].executor": "Run",
     "Gradle.Ars-Technica [runServer].executor": "Run",
     "Gradle.Ars-Technica.executor": "Run",
@@ -301,9 +306,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Ars-Technica [runClient]" />
+        <item itemvalue="Gradle.Ars-Technica [build]" />
         <item itemvalue="Gradle.Ars-Technica [runServer]" />
         <item itemvalue="Gradle.Ars-Technica [runData]" />
-        <item itemvalue="Gradle.Ars-Technica [build]" />
         <item itemvalue="Gradle.Ars-Technica" />
       </list>
     </recent_temporary>
@@ -318,6 +323,17 @@
       <updated>1733485633114</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

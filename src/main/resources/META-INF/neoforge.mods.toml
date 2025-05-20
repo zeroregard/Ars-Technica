@@ -26,9 +26,9 @@ displayName="Ars Technica" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 #logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-credits="A bunch of Starbuncles" #optional
+credits="Alexthw, BaileyHoll, Jarva, and a bunch of other awesome Starbuncles" #optional
 # A text field displayed in the mod UI
-authors="Alexthw & BaileyHoll for base example, zeroregard for the rest" #optional
+authors="zeroregard" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 This Ars Nouveau/Create add-on integrates machinery into magic. Become the Technomancer to build faster and summon entities that magically transform items.
