@@ -2,13 +2,12 @@ package com.zeroregard.ars_technica.helpers;
 
 
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -59,6 +58,14 @@ public class RecipeHelpers {
         return getProcessingRecipe(input, world, AllRecipeTypes.HAUNTING.getType());
     }
 
+    public static Optional<RecipeHolder<Recipe<RecipeInput>>> getItemApplicationRecipeForItemStack(ItemStack input, Level world) {
+        ItemStackHandler itemHandler = new ItemStackHandler(1);
+        itemHandler.setStackInSlot(0, input);
+        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+        
+        return world.getRecipeManager().getRecipeFor(AllRecipeTypes.ITEM_APPLICATION.getType(), wrapper, world);
+    }
+
     private static <T extends ProcessingRecipe<RecipeWrapper>> Optional<T> getProcessingRecipe(
             ItemStack input, Level world, RecipeType<T> recipeType) {
 
@@ -71,5 +78,23 @@ public class RecipeHelpers {
         return recipeHolder.map(RecipeHolder::value);
     }
 
+    public static Optional<RecipeHolder<Recipe<RecipeInput>>> getItemApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
+        var allApplicationRecipes = world.getRecipeManager().getAllRecipesFor(AllRecipeTypes.ITEM_APPLICATION.getType());
+        
+        for (var recipeHolder : allApplicationRecipes) {
+            var recipe = recipeHolder.value();
+            
+            ItemStackHandler itemHandler = new ItemStackHandler(2);
+            itemHandler.setStackInSlot(0, target);
+            itemHandler.setStackInSlot(1, applyItem);
+            RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+            
+            if (recipe.matches(wrapper, world)) {
+                return Optional.of(recipeHolder);
+            }
+        }
+        
+        return Optional.empty();
+    }
 
 }

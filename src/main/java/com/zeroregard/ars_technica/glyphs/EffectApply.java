@@ -1,0 +1,356 @@
+package com.zeroregard.ars_technica.glyphs;
+
+import com.hollingsworth.arsnouveau.api.spell.*;
+import com.hollingsworth.arsnouveau.api.util.SpellUtil;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
+import com.zeroregard.ars_technica.helpers.RecipeHelpers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.FakePlayer;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+import static com.zeroregard.ars_technica.ArsTechnica.prefix;
+
+public class EffectApply extends AbstractItemResolveEffect {
+    public static EffectApply INSTANCE = new EffectApply(prefix("glyph_apply"), "Apply");
+
+    private EffectApply(ResourceLocation resourceLocation, String description) {
+        super(resourceLocation, description);
+    }
+
+    @Override
+    public void onResolve(HitResult rayTraceResult, Level world, @Nullable LivingEntity shooter, SpellStats spellStats,
+                          SpellContext spellContext, SpellResolver resolver) {
+        if (rayTraceResult instanceof BlockHitResult blockHit) {
+            BlockPos pos = blockHit.getBlockPos();
+            if (handleBlockApplication(pos, blockHit, world, shooter, spellStats, spellContext, resolver)) {
+                return;
+            }
+        }
+        
+        super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext, resolver);
+    }
+
+    private boolean handleBlockApplication(BlockPos centerPos, BlockHitResult blockHitResult, Level world, @Nullable LivingEntity shooter,
+                                           SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
+        ApplyItemSource applySource = getApplyItemSource(shooter, world);
+        if (applySource.isEmpty()) {
+            return false;
+        }
+
+        double aoeBuff = spellStats.getAoeMultiplier();
+        int pierceBuff = spellStats.getBuffCount(AugmentPierce.INSTANCE);
+        List<BlockPos> posList = SpellUtil.calcAOEBlocks(shooter, centerPos, blockHitResult, aoeBuff, pierceBuff);
+        
+        int applicationsPerformed = 0;
+        
+        for (BlockPos pos : posList) {
+            ItemStack applyItem = applySource.getItem();
+            if (applyItem.isEmpty()) {
+                break;
+            }
+            
+            BlockState targetBlock = world.getBlockState(pos);
+            var recipe = getApplicationRecipe(applyItem, targetBlock, world);
+            if (recipe.isEmpty()) {
+                continue;
+            }
+
+            var result = recipe.get().value().getResultItem(world.registryAccess());
+            if (result.isEmpty()) {
+                continue;
+            }
+
+            applySource.consumeItem();
+
+            Block resultBlock = Block.byItem(result.getItem());
+            if (resultBlock != null && !resultBlock.equals(net.minecraft.world.level.block.Blocks.AIR)) {
+                world.setBlock(pos, resultBlock.defaultBlockState(), 3);
+            } else {
+                ItemEntity resultEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result.copy());
+                world.addFreshEntity(resultEntity);
+            }
+
+            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.8f, 1.0f + (world.random.nextFloat() - 0.5f) * 0.4f);
+            
+            applicationsPerformed++;
+        }
+
+        return applicationsPerformed > 0;
+    }
+
+    @Override
+    public void onResolveEntities(List<ItemEntity> entityList, BlockPos pos, Vec3 posVec, Level world,
+                                  @Nullable LivingEntity shooter,
+                                  SpellStats spellStats,
+                                  SpellContext spellContext, SpellResolver resolver) {
+        ApplyItemSource applySource = getApplyItemSource(shooter, world);
+        if (applySource.isEmpty()) {
+            return;
+        }
+
+        int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
+        int maxAmountToApply = 4 * (1 + aoeBuff);
+
+        int totalApplied = 0;
+        
+        for (ItemEntity itemEntity : entityList) {
+            if (totalApplied >= maxAmountToApply) {
+                break;
+            }
+
+            ItemStack itemStack = itemEntity.getItem();
+            ItemStack applyItem = applySource.getItem();
+            if (applyItem.isEmpty()) {
+                break;
+            }
+            
+            var recipe = getApplicationRecipe(applyItem, itemStack, world);
+            
+            if (recipe.isPresent()) {
+                var result = recipe.get().value().getResultItem(world.registryAccess());
+                if (!result.isEmpty()) {
+                    int remainingToApply = maxAmountToApply - totalApplied;
+                    int stackSize = itemStack.getCount();
+                    int applicationsToThisStack = Math.min(remainingToApply, stackSize);
+                    applicationsToThisStack = Math.min(applicationsToThisStack, applySource.getAvailableCount());
+                    
+                    if (applicationsToThisStack > 0) {
+                        applySource.consumeItems(applicationsToThisStack);
+                        
+                        itemStack.shrink(applicationsToThisStack);
+                        if (itemStack.getCount() <= 0) {
+                            itemEntity.discard();
+                        }
+
+                        for (int i = 0; i < applicationsToThisStack; i++) {
+                            ItemEntity resultEntity = new ItemEntity(world, 
+                                itemEntity.getX() + (world.random.nextFloat() - 0.5f) * 0.2f, 
+                                itemEntity.getY(), 
+                                itemEntity.getZ() + (world.random.nextFloat() - 0.5f) * 0.2f, 
+                                result.copy());
+                            world.addFreshEntity(resultEntity);
+                        }
+
+                        world.playSound(null, itemEntity.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 
+                            0.6f, 1.0f + (world.random.nextFloat() - 0.5f) * 0.4f);
+                        
+                        totalApplied += applicationsToThisStack;
+                        
+                        if (applySource.isEmpty()) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private ApplyItemSource getApplyItemSource(@Nullable LivingEntity shooter, Level world) {
+        if (shooter instanceof FakePlayer) {
+            return new InventoryApplyItemSource(shooter, world);
+        } else if (shooter instanceof Player player) {
+            return new PlayerApplyItemSource(player);
+        }
+        return new EmptyApplyItemSource();
+    }
+
+    private Optional<RecipeHolder<Recipe<RecipeInput>>> getApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
+        return RecipeHelpers.getItemApplicationRecipe(applyItem, target, world);
+    }
+
+    private Optional<RecipeHolder<Recipe<RecipeInput>>> getApplicationRecipe(ItemStack applyItem, BlockState target, Level world) {
+        ItemStack targetItem = new ItemStack(target.getBlock().asItem());
+        if (targetItem.isEmpty() || targetItem.getItem() == net.minecraft.world.item.Items.AIR) {
+            return Optional.empty();
+        }
+        return getApplicationRecipe(applyItem, targetItem, world);
+    }
+
+    private abstract static class ApplyItemSource {
+        public abstract ItemStack getItem();
+        public abstract int getAvailableCount();
+        public abstract void consumeItem();
+        public abstract void consumeItems(int count);
+        public abstract boolean isEmpty();
+    }
+
+    private static class PlayerApplyItemSource extends ApplyItemSource {
+        private final Player player;
+
+        public PlayerApplyItemSource(Player player) {
+            this.player = player;
+        }
+
+        @Override
+        public ItemStack getItem() {
+            return player.getOffhandItem();
+        }
+
+        @Override
+        public int getAvailableCount() {
+            return player.getOffhandItem().getCount();
+        }
+
+        @Override
+        public void consumeItem() {
+            player.getOffhandItem().shrink(1);
+        }
+
+        @Override
+        public void consumeItems(int count) {
+            player.getOffhandItem().shrink(count);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return player.getOffhandItem().isEmpty();
+        }
+    }
+
+    private static class InventoryApplyItemSource extends ApplyItemSource {
+        private Container foundContainer;
+        private int foundSlot;
+
+        public InventoryApplyItemSource(LivingEntity shooter, Level world) {
+            findFirstAvailableItem(shooter, world);
+        }
+
+        private void findFirstAvailableItem(LivingEntity shooter, Level world) {
+            BlockPos shooterPos = shooter.blockPosition();
+            
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        if (dx == 0 && dy == 0 && dz == 0) continue;
+                        
+                        BlockPos checkPos = shooterPos.offset(dx, dy, dz);
+                        BlockEntity blockEntity = world.getBlockEntity(checkPos);
+                        
+                        if (blockEntity instanceof Container container) {
+                            for (int slot = 0; slot < container.getContainerSize(); slot++) {
+                                ItemStack item = container.getItem(slot);
+                                if (!item.isEmpty()) {
+                                    this.foundContainer = container;
+                                    this.foundSlot = slot;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public ItemStack getItem() {
+            if (foundContainer != null) {
+                return foundContainer.getItem(foundSlot);
+            }
+            return ItemStack.EMPTY;
+        }
+
+        @Override
+        public int getAvailableCount() {
+            if (foundContainer != null) {
+                return foundContainer.getItem(foundSlot).getCount();
+            }
+            return 0;
+        }
+
+        @Override
+        public void consumeItem() {
+            if (foundContainer != null) {
+                ItemStack item = foundContainer.getItem(foundSlot);
+                item.shrink(1);
+                if (item.isEmpty()) {
+                    foundContainer.setItem(foundSlot, ItemStack.EMPTY);
+                }
+            }
+        }
+
+        @Override
+        public void consumeItems(int count) {
+            if (foundContainer != null) {
+                ItemStack item = foundContainer.getItem(foundSlot);
+                item.shrink(count);
+                if (item.isEmpty()) {
+                    foundContainer.setItem(foundSlot, ItemStack.EMPTY);
+                }
+            }
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return foundContainer == null || getItem().isEmpty();
+        }
+    }
+
+    private static class EmptyApplyItemSource extends ApplyItemSource {
+        @Override
+        public ItemStack getItem() { return ItemStack.EMPTY; }
+        @Override
+        public int getAvailableCount() { return 0; }
+        @Override
+        public void consumeItem() { }
+        @Override
+        public void consumeItems(int count) { }
+        @Override
+        public boolean isEmpty() { return true; }
+    }
+
+    @Override
+    public int getDefaultManaCost() {
+        return 80;
+    }
+
+    @Override
+    public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
+        super.addAugmentDescriptions(map);
+        addBlockAoeAugmentDescriptions(map);
+        map.put(AugmentAOE.INSTANCE, "Increases the amount of items that can be applied to and the area of blocks affected");
+    }
+
+    @Nonnull
+    @Override
+    public Set<AbstractAugment> getCompatibleAugments() {
+        return augmentSetOf(AugmentAOE.INSTANCE, AugmentPierce.INSTANCE);
+    }
+
+    @Nonnull
+    @Override
+    public Set<SpellSchool> getSchools() {
+        return setOf(SpellSchools.MANIPULATION);
+    }
+
+    @Override
+    public String getBookDescription() {
+        return "Uses the item in your offhand to apply to blocks or items, such as applying andesite alloy to stripped logs to create casings";
+    }
+
+    @Override
+    public SpellTier defaultTier() {
+        return SpellTier.ONE;
+    }
+} 
