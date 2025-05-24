@@ -78,22 +78,17 @@ public class RecipeHelpers {
         return recipeHolder.map(RecipeHolder::value);
     }
 
-    // New method that properly handles Item Application recipes with both apply item and target
     public static Optional<RecipeHolder<Recipe<RecipeInput>>> getItemApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
-        // Get all item application recipes
         var allApplicationRecipes = world.getRecipeManager().getAllRecipesFor(AllRecipeTypes.ITEM_APPLICATION.getType());
         
         for (var recipeHolder : allApplicationRecipes) {
             var recipe = recipeHolder.value();
             
-            // Create a wrapper with target in slot 0 and apply item in slot 1
-            // This matches the recipe structure: ingredient 0 = target (tag), ingredient 1 = apply item
             ItemStackHandler itemHandler = new ItemStackHandler(2);
             itemHandler.setStackInSlot(0, target);
             itemHandler.setStackInSlot(1, applyItem);
             RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
             
-            // Check if this recipe matches both our target and apply item
             if (recipe.matches(wrapper, world)) {
                 return Optional.of(recipeHolder);
             }
