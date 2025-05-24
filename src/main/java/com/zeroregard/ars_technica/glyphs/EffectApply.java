@@ -1,7 +1,9 @@
 package com.zeroregard.ars_technica.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
+import com.hollingsworth.arsnouveau.api.util.SpellUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +44,7 @@ public class EffectApply extends AbstractItemResolveEffect {
                           SpellContext spellContext, SpellResolver resolver) {
         if (rayTraceResult instanceof BlockHitResult blockHit) {
             BlockPos pos = blockHit.getBlockPos();
-            if (handleBlockApplication(pos, world, shooter, spellStats, spellContext, resolver)) {
+            if (handleBlockApplication(pos, blockHit, world, shooter, spellStats, spellContext, resolver)) {
                 return;
             }
         }
@@ -50,22 +52,20 @@ public class EffectApply extends AbstractItemResolveEffect {
         super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext, resolver);
     }
 
-    private boolean handleBlockApplication(BlockPos centerPos, Level world, @Nullable LivingEntity shooter,
+    private boolean handleBlockApplication(BlockPos centerPos, BlockHitResult blockHitResult, Level world, @Nullable LivingEntity shooter,
                                            SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         ApplyItemSource applySource = getApplyItemSource(shooter, world);
         if (applySource.isEmpty()) {
             return false;
         }
 
-        int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
-        int expansion = Math.max(0, aoeBuff);
+        double aoeBuff = spellStats.getAoeMultiplier();
+        int pierceBuff = spellStats.getBuffCount(AugmentPierce.INSTANCE);
+        List<BlockPos> posList = SpellUtil.calcAOEBlocks(shooter, centerPos, blockHitResult, aoeBuff, pierceBuff);
         
         int applicationsPerformed = 0;
         
-        BlockPos minPos = centerPos.offset(-expansion, -expansion, -expansion);
-        BlockPos maxPos = centerPos.offset(expansion, expansion, expansion);
-        
-        for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
+        for (BlockPos pos : posList) {
             ItemStack applyItem = applySource.getItem();
             if (applyItem.isEmpty()) {
                 break;
@@ -328,13 +328,14 @@ public class EffectApply extends AbstractItemResolveEffect {
     @Override
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
+        addBlockAoeAugmentDescriptions(map);
         map.put(AugmentAOE.INSTANCE, "Increases the amount of items that can be applied to and the area of blocks affected");
     }
 
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentAOE.INSTANCE);
+        return augmentSetOf(AugmentAOE.INSTANCE, AugmentPierce.INSTANCE);
     }
 
     @Nonnull
