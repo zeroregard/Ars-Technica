@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,8 +48,8 @@ public class EffectApply extends AbstractItemResolveEffect {
         super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext, resolver);
     }
 
-    private boolean handleBlockApplication(BlockPos pos, Level world, @Nullable LivingEntity shooter, 
-                                        SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
+    private boolean handleBlockApplication(BlockPos centerPos, Level world, @Nullable LivingEntity shooter,
+                                           SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         if (!(shooter instanceof Player player)) {
             return false;
         }
@@ -60,40 +59,54 @@ public class EffectApply extends AbstractItemResolveEffect {
             return false;
         }
 
-        BlockState targetBlock = world.getBlockState(pos);
-        
-        // Check if there's a valid application recipe
-        var recipe = getApplicationRecipe(offhandItem, targetBlock, world);
-        if (recipe.isEmpty()) {
-            return false;
-        }
-
-        // Perform the application
-        var result = recipe.get().value().getResultItem(world.registryAccess());
-        if (result.isEmpty()) {
-            return false;
-        }
-
-        // Check if we should consume from offhand
         boolean hasFocus = SpellResolverHelpers.hasTransmutationFocus(resolver);
-        if (!hasFocus || player.getRandom().nextFloat() < 0.5f) {
-            offhandItem.shrink(1);
+        int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
+        int expansion = Math.max(0, aoeBuff);
+        
+        int applicationsPerformed = 0;
+        
+        BlockPos minPos = centerPos.offset(-expansion, -expansion, -expansion);
+        BlockPos maxPos = centerPos.offset(expansion, expansion, expansion);
+        
+        for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
+            if (offhandItem.isEmpty()) {
+                break; // No more items to apply with
+            }
+            
+            BlockState targetBlock = world.getBlockState(pos);
+            
+            // Check if there's a valid application recipe
+            var recipe = getApplicationRecipe(offhandItem, targetBlock, world);
+            if (recipe.isEmpty()) {
+                continue;
+            }
+
+   
+            var result = recipe.get().value().getResultItem(world.registryAccess());
+            if (result.isEmpty()) {
+                continue;
+            }
+
+
+            if (!hasFocus || player.getRandom().nextFloat() < 0.5f) {
+                offhandItem.shrink(1);
+            }
+
+            Block resultBlock = Block.byItem(result.getItem());
+            if (resultBlock != null && !resultBlock.equals(net.minecraft.world.level.block.Blocks.AIR)) {
+                world.setBlock(pos, resultBlock.defaultBlockState(), 3);
+            } else {
+
+                ItemEntity resultEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result.copy());
+                world.addFreshEntity(resultEntity);
+            }
+
+            world.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.8f, 1.0f + (world.random.nextFloat() - 0.5f) * 0.4f);
+            
+            applicationsPerformed++;
         }
 
-        // Replace the block if it's a block result
-        Block resultBlock = Block.byItem(result.getItem());
-        if (resultBlock != null && !resultBlock.equals(net.minecraft.world.level.block.Blocks.AIR)) {
-            world.setBlock(pos, resultBlock.defaultBlockState(), 3);
-        } else {
-            // Drop the result item
-            ItemEntity resultEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result.copy());
-            world.addFreshEntity(resultEntity);
-        }
-
-        // Play sound effect
-        world.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.8f, 1.0f + (world.random.nextFloat() - 0.5f) * 0.4f);
-
-        return true;
+        return applicationsPerformed > 0;
     }
 
     @Override
@@ -112,11 +125,13 @@ public class EffectApply extends AbstractItemResolveEffect {
 
         boolean hasFocus = SpellResolverHelpers.hasTransmutationFocus(resolver);
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
+        // Standard formula: 4 base + 4 per AOE level
         int maxAmountToApply = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
 
-        int applied = 0;
+        int totalApplied = 0;
+        
         for (ItemEntity itemEntity : entityList) {
-            if (applied >= maxAmountToApply) {
+            if (totalApplied >= maxAmountToApply) {
                 break;
             }
 
@@ -126,27 +141,63 @@ public class EffectApply extends AbstractItemResolveEffect {
             if (recipe.isPresent()) {
                 var result = recipe.get().value().getResultItem(world.registryAccess());
                 if (!result.isEmpty()) {
-                    // Check if we should consume from offhand
-                    if (!hasFocus || player.getRandom().nextFloat() < 0.5f) {
-                        offhandItem.shrink(1);
+                    // Calculate how many we can apply to this stack
+                    int remainingToApply = maxAmountToApply - totalApplied;
+                    int stackSize = itemStack.getCount();
+                    int applicationsToThisStack = Math.min(remainingToApply, stackSize);
+                    
+                    // Check if we have enough offhand items (if not using focus)
+                    if (!hasFocus) {
+                        applicationsToThisStack = Math.min(applicationsToThisStack, offhandItem.getCount());
+                    }
+                    
+                    if (applicationsToThisStack > 0) {
+                        // Consume offhand items
+                        int offhandToConsume = hasFocus ? 
+                            (int) Math.ceil(applicationsToThisStack * 0.5f) : // 50% chance per item with focus
+                            applicationsToThisStack; // 100% consumption without focus
+                        
+                        if (hasFocus) {
+                            // With focus, use random consumption
+                            int actuallyConsumed = 0;
+                            for (int i = 0; i < applicationsToThisStack; i++) {
+                                if (player.getRandom().nextFloat() < 0.5f) {
+                                    actuallyConsumed++;
+                                }
+                            }
+                            offhandToConsume = actuallyConsumed;
+                        }
+                        
+                        offhandToConsume = Math.min(offhandToConsume, offhandItem.getCount());
+                        offhandItem.shrink(offhandToConsume);
+                        
+                        // Apply to the stack
+                        itemStack.shrink(applicationsToThisStack);
+                        if (itemStack.getCount() <= 0) {
+                            itemEntity.discard();
+                        }
+
+                        // Create result items
+                        for (int i = 0; i < applicationsToThisStack; i++) {
+                            ItemEntity resultEntity = new ItemEntity(world, 
+                                itemEntity.getX() + (world.random.nextFloat() - 0.5f) * 0.2f, 
+                                itemEntity.getY(), 
+                                itemEntity.getZ() + (world.random.nextFloat() - 0.5f) * 0.2f, 
+                                result.copy());
+                            world.addFreshEntity(resultEntity);
+                        }
+
+                        // Play sound effect
+                        world.playSound(null, itemEntity.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 
+                            0.6f, 1.0f + (world.random.nextFloat() - 0.5f) * 0.4f);
+                        
+                        totalApplied += applicationsToThisStack;
+                        
+                        // Break if we've used up all offhand items
                         if (offhandItem.isEmpty()) {
-                            break; // No more items to apply with
+                            break;
                         }
                     }
-
-                    // Replace the item entity with the result
-                    itemStack.shrink(1);
-                    if (itemStack.getCount() <= 0) {
-                        itemEntity.discard();
-                    }
-
-                    ItemEntity resultEntity = new ItemEntity(world, itemEntity.getX(), itemEntity.getY(), itemEntity.getZ(), result.copy());
-                    world.addFreshEntity(resultEntity);
-
-                    // Play sound effect
-                    world.playSound(null, itemEntity.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.6f, 1.0f + (world.random.nextFloat() - 0.5f) * 0.4f);
-                    
-                    applied++;
                 }
             }
         }
@@ -174,7 +225,7 @@ public class EffectApply extends AbstractItemResolveEffect {
     @Override
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
-        map.put(AugmentAOE.INSTANCE, "Increases the amount of items that can be applied to");
+        map.put(AugmentAOE.INSTANCE, "Increases the amount of items that can be applied to and the area of blocks affected");
     }
 
     @Nonnull
