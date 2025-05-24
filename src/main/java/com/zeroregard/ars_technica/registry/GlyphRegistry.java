@@ -20,6 +20,7 @@ public class GlyphRegistry {
         register(EffectWhirl.INSTANCE);
         register(EffectInsert.INSTANCE);
         register(EffectTelefeast.INSTANCE);
+        register(EffectApply.INSTANCE);
     }
 
     public static void register(AbstractSpellPart spellPart){
