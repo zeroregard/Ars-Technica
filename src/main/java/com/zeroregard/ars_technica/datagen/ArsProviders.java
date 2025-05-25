@@ -290,6 +290,10 @@ public class ArsProviders {
             futures.add(saveGlyphRecipe(cache, output, "glyph_telefeast", 55,
                 List.of("ars_nouveau:manipulation_essence", "minecraft:golden_apple", "minecraft:bucket", "minecraft:glass_bottle", "minecraft:ender_pearl"),
                 "ars_technica:glyph_telefeast"));
+            
+            futures.add(saveGlyphRecipe(cache, output, "glyph_apply", 27,
+                List.of("ars_nouveau:manipulation_essence", "create:brass_hand"),
+                "ars_technica:glyph_apply"));
 
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         }
