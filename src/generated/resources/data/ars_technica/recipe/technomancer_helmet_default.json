@@ -1,5 +1,6 @@
 {
   "type": "ars_technica:armor_upgrade",
+  "keepNbtOfReagent": true,
   "pedestalItems": [
     {
       "item": "ars_technica:mark_of_technomancy"

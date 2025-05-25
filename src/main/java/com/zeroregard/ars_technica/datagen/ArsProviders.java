@@ -390,7 +390,7 @@ public class ArsProviders {
                 .pattern("CSC")
                 .pattern("BCB")
                 .define('B', Ingredient.fromValues(java.util.stream.Stream.of(new Ingredient.TagValue(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/brass"))))))
-                .define('C', Ingredient.of(net.minecraft.world.item.Items.ITEM_FRAME))
+                .define('C', Ingredient.of(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("create", "cogwheel"))))
                 .define('S', ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())
                 .define('E', ELECTRON_TUBE.get())
                 .unlockedBy("has_calibrated_precision_mechanism", has(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get()))
@@ -512,10 +512,8 @@ public class ArsProviders {
             // Add source cost
             json.addProperty("sourceCost", 7000);
             
-            // Add keepNbtOfReagent for conditional recipes
-            if (conditional) {
-                json.addProperty("keepNbtOfReagent", true);
-            }
+            // Add keepNbtOfReagent for all armor recipes
+            json.addProperty("keepNbtOfReagent", true);
 
             Path path = output.resolve("data/" + root + "/recipe/" + name + ".json");
             return DataProvider.saveStable(cache, json, path);

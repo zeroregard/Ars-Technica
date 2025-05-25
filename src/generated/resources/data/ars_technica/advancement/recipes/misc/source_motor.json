@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_calibrated_precision_mechanism": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_technica:calibrated_precision_mechanism"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ars_technica:source_motor"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_calibrated_precision_mechanism"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ars_technica:source_motor"
+    ]
+  }
+}
