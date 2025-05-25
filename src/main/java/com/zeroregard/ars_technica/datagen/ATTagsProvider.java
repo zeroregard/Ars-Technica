@@ -25,6 +25,7 @@ public class ATTagsProvider {
     public static final TagKey<Item> MAGIC_ROBE = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "robe"));
     public static final TagKey<Item> MAGIC_LEG = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "legs"));
     public static final TagKey<Item> MAGIC_BOOT = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "boot"));
+    public static final TagKey<Item> MAGIC_ARMOR = ItemTags.create(ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "magic_armor"));
 
     public ATItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
       super(output, Registries.ITEM, lookupProvider, item -> item.builtInRegistryHolder().key(), ArsTechnica.MODID, existingFileHelper);
@@ -41,6 +42,9 @@ public class ATTagsProvider {
       tag(MAGIC_ROBE).add(chest);
       tag(MAGIC_LEG).add(legs);
       tag(MAGIC_BOOT).add(boots);
+
+      // Magic armor tag containing all technomancer armor pieces
+      tag(MAGIC_ARMOR).add(hat, chest, legs, boots);
 
       tag(ItemTags.ARMOR_ENCHANTABLE).add(hat, chest, legs, boots);
       tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(hat, chest, legs, boots);
