@@ -27,6 +27,8 @@ public class Setup {
 
         gen.addProvider(event.includeServer(), new ArsProviders.EnchantingAppProvider(gen));
         gen.addProvider(event.includeServer(), new ATTagsProvider.ATItemTagsProvider(output, provider, existingFileHelper));
+        gen.addProvider(event.includeServer(), new ATTagsProvider.CItemTagsProvider(output, provider, existingFileHelper));
+        gen.addProvider(event.includeServer(), new ATTagsProvider.CuriosItemTagsProvider(output, provider, existingFileHelper));
         gen.addProvider(event.includeServer(), new ATAdvancementsProvider(output, provider, existingFileHelper));
         // gen.addProvider(event.includeServer(), new ArsProviders.ImbuementProvider(gen));
 
