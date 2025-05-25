@@ -3,7 +3,7 @@
   "keepNbtOfReagent": false,
   "pedestalItems": [
     {
-      "item": "minecraft:gold_ingot"
+      "tag": "c:ingots/gold"
     },
     {
       "item": "ars_technica:calibrated_precision_mechanism"

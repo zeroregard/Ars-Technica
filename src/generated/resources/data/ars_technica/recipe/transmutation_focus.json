@@ -3,7 +3,7 @@
   "keepNbtOfReagent": false,
   "pedestalItems": [
     {
-      "item": "create:brass_ingot"
+      "tag": "c:ingots/brass"
     },
     {
       "item": "minecraft:rabbit_foot"
