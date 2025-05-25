@@ -49,7 +49,6 @@ public class ArsProviders {
         @Override
         public void collectJsons(CachedOutput cache) {
             addIngredientRecipes();
-            addTechnomancerArmorRecipes();
             addEquipmentRecipes();
             addCurioRecipes();
             addThreadRecipes();
@@ -128,64 +127,6 @@ public class ArsProviders {
                     .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
                     .build());
         }
-
-
-        ArmorBuilder Abuilder() {
-            return new ArmorBuilder();
-        }
-
-        public static class ArmorBuilder extends ApparatusRecipeBuilder {
-
-            @Override
-            public RecipeWrapper<EnchantingApparatusRecipe> build() {
-                var wrapper = super.build();
-                return new RecipeWrapper<>(wrapper.id(), new TechnomancerArmorRecipe(wrapper.recipe().reagent(), wrapper.recipe().result(), wrapper.recipe().pedestalItems(), wrapper.recipe().sourceCost()), TechnomancerArmorRecipe.CODEC);
-            }
-        }
-
-        protected void addTechnomancerArmorRecipes() {
-            recipes.add(Abuilder()
-                            .withResult(ItemRegistry.TECHNOMANCER_HELMET.get())
-                            .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_HOOD))
-                            //
-                            .withPedestalItem(Items.NETHERITE_INGOT)
-                            .withPedestalItem(BRASS_INGOT)
-                            .withPedestalItem(GOGGLES)
-                            .withSourceCost(7000)
-                            .keepNbtOfReagent(true)
-                            .build());
-            recipes.add(
-                    Abuilder()
-                            .withResult(ItemRegistry.TECHNOMANCER_CHESTPLATE.get())
-                            .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_ROBE))
-                            //
-                            .withPedestalItem(Items.NETHERITE_INGOT)
-                            .withPedestalItem(2, BRASS_INGOT)
-                            .withSourceCost(7000)
-                            .keepNbtOfReagent(true)
-                            .build());
-            recipes.add(
-                    Abuilder()
-                            .withResult((ItemRegistry.TECHNOMANCER_LEGGINGS.get()))
-                            .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_LEG))
-                            //
-                            .withPedestalItem(Items.NETHERITE_INGOT)
-                            .withPedestalItem(2, BRASS_INGOT)
-                            .withSourceCost(7000)
-                            .keepNbtOfReagent(true)
-                            .build());
-            recipes.add(
-                    Abuilder()
-                            .withResult(ItemRegistry.TECHNOMANCER_BOOTS.get())
-                            .withReagent(Ingredient.of(ATTagsProvider.ATItemTagsProvider.MAGIC_BOOT))
-                           //
-                            .withPedestalItem(Items.NETHERITE_INGOT)
-                            .withPedestalItem(2, BRASS_INGOT)
-                            .withSourceCost(7000)
-                            .keepNbtOfReagent(true)
-                            .build());
-        }
-
 
         protected static Path getRecipePath(Path pathIn, String str) {
             return pathIn.resolve("data/" + root + "/recipe/" + str + ".json");
@@ -436,7 +377,10 @@ public class ArsProviders {
             
             List<CompletableFuture<?>> futures = new ArrayList<>();
             
+            System.out.println("ArmorUpgradeProvider: Starting recipe generation");
+            
             // Conditional recipes (when ars_elemental is loaded)
+            System.out.println("ArmorUpgradeProvider: Adding conditional recipes");
             futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_helmet", 
                 "ars_elemental:mark_of_mastery", "ars_nouveau:magic_hood", "ars_technica:technomancer_helmet",
                 List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), true));
@@ -454,6 +398,7 @@ public class ArsProviders {
                 List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
 
             // Default recipes (no conditions)
+            System.out.println("ArmorUpgradeProvider: Adding default recipes");
             futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_helmet_default",
                 "ars_technica:mark_of_technomancy", "ars_nouveau:magic_hood", "ars_technica:technomancer_helmet",
                 List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), false));
@@ -470,15 +415,18 @@ public class ArsProviders {
                 "ars_technica:mark_of_technomancy", "ars_nouveau:magic_boots", "ars_technica:technomancer_boots",
                 List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
 
+            System.out.println("ArmorUpgradeProvider: Added " + futures.size() + " recipe futures");
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         }
 
         private CompletableFuture<?> saveArmorUpgradeRecipe(CachedOutput cache, Path output, String name, 
                 String markItem, String reagentTag, String resultItem, List<String> pedestalItems, boolean conditional) {
+            System.out.println("ArmorUpgradeProvider: Generating recipe " + name + " (conditional: " + conditional + ")");
             JsonObject json = new JsonObject();
             
             // Add conditions for conditional recipes
             if (conditional) {
+                System.out.println("ArmorUpgradeProvider: Adding conditions for " + name);
                 com.google.gson.JsonArray conditions = new com.google.gson.JsonArray();
                 JsonObject condition = new JsonObject();
                 condition.addProperty("type", "neoforge:mod_loaded");
@@ -520,6 +468,7 @@ public class ArsProviders {
             json.addProperty("keepNbtOfReagent", true);
 
             Path path = output.resolve("data/" + root + "/recipe/" + name + ".json");
+            System.out.println("ArmorUpgradeProvider: Saving recipe to " + path);
             return DataProvider.saveStable(cache, json, path);
         }
 
