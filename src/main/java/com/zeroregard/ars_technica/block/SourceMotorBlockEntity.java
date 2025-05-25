@@ -178,7 +178,7 @@ public class SourceMotorBlockEntity extends GeneratingKineticBlockEntity {
         if (sourceCost == 0) {
             return;
         }
-        var success = SourceUtil.takeSourceWithParticles(worldPosition, level, 10, sourceCost) != null;
+        var success = SourceUtil.takeSourceMultipleWithParticles(worldPosition, level, 10, sourceCost) != null;
         var fueledStateChanged = success != fueled;
         fueled = success;
         if(fueledStateChanged) {
