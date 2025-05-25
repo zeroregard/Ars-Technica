@@ -76,7 +76,6 @@ public class ATTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-      // Experience consumable tags - all need replace: false
       tag(EXPERIENCE_3)
           .replace(false)
           .addOptional(ResourceLocation.fromNamespaceAndPath("ars_nouveau", "experience_gem"))
