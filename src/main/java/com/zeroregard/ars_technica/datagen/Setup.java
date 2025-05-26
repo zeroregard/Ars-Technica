@@ -35,6 +35,7 @@ public class Setup {
         gen.addProvider(event.includeServer(), new ArsProviders.GlyphProvider(gen));
         gen.addProvider(event.includeServer(), new ArsProviders.DyeProvider(gen));
         gen.addProvider(event.includeServer(), new ArsProviders.CraftingProvider(gen));
+        gen.addProvider(event.includeServer(), new ArsProviders.CreateRecipeProvider(gen));
         gen.addProvider(event.includeServer(), new ArsProviders.ArmorUpgradeProvider(gen));
         // gen.addProvider(event.includeServer(), new ArsProviders.PatchouliProvider(gen));
     }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "ars_technica:blank_disc"
+    },
+    "G": {
+      "item": "ars_nouveau:source_gem"
+    },
+    "S": {
+      "tag": "c:plates/brass"
+    }
+  },
+  "pattern": [
+    " S ",
+    "GBG",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "ars_technica:pocket_factory"
+  }
+} 

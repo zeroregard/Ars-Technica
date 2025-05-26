@@ -117,5 +117,8 @@
 	"entity.ars_technica.arcane_polish_entity": "Arcane Polisher",
 	"entity.ars_technica.arcane_press_entity": "Arcane Press",
 	"entity.ars_technica.arcane_whirl_entity": "Arcane Whirl",
-	"entity.ars_technica.item_projectile_entity": "Item Bubble"
+	"entity.ars_technica.item_projectile_entity": "Item Bubble",
+
+	"item.ars_technica.blank_disc": "Blank Disc",
+	"item.ars_technica.crushed_vinyl": "Crushed Vinyl"
 }

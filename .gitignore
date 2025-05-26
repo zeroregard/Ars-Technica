@@ -13,3 +13,5 @@ node_modules/
 .github/scripts/dist/
 .github/scripts/coverage/
 .github/scripts/debug/
+
+MR_ROBOT.md
