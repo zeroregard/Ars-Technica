@@ -1,12 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     {
       "item": "ars_technica:giant_experience_gem"
     }
   ],
   "result": {
-    "id": "ars_nouveau:greater_experience_gem",
-    "count": 4
+    "count": 4,
+    "id": "ars_nouveau:greater_experience_gem"
   }
 }

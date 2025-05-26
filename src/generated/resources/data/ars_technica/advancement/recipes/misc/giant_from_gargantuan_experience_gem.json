@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_gargantuan_experience_gem": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_technica:gargantuan_experience_gem"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ars_technica:giant_from_gargantuan_experience_gem"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_gargantuan_experience_gem"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ars_technica:giant_from_gargantuan_experience_gem"
+    ]
+  }
+}

@@ -6,6 +6,7 @@
     }
   ],
   "type": "ars_technica:armor_upgrade",
+  "keepNbtOfReagent": true,
   "pedestalItems": [
     {
       "item": "ars_elemental:mark_of_mastery"

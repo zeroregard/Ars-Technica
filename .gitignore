@@ -5,6 +5,7 @@ bin/*
 run/*
 .DS_Store
 .idea/workspace.xml
+src/generated/resources/.cache
 
 # Node.js
 node_modules/
