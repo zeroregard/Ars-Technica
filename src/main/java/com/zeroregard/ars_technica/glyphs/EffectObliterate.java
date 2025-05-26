@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentFortune;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
 import com.zeroregard.ars_technica.entity.ArcaneHammerEntity;
 import net.minecraft.resources.ResourceLocation;
@@ -59,6 +60,7 @@ public class EffectObliterate extends AbstractEffect {
         super.addAugmentDescriptions(map);
         map.put(AugmentSensitive.INSTANCE, "Processes items instead of destroying them");
         map.put(AugmentAmplify.INSTANCE, "Increases the size and damage of the hammer");
+        map.put(AugmentFortune.INSTANCE, "Increases the chance of getting additional items from crushing recipes by 25% per level");
     }
 
     @Override
@@ -69,7 +71,7 @@ public class EffectObliterate extends AbstractEffect {
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentSensitive.INSTANCE, AugmentAmplify.INSTANCE);
+        return augmentSetOf(AugmentSensitive.INSTANCE, AugmentAmplify.INSTANCE, AugmentFortune.INSTANCE);
     }
 
     @Nonnull
@@ -86,5 +88,10 @@ public class EffectObliterate extends AbstractEffect {
     @Override
     public SpellTier defaultTier() {
         return SpellTier.THREE;
+    }
+
+    @Override
+    protected void addDefaultAugmentLimits(Map<ResourceLocation, Integer> defaults) {
+        defaults.put(AugmentFortune.INSTANCE.getRegistryName(), 4);
     }
 }

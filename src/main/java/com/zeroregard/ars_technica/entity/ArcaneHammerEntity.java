@@ -47,6 +47,7 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.keyframe.event.data.CustomInstructionKeyframeData;
 import software.bernie.geckolib.util.Color;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentFortune;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     private final Level world;
     private Entity caster;
     private SpellResolver resolver;
+    private SpellStats spellStats;
     private float ampScalar = 1.5f;
     private float amps = 0.0f;
 
@@ -134,6 +136,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         this.caster = caster;
         this.processItems = spellStats.isSensitive();
         this.resolver = resolver;
+        this.spellStats = spellStats;
         this.amps = (float)spellStats.getAmpMultiplier();
         this.target = target;
         setPos(position.x, position.y, position.z);
@@ -270,8 +273,19 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
                     List<ItemStack> rolledResults = recipe.get().rollResults();
                     for (int i = 0; i < rolledResults.size(); i++) {
                         ItemStack stack = rolledResults.get(i);
-                        if (SpellResolverHelpers.shouldDoubleOutputs(resolver) && RecipeHelpers.isChanceBased(stack, recipe.get())) {
-                            stack.grow(stack.getCount());
+                        if (RecipeHelpers.isChanceBased(stack, recipe.get())) {
+                            float fortuneMultiplier = 1.0f;
+                            if (spellStats != null) {
+                                int fortuneLevel = spellStats.getBuffCount(AugmentFortune.INSTANCE);
+                                fortuneMultiplier = 1.0f + (0.25f * fortuneLevel);
+                                
+                                if (SpellResolverHelpers.shouldDoubleOutputs(resolver)) {
+                                    fortuneMultiplier *= 2.0f;
+                                }
+                            }
+                            
+                            int newCount = (int) Math.round(stack.getCount() * fortuneMultiplier);
+                            stack.setCount(newCount);
                         }
                         ItemHelper.addToList(stack, list);
                     }
