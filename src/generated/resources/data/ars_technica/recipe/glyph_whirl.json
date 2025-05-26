@@ -3,16 +3,16 @@
   "exp": 55,
   "inputs": [
     {
-        "item": "ars_nouveau:manipulation_essence"
+      "item": "ars_nouveau:manipulation_essence"
     },
     {
-        "item": "ars_nouveau:air_essence"
+      "item": "ars_nouveau:air_essence"
     },
     {
-        "item": "ars_nouveau:air_essence"
+      "item": "ars_nouveau:air_essence"
     },
     {
-        "item": "ars_nouveau:air_essence"
+      "item": "ars_nouveau:air_essence"
     }
   ],
   "output": {

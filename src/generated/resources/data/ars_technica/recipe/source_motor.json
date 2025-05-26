@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "BEB",
-    "CSC",
-    "BCB"
-  ],
+  "category": "misc",
   "key": {
     "B": {
       "tag": "c:ingots/brass"
@@ -12,15 +8,20 @@
     "C": {
       "item": "create:cogwheel"
     },
-    "S": {
-      "item": "ars_technica:calibrated_precision_mechanism"
-    },
     "E": {
       "item": "create:electron_tube"
+    },
+    "S": {
+      "item": "ars_technica:calibrated_precision_mechanism"
     }
   },
+  "pattern": [
+    "BEB",
+    "CSC",
+    "BCB"
+  ],
   "result": {
-    "id": "ars_technica:source_motor",
-    "count": 1
+    "count": 1,
+    "id": "ars_technica:source_motor"
   }
 }

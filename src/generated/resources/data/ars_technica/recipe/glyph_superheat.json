@@ -3,19 +3,19 @@
   "exp": 160,
   "inputs": [
     {
-        "item": "ars_nouveau:fire_essence"
+      "item": "ars_nouveau:fire_essence"
     },
     {
-        "item": "ars_nouveau:fire_essence"
+      "item": "ars_nouveau:fire_essence"
     },
     {
-        "item": "ars_nouveau:fire_essence"
+      "item": "ars_nouveau:fire_essence"
     },
     {
-        "item": "minecraft:blaze_rod"
+      "item": "minecraft:blaze_rod"
     },
     {
-        "item": "create:blaze_cake"
+      "item": "create:blaze_cake"
     }
   ],
   "output": {

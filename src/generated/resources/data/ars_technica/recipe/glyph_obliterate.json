@@ -3,13 +3,13 @@
   "exp": 160,
   "inputs": [
     {
-        "item": "ars_nouveau:manipulation_essence"
+      "item": "ars_nouveau:manipulation_essence"
     },
     {
-        "item": "minecraft:anvil"
+      "item": "minecraft:anvil"
     },
     {
-        "item": "minecraft:diamond_block"
+      "item": "minecraft:diamond_block"
     }
   ],
   "output": {
