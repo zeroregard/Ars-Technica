@@ -53,7 +53,8 @@ public class TransmutationFocus extends ArsNouveauCurio implements ISpellModifie
                 "ars_technica.tooltip.transmutation_focus_shift_info_speed",
                 "ars_technica.tooltip.transmutation_focus_shift_info_process",
                 "ars_technica.tooltip.transmutation_focus_shift_info_chance",
-                "ars_technica.tooltip.transmutation_focus_shift_info_damage"
+                "ars_technica.tooltip.transmutation_focus_shift_info_damage",
+                "ars_technica.tooltip.transmutation_focus_shift_info_luck"
         };
 
         for (String key : infoKeys) {
