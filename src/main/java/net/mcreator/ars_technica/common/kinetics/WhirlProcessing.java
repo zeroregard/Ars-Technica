@@ -76,7 +76,6 @@ public class WhirlProcessing extends FanProcessing {
         return Optional.empty();
     }
 
-
     private static int decrementProcessingTime(ItemEntity entity, FanProcessingType type, double processingBoost) {
         CompoundTag nbt = entity.getPersistentData();
 
@@ -89,7 +88,7 @@ public class WhirlProcessing extends FanProcessing {
         CompoundTag processing = createData.getCompound("Processing");
 
         if (!processing.contains("Type") || AllFanProcessingTypes.parseLegacy(processing.getString("Type")) != type) {
-            processing.putString("Type", String.valueOf(CreateBuiltInRegistries.FAN_PROCESSING_TYPE.getId(type)));
+            processing.putString("Type", getProcessorLegacyId(type));
             int timeModifierForStackSize = ((entity.getItem().getCount() - 1) / 16) + 1;
             int baseProcessingTime = (int) (AllConfigs.server().kinetics.fanProcessingTime.get() * timeModifierForStackSize) + 1;
 
@@ -100,5 +99,21 @@ public class WhirlProcessing extends FanProcessing {
         int value = processing.getInt("Time") - 1;
         processing.putInt("Time", value);
         return value;
+    }
+
+    private static String getProcessorLegacyId(FanProcessingType processor) {
+        if (processor == AllFanProcessingTypes.BLASTING) {
+            return "BLASTING";
+        }
+        if (processor == AllFanProcessingTypes.HAUNTING) {
+            return "HAUNTING";
+        }
+        if (processor == AllFanProcessingTypes.SMOKING) {
+            return "SMOKING";
+        }
+        if (processor == AllFanProcessingTypes.SPLASHING) {
+            return "SPLASHING";
+        }
+        return "NONE";
     }
 }
