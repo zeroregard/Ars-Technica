@@ -33,7 +33,9 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
     private void modifyTicksUntilCharge(Entity entity, CallbackInfo ci) {
         if (entity == null) return;
         ArsTechnicaMod.LOGGER.info(entity.level().getGameTime());
-        this.ticksUntilCharge = ticksUntilChargeCount;
+        if(ticksUntilChargeCount != -1) {
+            this.ticksUntilCharge = ticksUntilChargeCount;
+        }
     }
 
     @Inject(method = "saveAdditional", at = @At("HEAD"))
@@ -63,6 +65,9 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
 
     @Override
     public int getTicksUntilChargeCount() {
+        if(this.ticksUntilChargeCount == -1) {
+            return 20 * 2;
+        }
         return this.ticksUntilChargeCount;
     }
 
