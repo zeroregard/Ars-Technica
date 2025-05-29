@@ -277,7 +277,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
                             float fortuneMultiplier = 1.0f;
                             if (spellStats != null) {
                                 int fortuneLevel = spellStats.getBuffCount(AugmentFortune.INSTANCE);
-                                fortuneMultiplier = 1.0f + (0.25f * fortuneLevel);
+                                fortuneMultiplier = 1.0f + (0.33f * fortuneLevel);
                                 
                                 if (SpellResolverHelpers.shouldDoubleOutputs(resolver)) {
                                     fortuneMultiplier *= 2.0f;
