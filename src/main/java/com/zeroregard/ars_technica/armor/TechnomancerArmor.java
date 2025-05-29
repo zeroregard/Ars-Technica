@@ -72,7 +72,9 @@ public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModif
 
   @Override
   public @Nullable ResourceLocation getArmorTexture(@NotNull ItemStack stack, @NotNull Entity entity, @NotNull EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
-    return ResourceLocation.fromNamespaceAndPath(ArsTechnica.MODID, "textures/armor/technomancer.png");
+    // Return null to let GeckoLib renderer handle the texture location
+    // This prevents conflicts with Figura and other mods that intercept armor rendering
+    return null;
   }
 
   @Override
