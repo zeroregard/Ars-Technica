@@ -41,6 +41,7 @@ public class ArcaneSchematiccannonRenderer extends SchematicannonRenderer {
         if (blockEntity instanceof ITechnomancerAware technomancerAware && technomancerAware.isTechnomancerNearby()) {
             renderCannonModel(blockEntity, partialTicks, ms, buffer, light, overlay);
         }
+        super.renderSafe(blockEntity, partialTicks, ms, buffer, light, overlay);
 
     }
 
