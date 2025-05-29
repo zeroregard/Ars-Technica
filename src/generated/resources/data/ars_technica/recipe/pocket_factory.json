@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "B": {
-      "item": "ars_technica:blank_disc"
+      "tag": "c:blank_music_disc"
     },
     "G": {
       "item": "ars_nouveau:source_gem"

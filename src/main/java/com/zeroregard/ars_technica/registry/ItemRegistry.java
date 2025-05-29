@@ -65,9 +65,8 @@ public class ItemRegistry {
 
     public static final DeferredItem<Item> MARK_OF_TECHNOMANCY = ITEMS.registerSimpleItem("mark_of_technomancy", new Item.Properties().stacksTo(64));
 
-    // New items for music disc crafting
+    // New items for music disc crafting - conditional blank disc
     public static final DeferredItem<Item> BLANK_DISC = ITEMS.registerSimpleItem("blank_disc", new Item.Properties().stacksTo(1));
-    public static final DeferredItem<Item> CRUSHED_VINYL = ITEMS.registerSimpleItem("crushed_vinyl", new Item.Properties().stacksTo(64));
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);

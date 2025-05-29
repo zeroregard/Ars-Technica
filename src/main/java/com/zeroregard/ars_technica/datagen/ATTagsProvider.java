@@ -73,6 +73,7 @@ public class ATTagsProvider {
     public static final TagKey<Item> EXPERIENCE_192 = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "consumables/experience_192"));
     public static final TagKey<Item> WRENCH = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/wrench"));
     public static final TagKey<Item> MUSIC_DISCS = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "music_discs"));
+    public static final TagKey<Item> BLANK_MUSIC_DISC = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "blank_music_disc"));
 
     public CItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
       super(output, Registries.ITEM, lookupProvider, item -> item.builtInRegistryHolder().key(), "c", existingFileHelper);
@@ -106,6 +107,12 @@ public class ATTagsProvider {
       tag(MUSIC_DISCS)
           .replace(false)
           .add(ItemRegistry.POCKET_FACTORY.get());
+
+      // Blank music disc tag - include both our blank disc and etched's blank disc
+      tag(BLANK_MUSIC_DISC)
+          .replace(false)
+          .add(ItemRegistry.BLANK_DISC.get())
+          .addOptional(ResourceLocation.fromNamespaceAndPath("etched", "blank_music_disc"));
     }
 
     @Override

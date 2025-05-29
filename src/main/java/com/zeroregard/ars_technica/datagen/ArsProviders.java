@@ -60,7 +60,6 @@ public class ArsProviders {
                     saveStable(cache, g.serialize(), path);
                 }
             }
-
         }
 
         protected void addIngredientRecipes() {
@@ -98,6 +97,13 @@ public class ArsProviders {
                     .withSourceCost(500)
                     .build());
 
+            // Blank disc recipe - conditional on etched not being loaded
+            recipes.add(builder()
+                    .withResult(ItemRegistry.BLANK_DISC)
+                    .withReagent(Ingredient.fromValues(java.util.stream.Stream.of(new Ingredient.TagValue(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "music_discs"))))))
+                    .withPedestalItem(Ingredient.of(FIRE_ESSENCE))
+                    .withSourceCost(0)
+                    .build());
         }
 
 
@@ -368,7 +374,7 @@ public class ArsProviders {
                 .pattern(" S ")
                 .define('S', Ingredient.fromValues(java.util.stream.Stream.of(new Ingredient.TagValue(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "plates/brass"))))))
                 .define('G', SOURCE_GEM.get())
-                .define('B', ItemRegistry.BLANK_DISC.get())
+                .define('B', Ingredient.fromValues(java.util.stream.Stream.of(new Ingredient.TagValue(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "blank_music_disc"))))))
                 .unlockedBy("has_blank_disc", has(ItemRegistry.BLANK_DISC.get()))
                 .save(output);
         }
@@ -493,96 +499,9 @@ public class ArsProviders {
             
             List<CompletableFuture<?>> futures = new ArrayList<>();
             
-            // Crushing recipe for any music disc -> Crushed Vinyl
-            futures.add(saveCrushingRecipe(cache, output, "crush_music_discs", 
-                "c:music_discs", "ars_technica:crushed_vinyl", 1, 1.0f, 
-                List.of(
-                    new RecipeResult("ars_technica:crushed_vinyl", 1, 0.5f),
-                    new RecipeResult("ars_technica:crushed_vinyl", 1, 0.25f)
-                )));
-            
-            // Pressing recipe: 3 Crushed Vinyl -> Blank Disc
-            futures.add(savePressingRecipe(cache, output, "press_blank_disc",
-                "ars_technica:crushed_vinyl", 3, "ars_technica:blank_disc", 1));
+            // No longer need smelting recipe - blank disc is now made via enchanting apparatus
 
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-        }
-
-        private CompletableFuture<?> saveCrushingRecipe(CachedOutput cache, Path output, String name, 
-                String inputTag, String primaryResult, int primaryCount, float primaryChance,
-                List<RecipeResult> additionalResults) {
-            JsonObject json = new JsonObject();
-            json.addProperty("type", "create:crushing");
-            
-            com.google.gson.JsonArray ingredients = new com.google.gson.JsonArray();
-            JsonObject ingredient = new JsonObject();
-            ingredient.addProperty("tag", inputTag);
-            ingredients.add(ingredient);
-            json.add("ingredients", ingredients);
-            
-            com.google.gson.JsonArray results = new com.google.gson.JsonArray();
-            
-            // Primary result
-            JsonObject primaryResultObj = new JsonObject();
-            primaryResultObj.addProperty("item", primaryResult);
-            primaryResultObj.addProperty("count", primaryCount);
-            if (primaryChance < 1.0f) {
-                primaryResultObj.addProperty("chance", primaryChance);
-            }
-            results.add(primaryResultObj);
-            
-            // Additional results
-            for (RecipeResult result : additionalResults) {
-                JsonObject resultObj = new JsonObject();
-                resultObj.addProperty("item", result.item);
-                resultObj.addProperty("count", result.count);
-                if (result.chance < 1.0f) {
-                    resultObj.addProperty("chance", result.chance);
-                }
-                results.add(resultObj);
-            }
-            
-            json.add("results", results);
-            json.addProperty("processingTime", 250);
-
-            Path path = output.resolve("data/" + root + "/recipe/" + name + ".json");
-            return DataProvider.saveStable(cache, json, path);
-        }
-
-        private CompletableFuture<?> savePressingRecipe(CachedOutput cache, Path output, String name,
-                String inputItem, int inputCount, String resultItem, int resultCount) {
-            JsonObject json = new JsonObject();
-            json.addProperty("type", "create:pressing");
-            
-            com.google.gson.JsonArray ingredients = new com.google.gson.JsonArray();
-            for (int i = 0; i < inputCount; i++) {
-                JsonObject ingredient = new JsonObject();
-                ingredient.addProperty("item", inputItem);
-                ingredients.add(ingredient);
-            }
-            json.add("ingredients", ingredients);
-            
-            com.google.gson.JsonArray results = new com.google.gson.JsonArray();
-            JsonObject result = new JsonObject();
-            result.addProperty("item", resultItem);
-            result.addProperty("count", resultCount);
-            results.add(result);
-            json.add("results", results);
-
-            Path path = output.resolve("data/" + root + "/recipe/" + name + ".json");
-            return DataProvider.saveStable(cache, json, path);
-        }
-
-        private static class RecipeResult {
-            final String item;
-            final int count;
-            final float chance;
-
-            RecipeResult(String item, int count, float chance) {
-                this.item = item;
-                this.count = count;
-                this.chance = chance;
-            }
         }
 
         @Override
