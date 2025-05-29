@@ -72,6 +72,7 @@ public class ATTagsProvider {
     public static final TagKey<Item> EXPERIENCE_48 = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "consumables/experience_48"));
     public static final TagKey<Item> EXPERIENCE_192 = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "consumables/experience_192"));
     public static final TagKey<Item> WRENCH = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "tools/wrench"));
+    public static final TagKey<Item> MUSIC_DISCS = ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "music_discs"));
 
     public CItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
       super(output, Registries.ITEM, lookupProvider, item -> item.builtInRegistryHolder().key(), "c", existingFileHelper);
@@ -100,6 +101,11 @@ public class ATTagsProvider {
       tag(WRENCH)
           .replace(false)
           .add(ItemRegistry.RUNIC_SPANNER.get());
+
+      // Music disc tag - include our pocket factory disc
+      tag(MUSIC_DISCS)
+          .replace(false)
+          .add(ItemRegistry.POCKET_FACTORY.get());
     }
 
     @Override
