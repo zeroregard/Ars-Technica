@@ -177,7 +177,12 @@ public class EffectApply extends AbstractItemResolveEffect {
     }
 
     private Optional<RecipeHolder<Recipe<RecipeInput>>> getApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
-        return RecipeHelpers.getItemApplicationRecipe(applyItem, target, world);
+        var recipe = RecipeHelpers.getItemApplicationRecipe(applyItem, target, world);
+        if (recipe.isPresent()) {
+            return recipe;
+        }
+        
+        return RecipeHelpers.getDeployingRecipe(applyItem, target, world);
     }
 
     private Optional<RecipeHolder<Recipe<RecipeInput>>> getApplicationRecipe(ItemStack applyItem, BlockState target, Level world) {
@@ -346,7 +351,7 @@ public class EffectApply extends AbstractItemResolveEffect {
 
     @Override
     public String getBookDescription() {
-        return "Uses the item in your offhand to apply to blocks or items, such as applying andesite alloy to stripped logs to create casings";
+        return "Uses the item in your offhand to apply to blocks or items, such as applying andesite alloy to stripped logs to create casings. Also supports deploying items onto other items.";
     }
 
     @Override

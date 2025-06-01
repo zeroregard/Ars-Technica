@@ -97,4 +97,23 @@ public class RecipeHelpers {
         return Optional.empty();
     }
 
+    public static Optional<RecipeHolder<Recipe<RecipeInput>>> getDeployingRecipe(ItemStack applyItem, ItemStack target, Level world) {
+        var allDeployingRecipes = world.getRecipeManager().getAllRecipesFor(AllRecipeTypes.DEPLOYING.getType());
+        
+        for (var recipeHolder : allDeployingRecipes) {
+            var recipe = recipeHolder.value();
+            
+            ItemStackHandler itemHandler = new ItemStackHandler(2);
+            itemHandler.setStackInSlot(0, target);
+            itemHandler.setStackInSlot(1, applyItem);
+            RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+            
+            if (recipe.matches(wrapper, world)) {
+                return Optional.of(recipeHolder);
+            }
+        }
+        
+        return Optional.empty();
+    }
+
 }
