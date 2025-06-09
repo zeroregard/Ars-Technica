@@ -1,0 +1,14 @@
+{
+  "type": "create_enchantment_industry:grinding",
+  "ingredients": [
+    {
+      "item": "ars_technica:giant_experience_gem"
+    }
+  ],
+  "results": [
+    {
+      "amount": 48,
+      "id": "create_enchantment_industry:experience"
+    }
+  ]
+}

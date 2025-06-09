@@ -499,14 +499,37 @@ public class ArsProviders {
             
             List<CompletableFuture<?>> futures = new ArrayList<>();
             
-            // No longer need smelting recipe - blank disc is now made via enchanting apparatus
+            // Grinding recipes for experience gems - Create Enchantment Industry 1.21 format
+            futures.add(saveGrindingRecipe(cache, output, "giant_experience_gem", "ars_technica:giant_experience_gem", 48));
+            futures.add(saveGrindingRecipe(cache, output, "gargantuan_experience_gem", "ars_technica:gargantuan_experience_gem", 192));
 
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         }
 
+        private CompletableFuture<?> saveGrindingRecipe(CachedOutput cache, Path output, String name, String item, int experience) {
+            JsonObject json = new JsonObject();
+            json.addProperty("type", "create_enchantment_industry:grinding");
+            
+            com.google.gson.JsonArray ingredients = new com.google.gson.JsonArray();
+            JsonObject ingredient = new JsonObject();
+            ingredient.addProperty("item", item);
+            ingredients.add(ingredient);
+            json.add("ingredients", ingredients);
+            
+            com.google.gson.JsonArray results = new com.google.gson.JsonArray();
+            JsonObject result = new JsonObject();
+            result.addProperty("amount", experience);
+            result.addProperty("id", "create_enchantment_industry:experience");
+            results.add(result);
+            json.add("results", results);
+
+            Path path = output.resolve("data/create_enchantment_industry/recipe/grinding/ars_technica/" + name + ".json");
+            return DataProvider.saveStable(cache, json, path);
+        }
+
         @Override
         public @NotNull String getName() {
-            return "Create Recipes";
+            return "Create Grinding Recipes";
         }
     }
 
