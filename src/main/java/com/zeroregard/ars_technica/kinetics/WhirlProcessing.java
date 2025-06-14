@@ -45,7 +45,8 @@ public class WhirlProcessing extends FanProcessing {
 
     private static List<ItemStack> applyCustomProcessing(List<ItemStack> stacks, ItemEntity entity, FanProcessingType type, Level world, SpellResolver whirlOwner) {
         if (SpellResolverHelpers.shouldDoubleOutputs(whirlOwner)) {
-            Optional<ProcessingRecipe<?>> recipe = getProcessingRecipeForEntity(entity, type, world);
+            @SuppressWarnings({"rawtypes", "unchecked"})
+            Optional<ProcessingRecipe> recipe = getProcessingRecipeForEntity(entity, type, world);
             // If there's a processing recipe, we need to check if any of them are chanced based
             if (!recipe.isEmpty()) {
                 for (ItemStack stack : stacks) {
@@ -59,7 +60,8 @@ public class WhirlProcessing extends FanProcessing {
         return stacks;
     }
 
-    private static Optional<ProcessingRecipe<?>> getProcessingRecipeForEntity(ItemEntity entity, FanProcessingType type, Level world) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static Optional<ProcessingRecipe> getProcessingRecipeForEntity(ItemEntity entity, FanProcessingType type, Level world) {
         if (type == AllFanProcessingTypes.SPLASHING) {
             return RecipeHelpers.getSplashingRecipeForItemStack(
                     entity.getItem(),

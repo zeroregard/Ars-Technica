@@ -19,7 +19,8 @@ import java.util.Optional;
 
 public class RecipeHelpers {
 
-    public static boolean isChanceBased(ItemStack input, ProcessingRecipe<?> recipe) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static boolean isChanceBased(ItemStack input, ProcessingRecipe recipe) {
         List<ProcessingOutput> rollables = recipe.getRollableResults();
 
         return rollables.stream()
@@ -32,7 +33,8 @@ public class RecipeHelpers {
         return world.getRecipeManager().getRecipeFor(AllRecipeTypes.PRESSING.getType(), wrapper, world);
     }
 
-    public static Optional<ProcessingRecipe<RecipeWrapper>> getCrushingRecipeForItemStack(ItemStack input, Level world) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static Optional<ProcessingRecipe> getCrushingRecipeForItemStack(ItemStack input, Level world) {
         ItemStackHandler itemHandler = new ItemStackHandler(1);
         itemHandler.setStackInSlot(0, input);
         RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
@@ -47,15 +49,37 @@ public class RecipeHelpers {
         return recipeHolder
                 .map(RecipeHolder::value)
                 .filter(recipe -> recipe instanceof ProcessingRecipe)
-                .map(recipe -> (ProcessingRecipe<RecipeWrapper>) recipe);
+                .map(recipe -> (ProcessingRecipe) recipe);
     }
 
-    public static Optional<ProcessingRecipe<RecipeWrapper>> getSplashingRecipeForItemStack(ItemStack input, Level world) {
-        return getProcessingRecipe(input, world, AllRecipeTypes.SPLASHING.getType());
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static Optional<ProcessingRecipe> getSplashingRecipeForItemStack(ItemStack input, Level world) {
+        ItemStackHandler itemHandler = new ItemStackHandler(1);
+        itemHandler.setStackInSlot(0, input);
+        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+
+        Optional<RecipeHolder<Recipe<RecipeWrapper>>> recipeHolder =
+                world.getRecipeManager().getRecipeFor(AllRecipeTypes.SPLASHING.getType(), wrapper, world);
+
+        return recipeHolder
+                .map(RecipeHolder::value)
+                .filter(recipe -> recipe instanceof ProcessingRecipe)
+                .map(recipe -> (ProcessingRecipe) recipe);
     }
 
-    public static Optional<ProcessingRecipe<RecipeWrapper>> getHauntingRecipeForItemStack(ItemStack input, Level world) {
-        return getProcessingRecipe(input, world, AllRecipeTypes.HAUNTING.getType());
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static Optional<ProcessingRecipe> getHauntingRecipeForItemStack(ItemStack input, Level world) {
+        ItemStackHandler itemHandler = new ItemStackHandler(1);
+        itemHandler.setStackInSlot(0, input);
+        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+
+        Optional<RecipeHolder<Recipe<RecipeWrapper>>> recipeHolder =
+                world.getRecipeManager().getRecipeFor(AllRecipeTypes.HAUNTING.getType(), wrapper, world);
+
+        return recipeHolder
+                .map(RecipeHolder::value)
+                .filter(recipe -> recipe instanceof ProcessingRecipe)
+                .map(recipe -> (ProcessingRecipe) recipe);
     }
 
     public static Optional<RecipeHolder<Recipe<RecipeInput>>> getItemApplicationRecipeForItemStack(ItemStack input, Level world) {
@@ -64,18 +88,6 @@ public class RecipeHelpers {
         RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
         
         return world.getRecipeManager().getRecipeFor(AllRecipeTypes.ITEM_APPLICATION.getType(), wrapper, world);
-    }
-
-    private static <T extends ProcessingRecipe<RecipeWrapper>> Optional<T> getProcessingRecipe(
-            ItemStack input, Level world, RecipeType<T> recipeType) {
-
-        ItemStackHandler itemHandler = new ItemStackHandler(1);
-        itemHandler.setStackInSlot(0, input);
-        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
-
-        Optional<RecipeHolder<T>> recipeHolder = world.getRecipeManager().getRecipeFor(recipeType, wrapper, world);
-
-        return recipeHolder.map(RecipeHolder::value);
     }
 
     public static Optional<RecipeHolder<Recipe<RecipeInput>>> getItemApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
