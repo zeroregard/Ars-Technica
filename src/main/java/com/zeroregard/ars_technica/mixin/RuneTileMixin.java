@@ -44,7 +44,6 @@ public class RuneTileMixin implements IRuneTileModifier, IHaveGoggleInformation 
     @Inject(method = "loadAdditional", at = @At("HEAD"))
     private void loadTicksUntilChargeCount(CompoundTag tag, HolderLookup.Provider pRegistries, CallbackInfo ci) {
         this.ticksUntilChargeCount = tag.getInt("ticksUntilChargeCount");
-        ArsTechnica.LOGGER.info(this.ticksUntilChargeCount);
     }
 
 

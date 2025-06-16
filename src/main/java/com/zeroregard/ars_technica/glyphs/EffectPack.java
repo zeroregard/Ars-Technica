@@ -70,7 +70,6 @@ public class EffectPack extends AbstractItemResolveEffect {
     Optional<CraftingRecipe> recipe = world.getRecipeManager()
             .getRecipeFor(RecipeType.CRAFTING, tempContainer, world)
             .map(RecipeHolder::value);
-    ArsTechnica.LOGGER.info(recipe.isPresent());
     return recipe.isPresent();
   }
 
