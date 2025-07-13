@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "ars_technica:item/techno_hat_tint",
-    "layer1": "ars_technica:item/techno_hat_brass"
-  }
-}

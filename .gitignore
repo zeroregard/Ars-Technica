@@ -6,6 +6,7 @@ run/*
 .DS_Store
 src/generated/resources/.cache
 .idea/
+out/
 
 # Node.js
 node_modules/
