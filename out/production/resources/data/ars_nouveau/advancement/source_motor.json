@@ -1,0 +1,32 @@
+{
+  "parent": "ars_technica:calibrated_precision_mechanism",
+  "criteria": {
+    "has_source_motor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "ars_technica:source_motor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "ars_technica.adv.desc.source_motor"
+    },
+    "icon": {
+      "count": 1,
+      "id": "ars_technica:source_motor"
+    },
+    "title": {
+      "translate": "ars_technica.adv.title.source_motor"
+    }
+  },
+  "requirements": [
+    [
+      "has_source_motor"
+    ]
+  ]
+}

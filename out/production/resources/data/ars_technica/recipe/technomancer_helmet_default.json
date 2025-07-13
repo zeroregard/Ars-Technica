@@ -1,0 +1,26 @@
+{
+  "type": "ars_technica:armor_upgrade",
+  "keepNbtOfReagent": true,
+  "pedestalItems": [
+    {
+      "item": "ars_technica:mark_of_technomancy"
+    },
+    {
+      "tag": "c:ingots/netherite"
+    },
+    {
+      "tag": "c:ingots/brass"
+    },
+    {
+      "item": "create:goggles"
+    }
+  ],
+  "reagent": {
+    "tag": "ars_nouveau:magic_hood"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_technica:technomancer_helmet"
+  },
+  "sourceCost": 7000
+}

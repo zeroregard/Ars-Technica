@@ -1,0 +1,38 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "create:precision_mechanism"
+    },
+    {
+      "item": "ars_technica:calibrated_precision_mechanism"
+    },
+    {
+      "item": "ars_nouveau:manipulation_essence"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/copper"
+    },
+    {
+      "tag": "c:plates/brass"
+    },
+    {
+      "tag": "c:ingots/zinc"
+    },
+    {
+      "tag": "c:plates/gold"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:wilden_tribute"
+  },
+  "result": {
+    "count": 5,
+    "id": "ars_technica:mark_of_technomancy"
+  },
+  "sourceCost": 10000
+}

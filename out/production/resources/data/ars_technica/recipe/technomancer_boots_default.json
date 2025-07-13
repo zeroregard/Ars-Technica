@@ -1,0 +1,26 @@
+{
+  "type": "ars_technica:armor_upgrade",
+  "keepNbtOfReagent": true,
+  "pedestalItems": [
+    {
+      "item": "ars_technica:mark_of_technomancy"
+    },
+    {
+      "tag": "c:ingots/netherite"
+    },
+    {
+      "tag": "c:ingots/brass"
+    },
+    {
+      "tag": "c:ingots/brass"
+    }
+  ],
+  "reagent": {
+    "tag": "ars_nouveau:magic_boots"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_technica:technomancer_boots"
+  },
+  "sourceCost": 7000
+}

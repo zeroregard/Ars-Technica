@@ -2,13 +2,15 @@ package com.zeroregard.ars_technica.helpers;
 
 
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
+import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
+import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -33,53 +35,38 @@ public class RecipeHelpers {
         return world.getRecipeManager().getRecipeFor(AllRecipeTypes.PRESSING.getType(), wrapper, world);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings("rawtypes")
     public static Optional<ProcessingRecipe> getCrushingRecipeForItemStack(ItemStack input, Level world) {
-        ItemStackHandler itemHandler = new ItemStackHandler(1);
-        itemHandler.setStackInSlot(0, input);
-        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+        SingleRecipeInput recipeInput = new SingleRecipeInput(input);
 
-        Optional<RecipeHolder<Recipe<RecipeWrapper>>> recipeHolder =
-                world.getRecipeManager().getRecipeFor(AllRecipeTypes.CRUSHING.getType(), wrapper, world);
+        Optional<RecipeHolder<AbstractCrushingRecipe>> recipeHolder =
+                world.getRecipeManager().getRecipeFor(AllRecipeTypes.CRUSHING.getType(), recipeInput, world);
 
         if (recipeHolder.isEmpty()) {
-            recipeHolder = world.getRecipeManager().getRecipeFor(AllRecipeTypes.MILLING.getType(), wrapper, world);
+            recipeHolder = world.getRecipeManager().getRecipeFor(AllRecipeTypes.MILLING.getType(), recipeInput, world);
         }
 
-        return recipeHolder
-                .map(RecipeHolder::value)
-                .filter(recipe -> recipe instanceof ProcessingRecipe)
-                .map(recipe -> (ProcessingRecipe) recipe);
+        return recipeHolder.map(RecipeHolder::value);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings("rawtypes")
     public static Optional<ProcessingRecipe> getSplashingRecipeForItemStack(ItemStack input, Level world) {
-        ItemStackHandler itemHandler = new ItemStackHandler(1);
-        itemHandler.setStackInSlot(0, input);
-        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+        SingleRecipeInput wrapper = new SingleRecipeInput(input);
 
-        Optional<RecipeHolder<Recipe<RecipeWrapper>>> recipeHolder =
+        Optional<RecipeHolder<SplashingRecipe>> recipeHolder =
                 world.getRecipeManager().getRecipeFor(AllRecipeTypes.SPLASHING.getType(), wrapper, world);
 
-        return recipeHolder
-                .map(RecipeHolder::value)
-                .filter(recipe -> recipe instanceof ProcessingRecipe)
-                .map(recipe -> (ProcessingRecipe) recipe);
+        return recipeHolder.map(RecipeHolder::value);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings("rawtypes")
     public static Optional<ProcessingRecipe> getHauntingRecipeForItemStack(ItemStack input, Level world) {
-        ItemStackHandler itemHandler = new ItemStackHandler(1);
-        itemHandler.setStackInSlot(0, input);
-        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+        SingleRecipeInput wrapper = new SingleRecipeInput(input);
 
-        Optional<RecipeHolder<Recipe<RecipeWrapper>>> recipeHolder =
+        Optional<RecipeHolder<HauntingRecipe>> recipeHolder =
                 world.getRecipeManager().getRecipeFor(AllRecipeTypes.HAUNTING.getType(), wrapper, world);
 
-        return recipeHolder
-                .map(RecipeHolder::value)
-                .filter(recipe -> recipe instanceof ProcessingRecipe)
-                .map(recipe -> (ProcessingRecipe) recipe);
+        return recipeHolder.map(RecipeHolder::value);
     }
 
     public static Optional<RecipeHolder<Recipe<RecipeInput>>> getItemApplicationRecipeForItemStack(ItemStack input, Level world) {

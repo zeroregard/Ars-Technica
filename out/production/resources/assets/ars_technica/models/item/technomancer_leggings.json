@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "ars_technica:item/techno_leggings_tint",
+    "layer1": "ars_technica:item/techno_leggings_brass"
+  }
+}

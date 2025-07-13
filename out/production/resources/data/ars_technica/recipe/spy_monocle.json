@@ -1,0 +1,17 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    {
+      "item": "ars_technica:calibrated_precision_mechanism"
+    }
+  ],
+  "reagent": {
+    "item": "minecraft:spyglass"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_technica:spy_monocle"
+  },
+  "sourceCost": 0
+}

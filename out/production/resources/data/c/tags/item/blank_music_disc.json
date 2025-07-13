@@ -1,0 +1,9 @@
+{
+  "values": [
+    "ars_technica:blank_disc",
+    {
+      "id": "etched:blank_music_disc",
+      "required": false
+    }
+  ]
+}
