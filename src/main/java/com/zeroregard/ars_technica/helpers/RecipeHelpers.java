@@ -4,12 +4,9 @@ package com.zeroregard.ars_technica.helpers;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
@@ -126,6 +123,15 @@ public class RecipeHelpers {
         }
         
         return Optional.empty();
+    }
+
+    public static <R extends ProcessingRecipe<RecipeWrapper, ?>> Optional<RecipeHolder<R>> getSequencedAssemblyRecipe(RecipeType<R> type, Class<R> clazz, ItemStack applyItem, ItemStack target, Level world) {
+        ItemStackHandler itemHandler = new ItemStackHandler(2);
+        itemHandler.setStackInSlot(0, target);
+        itemHandler.setStackInSlot(1, applyItem);
+        RecipeWrapper wrapper = new RecipeWrapper(itemHandler);
+
+        return SequencedAssemblyRecipe.getRecipe(world, wrapper, type, clazz);
     }
 
 }
