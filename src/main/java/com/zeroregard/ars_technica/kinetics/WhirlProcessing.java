@@ -45,7 +45,7 @@ public class WhirlProcessing extends FanProcessing {
 
     private static List<ItemStack> applyCustomProcessing(List<ItemStack> stacks, ItemEntity entity, FanProcessingType type, Level world, SpellResolver whirlOwner) {
         if (SpellResolverHelpers.shouldDoubleOutputs(whirlOwner)) {
-            @SuppressWarnings({"rawtypes", "unchecked"})
+            @SuppressWarnings({"rawtypes"})
             Optional<ProcessingRecipe> recipe = getProcessingRecipeForEntity(entity, type, world);
             // If there's a processing recipe, we need to check if any of them are chanced based
             if (!recipe.isEmpty()) {
@@ -60,19 +60,19 @@ public class WhirlProcessing extends FanProcessing {
         return stacks;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"rawtypes"})
     private static Optional<ProcessingRecipe> getProcessingRecipeForEntity(ItemEntity entity, FanProcessingType type, Level world) {
         if (type == AllFanProcessingTypes.SPLASHING) {
             return RecipeHelpers.getSplashingRecipeForItemStack(
                     entity.getItem(),
                     world
-            ).map(recipe -> recipe);
+            );
         }
         else if(type == AllFanProcessingTypes.HAUNTING) {
             return RecipeHelpers.getHauntingRecipeForItemStack(
                     entity.getItem(),
                     world
-            ).map(recipe -> recipe);
+            );
         }
         return Optional.empty();
     }
@@ -100,7 +100,7 @@ public class WhirlProcessing extends FanProcessing {
         if (!processing.contains("Type") || AllFanProcessingTypes.parseLegacy(processing.getString("Type")) != type) {
             processing.putString("Type", getIdOrThrow(type).toString());
             int timeModifierForStackSize = ((entity.getItem().getCount() - 1) / 16) + 1;
-            int baseProcessingTime = (int) (AllConfigs.server().kinetics.fanProcessingTime.get() * timeModifierForStackSize) + 1;
+            int baseProcessingTime = (AllConfigs.server().kinetics.fanProcessingTime.get() * timeModifierForStackSize) + 1;
 
             int processingTime = (int) (baseProcessingTime / (1 + processingBoost));
             processing.putInt("Time", processingTime);

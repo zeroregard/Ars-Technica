@@ -4,8 +4,9 @@ bin/*
 .gradle/*
 run/*
 .DS_Store
-.idea/workspace.xml
 src/generated/resources/.cache
+.idea/
+out/
 
 # Node.js
 node_modules/
