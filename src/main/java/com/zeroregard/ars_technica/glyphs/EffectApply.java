@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.SpellUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
+import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -125,42 +127,50 @@ public class EffectApply extends AbstractItemResolveEffect {
             if (applyItem.isEmpty()) {
                 break;
             }
-            
-            var recipe = getApplicationRecipe(applyItem, itemStack, world);
-            
-            if (recipe.isPresent()) {
-                var result = recipe.get().value().getResultItem(world.registryAccess());
-                if (!result.isEmpty()) {
-                    int remainingToApply = maxAmountToApply - totalApplied;
-                    int stackSize = itemStack.getCount();
-                    int applicationsToThisStack = Math.min(remainingToApply, stackSize);
-                    applicationsToThisStack = Math.min(applicationsToThisStack, applySource.getAvailableCount());
-                    
-                    if (applicationsToThisStack > 0) {
-                        applySource.consumeItems(applicationsToThisStack);
-                        
-                        itemStack.shrink(applicationsToThisStack);
-                        if (itemStack.getCount() <= 0) {
-                            itemEntity.discard();
-                        }
 
-                        for (int i = 0; i < applicationsToThisStack; i++) {
-                            ItemEntity resultEntity = new ItemEntity(world, 
-                                itemEntity.getX() + (world.random.nextFloat() - 0.5f) * 0.2f, 
-                                itemEntity.getY(), 
-                                itemEntity.getZ() + (world.random.nextFloat() - 0.5f) * 0.2f, 
-                                result.copy());
+            List<ItemStack> results = new ArrayList<>();
+            var seqRecipe = RecipeHelpers.getSequencedAssemblyRecipe(AllRecipeTypes.DEPLOYING.getType(), DeployerApplicationRecipe.class, applyItem, itemStack, world);
+            if (seqRecipe.isPresent()) {
+                results.addAll(seqRecipe.get().value().rollResults());
+            } else {
+                var recipe = getApplicationRecipe(applyItem, itemStack, world);
+                if (recipe.isPresent()) {
+                    results.add(recipe.get().value().getResultItem(world.registryAccess()));
+                }
+            }
+
+            if (!results.isEmpty()) {
+                int remainingToApply = maxAmountToApply - totalApplied;
+                int stackSize = itemStack.getCount();
+                int applicationsToThisStack = Math.min(remainingToApply, stackSize);
+                applicationsToThisStack = Math.min(applicationsToThisStack, applySource.getAvailableCount());
+
+                if (applicationsToThisStack > 0) {
+                    applySource.consumeItems(applicationsToThisStack);
+
+                    itemStack.shrink(applicationsToThisStack);
+                    if (itemStack.getCount() <= 0) {
+                        itemEntity.discard();
+                    }
+
+                    for (int i = 0; i < applicationsToThisStack; i++) {
+                        for (ItemStack result : results) {
+                            ItemEntity resultEntity = new ItemEntity(world,
+                                    itemEntity.getX() + (world.random.nextFloat() - 0.5f) * 0.2f,
+                                    itemEntity.getY(),
+                                    itemEntity.getZ() + (world.random.nextFloat() - 0.5f) * 0.2f,
+                                    result.copy());
                             world.addFreshEntity(resultEntity);
                         }
+                    }
 
-                        world.playSound(null, itemEntity.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 
+                    world.playSound(null, itemEntity.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS,
                             0.6f, 1.0f + (world.random.nextFloat() - 0.5f) * 0.4f);
-                        
-                        totalApplied += applicationsToThisStack;
-                        
-                        if (applySource.isEmpty()) {
-                            break;
-                        }
+
+                    totalApplied += applicationsToThisStack;
+
+                    if (applySource.isEmpty()) {
+                        break;
                     }
                 }
             }
