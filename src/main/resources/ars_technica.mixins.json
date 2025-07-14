@@ -2,7 +2,6 @@
   "required": true,
   "package": "com.zeroregard.ars_technica.mixin",
   "compatibilityLevel": "JAVA_21",
-  "refmap": "ars_technica.refmap.json",
   "mixins": [
     "SchematicannonMixin",
     "RuneBlockMixin",
@@ -12,7 +11,8 @@
     "BacktankUtilMixin",
     "TurretMixin",
     "ContainmentJarMixin",
-    "PedestalMixin"
+    "PedestalMixin",
+    "EffectCrushMixin"
   ],
   "minVersion": "0.8",
   "client": [
