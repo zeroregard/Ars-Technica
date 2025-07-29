@@ -16,6 +16,7 @@ import com.zeroregard.ars_technica.registry.ItemRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.DyeColor;
@@ -57,10 +58,8 @@ public class ClientHandler {
 
 
     public static int colorFromArmor(ItemStack stack) {
-        ArmorPerkHolder holder = PerkUtil.getPerkHolder(stack);
-        if (!(holder instanceof ArmorPerkHolder armorPerkHolder))
-            return FastColor.ABGR32.opaque(DyeColor.PURPLE.getTextColor());
-        return FastColor.ABGR32.opaque(DyeColor.byName(armorPerkHolder.getColor(), DyeColor.PURPLE).getTextColor());
+        DyeColor color = stack.getOrDefault(DataComponents.BASE_COLOR, DyeColor.PURPLE);
+        return FastColor.ABGR32.opaque(color.getTextColor());
     }
 
     @SubscribeEvent

@@ -15,6 +15,8 @@ import com.zeroregard.ars_technica.client.armor.TechnomancerArmorRenderer;
 import com.zeroregard.ars_technica.client.utils.TooltipUtils;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.Util;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
@@ -93,11 +95,7 @@ public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModif
 
   @Override
   public String getColor(ItemStack object) {
-    var perkHolder = PerkUtil.getPerkHolder(object);
-    if (!(perkHolder instanceof ArmorPerkHolder data)) {
-      return "purple";
-    }
-    return data.getColor() == null || data.getColor().isEmpty() ? "purple" : data.getColor();
+    return object.getOrDefault(DataComponents.BASE_COLOR, DyeColor.PURPLE).getName();
   }
 
   @Override
