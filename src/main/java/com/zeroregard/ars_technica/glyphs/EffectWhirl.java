@@ -10,17 +10,24 @@ import com.hollingsworth.arsnouveau.common.spell.effect.EffectHex;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import com.simibubi.create.content.logistics.depot.DepotBlock;
 import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -53,6 +60,13 @@ public class EffectWhirl extends AbstractEffect {
     public void onResolveBlock(BlockHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         if (!(world instanceof ServerLevel serverWorld)) return;
         Vec3 adjustedPosition = getAdjustedPosition(rayTraceResult);
+
+        BlockPos blockPos = rayTraceResult.getBlockPos();
+        BlockState state = world.getBlockState(blockPos);
+        if (state.getBlock() instanceof DepotBlock) {
+            handleDepotExtraction(serverWorld, blockPos, adjustedPosition);
+        }
+
         resolve(adjustedPosition, serverWorld, shooter, spellStats, spellContext, resolver);
     }
 
@@ -106,6 +120,25 @@ public class EffectWhirl extends AbstractEffect {
 
         ArcaneWhirlEntity whirl = new ArcaneWhirlEntity(world, position, DEFAULT_RADIUS + aoeAmplifier * 0.33f, DEFAULT_DURATION + extraDurationTicks, processingType, resolver);
         world.addFreshEntity(whirl);
+    }
+
+    private void handleDepotExtraction(ServerLevel world, BlockPos pos, Vec3 dropPosition) {
+        BlockEntity be = world.getBlockEntity(pos);
+        if (be == null) return;
+        BlockState bs = be.getBlockState();
+        IItemHandler itemHandler = Capabilities.ItemHandler.BLOCK.getCapability(world, pos, bs, be, null);
+        if (itemHandler == null) return;
+
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+            ItemStack inSlot = itemHandler.getStackInSlot(slot);
+            if (inSlot.isEmpty()) continue;
+            int extractAmount = inSlot.getCount();
+            if (extractAmount <= 0) continue;
+            ItemStack extracted = itemHandler.extractItem(slot, extractAmount, false);
+            if (extracted.isEmpty()) continue;
+            ItemEntity itemEntity = new ItemEntity(world, dropPosition.x, dropPosition.y, dropPosition.z, extracted);
+            world.addFreshEntity(itemEntity);
+        }
     }
 
     @Override
