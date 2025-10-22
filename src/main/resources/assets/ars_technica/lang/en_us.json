@@ -121,5 +121,6 @@
 	"entity.ars_technica.arcane_whirl_entity": "Arcane Whirl",
 	"entity.ars_technica.item_projectile_entity": "Item Bubble",
 
-	"item.ars_technica.blank_disc": "Blank Disc"
+	"item.ars_technica.blank_disc": "Blank Disc",
+	"ars_technica.jei.polish_glyph_tooltip": "Polish Glyph Available"
 }
