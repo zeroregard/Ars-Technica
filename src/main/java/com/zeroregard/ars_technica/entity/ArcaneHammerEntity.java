@@ -16,6 +16,10 @@ import com.zeroregard.ars_technica.registry.SoundRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
@@ -74,6 +78,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     private boolean didObliterate = false;
     private boolean isCharging = true;
     private boolean chargeAnimationPlayed = false;
+    private BlockPos boundDepotPos;
 
     private Color color;
     private float yaw;
@@ -144,6 +149,10 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         setSize(1.0f + amps * AMPS_SIZE_MULTIPLIER);
         setSpeed(1.0f + amps * AMPS_SPEED_MULTIPLIER);
         this.createdTime = world.getGameTime();
+    }
+
+    public void bindDepot(BlockPos depotPos) {
+        this.boundDepotPos = depotPos;
     }
 
     public ArcaneHammerEntity(EntityType<ArcaneHammerEntity> entityType, Level world) {
@@ -246,6 +255,11 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     }
 
     protected void handleItems() {
+        if (boundDepotPos != null) {
+            handleDepotItems();
+            return;
+        }
+        
         List<ItemEntity> itemEntities = world.getEntitiesOfClass(ItemEntity.class, getBoundingBox().inflate(1.0));
         if (itemEntities.isEmpty()) {
             return;
@@ -259,6 +273,70 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             sendProcessingParticles(midPoint);
         }
         else {itemEntities.forEach(ItemEntity::discard);
+        }
+    }
+
+    private void handleDepotItems() {
+        if (!processItems) {
+            return;
+        }
+
+        BlockEntity be = world.getBlockEntity(boundDepotPos);
+        if (be == null) {
+            return;
+        }
+
+        BlockState bs = be.getBlockState();
+        IItemHandler itemHandler = Capabilities.ItemHandler.BLOCK.getCapability(world, boundDepotPos, bs, be, null);
+        if (itemHandler == null) {
+            return;
+        }
+
+        Vec3 hammerPos = getPosition(1.0f);
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+            ItemStack stack = itemHandler.getStackInSlot(slot);
+            if (stack.isEmpty()) {
+                continue;
+            }
+
+            var recipe = RecipeHelpers.getCrushingRecipeForItemStack(stack, world);
+            if (recipe.isEmpty()) {
+                continue;
+            }
+
+            int count = stack.getCount();
+            itemHandler.extractItem(slot, count, false);
+
+            List<ItemStack> allResults = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                List<ItemStack> rolledResults = recipe.get().rollResults();
+                for (ItemStack result : rolledResults) {
+                    if (RecipeHelpers.isChanceBased(result, recipe.get())) {
+                        float fortuneMultiplier = 1.0f;
+                        if (spellStats != null) {
+                            int fortuneLevel = spellStats.getBuffCount(AugmentFortune.INSTANCE);
+                            fortuneMultiplier = 1.0f + (0.33f * fortuneLevel);
+                            
+                            if (SpellResolverHelpers.shouldDoubleOutputs(resolver)) {
+                                fortuneMultiplier *= 2.0f;
+                            }
+                        }
+                        
+                        int newCount = (int) Math.round(result.getCount() * fortuneMultiplier);
+                        result.setCount(newCount);
+                    }
+                    ItemHelper.addToList(result, allResults);
+                }
+            }
+
+            for (ItemStack result : allResults) {
+                ItemEntity resultEntity = new ItemEntity(world, hammerPos.x, hammerPos.y, hammerPos.z, result);
+                resultEntity.setDeltaMovement(Vec3.ZERO);
+                resultEntity.setPickUpDelay(10);
+                world.addFreshEntity(resultEntity);
+            }
+            
+            sendProcessingParticles(hammerPos);
         }
     }
 
