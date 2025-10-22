@@ -1,5 +1,6 @@
 package com.zeroregard.ars_technica.entity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -9,7 +10,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.util.Color;
 
@@ -31,6 +36,8 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
     protected int tickCount;
     protected Color color;
     protected Level world;
+    protected BlockPos boundDepotPos;
+    protected int currentDepotSlot = 0;
 
     protected static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.FLOAT);
     protected static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(ArcaneProcessEntity.class, EntityDataSerializers.INT);
@@ -50,6 +57,14 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
 
     protected void setColor(Color color) {
         this.entityData.set(COLOR, color.getColor());
+    }
+
+    public void bindDepot(BlockPos depotPos) {
+        this.boundDepotPos = depotPos;
+    }
+
+    public boolean isBoundToDepot() {
+        return boundDepotPos != null;
     }
 
     public ArcaneProcessEntity(EntityType<?> entityType, Vec3 position, Level world, int maxToProcess, float speed, Color color, List<ItemEntity> processableEntities) {
@@ -92,21 +107,28 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
     public void tick() {
         super.tick();
 
-        if (currentItem == null || currentItem.isRemoved()) {
-            findNextItem();
-        }
-
-        if ((amountProcessed == maxToProcess || currentItem == null) && !world.isClientSide) {
-            this.discard();
-        }
-
-        handleProcessLogic();
-
-        if (tickCount >= getTicksToReset()) {
-            if(currentItem != null && !currentItem.isRemoved()) {
-                moveToItem();
+        if (isBoundToDepot()) {
+            handleDepotProcessing();
+            if (tickCount >= getTicksToReset()) {
+                tickCount = 0;
             }
-            tickCount = 0;
+        } else {
+            if (currentItem == null || currentItem.isRemoved()) {
+                findNextItem();
+            }
+
+            if ((amountProcessed == maxToProcess || currentItem == null) && !world.isClientSide) {
+                this.discard();
+            }
+
+            handleProcessLogic();
+
+            if (tickCount >= getTicksToReset()) {
+                if(currentItem != null && !currentItem.isRemoved()) {
+                    moveToItem();
+                }
+                tickCount = 0;
+            }
         }
         tickCount++;
     }
@@ -152,6 +174,76 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
         }
     }
 
+    private void handleDepotProcessing() {
+        if (world.isClientSide) {
+            return;
+        }
+
+        if (amountProcessed >= maxToProcess) {
+            this.discard();
+            return;
+        }
+
+        BlockEntity be = world.getBlockEntity(boundDepotPos);
+        if (be == null) {
+            this.discard();
+            return;
+        }
+
+        BlockState bs = be.getBlockState();
+        IItemHandler itemHandler = Capabilities.ItemHandler.BLOCK.getCapability(world, boundDepotPos, bs, be, null);
+        if (itemHandler == null) {
+            this.discard();
+            return;
+        }
+
+        if (tickCount == getTicksToPress()) {
+            boolean processedAny = false;
+            for (int slot = currentDepotSlot; slot < itemHandler.getSlots(); slot++) {
+                ItemStack stack = itemHandler.getStackInSlot(slot);
+                if (stack.isEmpty()) {
+                    continue;
+                }
+
+                if (canProcessStack(stack)) {
+                    processDepotItem(itemHandler, slot, stack);
+                    currentDepotSlot = slot;
+                    processedAny = true;
+                    break;
+                }
+            }
+
+            if (!processedAny) {
+                this.discard();
+            }
+        }
+    }
+
+    protected void processDepotItem(IItemHandler itemHandler, int slot, ItemStack stack) {
+        ItemStack extracted = itemHandler.extractItem(slot, 1, false);
+        if (extracted.isEmpty()) {
+            return;
+        }
+
+        currentOutput = null;
+        
+        ItemEntity tempEntity = new ItemEntity(world, getX(), getY(), getZ(), extracted);
+        process(tempEntity);
+        tempEntity.discard();
+
+        if (currentOutput != null && !currentOutput.isRemoved()) {
+            ItemStack outputStack = currentOutput.getItem();
+            currentOutput.discard();
+            ItemEntity outputEntity = new ItemEntity(world, getX(), getY(), getZ(), outputStack);
+            outputEntity.setDeltaMovement(Vec3.ZERO);
+            outputEntity.setPickUpDelay(10);
+            world.addFreshEntity(outputEntity);
+            currentOutput = null;
+        }
+    }
+
+    protected abstract boolean canProcessStack(ItemStack stack);
+
     protected abstract void process(ItemEntity item);
 
     @Override
@@ -164,12 +256,27 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
             this.color = new Color(compound.getInt("Color"));
             this.entityData.set(COLOR, this.color.getColor());
         }
+        if (compound.contains("DepotX")) {
+            int x = compound.getInt("DepotX");
+            int y = compound.getInt("DepotY");
+            int z = compound.getInt("DepotZ");
+            this.boundDepotPos = new BlockPos(x, y, z);
+        }
+        if (compound.contains("DepotSlot")) {
+            this.currentDepotSlot = compound.getInt("DepotSlot");
+        }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         compound.putFloat("Speed", this.speed);
         compound.putInt("Color", this.color.getColor());
+        if (this.boundDepotPos != null) {
+            compound.putInt("DepotX", this.boundDepotPos.getX());
+            compound.putInt("DepotY", this.boundDepotPos.getY());
+            compound.putInt("DepotZ", this.boundDepotPos.getZ());
+        }
+        compound.putInt("DepotSlot", this.currentDepotSlot);
     }
 
 
