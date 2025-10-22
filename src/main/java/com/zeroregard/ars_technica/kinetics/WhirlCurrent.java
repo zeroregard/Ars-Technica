@@ -30,7 +30,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import com.simibubi.create.content.logistics.basin.BasinBlockEntity;
 import java.util.UUID;
 
 public class WhirlCurrent {
@@ -142,12 +141,8 @@ public class WhirlCurrent {
             CompoundTag saved = depotSlotProcessing.get(slot);
             if (saved != null) {
                 temp.getPersistentData().put("CreateData", saved.copy());
-                CompoundTag processingTag = saved.getCompound("Processing");
-                int timeLeft = processingTag.getInt("Time");
             }
             boolean processed = WhirlProcessing.applyProcessing(temp, processingType, world, whirlOwner);
-            CompoundTag afterProcessing = temp.getPersistentData().getCompound("CreateData").getCompound("Processing");
-            int timeAfter = afterProcessing.getInt("Time");
 
             if (processed) {
                 itemHandler.extractItem(slot, extractAmount, false);
