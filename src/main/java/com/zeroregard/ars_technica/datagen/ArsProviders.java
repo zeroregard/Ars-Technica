@@ -10,6 +10,7 @@ import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.item.PressurePerk;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
+import com.zeroregard.ars_technica.registry.BlockRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
@@ -124,7 +125,7 @@ public class ArsProviders {
                     .build());
 
             recipes.add(builder()
-                    .withResult(ItemRegistry.TRANSMUTATION_TURRET)
+                    .withResult(BlockRegistry.TRANSMUTATION_TURRET.get())
                     .withReagent(Items.DISPENSER)
                     .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
                     .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.TRANSMUTATION_FOCUS.get())))

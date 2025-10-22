@@ -1,5 +1,6 @@
 package com.zeroregard.ars_technica.block;
 
+import com.alexthw.sauce.common.block.FocusEnhancedSpellTurretTile;
 import com.hollingsworth.arsnouveau.api.ANFakePlayer;
 import com.hollingsworth.arsnouveau.api.spell.EntitySpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.Spell;
@@ -8,7 +9,6 @@ import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.TileCaster;
 import com.hollingsworth.arsnouveau.api.util.SourceUtil;
 import com.hollingsworth.arsnouveau.common.block.BasicSpellTurret;
-import com.hollingsworth.arsnouveau.common.block.tile.BasicSpellTurretTile;
 import com.hollingsworth.arsnouveau.common.network.Networking;
 import com.hollingsworth.arsnouveau.common.network.PacketOneShotAnimation;
 import com.zeroregard.ars_technica.Config;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.hollingsworth.arsnouveau.common.block.BasicSpellTurret.TURRET_BEHAVIOR_MAP;
 
-public class TransmutationTurretTile extends BasicSpellTurretTile {
+public class TransmutationTurretTile extends FocusEnhancedSpellTurretTile {
 
     public TransmutationTurretTile(BlockPos pos, BlockState state) {
         super(pos, state);
