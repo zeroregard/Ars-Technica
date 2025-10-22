@@ -11,6 +11,7 @@ import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.logistics.depot.DepotBlock;
+import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -54,16 +55,23 @@ public class EffectWhirl extends AbstractEffect {
     @Override
     public void onResolveBlock(BlockHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         if (!(world instanceof ServerLevel serverWorld)) return;
-        Vec3 adjustedPosition = getAdjustedPosition(rayTraceResult);
-
+        
         BlockPos blockPos = rayTraceResult.getBlockPos();
         BlockState state = world.getBlockState(blockPos);
+
         boolean boundToDepot = false;
         if (state.getBlock() instanceof DepotBlock) {
             boundToDepot = true;
         }
+        
+        Vec3 adjustedPosition;
+        if (boundToDepot) {
+            adjustedPosition = Vec3.atCenterOf(blockPos).add(0, 0.5, 0);
+        } else {
+            adjustedPosition = getAdjustedPosition(rayTraceResult);
+        }
 
-        ArcaneWhirlEntity whirl = resolve(adjustedPosition, serverWorld, shooter, spellStats, spellContext, resolver);
+        ArcaneWhirlEntity whirl = resolve(adjustedPosition, serverWorld, shooter, spellStats, spellContext, resolver);      
         if (boundToDepot && whirl != null) {
             whirl.bindDepot(blockPos);
         }

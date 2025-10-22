@@ -5,6 +5,7 @@ import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import com.simibubi.create.content.kinetics.fan.IAirCurrentSource;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.client.ClientHandler;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
 import com.zeroregard.ars_technica.kinetics.WhirlCurrent;
