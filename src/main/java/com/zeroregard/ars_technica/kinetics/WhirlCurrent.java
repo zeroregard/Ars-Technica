@@ -8,6 +8,7 @@ import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
 import com.zeroregard.ars_technica.network.ParticleEffectPacket;
 import com.zeroregard.ars_technica.registry.ParticleRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -16,12 +17,19 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class WhirlCurrent {
@@ -33,6 +41,7 @@ public class WhirlCurrent {
     private int tickCount = 0;
     private double tangentialFactor = 0.25;
     private double pullFactor = 3.0;
+    private final Map<Integer, CompoundTag> depotSlotProcessing = new HashMap<>();
 
     public WhirlCurrent(ArcaneWhirlEntity source) {
         this.source = source;
@@ -51,6 +60,11 @@ public class WhirlCurrent {
     }
 
     protected void tickAffectedEntities(Level world, SpellResolver whirlOwner) {
+        if (!source.isSwirlPhysicsEnabled() && source.getBoundDepotPos() != null) {
+            tickDepotProcessing(world, whirlOwner);
+            return;
+        }
+
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
         if (tickCount % 4 == 0) {
             sendWhirlParticles(world, source.getProcessor());
@@ -62,7 +76,9 @@ public class WhirlCurrent {
                 continue;
             }
 
-            moveItem(entity);
+            if (source.isSwirlPhysicsEnabled()) {
+                moveItem(entity);
+            }
 
             FanProcessingType processingType = source.getProcessor();
 
@@ -86,6 +102,64 @@ public class WhirlCurrent {
                 }
             }
         }
+    }
+
+    private void tickDepotProcessing(Level world, SpellResolver whirlOwner) {
+        BlockPos depotPos = source.getBoundDepotPos();
+        if (depotPos == null) return;
+
+        BlockEntity be = world.getBlockEntity(depotPos);
+        if (be == null) return;
+        BlockState bs = be.getBlockState();
+
+        IItemHandler itemHandler = Capabilities.ItemHandler.BLOCK.getCapability(world, depotPos, bs, be, null);
+        if (itemHandler == null) return;
+
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+            ItemStack stack = itemHandler.getStackInSlot(slot);
+            if (stack.isEmpty()) continue;
+
+            int extractAmount = Math.min(stack.getCount(), 1);
+            ItemStack extracted = itemHandler.extractItem(slot, extractAmount, true);
+            if (extracted.isEmpty()) continue;
+
+            FanProcessingType processingType = source.getProcessor();
+            if (processingType == null) {
+                return;
+            }
+
+            ItemEntity temp = new ItemEntity(world, source.getX(), source.getY(), source.getZ(), extracted.copy());
+            CompoundTag saved = depotSlotProcessing.get(slot);
+            if (saved != null) {
+                temp.getPersistentData().put("CreateData", saved.copy());
+            }
+            boolean processed = WhirlProcessing.applyProcessing(temp, processingType, world, whirlOwner);
+
+            if (processed) {
+                itemHandler.extractItem(slot, extractAmount, false);
+                ItemStack remaining = temp.getItem();
+                if (!remaining.isEmpty() && !ItemStack.isSameItemSameComponents(remaining, extracted)) {
+                    ItemStack leftover = remaining.copy();
+                    leftover = tryInsertIntoHandler(itemHandler, leftover);
+                    if (!leftover.isEmpty()) {
+                        world.addFreshEntity(new ItemEntity(world, source.getX(), source.getY(), source.getZ(), leftover));
+                    }
+                }
+                depotSlotProcessing.remove(slot);
+            } else {
+                CompoundTag updated = temp.getPersistentData().getCompound("CreateData");
+                depotSlotProcessing.put(slot, updated.copy());
+            }
+            break;
+        }
+    }
+
+    private ItemStack tryInsertIntoHandler(IItemHandler handler, ItemStack stack) {
+        ItemStack toInsert = stack;
+        for (int i = 0; i < handler.getSlots() && !toInsert.isEmpty(); i++) {
+            toInsert = handler.insertItem(i, toInsert, false);
+        }
+        return toInsert;
     }
 
     private void moveItem(Entity entity) {

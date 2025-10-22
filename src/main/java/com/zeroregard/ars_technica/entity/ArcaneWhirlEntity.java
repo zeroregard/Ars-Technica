@@ -37,6 +37,8 @@ public class ArcaneWhirlEntity extends Entity implements IAirCurrentSource, GeoE
     private WhirlCurrent current;
     private final SpellResolver spellResolver;
     private boolean soundPlaying;
+    private boolean swirlPhysicsEnabled = true;
+    private BlockPos boundDepotPos;
 
     private static final EntityDataAccessor<String> PROCESSOR_TYPE = SynchedEntityData.defineId(ArcaneWhirlEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Float> SPEED = SynchedEntityData.defineId(ArcaneWhirlEntity.class, EntityDataSerializers.FLOAT);
@@ -58,6 +60,14 @@ public class ArcaneWhirlEntity extends Entity implements IAirCurrentSource, GeoE
 
     public FanProcessingType getProcessor() {
         return processor;
+    }
+
+    public boolean isSwirlPhysicsEnabled() {
+        return swirlPhysicsEnabled;
+    }
+
+    public BlockPos getBoundDepotPos() {
+        return boundDepotPos;
     }
 
     public ArcaneWhirlEntity(EntityType<? extends ArcaneWhirlEntity> entityType, Level world) {
@@ -119,6 +129,11 @@ public class ArcaneWhirlEntity extends Entity implements IAirCurrentSource, GeoE
             return "SPLASHING";
         }
         return "NONE";
+    }
+
+    public void bindDepot(BlockPos depotPos) {
+        this.boundDepotPos = depotPos;
+        this.swirlPhysicsEnabled = false;
     }
 
     private void handleWhirlwindEffect() {
@@ -183,6 +198,15 @@ public class ArcaneWhirlEntity extends Entity implements IAirCurrentSource, GeoE
             String processorType = compound.getString("ProcessorType");
             setProcessor(AllFanProcessingTypes.parseLegacy(processorType));
         }
+        if (compound.contains("SwirlPhysics")) {
+            this.swirlPhysicsEnabled = compound.getBoolean("SwirlPhysics");
+        }
+        if (compound.contains("DepotX")) {
+            int x = compound.getInt("DepotX");
+            int y = compound.getInt("DepotY");
+            int z = compound.getInt("DepotZ");
+            this.boundDepotPos = new BlockPos(x, y, z);
+        }
     }
 
     @Override
@@ -192,6 +216,12 @@ public class ArcaneWhirlEntity extends Entity implements IAirCurrentSource, GeoE
         compound.putFloat("Speed", this.speed);
         if (this.processor != null) {
             compound.putString("ProcessorType", getProcessorLegacyId(this.processor));
+        }
+        compound.putBoolean("SwirlPhysics", this.swirlPhysicsEnabled);
+        if (this.boundDepotPos != null) {
+            compound.putInt("DepotX", this.boundDepotPos.getX());
+            compound.putInt("DepotY", this.boundDepotPos.getY());
+            compound.putInt("DepotZ", this.boundDepotPos.getZ());
         }
     }
 
