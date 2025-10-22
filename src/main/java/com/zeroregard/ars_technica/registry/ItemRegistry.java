@@ -33,6 +33,10 @@ public class ItemRegistry {
                     new Item.Properties().stacksTo(1)
             ).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus"))
     );
+
+    public static DeferredItem<Item> TRANSMUTATION_TURRET = ITEMS.register(
+            "transmutation_turret", () -> new BlockItem(BlockRegistry.TRANSMUTATION_TURRET.get(), new Item.Properties().stacksTo(64))
+    );
     public static final DeferredItem<Item> SPY_MONOCLE = ITEMS.register("spy_monocle", () -> new SpyMonocle(new Item.Properties().stacksTo(1)));
 
     public static int GREATER_EXPERIENCE_VALUE = 12;

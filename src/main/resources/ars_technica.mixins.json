@@ -10,6 +10,7 @@
     "AnimatedMagicArmorMixin",
     "BacktankUtilMixin",
     "TurretMixin",
+    "TransmutationTurretMixin",
     "ContainmentJarMixin",
     "PedestalMixin",
     "EffectCrushMixin"

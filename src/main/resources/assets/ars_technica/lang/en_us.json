@@ -83,6 +83,7 @@
 	"item.ars_technica.pocket_factory.desc": "zeroregard - pocket factory",
 
 	"item.ars_technica.transmutation_focus": "Focus of Transmutation",
+	"item.ars_technica.transmutation_turret": "Transmutation Turret",
 	"ars_technica.focus_of_transmutation.shift_info": "Hold %s for more info",
 	"ars_technica.tooltip.transmutation_focus": "Augments spells with Luck and improves various glyphs",
 	"ars_technica.tooltip.transmutation_focus_shift_info_title": "Provides the following bonuses",

@@ -122,6 +122,13 @@ public class ArsProviders {
                     .withReagent(Items.SPYGLASS)
                     .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
                     .build());
+
+            recipes.add(builder()
+                    .withResult(ItemRegistry.TRANSMUTATION_TURRET)
+                    .withReagent(Items.DISPENSER)
+                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
+                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.TRANSMUTATION_FOCUS.get())))
+                    .build());
         }
 
         protected void addThreadRecipes() {
