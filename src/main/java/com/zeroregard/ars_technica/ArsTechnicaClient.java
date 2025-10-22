@@ -6,6 +6,7 @@ import com.zeroregard.ars_technica.client.block.AllPartialModels;
 import com.zeroregard.ars_technica.client.block.ArcaneSchematiccannonRenderer;
 import com.zeroregard.ars_technica.client.block.TransmutationTurretRenderer;
 import com.zeroregard.ars_technica.client.item.SpyMonocleCurioRenderer;
+import com.zeroregard.ars_technica.client.item.TransmutationFocusRenderer;
 import com.zeroregard.ars_technica.ponder.ATPonderPlugin;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
@@ -34,6 +35,7 @@ public class ArsTechnicaClient {
         AllPartialModels.init();
         PonderIndex.addPlugin(new ATPonderPlugin());
         CuriosRendererRegistry.register(ItemRegistry.SPY_MONOCLE.get(), () -> new SpyMonocleCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER)));
+        CuriosRendererRegistry.register(ItemRegistry.TRANSMUTATION_FOCUS.get(), TransmutationFocusRenderer::new);
         event.enqueueWork(() -> {
             EntityRenderersEvent.RegisterRenderers renderRegisterEvent = new EntityRenderersEvent.RegisterRenderers();
             renderRegisterEvent.registerBlockEntityRenderer(AllBlockEntityTypes.SCHEMATICANNON.get(), ArcaneSchematiccannonRenderer::new);
