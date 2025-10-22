@@ -50,13 +50,17 @@ public class ArcanePolishEntity extends ArcaneProcessEntity implements GeoEntity
 
 
             if (polishingRecipes.isEmpty()) {
-                processableEntities.remove(currentItem);
-                currentItem = null;
+                if (currentItem != null) {
+                    processableEntities.remove(currentItem);
+                    currentItem = null;
+                }
                 return;
             }
 
-            var currentPos = currentItem.getPosition(1.0f);
-            setPos(currentPos.add(Math.random() / 8f, distanceToItem, Math.random() / 8f));
+            if (currentItem != null) {
+                var currentPos = currentItem.getPosition(1.0f);
+                setPos(currentPos.add(Math.random() / 8f, distanceToItem, Math.random() / 8f));
+            }
 
             RegistryAccess registryAccess = world.registryAccess();
             var firstRecipe = polishingRecipes.getFirst();
@@ -74,7 +78,7 @@ public class ArcanePolishEntity extends ArcaneProcessEntity implements GeoEntity
                     1.5f + (speed / 16));
         }
 
-        if (currentStack.getCount() <= 0) {
+        if (currentStack.getCount() <= 0 && currentItem != null) {
             currentItem = null;
         }
     }
@@ -84,7 +88,11 @@ public class ArcanePolishEntity extends ArcaneProcessEntity implements GeoEntity
         setPos(currentItem.position().add(0, distanceToItem, 0));
     }
 
-
+    @Override
+    protected boolean canProcessStack(ItemStack stack) {
+        var polishingRecipes = SandPaperPolishingRecipe.getMatchingRecipes(world, stack);
+        return !polishingRecipes.isEmpty();
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {

@@ -43,6 +43,14 @@ public class WhirlProcessing extends FanProcessing {
         return true;
     }
 
+    public static boolean canProcess(ItemEntity entity, FanProcessingType type) {
+        if (type == null || entity == null || entity.getItem().isEmpty()) {
+            return false;
+        }
+        List<ItemStack> result = type.process(entity.getItem(), entity.level());
+        return result != null && !result.isEmpty();
+    }
+
     private static List<ItemStack> applyCustomProcessing(List<ItemStack> stacks, ItemEntity entity, FanProcessingType type, Level world, SpellResolver whirlOwner) {
         if (SpellResolverHelpers.shouldDoubleOutputs(whirlOwner)) {
             @SuppressWarnings({"rawtypes"})

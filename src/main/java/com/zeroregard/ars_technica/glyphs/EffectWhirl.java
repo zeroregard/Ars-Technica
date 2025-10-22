@@ -10,6 +10,7 @@ import com.hollingsworth.arsnouveau.common.spell.effect.EffectHex;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import com.simibubi.create.content.logistics.depot.DepotBlock;
 import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -52,8 +54,26 @@ public class EffectWhirl extends AbstractEffect {
     @Override
     public void onResolveBlock(BlockHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         if (!(world instanceof ServerLevel serverWorld)) return;
-        Vec3 adjustedPosition = getAdjustedPosition(rayTraceResult);
-        resolve(adjustedPosition, serverWorld, shooter, spellStats, spellContext, resolver);
+        
+        BlockPos blockPos = rayTraceResult.getBlockPos();
+        BlockState state = world.getBlockState(blockPos);
+
+        boolean boundToDepot = false;
+        if (state.getBlock() instanceof DepotBlock) {
+            boundToDepot = true;
+        }
+        
+        Vec3 adjustedPosition;
+        if (boundToDepot) {
+            adjustedPosition = Vec3.atCenterOf(blockPos).add(0, 0.5, 0);
+        } else {
+            adjustedPosition = getAdjustedPosition(rayTraceResult);
+        }
+
+        ArcaneWhirlEntity whirl = resolve(adjustedPosition, serverWorld, shooter, spellStats, spellContext, resolver);      
+        if (boundToDepot && whirl != null) {
+            whirl.bindDepot(blockPos);
+        }
     }
 
     private Vec3 getAdjustedPosition(BlockHitResult rayTraceResult) {
@@ -78,7 +98,7 @@ public class EffectWhirl extends AbstractEffect {
         }
     }
 
-    protected void resolve(Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
+    protected ArcaneWhirlEntity resolve(Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
 
         float aoeAmplifier = (float)spellStats.getAoeMultiplier();
         double durationAmplifier = spellStats.getDurationMultiplier();
@@ -106,6 +126,7 @@ public class EffectWhirl extends AbstractEffect {
 
         ArcaneWhirlEntity whirl = new ArcaneWhirlEntity(world, position, DEFAULT_RADIUS + aoeAmplifier * 0.33f, DEFAULT_DURATION + extraDurationTicks, processingType, resolver);
         world.addFreshEntity(whirl);
+        return whirl;
     }
 
     @Override

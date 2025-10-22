@@ -17,7 +17,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity, Colorable {
+public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity {
 
 
     public ArcanePressEntity(Vec3 position, Level world, int maxAmountToPress, float speed, Color color, List<ItemEntity> pressableEntities) {
@@ -39,13 +39,17 @@ public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity,
             var pressingRecipe = RecipeHelpers.getPressingRecipeForItemStack(currentStack, world);
 
             if (pressingRecipe.isEmpty()) {
-                processableEntities.remove(currentItem);
-                currentItem = null;
+                if (currentItem != null) {
+                    processableEntities.remove(currentItem);
+                    currentItem = null;
+                }
                 return;
             }
 
-            var currentPos = currentItem.getPosition(1.0f);
-            setPos(currentPos.add(0, 1f, 0));
+            if (currentItem != null) {
+                var currentPos = currentItem.getPosition(1.0f);
+                setPos(currentPos.add(0, 1f, 0));
+            }
 
             RegistryAccess registryAccess = world.registryAccess();
             var recipe = pressingRecipe.get().value();
@@ -62,9 +66,15 @@ public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity,
                     .75f + (speed / 16));
         }
 
-        if (currentStack.getCount() <= 0) {
+        if (currentStack.getCount() <= 0 && currentItem != null) {
             currentItem = null;
         }
+    }
+
+    @Override
+    protected boolean canProcessStack(ItemStack stack) {
+        var pressingRecipe = RecipeHelpers.getPressingRecipeForItemStack(stack, world);
+        return pressingRecipe.isPresent();
     }
 
     @Override
