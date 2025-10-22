@@ -4,7 +4,6 @@ import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
-import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
 import com.zeroregard.ars_technica.network.ParticleEffectPacket;
 import com.zeroregard.ars_technica.registry.ParticleRegistry;
@@ -31,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import com.simibubi.create.content.logistics.basin.BasinBlockEntity;
 import java.util.UUID;
 
 public class WhirlCurrent {
@@ -62,16 +62,10 @@ public class WhirlCurrent {
 
     protected void tickAffectedEntities(Level world, SpellResolver whirlOwner) {
         if (!source.isSwirlPhysicsEnabled() && source.getBoundDepotPos() != null) {
-            if (tickCount % 20 == 0) {
-                ArsTechnica.LOGGER.info("WhirlCurrent: Taking depot processing path. DepotPos={}", source.getBoundDepotPos());
-            }
             tickDepotProcessing(world, whirlOwner);
             return;
         }
 
-        if (tickCount % 20 == 0) {
-            ArsTechnica.LOGGER.info("WhirlCurrent: Taking normal processing path. swirlPhysics={}, depotPos={}", source.isSwirlPhysicsEnabled(), source.getBoundDepotPos());
-        }
         affectedEntities = world.getEntitiesOfClass(ItemEntity.class, bounds);
         if (tickCount % 4 == 0) {
             sendWhirlParticles(world, source.getProcessor());
@@ -114,49 +108,32 @@ public class WhirlCurrent {
     private void tickDepotProcessing(Level world, SpellResolver whirlOwner) {
         BlockPos depotPos = source.getBoundDepotPos();
         if (depotPos == null) {
-            ArsTechnica.LOGGER.warn("tickDepotProcessing: depotPos is null!");
             return;
         }
 
         BlockEntity be = world.getBlockEntity(depotPos);
         if (be == null) {
-            if (tickCount % 20 == 0) {
-                ArsTechnica.LOGGER.warn("tickDepotProcessing: No block entity at {}", depotPos);
-            }
             return;
         }
         BlockState bs = be.getBlockState();
-        if (tickCount % 20 == 0) {
-            ArsTechnica.LOGGER.info("tickDepotProcessing: Found block entity {} at {}", be, depotPos);
-        }
 
         IItemHandler itemHandler = Capabilities.ItemHandler.BLOCK.getCapability(world, depotPos, bs, be, null);
         if (itemHandler == null) {
-            if (tickCount % 20 == 0) {
-                ArsTechnica.LOGGER.warn("tickDepotProcessing: No item handler capability for {}", be);
-            }
             return;
-        }
-        if (tickCount % 20 == 0) {
-            ArsTechnica.LOGGER.info("tickDepotProcessing: Got item handler with {} slots", itemHandler.getSlots());
         }
 
         for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
             ItemStack stack = itemHandler.getStackInSlot(slot);
-            if (tickCount % 20 == 0) {
-                ArsTechnica.LOGGER.info("tickDepotProcessing: Slot {}: {}", slot, stack);
-            }
             if (stack.isEmpty()) continue;
 
             int extractAmount = Math.min(stack.getCount(), 1);
             ItemStack extracted = itemHandler.extractItem(slot, extractAmount, true);
-            ArsTechnica.LOGGER.info("tickDepotProcessing: Simulated extraction from slot {}: {}", slot, extracted);
+          
             if (extracted.isEmpty()) continue;
 
             FanProcessingType processingType = source.getProcessor();
-            ArsTechnica.LOGGER.info("tickDepotProcessing: ProcessingType={}", processingType);
+
             if (processingType == null) {
-                ArsTechnica.LOGGER.warn("tickDepotProcessing: No processing type, stopping");
                 return;
             }
 
@@ -167,17 +144,12 @@ public class WhirlCurrent {
                 temp.getPersistentData().put("CreateData", saved.copy());
                 CompoundTag processingTag = saved.getCompound("Processing");
                 int timeLeft = processingTag.getInt("Time");
-                ArsTechnica.LOGGER.info("tickDepotProcessing: Restored processing data for slot {}, timeLeft={}", slot, timeLeft);
-            } else {
-                ArsTechnica.LOGGER.info("tickDepotProcessing: No saved processing data for slot {}, will initialize", slot);
             }
             boolean processed = WhirlProcessing.applyProcessing(temp, processingType, world, whirlOwner);
             CompoundTag afterProcessing = temp.getPersistentData().getCompound("CreateData").getCompound("Processing");
             int timeAfter = afterProcessing.getInt("Time");
-            ArsTechnica.LOGGER.info("tickDepotProcessing: Processing result for slot {}: processed={}, timeAfter={}", slot, processed, timeAfter);
 
             if (processed) {
-                ArsTechnica.LOGGER.info("tickDepotProcessing: Item finished processing! Extracting from depot");
                 itemHandler.extractItem(slot, extractAmount, false);
                 
                 Vec3 itemPosition = new Vec3(source.getX(), source.getY(), source.getZ());
@@ -185,7 +157,6 @@ public class WhirlCurrent {
                 
                 ItemStack primaryResult = temp.getItem();
                 if (!primaryResult.isEmpty()) {
-                    ArsTechnica.LOGGER.info("tickDepotProcessing: Spawning primary result: {}", primaryResult);
                     ItemEntity resultEntity = new ItemEntity(world, source.getX(), source.getY(), source.getZ(), primaryResult);
                     resultEntity.setDeltaMovement(Vec3.ZERO);
                     resultEntity.setPickUpDelay(10);
@@ -203,7 +174,6 @@ public class WhirlCurrent {
                 
                 CompoundTag updated = temp.getPersistentData().getCompound("CreateData");
                 depotSlotProcessing.put(slot, updated.copy());
-                ArsTechnica.LOGGER.info("tickDepotProcessing: Item still processing, saved state for slot {}", slot);
             }
             break;
         }

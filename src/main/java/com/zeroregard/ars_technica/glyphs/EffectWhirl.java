@@ -11,7 +11,6 @@ import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.logistics.depot.DepotBlock;
-import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
