@@ -21,7 +21,6 @@ public class GlyphRegistry {
         register(EffectInsert.INSTANCE);
         register(EffectTelefeast.INSTANCE);
         register(EffectApply.INSTANCE);
-        register(AugmentPreserve.INSTANCE);
     }
 
     public static void register(AbstractSpellPart spellPart){

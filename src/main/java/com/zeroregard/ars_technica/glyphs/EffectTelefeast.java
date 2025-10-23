@@ -3,7 +3,7 @@ package com.zeroregard.ars_technica.glyphs;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
-import com.zeroregard.ars_technica.glyphs.AugmentPreserve;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
@@ -64,7 +64,7 @@ public class EffectTelefeast extends AbstractEffect {
         BlockState bs = be.getBlockState();
         boolean canUse = spellStats.isSensitive();
         boolean forwardItem = spellStats.getBuffCount(AugmentPierce.INSTANCE) > 0;
-        boolean preserveContainer = spellStats.getBuffCount(AugmentPreserve.INSTANCE) > 0;
+        boolean preserveContainer = spellStats.getBuffCount(AugmentDampen.INSTANCE) > 0;
 
         Direction dir = rayTraceResult.getDirection();
         Vec3 inverseDirection = new Vec3(dir.getStepX(), dir.getStepY(), dir.getStepZ()).scale(-1).normalize();
@@ -236,7 +236,7 @@ public class EffectTelefeast extends AbstractEffect {
 
     @Override
     protected @NotNull Set<AbstractAugment> getCompatibleAugments() {
-        return Set.of(AugmentSensitive.INSTANCE, AugmentPierce.INSTANCE, AugmentPreserve.INSTANCE);
+        return Set.of(AugmentSensitive.INSTANCE, AugmentPierce.INSTANCE, AugmentDampen.INSTANCE);
     }
 
     @Nonnull
@@ -251,7 +251,7 @@ public class EffectTelefeast extends AbstractEffect {
         super.addAugmentDescriptions(map);
         map.put(AugmentSensitive.INSTANCE, "Will try to 'use' an item even if it's not a drink/food (for example experience gems)");
         map.put(AugmentPierce.INSTANCE, "Changes to 'pierce' through the container, carrying the consumable in a magic floating bubble");
-        map.put(AugmentPreserve.INSTANCE, "When used with pierce, preserves the container item and only consumes the contents");
+        map.put(AugmentDampen.INSTANCE, "When used with pierce, preserves the container item and only consumes the contents");
     }
 
     @Override

@@ -110,10 +110,10 @@ public class ItemProjectileRenderer extends EntityRenderer<ItemProjectileEntity>
         int color = 0xFF4A90E2; // Water blue color
         
         // Top face
-        buffer.addVertex(pose, -size, size, -size).setColor(color).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn);
-        buffer.addVertex(pose, size, size, -size).setColor(color).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn);
-        buffer.addVertex(pose, size, size, size).setColor(color).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn);
-        buffer.addVertex(pose, -size, size, size).setColor(color).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn);
+        buffer.addVertex(pose, -size, size, -size).setColor(color).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
+        buffer.addVertex(pose, size, size, -size).setColor(color).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
+        buffer.addVertex(pose, size, size, size).setColor(color).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
+        buffer.addVertex(pose, -size, size, size).setColor(color).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
         
         matrixStack.popPose();
     }
