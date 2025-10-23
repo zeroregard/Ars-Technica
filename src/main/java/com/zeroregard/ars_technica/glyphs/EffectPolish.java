@@ -3,15 +3,20 @@ package com.zeroregard.ars_technica.glyphs;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
+import com.simibubi.create.content.logistics.depot.DepotBlock;
 import com.zeroregard.ars_technica.entity.ArcanePolishEntity;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.util.Color;
 
 import javax.annotation.Nonnull;
@@ -27,6 +32,31 @@ public class EffectPolish extends AbstractItemResolveEffect {
 
     private EffectPolish(ResourceLocation resourceLocation, String description) {
         super(resourceLocation, description);
+    }
+
+    @Override
+    public void onResolve(net.minecraft.world.phys.HitResult rayTraceResult, Level world, @Nullable LivingEntity shooter, 
+                          SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
+        if (rayTraceResult instanceof BlockHitResult blockHit) {
+            BlockPos blockPos = blockHit.getBlockPos();
+            BlockState state = world.getBlockState(blockPos);
+            
+            if (state.getBlock() instanceof DepotBlock) {
+                boolean hasFocus = SpellResolverHelpers.hasTransmutationFocus(resolver);
+                int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
+                int maxAmountToPolish = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
+                float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
+                var color = new Color(spellContext.getColors().getColor());
+                
+                Vec3 spawnPos = Vec3.atCenterOf(blockPos).add(0, 0.5, 0);
+                ArcanePolishEntity arcanePolishEntity = new ArcanePolishEntity(spawnPos, world, maxAmountToPolish, speed, color, Collections.emptyList());
+                arcanePolishEntity.bindDepot(blockPos);
+                world.addFreshEntity(arcanePolishEntity);
+                return;
+            }
+        }
+        
+        super.onResolve(rayTraceResult, world, shooter, spellStats, spellContext, resolver);
     }
 
     @Override

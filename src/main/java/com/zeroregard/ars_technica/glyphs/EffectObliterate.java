@@ -4,11 +4,14 @@ import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAmplify;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentFortune;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
+import com.simibubi.create.content.logistics.depot.DepotBlock;
 import com.zeroregard.ars_technica.entity.ArcaneHammerEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -36,17 +39,25 @@ public class EffectObliterate extends AbstractEffect {
     }
 
     public void onResolveBlock(BlockHitResult rayTraceResult, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        var position = rayTraceResult.getBlockPos().getCenter().add(0, 0.5, 0);
-        resolve(null, position, world, shooter, spellStats, spellContext, resolver);
+        BlockPos blockPos = rayTraceResult.getBlockPos();
+        BlockState state = world.getBlockState(blockPos);
+        var position = blockPos.getCenter().add(0, 0.5, 0);
+        
+        ArcaneHammerEntity hammer = resolve(null, position, world, shooter, spellStats, spellContext, resolver);
+        
+        if (state.getBlock() instanceof DepotBlock && hammer != null) {
+            hammer.bindDepot(blockPos);
+        }
     }
 
-    private void resolve(@Nullable Entity target, Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
+    private ArcaneHammerEntity resolve(@Nullable Entity target, Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
         var color = new Color(spellContext.getColors().getColor());
         SpellContext newContext = spellContext.makeChildContext();
         spellContext.setCanceled(true);
         ArcaneHammerEntity arcaneHammerEntity = new ArcaneHammerEntity(target, position, world, shooter, color, resolver.getNewResolver(newContext), spellStats);
         setYaw(position, shooter, arcaneHammerEntity);
         world.addFreshEntity(arcaneHammerEntity);
+        return arcaneHammerEntity;
     }
 
     private void setYaw(Vec3 position, @NotNull LivingEntity shooter, ArcaneHammerEntity arcaneHammerEntity) {
