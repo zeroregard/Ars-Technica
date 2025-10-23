@@ -162,16 +162,7 @@ repositories {
 dependencies {
 
     implementation("com.hollingsworth.ars_nouveau:ars_nouveau-${minecraft_version}:${ars_version}")
-    implementation("com.alexthw.sauce:sauce-${minecraft_version}") {
-        version {
-            strictly '[0.0.11.37,)'
-            prefer sauce_version
-        }
-    }
-    // compileOnly "com.alexthw.ars_elemental:ars_elemental-1.21.1:0.7.2.0.46"
-    // runtimeOnly "com.alexthw.ars_elemental:ars_elemental-1.21.1:0.7.2.0.46"
 
-    // only need the compileOnly, the runtime dependency is handled by Ars Nouveau
     compileOnly "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     compileOnly "vazkii.patchouli:Patchouli:1.21-${patchouli_version}"
     compileOnly 'com.github.glitchfiend:TerraBlender-neoforge:1.21-4.0.0.0'
@@ -183,11 +174,6 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${flywheel_minecraft_version}:${flywheel_version}")
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${flywheel_minecraft_version}:${flywheel_version}")
     implementation("com.tterrag.registrate:Registrate:${registrate_version}")
-
-    //implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-
-    // cyanide to debug worldgen, localRuntime configuration won't mark is a dependency
-    // localRuntime "curse.maven:cyanide-541676:5782674"
 
 }
 

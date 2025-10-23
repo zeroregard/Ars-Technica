@@ -1,14 +1,11 @@
 package com.zeroregard.ars_technica.block;
 
-import com.alexthw.sauce.common.block.FocusEnhancedSpellTurretTile;
 import com.hollingsworth.arsnouveau.api.ANFakePlayer;
-import com.hollingsworth.arsnouveau.api.spell.EntitySpellResolver;
-import com.hollingsworth.arsnouveau.api.spell.Spell;
-import com.hollingsworth.arsnouveau.api.spell.SpellContext;
-import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
+import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.TileCaster;
 import com.hollingsworth.arsnouveau.api.util.SourceUtil;
 import com.hollingsworth.arsnouveau.common.block.BasicSpellTurret;
+import com.hollingsworth.arsnouveau.common.block.tile.BasicSpellTurretTile;
 import com.hollingsworth.arsnouveau.common.network.Networking;
 import com.hollingsworth.arsnouveau.common.network.PacketOneShotAnimation;
 import com.zeroregard.ars_technica.Config;
@@ -16,7 +13,9 @@ import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Position;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,10 +26,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.hollingsworth.arsnouveau.common.block.BasicSpellTurret.TURRET_BEHAVIOR_MAP;
 
-public class TransmutationTurretTile extends FocusEnhancedSpellTurretTile {
+public class TransmutationTurretTile extends BasicSpellTurretTile {
 
     public TransmutationTurretTile(BlockPos pos, BlockState state) {
-        super(pos, state);
+        super(EntityRegistry.TRANSMUTATION_TURRET_BLOCK_ENTITY.get(), pos, state);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class TransmutationTurretTile extends FocusEnhancedSpellTurretTile {
         if (spellCaster.getSpell().isEmpty() || !(this.level instanceof ServerLevel world))
             return;
         int manaCost = getManaCost();
-        if (manaCost > 0 && SourceUtil.takeSourceMultiple(pos, world, 10, manaCost) == null)
+        if (manaCost > 0 && SourceUtil.takeSourceMultipleWithParticles(pos, world, 10, manaCost) == null)
             return;
         Networking.sendToNearbyClient(world, pos, new PacketOneShotAnimation(pos));
         Position iposition = BasicSpellTurret.getDispensePosition(pos, world.getBlockState(pos).getValue(BasicSpellTurret.FACING));
@@ -65,6 +64,7 @@ public class TransmutationTurretTile extends FocusEnhancedSpellTurretTile {
             TURRET_BEHAVIOR_MAP.get(resolver.castType).onCast(resolver, world, pos, fakePlayer, iposition, direction);
         }
     }
+
 
     static class TransmutationTurretSpellResolver extends EntitySpellResolver {
 
@@ -91,3 +91,4 @@ public class TransmutationTurretTile extends FocusEnhancedSpellTurretTile {
         }
     }
 }
+

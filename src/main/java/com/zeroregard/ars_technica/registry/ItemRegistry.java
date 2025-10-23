@@ -1,6 +1,5 @@
 package com.zeroregard.ars_technica.registry;
 
-import com.alexthw.sauce.client.FocusTurretRenderer;
 import com.hollingsworth.arsnouveau.common.items.ExperienceGem;
 import com.hollingsworth.arsnouveau.common.items.RendererBlockItem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
@@ -83,7 +82,7 @@ public class ItemRegistry {
             @Override
             @OnlyIn(Dist.CLIENT)
             public Supplier<BlockEntityWithoutLevelRenderer> getRenderer() {
-                return () -> FocusTurretRenderer.getISTER(model);
+                return com.zeroregard.ars_technica.client.item.TransmutationTurretItemRenderer.getISTER();
             }
         });
     }

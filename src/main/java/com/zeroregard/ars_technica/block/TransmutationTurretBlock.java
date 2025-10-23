@@ -1,8 +1,6 @@
 package com.zeroregard.ars_technica.block;
 
-import com.alexthw.sauce.common.block.FocusEnhancedSpellTurret;
-import com.hollingsworth.arsnouveau.api.spell.SpellSchools;
-import com.zeroregard.ars_technica.registry.ItemRegistry;
+import com.hollingsworth.arsnouveau.common.block.BasicSpellTurret;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -13,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public class TransmutationTurretBlock extends FocusEnhancedSpellTurret {
+public class TransmutationTurretBlock extends BasicSpellTurret {
 
     public TransmutationTurretBlock(Properties properties) {
-        super(properties, SpellSchools.MANIPULATION);
+        super(properties);
     }
 
     @Override
@@ -29,3 +27,4 @@ public class TransmutationTurretBlock extends FocusEnhancedSpellTurret {
         return Collections.singletonList(new ItemStack(this));
     }
 }
+

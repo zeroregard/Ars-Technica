@@ -34,6 +34,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.*;
 import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.AIR_ESSENCE;
+import static com.hollingsworth.arsnouveau.setup.registry.BlockRegistry.ENCHANTED_SPELL_TURRET;
 import static com.simibubi.create.AllItems.*;
 import static com.zeroregard.ars_technica.datagen.Setup.provider;
 
@@ -126,8 +127,8 @@ public class ArsProviders {
 
             recipes.add(builder()
                     .withResult(BlockRegistry.TRANSMUTATION_TURRET.get())
-                    .withReagent(Items.DISPENSER)
-                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
+                    .withReagent(ENCHANTED_SPELL_TURRET)
+                    .withPedestalItem(3, Ingredient.of(MANIPULATION_ESSENCE))
                     .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.TRANSMUTATION_FOCUS.get())))
                     .build());
         }
