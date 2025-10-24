@@ -84,6 +84,13 @@ public class ItemRegistry {
             public Supplier<BlockEntityWithoutLevelRenderer> getRenderer() {
                 return com.zeroregard.ars_technica.client.item.TransmutationTurretItemRenderer.getISTER();
             }
+            
+            @Override
+            public void appendHoverText(net.minecraft.world.item.ItemStack stack, net.minecraft.world.item.Item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
+                super.appendHoverText(stack, context, tooltip, flag);
+                double multiplier = com.zeroregard.ars_technica.Config.Common.TRANSMUTATION_TURRET_SOURCE_COST_MULTIPLIER.get();
+                tooltip.add(net.minecraft.network.chat.Component.translatable("ars_technica.tooltip.transmutation_turret", String.format("%.1f", multiplier)));
+            }
         });
     }
 
