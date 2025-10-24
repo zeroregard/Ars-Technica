@@ -10,6 +10,7 @@ import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.item.PressurePerk;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
+import com.zeroregard.ars_technica.registry.BlockRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
@@ -33,6 +34,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.*;
 import static com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry.AIR_ESSENCE;
+import static com.hollingsworth.arsnouveau.setup.registry.BlockRegistry.ENCHANTED_SPELL_TURRET;
 import static com.simibubi.create.AllItems.*;
 import static com.zeroregard.ars_technica.datagen.Setup.provider;
 
@@ -121,6 +123,13 @@ public class ArsProviders {
                     .withResult(ItemRegistry.SPY_MONOCLE)
                     .withReagent(Items.SPYGLASS)
                     .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
+                    .build());
+
+            recipes.add(builder()
+                    .withResult(BlockRegistry.TRANSMUTATION_TURRET.get())
+                    .withReagent(ENCHANTED_SPELL_TURRET)
+                    .withPedestalItem(3, Ingredient.of(MANIPULATION_ESSENCE))
+                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.TRANSMUTATION_FOCUS.get())))
                     .build());
         }
 

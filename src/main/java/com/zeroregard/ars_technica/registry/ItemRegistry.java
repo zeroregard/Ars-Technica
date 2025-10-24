@@ -1,19 +1,27 @@
 package com.zeroregard.ars_technica.registry;
 
 import com.hollingsworth.arsnouveau.common.items.ExperienceGem;
+import com.hollingsworth.arsnouveau.common.items.RendererBlockItem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.zeroregard.ars_technica.armor.ATGogglesItem;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
 import com.zeroregard.ars_technica.item.RunicSpanner;
 import com.zeroregard.ars_technica.item.SpyMonocle;
 import com.zeroregard.ars_technica.item.TransmutationFocus;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 import static com.zeroregard.ars_technica.ArsTechnica.MODID;
 import static com.zeroregard.ars_technica.registry.SoundRegistry.POCKET_FACTORY_KEY;
@@ -33,6 +41,7 @@ public class ItemRegistry {
                     new Item.Properties().stacksTo(1)
             ).withTooltip(Component.translatable("ars_technica.tooltip.transmutation_focus"))
     );
+
     public static final DeferredItem<Item> SPY_MONOCLE = ITEMS.register("spy_monocle", () -> new SpyMonocle(new Item.Properties().stacksTo(1)));
 
     public static int GREATER_EXPERIENCE_VALUE = 12;
@@ -67,6 +76,23 @@ public class ItemRegistry {
 
     // New items for music disc crafting - conditional blank disc
     public static final DeferredItem<Item> BLANK_DISC = ITEMS.registerSimpleItem("blank_disc", new Item.Properties().stacksTo(1));
+
+    public static void addGeckoBlockItem(String name, DeferredHolder<Block, ? extends Block> block, String model) {
+        ITEMS.register(name, () -> new RendererBlockItem(block.get(), new Item.Properties().stacksTo(64)) {
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public Supplier<BlockEntityWithoutLevelRenderer> getRenderer() {
+                return com.zeroregard.ars_technica.client.item.TransmutationTurretItemRenderer.getISTER();
+            }
+            
+            @Override
+            public void appendHoverText(net.minecraft.world.item.ItemStack stack, net.minecraft.world.item.Item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
+                super.appendHoverText(stack, context, tooltip, flag);
+                double multiplier = com.zeroregard.ars_technica.Config.Common.TRANSMUTATION_TURRET_SOURCE_COST_MULTIPLIER.get();
+                tooltip.add(net.minecraft.network.chat.Component.translatable("ars_technica.tooltip.transmutation_turret", String.format("%.1f", multiplier)));
+            }
+        });
+    }
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);

@@ -4,6 +4,7 @@ package com.zeroregard.ars_technica.registry;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.block.PreciseRelayTile;
 import com.zeroregard.ars_technica.block.SourceMotorBlockEntity;
+import com.zeroregard.ars_technica.block.TransmutationTurretTile;
 import com.zeroregard.ars_technica.entity.*;
 import com.zeroregard.ars_technica.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -65,6 +66,12 @@ public class EntityRegistry {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PreciseRelayTile>> PRECISE_RELAY_TILE =
             BLOCK_ENTITIES.register("precise_relay_tile", () -> {
                 return BlockEntityType.Builder.of(PreciseRelayTile::new, BlockRegistry.PRECISE_RELAY.get())
+                        .build(null);
+            });
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TransmutationTurretTile>> TRANSMUTATION_TURRET_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("transmutation_turret_block_entity", () -> {
+                return BlockEntityType.Builder.of(TransmutationTurretTile::new, BlockRegistry.TRANSMUTATION_TURRET.get())
                         .build(null);
             });
 }
