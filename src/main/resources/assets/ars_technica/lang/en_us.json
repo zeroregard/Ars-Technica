@@ -75,7 +75,7 @@
 	"create.gui.ars_technica.cooldown": "Cooldown",
 
 	"block.ars_technica.precise_relay": "Precise Relay",
-	"block.ars_technica.transmutation_turret": "Transmutation Turret",
+	"block.ars_technica.transmutation_turret": "Transmutation Infused Turret",
 	"create.gui.ars_technica.relay": "Precise Relay",
 	"ars_nouveau.relay.average_transfer_rate": "%d source per second",
 	"ars_nouveau.relay.transfer_rate": "~%d source / %d",

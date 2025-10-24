@@ -40,8 +40,11 @@ public class TransmutationTurretTile extends BasicSpellTurretTile {
     @Override
     public int getManaCost() {
         Spell spell = this.spellCaster.getSpell();
+        int baseCost = spell.getCost();
         double multiplier = Config.Common.TRANSMUTATION_TURRET_SOURCE_COST_MULTIPLIER.get();
-        return (int) (spell.getCost() * multiplier);
+        int finalCost = (int) (baseCost * multiplier);
+        System.out.println("[TRANSMUTATION TURRET] Source cost - Base: " + baseCost + ", Multiplier: " + multiplier + ", Final: " + finalCost);
+        return finalCost;
     }
 
     @Override

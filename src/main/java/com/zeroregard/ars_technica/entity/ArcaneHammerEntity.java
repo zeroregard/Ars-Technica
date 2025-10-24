@@ -318,6 +318,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
                             fortuneMultiplier = 1.0f + (0.33f * fortuneLevel);
                             
                             if (SpellResolverHelpers.shouldDoubleOutputs(resolver)) {
+                                System.out.println("[TRANSMUTATION] Doubling outputs for depot item! Fortune multiplier: " + fortuneMultiplier + " -> " + (fortuneMultiplier * 2.0f));
                                 fortuneMultiplier *= 2.0f;
                             }
                         }
@@ -358,6 +359,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
                                 fortuneMultiplier = 1.0f + (0.33f * fortuneLevel);
                                 
                                 if (SpellResolverHelpers.shouldDoubleOutputs(resolver)) {
+                                    System.out.println("[TRANSMUTATION] Doubling outputs for ground item! Fortune multiplier: " + fortuneMultiplier + " -> " + (fortuneMultiplier * 2.0f));
                                     fortuneMultiplier *= 2.0f;
                                 }
                             }
