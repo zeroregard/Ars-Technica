@@ -95,7 +95,7 @@ public class EffectTelefeast extends AbstractEffect {
                     if (!emptyContainer.isEmpty()) {
                         itemHandler.insertItem(i, emptyContainer, false);
                     }
-                    forwardItem(world, extractedItem, direction, position.getCenter(), true);
+                    forwardItem(world, extractedItem, direction, position.getCenter());
                     break;
                 }
 
@@ -149,19 +149,18 @@ public class EffectTelefeast extends AbstractEffect {
             if(!forwardItem) {
                 ConsumptionHelper.tryUseEdibleItem(caster, outputItem, world);
             } else {
-                forwardItem(world, outputItem, direction, position.getCenter(), true);
+                forwardItem(world, outputItem, direction, position.getCenter());
             }
         }
 
 
     }
 
-    private void forwardItem(Level world, ItemStack item, Vec3 direction, Vec3 position, boolean preserveContainer) {
+    private void forwardItem(Level world, ItemStack item, Vec3 direction, Vec3 position) {
         if (item.isEmpty()) {
             return;
         }
         ItemProjectileEntity projectile = new ItemProjectileEntity(world, position.add(0, -0.5, 0), direction, item);
-        projectile.setPreserveContainer(preserveContainer);
         world.addFreshEntity(projectile);
     }
 
