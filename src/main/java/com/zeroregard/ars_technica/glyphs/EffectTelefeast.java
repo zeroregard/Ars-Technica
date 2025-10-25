@@ -3,7 +3,6 @@ package com.zeroregard.ars_technica.glyphs;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentDampen;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
@@ -64,7 +63,6 @@ public class EffectTelefeast extends AbstractEffect {
         BlockState bs = be.getBlockState();
         boolean canUse = spellStats.isSensitive();
         boolean forwardItem = spellStats.getBuffCount(AugmentPierce.INSTANCE) > 0;
-        boolean preserveContainer = spellStats.getBuffCount(AugmentDampen.INSTANCE) > 0;
 
         Direction dir = rayTraceResult.getDirection();
         Vec3 inverseDirection = new Vec3(dir.getStepX(), dir.getStepY(), dir.getStepZ()).scale(-1).normalize();
@@ -73,9 +71,9 @@ public class EffectTelefeast extends AbstractEffect {
         var itemHandler = Capabilities.ItemHandler.BLOCK.getCapability(world, pos, bs, be, null);
 
         if (fluidHandler != null) {
-            handleFluid(shooter, fluidHandler.getFluidInTank(0), fluidHandler, world, inverseDirection, be.getBlockPos(), forwardItem, preserveContainer);
+            handleFluid(shooter, fluidHandler.getFluidInTank(0), fluidHandler, world, inverseDirection, be.getBlockPos(), forwardItem);
         } else if (itemHandler != null) {
-            handleItem(shooter, itemHandler, world, inverseDirection, be.getBlockPos(), canUse, forwardItem, preserveContainer);
+            handleItem(shooter, itemHandler, world, inverseDirection, be.getBlockPos(), canUse, forwardItem);
         }
     }
 
@@ -87,43 +85,32 @@ public class EffectTelefeast extends AbstractEffect {
         }
     }
 
-    private void handleItem(LivingEntity caster, IItemHandler itemHandler, Level world, Vec3 direction, BlockPos position, boolean canUse, boolean forwardItem, boolean preserveContainer) {
+    private void handleItem(LivingEntity caster, IItemHandler itemHandler, Level world, Vec3 direction, BlockPos position, boolean canUse, boolean forwardItem) {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             ItemStack itemStack = itemHandler.getStackInSlot(i);
             if (!itemStack.isEmpty()) {
                 if(forwardItem && (isFood(itemStack, null) || isDrink(itemStack))) {
                     ItemStack extractedItem = itemHandler.extractItem(i, 1, false);
-                    if (preserveContainer) {
-                        extractedItem = preserveConsumableContainer(extractedItem, world);
+                    ItemStack emptyContainer = getEmptyContainer(extractedItem, world);
+                    if (!emptyContainer.isEmpty()) {
+                        itemHandler.insertItem(i, emptyContainer, false);
                     }
-                    forwardItem(world, extractedItem, direction, position.getCenter());
+                    forwardItem(world, extractedItem, direction, position.getCenter(), true);
                     break;
                 }
 
                 if(ConsumptionHelper.tryUseConsumableItem(caster, itemStack, world, canUse)) {
-                    if (preserveContainer) {
-                        ItemStack preservedContainer = preserveConsumableContainer(itemStack, world);
-                        if (!preservedContainer.isEmpty()) {
-                            itemHandler.insertItem(i, preservedContainer, false);
-                        }
-                    }
                     break;
                 }
 
                 if (ConsumptionHelper.tryUseEdibleItem(caster, itemStack, world)) {
-                    if (preserveContainer) {
-                        ItemStack preservedContainer = preserveConsumableContainer(itemStack, world);
-                        if (!preservedContainer.isEmpty()) {
-                            itemHandler.insertItem(i, preservedContainer, false);
-                        }
-                    }
                     break;
                 }
             }
         }
     }
 
-    private void handleFluid(LivingEntity caster, FluidStack fluid, IFluidHandler handler, Level world, Vec3 direction, BlockPos position, boolean forwardItem, boolean preserveContainer) {
+    private void handleFluid(LivingEntity caster, FluidStack fluid, IFluidHandler handler, Level world, Vec3 direction, BlockPos position, boolean forwardItem) {
         if (fluid.getFluid() == Fluids.LAVA && !forwardItem) {
             Holder<DamageType> lavaDamageType = world.registryAccess()
                     .registryOrThrow(Registries.DAMAGE_TYPE)
@@ -162,49 +149,42 @@ public class EffectTelefeast extends AbstractEffect {
             if(!forwardItem) {
                 ConsumptionHelper.tryUseEdibleItem(caster, outputItem, world);
             } else {
-                if (preserveContainer) {
-                    outputItem = preserveConsumableContainer(outputItem, world);
-                }
-                forwardItem(world, outputItem, direction, position.getCenter());
+                forwardItem(world, outputItem, direction, position.getCenter(), true);
             }
         }
 
 
     }
 
-    private void forwardItem(Level world, ItemStack item, Vec3 direction, Vec3 position) {
+    private void forwardItem(Level world, ItemStack item, Vec3 direction, Vec3 position, boolean preserveContainer) {
         if (item.isEmpty()) {
             return;
         }
         ItemProjectileEntity projectile = new ItemProjectileEntity(world, position.add(0, -0.5, 0), direction, item);
+        projectile.setPreserveContainer(preserveContainer);
         world.addFreshEntity(projectile);
     }
 
-    private ItemStack preserveConsumableContainer(ItemStack consumable, Level world) {
+    private ItemStack getEmptyContainer(ItemStack consumable, Level world) {
         if (consumable.isEmpty()) {
-            return consumable;
+            return ItemStack.EMPTY;
         }
 
-        // Handle potion flasks - return empty flask
         if (consumable.getItem() instanceof PotionItem) {
             return new ItemStack(Items.GLASS_BOTTLE);
         }
 
-        // Handle buckets - return empty bucket
         if (consumable.getUseAnimation() == UseAnim.DRINK) {
-            // Check for specific bucket types
             if (consumable.getItem() == Items.MILK_BUCKET) {
                 return new ItemStack(Items.BUCKET);
             }
             
-            // Check if this item has a container item (like potions do)
             ItemStack containerItem = consumable.getCraftingRemainingItem();
             if (!containerItem.isEmpty()) {
                 return containerItem;
             }
         }
 
-        // Handle food items that might have containers
         if (isFood(consumable, null)) {
             ItemStack containerItem = consumable.getCraftingRemainingItem();
             if (!containerItem.isEmpty()) {
@@ -212,8 +192,6 @@ public class EffectTelefeast extends AbstractEffect {
             }
         }
 
-        // For modded items, try to detect common container patterns
-        // This could be extended for specific mods
         String itemName = consumable.getItem().toString().toLowerCase();
         if (itemName.contains("bucket") && !itemName.contains("empty")) {
             return new ItemStack(Items.BUCKET);
@@ -225,7 +203,6 @@ public class EffectTelefeast extends AbstractEffect {
             return new ItemStack(Items.BOWL);
         }
 
-        // Return empty if no container found
         return ItemStack.EMPTY;
     }
 
@@ -236,7 +213,7 @@ public class EffectTelefeast extends AbstractEffect {
 
     @Override
     protected @NotNull Set<AbstractAugment> getCompatibleAugments() {
-        return Set.of(AugmentSensitive.INSTANCE, AugmentPierce.INSTANCE, AugmentDampen.INSTANCE);
+        return Set.of(AugmentSensitive.INSTANCE, AugmentPierce.INSTANCE);
     }
 
     @Nonnull
@@ -250,8 +227,7 @@ public class EffectTelefeast extends AbstractEffect {
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
         map.put(AugmentSensitive.INSTANCE, "Will try to 'use' an item even if it's not a drink/food (for example experience gems)");
-        map.put(AugmentPierce.INSTANCE, "Changes to 'pierce' through the container, carrying the consumable in a magic floating bubble");
-        map.put(AugmentDampen.INSTANCE, "When used with pierce, preserves the container item and only consumes the contents");
+        map.put(AugmentPierce.INSTANCE, "Forwards the consumable in a magic bubble, preserving the container");
     }
 
     @Override

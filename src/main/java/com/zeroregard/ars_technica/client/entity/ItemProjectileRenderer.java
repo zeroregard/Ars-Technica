@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
@@ -50,9 +51,8 @@ public class ItemProjectileRenderer extends EntityRenderer<ItemProjectileEntity>
         Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrixStack, bufferIn, entityIn.level(), (int) entityIn.blockPosition().asLong());
         matrixStack.popPose();
 
-        // Render small fluid block for preserved containers
-        if (isPreservedContainer(stack)) {
-            renderFluidBlock(matrixStack, bufferIn, packedLightIn, getFluidFromContainer(stack));
+        if (entityIn.shouldPreserveContainer() && isConsumableWithContainer(stack)) {
+            renderFluidBlock(matrixStack, bufferIn, packedLightIn, getFluidFromStack(stack));
         }
 
         renderBubble(matrixStack, bufferIn, packedLightIn);
@@ -74,23 +74,41 @@ public class ItemProjectileRenderer extends EntityRenderer<ItemProjectileEntity>
         matrixStack.popPose();
     }
 
-    private boolean isPreservedContainer(ItemStack stack) {
+    private boolean isConsumableWithContainer(ItemStack stack) {
         if (stack.isEmpty()) return false;
         
-        // Check if this is an empty container that was likely preserved
-        return stack.getItem() == Items.GLASS_BOTTLE || 
-               stack.getItem() == Items.BUCKET || 
-               stack.getItem() == Items.BOWL;
+        if (stack.getItem() instanceof PotionItem) {
+            return true;
+        }
+        
+        if (stack.getItem() == Items.MILK_BUCKET) {
+            return true;
+        }
+        
+        if (stack.getUseAnimation() == UseAnim.DRINK) {
+            return true;
+        }
+        
+        String itemName = stack.getItem().toString().toLowerCase();
+        return (itemName.contains("bucket") || itemName.contains("bottle") || itemName.contains("bowl")) 
+               && !itemName.contains("empty");
     }
     
-    private FluidStack getFluidFromContainer(ItemStack container) {
-        // This is a simplified approach - in a real implementation you'd need to track
-        // what fluid was originally in the container. For now, we'll use a default.
-        if (container.getItem() == Items.GLASS_BOTTLE) {
-            return new FluidStack(Fluids.WATER, 1000);
-        } else if (container.getItem() == Items.BUCKET) {
+    private FluidStack getFluidFromStack(ItemStack stack) {
+        if (stack.isEmpty()) return FluidStack.EMPTY;
+        
+        if (stack.getItem() instanceof PotionItem) {
             return new FluidStack(Fluids.WATER, 1000);
         }
+        
+        if (stack.getItem() == Items.MILK_BUCKET) {
+            return new FluidStack(Fluids.WATER, 1000);
+        }
+        
+        if (stack.getUseAnimation() == UseAnim.DRINK) {
+            return new FluidStack(Fluids.WATER, 1000);
+        }
+        
         return FluidStack.EMPTY;
     }
     
@@ -98,22 +116,19 @@ public class ItemProjectileRenderer extends EntityRenderer<ItemProjectileEntity>
         if (fluid.isEmpty()) return;
         
         matrixStack.pushPose();
-        matrixStack.translate(0, 0.1, 0); // Slightly above the container
-        matrixStack.scale(0.5f, 0.5f, 0.5f); // Half size block
+        matrixStack.translate(0, 0.1, 0);
+        matrixStack.scale(0.5f, 0.5f, 0.5f);
         
-        // Simple fluid block rendering - this would need to be enhanced for proper fluid textures
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/water_still.png")));
         Matrix4f pose = matrixStack.last().pose();
         
-        // Render a simple cube for the fluid
         float size = 0.3f;
-        int color = 0xFF4A90E2; // Water blue color
+        int color = 0xFF4A90E2;
         
-        // Top face
-        buffer.addVertex(pose, -size, size, -size).setColor(color).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
-        buffer.addVertex(pose, size, size, -size).setColor(color).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
-        buffer.addVertex(pose, size, size, size).setColor(color).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
-        buffer.addVertex(pose, -size, size, size).setColor(color).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16);
+        buffer.addVertex(pose, -size, size, -size).setColor(color).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16).setNormal(0, 1, 0);
+        buffer.addVertex(pose, size, size, -size).setColor(color).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16).setNormal(0, 1, 0);
+        buffer.addVertex(pose, size, size, size).setColor(color).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16).setNormal(0, 1, 0);
+        buffer.addVertex(pose, -size, size, size).setColor(color).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setUv2(packedLightIn, packedLightIn >> 16).setNormal(0, 1, 0);
         
         matrixStack.popPose();
     }

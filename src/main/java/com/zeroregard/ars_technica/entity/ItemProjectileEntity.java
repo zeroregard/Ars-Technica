@@ -30,11 +30,20 @@ public class ItemProjectileEntity extends Entity {
     private Vec3 velocity;
     private final Level world;
     private static final EntityDataAccessor<ItemStack> ITEM_STACK = SynchedEntityData.defineId(ItemProjectileEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Boolean> PRESERVE_CONTAINER = SynchedEntityData.defineId(ItemProjectileEntity.class, EntityDataSerializers.BOOLEAN);
     private static final int MAXIMUM_LIFE_TIME_TICKS = 10 * 20;
     private int ticks = 0;
 
     public @Nullable ItemStack getStack() {
         return itemStack;
+    }
+
+    public boolean shouldPreserveContainer() {
+        return this.entityData.get(PRESERVE_CONTAINER);
+    }
+
+    public void setPreserveContainer(boolean preserveContainer) {
+        this.entityData.set(PRESERVE_CONTAINER, preserveContainer);
     }
 
     public ItemProjectileEntity(EntityType<ItemProjectileEntity> type, Level world) {
@@ -122,6 +131,7 @@ public class ItemProjectileEntity extends Entity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder dataBuilder) {
         dataBuilder.define(ITEM_STACK, ItemStack.EMPTY);
+        dataBuilder.define(PRESERVE_CONTAINER, false);
     }
 
 
@@ -136,13 +146,16 @@ public class ItemProjectileEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        // Use the level's registry access as the lookup provider.
         itemStack = ItemStack.parseOptional(world.registryAccess(), tag.getCompound("Item"));
+        if (tag.contains("PreserveContainer")) {
+            this.entityData.set(PRESERVE_CONTAINER, tag.getBoolean("PreserveContainer"));
+        }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.put("Item", itemStack.save(world.registryAccess(), new CompoundTag()));
+        tag.putBoolean("PreserveContainer", this.entityData.get(PRESERVE_CONTAINER));
     }
     @Override
     public boolean isPickable() {
