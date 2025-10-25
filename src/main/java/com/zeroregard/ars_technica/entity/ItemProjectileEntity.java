@@ -136,7 +136,6 @@ public class ItemProjectileEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        // Use the level's registry access as the lookup provider.
         itemStack = ItemStack.parseOptional(world.registryAccess(), tag.getCompound("Item"));
     }
 

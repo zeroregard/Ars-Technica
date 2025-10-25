@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
@@ -41,7 +42,8 @@ public class ItemProjectileRenderer extends EntityRenderer<ItemProjectileEntity>
             return;
         }
 
-        Minecraft.getInstance().getItemRenderer().renderStatic(entityIn.getStack(), ItemDisplayContext.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrixStack, bufferIn, entityIn.level(), (int) entityIn.blockPosition().asLong());
+        ItemStack stack = entityIn.getStack();
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED, 15728880, OverlayTexture.NO_OVERLAY, matrixStack, bufferIn, entityIn.level(), (int) entityIn.blockPosition().asLong());
         matrixStack.popPose();
 
         renderBubble(matrixStack, bufferIn, packedLightIn);
