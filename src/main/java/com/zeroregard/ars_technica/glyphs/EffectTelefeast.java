@@ -91,6 +91,10 @@ public class EffectTelefeast extends AbstractEffect {
             if (!itemStack.isEmpty()) {
                 if(forwardItem && (isFood(itemStack, null) || isDrink(itemStack))) {
                     ItemStack extractedItem = itemHandler.extractItem(i, 1, false);
+                    ItemStack emptyContainer = getEmptyContainer(extractedItem, world);
+                    if (!emptyContainer.isEmpty()) {
+                        itemHandler.insertItem(i, emptyContainer, false);
+                    }
                     forwardItem(world, extractedItem, direction, position.getCenter());
                     break;
                 }
@@ -160,6 +164,47 @@ public class EffectTelefeast extends AbstractEffect {
         world.addFreshEntity(projectile);
     }
 
+    private ItemStack getEmptyContainer(ItemStack consumable, Level world) {
+        if (consumable.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        if (consumable.getItem() instanceof PotionItem) {
+            return new ItemStack(Items.GLASS_BOTTLE);
+        }
+
+        if (consumable.getUseAnimation() == UseAnim.DRINK) {
+            if (consumable.getItem() == Items.MILK_BUCKET) {
+                return new ItemStack(Items.BUCKET);
+            }
+            
+            ItemStack containerItem = consumable.getCraftingRemainingItem();
+            if (!containerItem.isEmpty()) {
+                return containerItem;
+            }
+        }
+
+        if (isFood(consumable, null)) {
+            ItemStack containerItem = consumable.getCraftingRemainingItem();
+            if (!containerItem.isEmpty()) {
+                return containerItem;
+            }
+        }
+
+        String itemName = consumable.getItem().toString().toLowerCase();
+        if (itemName.contains("bucket") && !itemName.contains("empty")) {
+            return new ItemStack(Items.BUCKET);
+        }
+        if (itemName.contains("bottle") && !itemName.contains("empty")) {
+            return new ItemStack(Items.GLASS_BOTTLE);
+        }
+        if (itemName.contains("bowl") && !itemName.contains("empty")) {
+            return new ItemStack(Items.BOWL);
+        }
+
+        return ItemStack.EMPTY;
+    }
+
     @Override
     protected int getDefaultManaCost() {
         return 10;
@@ -181,7 +226,7 @@ public class EffectTelefeast extends AbstractEffect {
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
         map.put(AugmentSensitive.INSTANCE, "Will try to 'use' an item even if it's not a drink/food (for example experience gems)");
-        map.put(AugmentPierce.INSTANCE, "Changes to 'pierce' through the container, carrying the consumable in a magic floating bubble");
+        map.put(AugmentPierce.INSTANCE, "Forwards the consumable in a magic bubble, preserving the container");
     }
 
     @Override
