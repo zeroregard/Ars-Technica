@@ -99,12 +99,25 @@ public class EffectTelefeast extends AbstractEffect {
                     break;
                 }
 
-                if(ConsumptionHelper.tryUseConsumableItem(caster, itemStack, world, canUse)) {
-                    break;
-                }
-
-                if (ConsumptionHelper.tryUseEdibleItem(caster, itemStack, world)) {
-                    break;
+                if(canUse || isDrink(itemStack) || isFood(itemStack, null)) {
+                    ItemStack extractedItem = itemHandler.extractItem(i, 1, false);
+                    ItemStack emptyContainer = getEmptyContainer(extractedItem, world);
+                    boolean consumed = false;
+                    
+                    if(ConsumptionHelper.tryUseConsumableItem(caster, extractedItem, world, canUse)) {
+                        consumed = true;
+                    } else if (ConsumptionHelper.tryUseEdibleItem(caster, extractedItem, world)) {
+                        consumed = true;
+                    }
+                    
+                    if(consumed) {
+                        if (!emptyContainer.isEmpty()) {
+                            itemHandler.insertItem(i, emptyContainer, false);
+                        }
+                        break;
+                    } else {
+                        itemHandler.insertItem(i, extractedItem, false);
+                    }
                 }
             }
         }
@@ -226,12 +239,12 @@ public class EffectTelefeast extends AbstractEffect {
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
         map.put(AugmentSensitive.INSTANCE, "Will try to 'use' an item even if it's not a drink/food (for example experience gems)");
-        map.put(AugmentPierce.INSTANCE, "Forwards the consumable in a magic bubble, preserving the container");
+        map.put(AugmentPierce.INSTANCE, "Forwards the consumable in a magic bubble");
     }
 
     @Override
     public String getBookDescription() {
-        return "Consumes the first edible/potion, or some amount of liquid, found in the container/tank this was cast on.";
+        return "Consumes the first edible/potion, or some amount of liquid, found in the container/tank this was cast on. Containers like bottles and buckets are preserved.";
     }
 
     @Override
