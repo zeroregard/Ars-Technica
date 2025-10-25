@@ -75,6 +75,8 @@
 	"create.gui.ars_technica.cooldown": "Cooldown",
 
 	"block.ars_technica.precise_relay": "Precise Relay",
+	"block.ars_technica.transmutation_turret": "Transmutation Infused Turret",
+	"ars_technica.tooltip.transmutation_turret": "Casts spells infused with the Focus of Transmutation. Costs x%s more source.",
 	"create.gui.ars_technica.relay": "Precise Relay",
 	"ars_nouveau.relay.average_transfer_rate": "%d source per second",
 	"ars_nouveau.relay.transfer_rate": "~%d source / %d",
@@ -83,6 +85,7 @@
 	"item.ars_technica.pocket_factory.desc": "zeroregard - pocket factory",
 
 	"item.ars_technica.transmutation_focus": "Focus of Transmutation",
+	"item.ars_technica.transmutation_turret": "Transmutation Turret",
 	"ars_technica.focus_of_transmutation.shift_info": "Hold %s for more info",
 	"ars_technica.tooltip.transmutation_focus": "Augments spells with Luck and improves various glyphs",
 	"ars_technica.tooltip.transmutation_focus_shift_info_title": "Provides the following bonuses",

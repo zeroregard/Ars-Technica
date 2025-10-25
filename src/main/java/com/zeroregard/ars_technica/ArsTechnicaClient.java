@@ -4,8 +4,10 @@ import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.foundation.ponder.CreatePonderPlugin;
 import com.zeroregard.ars_technica.client.block.AllPartialModels;
 import com.zeroregard.ars_technica.client.block.ArcaneSchematiccannonRenderer;
+import com.zeroregard.ars_technica.client.block.TransmutationTurretRenderer;
 import com.zeroregard.ars_technica.client.item.SpyMonocleCurioRenderer;
 import com.zeroregard.ars_technica.ponder.ATPonderPlugin;
+import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.Minecraft;
@@ -35,6 +37,7 @@ public class ArsTechnicaClient {
         event.enqueueWork(() -> {
             EntityRenderersEvent.RegisterRenderers renderRegisterEvent = new EntityRenderersEvent.RegisterRenderers();
             renderRegisterEvent.registerBlockEntityRenderer(AllBlockEntityTypes.SCHEMATICANNON.get(), ArcaneSchematiccannonRenderer::new);
+            renderRegisterEvent.registerBlockEntityRenderer(EntityRegistry.TRANSMUTATION_TURRET_BLOCK_ENTITY.get(), TransmutationTurretRenderer::new);
         });
     }
 
