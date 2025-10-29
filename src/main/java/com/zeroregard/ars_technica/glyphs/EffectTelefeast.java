@@ -262,14 +262,13 @@ public class EffectTelefeast extends AbstractEffect {
                 .map(RecipeHolder::value)
                 .filter(FillingRecipe.class::isInstance)
                 .map(FillingRecipe.class::cast)
-                .filter(recipe -> recipe.getFluidIngredients().get(0).getMatchingFluidStacks().stream()
-                        .anyMatch(stack -> stack.getFluid().isSame(fluidIngredient.getFluid())))
+                .filter(recipe -> recipe.getFluidIngredients().get(0).ingredient().test(fluidIngredient))
                 .filter(recipe -> recipe.getIngredients().get(0).getItems()[0].getItem() == itemIngredient.getItem())
                 .findFirst();
 
         if (staticRecipe.isPresent()) {
             var recipe = staticRecipe.get();
-            var result = new FillingResult(recipe.getResultItem(world.registryAccess()).copy(), recipe.getRequiredFluid().getRequiredAmount());
+            var result = new FillingResult(recipe.getResultItem(world.registryAccess()).copy(), recipe.getRequiredFluid().amount());
             return Optional.of(result);
         }
 

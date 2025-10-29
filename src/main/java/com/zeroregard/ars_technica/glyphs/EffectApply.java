@@ -131,7 +131,7 @@ public class EffectApply extends AbstractItemResolveEffect {
             List<ItemStack> results = new ArrayList<>();
             var seqRecipe = RecipeHelpers.getSequencedAssemblyRecipe(AllRecipeTypes.DEPLOYING.getType(), DeployerApplicationRecipe.class, applyItem, itemStack, world);
             if (seqRecipe.isPresent()) {
-                results.addAll(seqRecipe.get().value().rollResults());
+                results.addAll(seqRecipe.get().value().rollResults(world.getRandom()));
             } else {
                 var recipe = getApplicationRecipe(applyItem, itemStack, world);
                 if (recipe.isPresent()) {

@@ -23,20 +23,18 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 import net.neoforged.neoforge.client.event.*;
 
-@EventBusSubscriber(modid = ArsTechnica.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientHandler {
 
     @SubscribeEvent
-    public static void bindRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+    public void bindRenderers(final EntityRenderersEvent.RegisterRenderers event) {
 
     }
 
     @SubscribeEvent
-    public static void initItemColors(final RegisterColorHandlersEvent.Item event) {
+    public void initItemColors(final RegisterColorHandlersEvent.Item event) {
 
         event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
                 ItemRegistry.TECHNOMANCER_BOOTS.get());
@@ -52,7 +50,7 @@ public class ClientHandler {
     }
 
     @SubscribeEvent
-    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    public void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SpyMonocleCurioRenderer.SPY_MONOCLE_LAYER, () -> SpyMonocleCurioRenderer.createBodyLayer());
     }
 
@@ -63,7 +61,7 @@ public class ClientHandler {
     }
 
     @SubscribeEvent
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    public void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_HAMMER_ENTITY.get(), ArcaneHammerEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
@@ -96,13 +94,12 @@ public class ClientHandler {
     }
 
     @SubscribeEvent
-    public static void registerKeyBindings(RegisterKeyMappingsEvent event) {
+    public void registerKeyBindings(RegisterKeyMappingsEvent event) {
 
     }
 
-    //Curio bag stuff
     @SubscribeEvent
-    public static void bindContainerRenderers(RegisterMenuScreensEvent event) {
+    public void bindContainerRenderers(RegisterMenuScreensEvent event) {
 
     }
 

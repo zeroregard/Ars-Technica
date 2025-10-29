@@ -309,7 +309,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
 
             List<ItemStack> allResults = new ArrayList<>();
             for (int i = 0; i < count; i++) {
-                List<ItemStack> rolledResults = recipe.get().rollResults();
+                List<ItemStack> rolledResults = recipe.get().rollResults(world.getRandom());
                 for (ItemStack result : rolledResults) {
                     if (RecipeHelpers.isChanceBased(result, recipe.get())) {
                         float fortuneMultiplier = 1.0f;
@@ -348,7 +348,7 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             if(recipe.isPresent()) {
                 int rolls = itemStack.getCount();
                 for (int roll = 0; roll < rolls; roll++) {
-                    List<ItemStack> rolledResults = recipe.get().rollResults();
+                    List<ItemStack> rolledResults = recipe.get().rollResults(world.getRandom());
                     for (int i = 0; i < rolledResults.size(); i++) {
                         ItemStack stack = rolledResults.get(i);
                         if (RecipeHelpers.isChanceBased(stack, recipe.get())) {

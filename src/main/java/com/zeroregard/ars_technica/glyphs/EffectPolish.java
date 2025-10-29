@@ -46,7 +46,7 @@ public class EffectPolish extends AbstractItemResolveEffect {
                 int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
                 int maxAmountToPolish = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
                 float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
-                var color = new Color(spellContext.getColors().getColor());
+                var color = new Color(spellContext.getSpell().color().getColor());
                 
                 Vec3 spawnPos = Vec3.atCenterOf(blockPos).add(0, 0.5, 0);
                 ArcanePolishEntity arcanePolishEntity = new ArcanePolishEntity(spawnPos, world, maxAmountToPolish, speed, color, Collections.emptyList());
@@ -79,7 +79,7 @@ public class EffectPolish extends AbstractItemResolveEffect {
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
         int maxAmountToPolish = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
         float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
-        var color = new Color(spellContext.getColors().getColor());
+        var color = new Color(spellContext.getSpell().color().getColor());
 
         if (!validPolishableEntities.isEmpty()) {
             ItemEntity closest = validPolishableEntities.stream()

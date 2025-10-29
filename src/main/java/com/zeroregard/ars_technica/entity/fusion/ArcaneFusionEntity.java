@@ -224,12 +224,13 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             int maxFluidIterations = recipe.getFluidIngredients().isEmpty() ? Integer.MAX_VALUE :
                     fluidIngredients.stream()
                             .mapToInt(fluidSource -> {
-                                var requiredFluid = recipe.getFluidIngredients().stream()
-                                        .flatMap(ingredient -> ingredient.getMatchingFluidStacks().stream())
-                                        .filter(matchingFluid -> matchingFluid.getFluid().equals(fluidSource.getFluidStack().getFluid()))
+                                // Find the recipe ingredient that matches this fluid source
+                                var requiredFluidIngredient = recipe.getFluidIngredients().stream()
+                                        .filter(ingredient -> ingredient.ingredient().test(fluidSource.getFluidStack()))
                                         .findFirst()
                                         .orElse(null);
-                                return (int) Math.floor(fluidSource.getMbAmount() / requiredFluid.getAmount());
+                                if (requiredFluidIngredient == null) return 0;
+                                return (int) Math.floor(fluidSource.getMbAmount() / requiredFluidIngredient.amount());
                             })
                             .min()
                             .orElse(0);
@@ -257,14 +258,13 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
             // Remove the used fluids
             fluidIngredients.forEach(fluidSource -> {
                 // Find the matching fluid ingredient for this fluid source
-                var requiredFluid = recipe.getFluidIngredients().stream()
-                        .flatMap(ingredient -> ingredient.getMatchingFluidStacks().stream())
-                        .filter(matchingFluid -> matchingFluid.getFluid().equals(fluidSource.getFluidStack().getFluid()))
+                var requiredFluidIngredient = recipe.getFluidIngredients().stream()
+                        .filter(ingredient -> ingredient.ingredient().test(fluidSource.getFluidStack()))
                         .findFirst()
                         .orElse(null);
 
-                if (requiredFluid != null) {
-                    int mbToDrain = requiredFluid.getAmount() * clampedRecipeIterations;
+                if (requiredFluidIngredient != null) {
+                    int mbToDrain = requiredFluidIngredient.amount() * clampedRecipeIterations;
                     fluidSource.drainFluid(mbToDrain, world);
                 }
             });

@@ -96,6 +96,11 @@ neoForge {
 
 configurations {
     runtimeClasspath.extendsFrom localRuntime
+    all {
+        resolutionStrategy {
+            force "com.tterrag.registrate:Registrate:${registrate_version}"
+        }
+    }
 }
 
 //minecraft.accessTransformers.files(

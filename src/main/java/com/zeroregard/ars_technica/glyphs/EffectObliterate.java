@@ -51,7 +51,7 @@ public class EffectObliterate extends AbstractEffect {
     }
 
     private ArcaneHammerEntity resolve(@Nullable Entity target, Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        var color = new Color(spellContext.getColors().getColor());
+        var color = new Color(spellContext.getSpell().color().getColor());
         SpellContext newContext = spellContext.makeChildContext();
         spellContext.setCanceled(true);
         ArcaneHammerEntity arcaneHammerEntity = new ArcaneHammerEntity(target, position, world, shooter, color, resolver.getNewResolver(newContext), spellStats);

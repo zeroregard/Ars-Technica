@@ -46,7 +46,7 @@ public class EffectPress extends AbstractItemResolveEffect {
                 int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
                 int maxAmountToPress = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
                 float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
-                var color = new Color(spellContext.getColors().getColor());
+                var color = new Color(spellContext.getSpell().color().getColor());
                 
                 Vec3 spawnPos = Vec3.atCenterOf(blockPos).add(0, 1.0, 0);
                 ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, maxAmountToPress, speed, color, Collections.emptyList());
@@ -80,7 +80,7 @@ public class EffectPress extends AbstractItemResolveEffect {
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
         int maxAmountToPress = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
         float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
-        var color = new Color(spellContext.getColors().getColor());
+        var color = new Color(spellContext.getSpell().color().getColor());
 
         if (!validPressableEntities.isEmpty()) {
             ItemEntity closest = validPressableEntities.stream()
