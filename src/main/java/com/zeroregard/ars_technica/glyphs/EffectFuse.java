@@ -40,7 +40,7 @@ public class EffectFuse extends AbstractEffect {
     }
 
     private void resolve(@Nullable Entity target, Vec3 position, Level world, @NotNull LivingEntity shooter, SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        var color = new Color(spellContext.getColors().getColor());
+        var color = new Color(spellContext.getSpell().color().getColor());
         String fusionTypeId = getFusionType(spellStats, spellContext);
         SpellContext newContext = spellContext.makeChildContext();
         spellContext.setCanceled(true);

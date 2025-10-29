@@ -1,12 +1,15 @@
 package com.zeroregard.ars_technica;
 
 import com.simibubi.create.api.stress.BlockStressValues;
+import com.zeroregard.ars_technica.client.ClientHandler;
 import com.zeroregard.ars_technica.network.ATPackets;
 import com.zeroregard.ars_technica.registry.BlockRegistry;
 import com.zeroregard.ars_technica.registry.GlyphRegistry;
 import com.zeroregard.ars_technica.registry.ModRegistry;
+import com.zeroregard.ars_technica.registry.ParticleRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -14,6 +17,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +40,10 @@ public class ArsTechnica {
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::doClientStuff);
         NeoForge.EVENT_BUS.register(this);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.register(new ClientHandler());
+            modEventBus.register(new ParticleRegistry());
+        }
     }
 
     public static ResourceLocation prefix(String path) {

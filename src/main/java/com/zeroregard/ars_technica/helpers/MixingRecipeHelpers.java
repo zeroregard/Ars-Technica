@@ -2,7 +2,6 @@ package com.zeroregard.ars_technica.helpers;
 
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.zeroregard.ars_technica.entity.fusion.ArcaneFusionType;
 import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -88,15 +87,14 @@ public class MixingRecipeHelpers {
         }
 
         // Match fluid requirements
-        for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
-            for(FluidStack ingredientVariant : fluidIngredient.getMatchingFluidStacks()) {
-                var fluidCandidate = availableFluids.stream().filter(fluid -> fluid.getFluidStack().getFluid() == ingredientVariant.getFluid()).findFirst();
-                if(fluidCandidate.isPresent()) {
-                    var candidateUnwrapped = fluidCandidate.get();
-                    if(candidateUnwrapped.getMbAmount() >= ingredientVariant.getAmount()) {
-                        usedFluids.add(candidateUnwrapped);
-                        break;
-                    }
+        for (var fluidIngredient : recipe.getFluidIngredients()) {
+            var fluidCandidate = availableFluids.stream()
+                .filter(fluid -> fluidIngredient.ingredient().test(fluid.getFluidStack()))
+                .findFirst();
+            if(fluidCandidate.isPresent()) {
+                var candidateUnwrapped = fluidCandidate.get();
+                if(candidateUnwrapped.getMbAmount() >= fluidIngredient.amount()) {
+                    usedFluids.add(candidateUnwrapped);
                 }
             }
         }
