@@ -26,7 +26,7 @@ public class RunicSpannerRadialWrenchHandler {
         if (!pressed)
             return;
 
-        if (key != AllKeys.ROTATE_MENU.getBoundCode())
+        if (!AllKeys.ROTATE_MENU.isPressed())
             return;
 
         if (COOLDOWN > 0)
