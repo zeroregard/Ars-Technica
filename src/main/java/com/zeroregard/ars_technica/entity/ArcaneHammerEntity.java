@@ -3,17 +3,14 @@ package com.zeroregard.ars_technica.entity;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
-import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.kinetics.crusher.CrushingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.item.ItemHelper;
+import com.zeroregard.ars_technica.helpers.ObliterateHelper;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
 import com.zeroregard.ars_technica.network.ParticleEffectPacket;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.ParticleRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -235,7 +231,6 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
                         BlockHitResult(pos, Direction.UP, blockPos, false));
             }
         }
-        var pos = getPosition(1.0f);
         playWorldSound(SoundRegistry.OBLITERATE_SMASH.get(), 0.75f, 1.0f);
         playWorldSound(SoundRegistry.OBLITERATE_SHOCKWAVE.get(), getLargeSoundVolume(), 1.0f);
         didObliterate = true;
@@ -307,24 +302,20 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             int count = stack.getCount();
             itemHandler.extractItem(slot, count, false);
 
+            boolean allowOverflow = SpellResolverHelpers.shouldDoubleOutputs(resolver);
+            int fortuneLevel = 0;
+            if (spellStats != null) {
+                fortuneLevel = spellStats.getBuffCount(AugmentFortune.INSTANCE);
+            }
+            float chanceMultiplier = ObliterateHelper.getFortuneChanceMultiplier(fortuneLevel);
+            if (allowOverflow) {
+                chanceMultiplier *= 2.0f;
+            }
+
             List<ItemStack> allResults = new ArrayList<>();
             for (int i = 0; i < count; i++) {
-                List<ItemStack> rolledResults = recipe.get().rollResults(world.getRandom());
+                List<ItemStack> rolledResults = RecipeHelpers.rollResultsWithFortuneBoost(recipe.get(), world.getRandom(), chanceMultiplier, allowOverflow);
                 for (ItemStack result : rolledResults) {
-                    if (RecipeHelpers.isChanceBased(result, recipe.get())) {
-                        float fortuneMultiplier = 1.0f;
-                        if (spellStats != null) {
-                            int fortuneLevel = spellStats.getBuffCount(AugmentFortune.INSTANCE);
-                            fortuneMultiplier = 1.0f + (0.33f * fortuneLevel);
-                            
-                            if (SpellResolverHelpers.shouldDoubleOutputs(resolver)) {
-                                fortuneMultiplier *= 2.0f;
-                            }
-                        }
-                        
-                        int newCount = (int) Math.round(result.getCount() * fortuneMultiplier);
-                        result.setCount(newCount);
-                    }
                     ItemHelper.addToList(result, allResults);
                 }
             }
@@ -347,24 +338,19 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
             List<ItemStack> list = new ArrayList<>();
             if(recipe.isPresent()) {
                 int rolls = itemStack.getCount();
+                boolean allowOverflow = SpellResolverHelpers.shouldDoubleOutputs(resolver);
+                int fortuneLevel = 0;
+                if (spellStats != null) {
+                    fortuneLevel = spellStats.getBuffCount(AugmentFortune.INSTANCE);
+                }
+                float chanceMultiplier = ObliterateHelper.getFortuneChanceMultiplier(fortuneLevel);
+                if (allowOverflow) {
+                    chanceMultiplier *= 2.0f;
+                }
+
                 for (int roll = 0; roll < rolls; roll++) {
-                    List<ItemStack> rolledResults = recipe.get().rollResults(world.getRandom());
-                    for (int i = 0; i < rolledResults.size(); i++) {
-                        ItemStack stack = rolledResults.get(i);
-                        if (RecipeHelpers.isChanceBased(stack, recipe.get())) {
-                            float fortuneMultiplier = 1.0f;
-                            if (spellStats != null) {
-                                int fortuneLevel = spellStats.getBuffCount(AugmentFortune.INSTANCE);
-                                fortuneMultiplier = 1.0f + (0.33f * fortuneLevel);
-                                
-                                if (SpellResolverHelpers.shouldDoubleOutputs(resolver)) {
-                                    fortuneMultiplier *= 2.0f;
-                                }
-                            }
-                            
-                            int newCount = (int) Math.round(stack.getCount() * fortuneMultiplier);
-                            stack.setCount(newCount);
-                        }
+                    List<ItemStack> rolledResults = RecipeHelpers.rollResultsWithFortuneBoost(recipe.get(), world.getRandom(), chanceMultiplier, allowOverflow);
+                    for (ItemStack stack : rolledResults) {
                         ItemHelper.addToList(stack, list);
                     }
                 }

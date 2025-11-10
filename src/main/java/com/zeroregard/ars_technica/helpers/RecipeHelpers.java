@@ -8,16 +8,52 @@ import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
+
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class RecipeHelpers {
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static List<ItemStack> rollResultsWithFortuneBoost(ProcessingRecipe recipe, RandomSource random, float chanceMultiplier, boolean allowOverflow) {
+        List<ItemStack> results = new ArrayList<>();
+        List<ProcessingOutput> rollables = recipe.getRollableResults();
+
+        for (ProcessingOutput rollable : rollables) {
+            float adjustedChance = rollable.getChance() * chanceMultiplier;
+            if (!allowOverflow) {
+                adjustedChance = Math.min(1.0f, adjustedChance);
+            }
+            adjustedChance = Math.max(0.0f, adjustedChance);
+
+            int guaranteedRolls = (int) adjustedChance;
+            float partialChance = adjustedChance - guaranteedRolls;
+
+            for (int guaranteed = 0; guaranteed < guaranteedRolls; guaranteed++) {
+                ItemStack guaranteedStack = rollable.getStack().copy();
+                if (!guaranteedStack.isEmpty()) {
+                    results.add(guaranteedStack);
+                }
+            }
+
+            if (random.nextFloat() < partialChance) {
+                ItemStack stack = rollable.getStack().copy();
+                if (!stack.isEmpty()) {
+                    results.add(stack);
+                }
+            }
+        }
+
+        return results;
+    }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static boolean isChanceBased(ItemStack input, ProcessingRecipe recipe) {

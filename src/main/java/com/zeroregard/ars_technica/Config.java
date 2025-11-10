@@ -1,9 +1,6 @@
 package com.zeroregard.ars_technica;
 
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -30,6 +27,7 @@ public class Config {
         public static ModConfigSpec.IntValue RELAY_MAX_COOLDOWN_VALUE;
 
         public static ModConfigSpec.ConfigValue<Double> TRANSMUTATION_TURRET_SOURCE_COST_MULTIPLIER;
+        public static ModConfigSpec.ConfigValue<Double> OBLITERATE_FORTUNE_BASE_CHANCE;
 
         public Common(ModConfigSpec.Builder builder) {
 
@@ -76,6 +74,13 @@ public class Config {
 
             TRANSMUTATION_TURRET_SOURCE_COST_MULTIPLIER = builder.comment("Source cost multiplier for transmutation turret, defaults to 2.0")
                     .defineInRange("transmutationTurretSourceCostMultiplier", 2.0, 0.1, 10.0);
+
+            builder.pop();
+
+            builder.comment("Obliterate settings")
+                    .push("Glyph - Obliterate");
+
+            OBLITERATE_FORTUNE_BASE_CHANCE = builder.defineInRange("obliterateFortuneBaseChance", 0.15, 0.0, 5.0);
 
             builder.pop();
 

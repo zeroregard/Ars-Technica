@@ -71,7 +71,7 @@ public class EffectObliterate extends AbstractEffect {
         super.addAugmentDescriptions(map);
         map.put(AugmentSensitive.INSTANCE, "Processes items instead of destroying them");
         map.put(AugmentAmplify.INSTANCE, "Increases the size and damage of the hammer");
-        map.put(AugmentFortune.INSTANCE, "Increases the chance of getting additional items from crushing recipes by 25% per level");
+        map.put(AugmentFortune.INSTANCE, "Increases the chance of getting additional items from crushing recipes with diminishing returns");
     }
 
     @Override
