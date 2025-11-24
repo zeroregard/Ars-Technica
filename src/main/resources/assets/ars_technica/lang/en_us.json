@@ -125,5 +125,7 @@
 	"entity.ars_technica.arcane_whirl_entity": "Arcane Whirl",
 	"entity.ars_technica.item_projectile_entity": "Item Bubble",
 
-	"item.ars_technica.blank_disc": "Blank Disc"
+	"item.ars_technica.blank_disc": "Blank Disc",
+	"jei.ars_technica.category.fuse_mixing": "Fuse Mixing",
+	"jei.ars_technica.category.fuse_mixing.heat": "Heat: %s"
 }

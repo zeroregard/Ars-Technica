@@ -1,0 +1,12 @@
+{
+  "type": "ars_technica:fuse_mixing",
+  "heat": "superheated",
+  "ingredients": [
+    {
+      "item": "ars_technica:calibrated_precision_mechanism"
+    }
+  ],
+  "result": {
+    "item": "create:precision_mechanism"
+  }
+}

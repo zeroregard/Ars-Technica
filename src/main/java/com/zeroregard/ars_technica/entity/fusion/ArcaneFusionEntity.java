@@ -2,11 +2,11 @@ package com.zeroregard.ars_technica.entity.fusion;
 
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
-import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import com.zeroregard.ars_technica.entity.Colorable;
 import com.zeroregard.ars_technica.entity.fusion.fluids.ArcaneFusionFluids;
 import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import com.zeroregard.ars_technica.helpers.FluidHelper;
+import com.zeroregard.ars_technica.helpers.FuseRecipeLike;
 import com.zeroregard.ars_technica.helpers.MixingRecipeHelpers;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import com.zeroregard.ars_technica.registry.SoundRegistry;
@@ -246,7 +246,6 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
                 particleHandler.setIngredientsForParticles(ingredients);
             }
 
-            // Remove the used items based on count
             ingredients.forEach(itemEntity -> {
                 var item = itemEntity.getItem();
                 item.setCount(item.getCount() - clampedRecipeIterations);
@@ -255,9 +254,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
                 }
             });
 
-            // Remove the used fluids
             fluidIngredients.forEach(fluidSource -> {
-                // Find the matching fluid ingredient for this fluid source
                 var requiredFluidIngredient = recipe.getFluidIngredients().stream()
                         .filter(ingredient -> ingredient.ingredient().test(fluidSource.getFluidStack()))
                         .findFirst()
@@ -284,7 +281,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         playWorldSound(SoundRegistry.FUSE_FAILED.get(), 0.75f, 1.0f);
     }
 
-    private void setItemResult(MixingRecipe recipe, int recipeIterations) {
+    private void setItemResult(FuseRecipeLike recipe, int recipeIterations) {
         RegistryAccess registryAccess = world.registryAccess();
         ItemStack recipeItemResult = recipe.getResultItem(registryAccess);
         var itemOutput = recipeItemResult.copy();
@@ -292,7 +289,7 @@ public class ArcaneFusionEntity extends Entity implements GeoEntity, Colorable {
         resultEntity = new ItemEntity(world, getX(), getY(), getZ(), itemOutput);
     }
 
-    private void setFluidResult(MixingRecipe recipe, int recipeIterations) {
+    private void setFluidResult(FuseRecipeLike recipe, int recipeIterations) {
         List<FluidStack> fluidResults = recipe.getFluidResults();
         resultLiquids = fluidResults.stream()
                 .map(fluidStack -> {

@@ -14,6 +14,7 @@ public class Config {
         public static ModConfigSpec.BooleanValue FLUID_CAN_BE_PLACED;
         public static ModConfigSpec.BooleanValue FLUID_SOURCES_CAN_BE_PLACED;
         public static ModConfigSpec.IntValue FLUID_MAX_PLACEMENTS_PER_FUSE;
+        public static ModConfigSpec.ConfigValue<java.util.List<? extends String>> FUSE_RECIPE_FILTER;
 
         public static ModConfigSpec.ConfigValue<Double> SOURCE_MOTOR_SPEED_TO_SOURCE_MULTIPLIER;
 
@@ -55,6 +56,8 @@ public class Config {
             FLUID_CAN_BE_PLACED = builder.define("fluidCanBePlaced", true);
             FLUID_SOURCES_CAN_BE_PLACED = builder.define("fluidSourcesCanBePlaced", true);
             FLUID_MAX_PLACEMENTS_PER_FUSE = builder.defineInRange("fluidMaxPlacementsPerFuse", 16, 1, 256);
+            FUSE_RECIPE_FILTER = builder.comment("List of recipe IDs (namespace:path) that Fuse should ignore when scanning for recipes")
+                    .defineList("recipeFilter", java.util.List.of(), entry -> entry instanceof String string && net.minecraft.resources.ResourceLocation.tryParse(string) != null);
 
             builder.pop();
 

@@ -1,6 +1,7 @@
 package com.zeroregard.ars_technica.registry;
 
 import com.zeroregard.ars_technica.ArsTechnica;
+import com.zeroregard.ars_technica.recipe.FuseMixingRecipe;
 import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -23,10 +24,14 @@ public class RecipeRegistry {
 
   public static final DeferredHolder<RecipeType<?>, RecipeType<TechnomancerArmorRecipe>> TECHNOMANCER_ARMOR_UP;
   public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<TechnomancerArmorRecipe>> TECHNOMANCER_ARMOR_UP_SERIALIZER;
+  public static final DeferredHolder<RecipeType<?>, RecipeType<FuseMixingRecipe>> FUSE_MIXING_TYPE;
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FuseMixingRecipe>> FUSE_MIXING_SERIALIZER;
 
   static {
     TECHNOMANCER_ARMOR_UP = RECIPES.register("armor_upgrade", () -> RecipeType.simple(prefix("armor_upgrade")));
     TECHNOMANCER_ARMOR_UP_SERIALIZER = SERIALIZERS.register("armor_upgrade", TechnomancerArmorRecipe.Serializer::new);
+    FUSE_MIXING_TYPE = RECIPES.register("fuse_mixing", () -> RecipeType.simple(prefix("fuse_mixing")));
+    FUSE_MIXING_SERIALIZER = SERIALIZERS.register("fuse_mixing", FuseMixingRecipe.Serializer::new);
   }
 
 }
