@@ -142,6 +142,9 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
             currentOutput = new ItemEntity(world, input.getX(), input.getY(), input.getZ(), newStack);
             world.addFreshEntity(currentOutput);
         } else {
+            if (currentOutput != null && !currentOutput.isRemoved()) {
+                currentOutput.discard();
+            }
             currentOutput = new ItemEntity(world, input.getX(), input.getY(), input.getZ(), outputStack);
             world.addFreshEntity(currentOutput);
         }
