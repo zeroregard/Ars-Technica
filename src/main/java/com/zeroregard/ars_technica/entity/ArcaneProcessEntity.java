@@ -137,7 +137,7 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
         if (currentOutput != null && currentOutput.isRemoved()) {
             currentOutput = null;
         }
-        if (currentOutput != null && !currentOutput.isRemoved() && currentOutput.getItem().getItem() == outputStack.getItem() && currentOutput.getItem().getCount() < currentOutput.getItem().getMaxStackSize()) {
+        if (currentOutput != null && currentOutput.getItem().getItem() == outputStack.getItem() && currentOutput.getItem().getCount() < currentOutput.getItem().getMaxStackSize()) {
             ItemStack currentOutputItem = currentOutput.getItem();
             ItemStack newStack = currentOutputItem.copyWithCount(currentOutputItem.getCount() + 1);
             currentOutput.discard();
@@ -145,9 +145,6 @@ public abstract class ArcaneProcessEntity extends Entity implements Colorable {
             currentOutput = new ItemEntity(world, input.getX(), input.getY(), input.getZ(), newStack);
             world.addFreshEntity(currentOutput);
         } else {
-            if (currentOutput != null && !currentOutput.isRemoved()) {
-                currentOutput.discard();
-            }
             currentOutput = new ItemEntity(world, input.getX(), input.getY(), input.getZ(), outputStack);
             world.addFreshEntity(currentOutput);
         }
