@@ -101,7 +101,7 @@ public class EffectTelefeast extends AbstractEffect {
 
                 if(canUse || isDrink(itemStack) || isFood(itemStack, null)) {
                     ItemStack extractedItem = itemHandler.extractItem(i, 1, false);
-                    ItemStack emptyContainer = getEmptyContainer(extractedItem, world);
+                    ItemStack originalItem = extractedItem.copy();
                     boolean consumed = false;
                     
                     if(ConsumptionHelper.tryUseConsumableItem(caster, extractedItem, world, canUse)) {
@@ -111,8 +111,13 @@ public class EffectTelefeast extends AbstractEffect {
                     }
                     
                     if(consumed) {
-                        if (!emptyContainer.isEmpty()) {
-                            itemHandler.insertItem(i, emptyContainer, false);
+                        if (!extractedItem.isEmpty()) {
+                            itemHandler.insertItem(i, extractedItem, false);
+                        } else {
+                            ItemStack emptyContainer = getEmptyContainer(originalItem, world);
+                            if (!emptyContainer.isEmpty()) {
+                                itemHandler.insertItem(i, emptyContainer, false);
+                            }
                         }
                         break;
                     } else {
