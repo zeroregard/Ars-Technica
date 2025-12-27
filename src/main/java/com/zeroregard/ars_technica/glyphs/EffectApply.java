@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.api.util.SpellUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
+import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.RuneCaster;
+import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.TileCaster;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
@@ -56,7 +58,7 @@ public class EffectApply extends AbstractItemResolveEffect {
 
     private boolean handleBlockApplication(BlockPos centerPos, BlockHitResult blockHitResult, Level world, @Nullable LivingEntity shooter,
                                            SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        ApplyItemSource applySource = getApplyItemSource(shooter, world);
+        ApplyItemSource applySource = getApplyItemSource(shooter, world, spellContext);
         if (applySource.isEmpty()) {
             return false;
         }
@@ -107,7 +109,7 @@ public class EffectApply extends AbstractItemResolveEffect {
                                   @Nullable LivingEntity shooter,
                                   SpellStats spellStats,
                                   SpellContext spellContext, SpellResolver resolver) {
-        ApplyItemSource applySource = getApplyItemSource(shooter, world);
+        ApplyItemSource applySource = getApplyItemSource(shooter, world, spellContext);
         if (applySource.isEmpty()) {
             return;
         }
@@ -177,13 +179,27 @@ public class EffectApply extends AbstractItemResolveEffect {
         }
     }
 
-    private ApplyItemSource getApplyItemSource(@Nullable LivingEntity shooter, Level world) {
+    private ApplyItemSource getApplyItemSource(@Nullable LivingEntity shooter, Level world, SpellContext spellContext) {
+        if (shooter == null) {
+            return new EmptyApplyItemSource();
+        }
         if (shooter instanceof FakePlayer) {
-            return new InventoryApplyItemSource(shooter, world);
+            return new InventoryApplyItemSource(getInventorySearchPos(shooter, spellContext), world);
         } else if (shooter instanceof Player player) {
             return new PlayerApplyItemSource(player);
         }
         return new EmptyApplyItemSource();
+    }
+
+    private BlockPos getInventorySearchPos(LivingEntity shooter, SpellContext spellContext) {
+        Object caster = spellContext.getCaster();
+        if (caster instanceof TileCaster tileCaster) {
+            return BlockPos.containing(tileCaster.getPosition());
+        }
+        if (caster instanceof RuneCaster runeCaster) {
+            return BlockPos.containing(runeCaster.getPosition());
+        }
+        return shooter.blockPosition();
     }
 
     private Optional<RecipeHolder<Recipe<RecipeInput>>> getApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
@@ -248,19 +264,17 @@ public class EffectApply extends AbstractItemResolveEffect {
         private Container foundContainer;
         private int foundSlot;
 
-        public InventoryApplyItemSource(LivingEntity shooter, Level world) {
-            findFirstAvailableItem(shooter, world);
+        public InventoryApplyItemSource(BlockPos searchPos, Level world) {
+            findFirstAvailableItem(searchPos, world);
         }
 
-        private void findFirstAvailableItem(LivingEntity shooter, Level world) {
-            BlockPos shooterPos = shooter.blockPosition();
-            
+        private void findFirstAvailableItem(BlockPos searchPos, Level world) {
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dz = -1; dz <= 1; dz++) {
                         if (dx == 0 && dy == 0 && dz == 0) continue;
                         
-                        BlockPos checkPos = shooterPos.offset(dx, dy, dz);
+                        BlockPos checkPos = searchPos.offset(dx, dy, dz);
                         BlockEntity blockEntity = world.getBlockEntity(checkPos);
                         
                         if (blockEntity instanceof Container container) {
