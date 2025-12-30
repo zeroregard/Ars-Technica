@@ -1,5 +1,7 @@
 package com.zeroregard.ars_technica.entity;
 
+import com.hollingsworth.arsnouveau.ArsNouveau;
+import com.hollingsworth.arsnouveau.api.perk.PerkAttributes;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
@@ -20,6 +22,8 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -32,6 +36,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.item.ItemStack;
@@ -246,7 +251,13 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
     protected float getDamage() {
         var ampsDamage =  ampScalar * amps;
         var focusDamage = SpellResolverHelpers.shouldDoubleOutputs(resolver) ? ampsDamage : 0f;
-        return 5 + ampsDamage + focusDamage;
+        float spellPower = 0.0f;
+        if (caster instanceof LivingEntity livingCaster) {
+            if (livingCaster.getAttributes().hasAttribute(PerkAttributes.SPELL_DAMAGE_BONUS)) {
+                spellPower = (float) livingCaster.getAttributeValue(PerkAttributes.SPELL_DAMAGE_BONUS);
+            }
+        }
+        return 5 + ampsDamage + focusDamage + spellPower;
     }
 
     protected void handleItems() {
