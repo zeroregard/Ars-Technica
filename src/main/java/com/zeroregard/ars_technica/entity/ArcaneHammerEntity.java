@@ -1,6 +1,7 @@
 package com.zeroregard.ars_technica.entity;
 
 import com.hollingsworth.arsnouveau.ArsNouveau;
+import com.hollingsworth.arsnouveau.api.perk.PerkAttributes;
 import com.hollingsworth.arsnouveau.api.spell.SpellResolver;
 import com.hollingsworth.arsnouveau.api.spell.SpellStats;
 import com.hollingsworth.arsnouveau.client.particle.ParticleColor;
@@ -252,14 +253,8 @@ public class ArcaneHammerEntity extends Entity implements GeoEntity, Colorable {
         var focusDamage = SpellResolverHelpers.shouldDoubleOutputs(resolver) ? ampsDamage : 0f;
         float spellPower = 0.0f;
         if (caster instanceof LivingEntity livingCaster) {
-            ResourceLocation spellPowerAttrLoc = ResourceLocation.fromNamespaceAndPath(ArsNouveau.MODID, "spell_power");
-            var attributeRegistry = livingCaster.level().registryAccess().registryOrThrow(Registries.ATTRIBUTE);
-            var spellPowerAttrHolder = attributeRegistry.getHolder(spellPowerAttrLoc);
-            if (spellPowerAttrHolder.isPresent()) {
-                AttributeInstance attrInstance = livingCaster.getAttributes().getInstance(spellPowerAttrHolder.get());
-                if (attrInstance != null) {
-                    spellPower = (float) attrInstance.getValue();
-                }
+            if (livingCaster.getAttributes().hasAttribute(PerkAttributes.SPELL_DAMAGE_BONUS)) {
+                spellPower = (float) livingCaster.getAttributeValue(PerkAttributes.SPELL_DAMAGE_BONUS);
             }
         }
         return 5 + ampsDamage + focusDamage + spellPower;
