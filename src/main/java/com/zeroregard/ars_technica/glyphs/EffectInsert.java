@@ -6,7 +6,6 @@ import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSplit;
 import com.zeroregard.ars_technica.helpers.StorageHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -124,7 +123,7 @@ public class EffectInsert extends AbstractItemResolveEffect {
         BlockPos maxPos = pos.offset(expansion, expansion, expansion);
         for (BlockPos currentPos : BlockPos.betweenClosed(minPos, maxPos)) {
             BlockEntity tileEntity = world.getBlockEntity(currentPos);
-            if (tileEntity instanceof Container) {
+            if (tileEntity != null && StorageHelpers.getItemCapFromTile(world, tileEntity) != null) {
                 containers.add(tileEntity);
             }
         }
