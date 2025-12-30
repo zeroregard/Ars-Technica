@@ -21,7 +21,8 @@ import java.util.List;
 @JeiPlugin
 public class JeiArsExtraPlugin implements IModPlugin {
 
-    public static final RecipeType<TechnomancerArmorRecipe> TECHNOMANCER_ARMOR_TYPE = RecipeType.create(ArsTechnica.MODID, "armor_upgrade", TechnomancerArmorRecipe.class);
+    @SuppressWarnings("unchecked")
+    public static final RecipeType<RecipeHolder<TechnomancerArmorRecipe>> TECHNOMANCER_ARMOR_TYPE = (RecipeType<RecipeHolder<TechnomancerArmorRecipe>>) (Object) RecipeType.create(ArsTechnica.MODID, "armor_upgrade", TechnomancerArmorRecipe.class);
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
@@ -39,10 +40,10 @@ public class JeiArsExtraPlugin implements IModPlugin {
     public void registerRecipes(@NotNull IRecipeRegistration registry) {
         assert Minecraft.getInstance().level != null;
         RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
-        List<TechnomancerArmorRecipe> armorRecipes = new ArrayList<>();
+        List<RecipeHolder<TechnomancerArmorRecipe>> armorRecipes = new ArrayList<>();
         for (RecipeHolder<?> i : manager.getRecipes()) {
             if (i.value() instanceof TechnomancerArmorRecipe aer) {
-                armorRecipes.add(aer);
+                armorRecipes.add((RecipeHolder<TechnomancerArmorRecipe>) i);
             }
         }
         registry.addRecipes(TECHNOMANCER_ARMOR_TYPE, armorRecipes);
