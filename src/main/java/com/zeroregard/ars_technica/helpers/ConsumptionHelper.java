@@ -1,5 +1,8 @@
 package com.zeroregard.ars_technica.helpers;
 
+import com.hollingsworth.arsnouveau.api.potion.IPotionProvider;
+import com.hollingsworth.arsnouveau.api.registry.PotionProviderRegistry;
+import com.hollingsworth.arsnouveau.common.items.PotionFlask;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -10,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +21,9 @@ public class ConsumptionHelper {
 
     public static boolean tryUseEdibleItem(LivingEntity consumer, ItemStack itemStack, Level world) {
         if (isDrink((itemStack))) {
+            if (itemStack.getItem() instanceof PotionFlask && !canConsumeArsNouveauPotionFlask(itemStack)) {
+                return false;
+            }
             itemStack.finishUsingItem(world, consumer);
             playSound(SoundEvents.GENERIC_DRINK, world, consumer);
             return true;
@@ -49,6 +56,9 @@ public class ConsumptionHelper {
             try {
                 player.setItemInHand(temporaryHand, itemStack);
                 if (isDrink(itemStack)) {
+                    if (itemStack.getItem() instanceof PotionFlask && !canConsumeArsNouveauPotionFlask(itemStack)) {
+                        return false;
+                    }
                     itemStack.finishUsingItem(world, player);
                     playSound(SoundEvents.GENERIC_DRINK, world, consumer);
                     return true;
@@ -70,5 +80,10 @@ public class ConsumptionHelper {
 
     public static void playSound(SoundEvent event, Level world, LivingEntity consumer) {
         world.playSound(null, consumer.getX(), consumer.getY(), consumer.getZ(), event, SoundSource.NEUTRAL, 1.0F, 1.0F);
+    }
+
+    private static boolean canConsumeArsNouveauPotionFlask(ItemStack stack) {
+        IPotionProvider data = PotionProviderRegistry.from(stack);
+        return data != null && data.getPotionData(stack) != PotionContents.EMPTY && data.usesRemaining(stack) > 0;
     }
 }

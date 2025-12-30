@@ -15,6 +15,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -27,8 +28,8 @@ public class TechnomancerUpgradeRecipeCategory extends EnchantingApparatusRecipe
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, TechnomancerArmorRecipe recipe, IFocusGroup focuses) {
-        MultiProvider provider = multiProvider.apply(recipe);
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<TechnomancerArmorRecipe> recipe, IFocusGroup focuses) {
+        MultiProvider provider = multiProvider.apply(recipe.value());
         List<Ingredient> inputs = provider.input();
         double angleBetweenEach = 360.0 / inputs.size();
         if (provider.optionalCenter() != null) {
@@ -57,17 +58,18 @@ public class TechnomancerUpgradeRecipeCategory extends EnchantingApparatusRecipe
     }
 
     @Override
-    public RecipeType<TechnomancerArmorRecipe> getRecipeType() {
+    public RecipeType<RecipeHolder<TechnomancerArmorRecipe>> getRecipeType() {
         return JeiArsExtraPlugin.TECHNOMANCER_ARMOR_TYPE;
     }
 
     @Override
-    public void draw(TechnomancerArmorRecipe recipe, @NotNull IRecipeSlotsView slotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<TechnomancerArmorRecipe> recipe, @NotNull IRecipeSlotsView slotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         Font renderer = Minecraft.getInstance().font;
         guiGraphics.drawString(renderer, Component.translatable("ars_nouveau.tier", 3), 0, 0, 10, false);
 
-        if (recipe.consumesSource())
-            guiGraphics.drawString(renderer, Component.translatable("ars_nouveau.source", recipe.sourceCost()), 0, 100, 10, false);
+        TechnomancerArmorRecipe recipeValue = recipe.value();
+        if (recipeValue.consumesSource())
+            guiGraphics.drawString(renderer, Component.translatable("ars_nouveau.source", recipeValue.sourceCost()), 0, 100, 10, false);
     }
 
 }
