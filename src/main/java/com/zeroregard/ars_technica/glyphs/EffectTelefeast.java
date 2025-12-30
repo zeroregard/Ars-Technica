@@ -1,6 +1,9 @@
 package com.zeroregard.ars_technica.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
+import com.hollingsworth.arsnouveau.api.potion.IPotionProvider;
+import com.hollingsworth.arsnouveau.api.registry.PotionProviderRegistry;
+import com.hollingsworth.arsnouveau.common.items.PotionFlask;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
 import com.simibubi.create.AllRecipeTypes;
@@ -91,6 +94,25 @@ public class EffectTelefeast extends AbstractEffect {
             if (!itemStack.isEmpty()) {
                 if(forwardItem && (isFood(itemStack, null) || isDrink(itemStack))) {
                     ItemStack extractedItem = itemHandler.extractItem(i, 1, false);
+                    
+                    if (extractedItem.getItem() instanceof PotionFlask) {
+                        IPotionProvider data = PotionProviderRegistry.from(extractedItem);
+                        if (data != null && data.usesRemaining(extractedItem) > 0) {
+                            ItemStack copyItem = extractedItem.copy();
+                            IPotionProvider copyData = PotionProviderRegistry.from(copyItem);
+                            if (copyData != null) {
+                                copyData.setData(data.getPotionData(extractedItem), 1, data.maxUses(extractedItem), copyItem);
+                                data.consumeUses(extractedItem, 1, null);
+                                itemHandler.insertItem(i, extractedItem, false);
+                                forwardItem(world, copyItem, direction, position.getCenter());
+                                break;
+                            }
+                        } else {
+                            itemHandler.insertItem(i, extractedItem, false);
+                            continue;
+                        }
+                    }
+                    
                     ItemStack emptyContainer = getEmptyContainer(extractedItem, world);
                     if (!emptyContainer.isEmpty()) {
                         itemHandler.insertItem(i, emptyContainer, false);
@@ -101,7 +123,7 @@ public class EffectTelefeast extends AbstractEffect {
 
                 if(canUse || isDrink(itemStack) || isFood(itemStack, null)) {
                     ItemStack extractedItem = itemHandler.extractItem(i, 1, false);
-                    ItemStack emptyContainer = getEmptyContainer(extractedItem, world);
+                    ItemStack originalItem = extractedItem.copy();
                     boolean consumed = false;
                     
                     if(ConsumptionHelper.tryUseConsumableItem(caster, extractedItem, world, canUse)) {
@@ -111,8 +133,13 @@ public class EffectTelefeast extends AbstractEffect {
                     }
                     
                     if(consumed) {
-                        if (!emptyContainer.isEmpty()) {
-                            itemHandler.insertItem(i, emptyContainer, false);
+                        if (!extractedItem.isEmpty()) {
+                            itemHandler.insertItem(i, extractedItem, false);
+                        } else {
+                            ItemStack emptyContainer = getEmptyContainer(originalItem, world);
+                            if (!emptyContainer.isEmpty()) {
+                                itemHandler.insertItem(i, emptyContainer, false);
+                            }
                         }
                         break;
                     } else {
