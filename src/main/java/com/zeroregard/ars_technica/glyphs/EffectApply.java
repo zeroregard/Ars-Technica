@@ -21,12 +21,13 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -245,7 +246,7 @@ public class EffectApply extends AbstractItemResolveEffect {
     }
 
     private static class InventoryApplyItemSource extends ApplyItemSource {
-        private Container foundContainer;
+        private IItemHandler foundCapability;
         private int foundSlot;
 
         public InventoryApplyItemSource(LivingEntity shooter, Level world) {
@@ -254,20 +255,20 @@ public class EffectApply extends AbstractItemResolveEffect {
 
         private void findFirstAvailableItem(LivingEntity shooter, Level world) {
             BlockPos shooterPos = shooter.blockPosition();
-            
+
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dz = -1; dz <= 1; dz++) {
                         if (dx == 0 && dy == 0 && dz == 0) continue;
                         
                         BlockPos checkPos = shooterPos.offset(dx, dy, dz);
-                        BlockEntity blockEntity = world.getBlockEntity(checkPos);
+                        IItemHandler capability = world.getCapability(Capabilities.ItemHandler.BLOCK, checkPos, null);
                         
-                        if (blockEntity instanceof Container container) {
-                            for (int slot = 0; slot < container.getContainerSize(); slot++) {
-                                ItemStack item = container.getItem(slot);
+                        if (capability != null) {
+                            for (int slot = 0; slot < capability.getSlots(); slot++) {
+                                ItemStack item = capability.getStackInSlot(slot);
                                 if (!item.isEmpty()) {
-                                    this.foundContainer = container;
+                                    this.foundCapability = capability;
                                     this.foundSlot = slot;
                                     return;
                                 }
@@ -280,45 +281,35 @@ public class EffectApply extends AbstractItemResolveEffect {
 
         @Override
         public ItemStack getItem() {
-            if (foundContainer != null) {
-                return foundContainer.getItem(foundSlot);
+            if (foundCapability != null) {
+                return foundCapability.getStackInSlot(foundSlot);
             }
             return ItemStack.EMPTY;
         }
 
         @Override
         public int getAvailableCount() {
-            if (foundContainer != null) {
-                return foundContainer.getItem(foundSlot).getCount();
+            if (foundCapability != null) {
+                return foundCapability.getStackInSlot(foundSlot).getCount();
             }
             return 0;
         }
 
         @Override
         public void consumeItem() {
-            if (foundContainer != null) {
-                ItemStack item = foundContainer.getItem(foundSlot);
-                item.shrink(1);
-                if (item.isEmpty()) {
-                    foundContainer.setItem(foundSlot, ItemStack.EMPTY);
-                }
-            }
+            this.consumeItems(1);
         }
 
         @Override
         public void consumeItems(int count) {
-            if (foundContainer != null) {
-                ItemStack item = foundContainer.getItem(foundSlot);
-                item.shrink(count);
-                if (item.isEmpty()) {
-                    foundContainer.setItem(foundSlot, ItemStack.EMPTY);
-                }
+            if (foundCapability != null) {
+                foundCapability.extractItem(foundSlot, count, false);
             }
         }
 
         @Override
         public boolean isEmpty() {
-            return foundContainer == null || getItem().isEmpty();
+            return foundCapability == null || getItem().isEmpty();
         }
     }
 
