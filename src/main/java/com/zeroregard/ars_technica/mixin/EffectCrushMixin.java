@@ -17,6 +17,8 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -37,9 +39,14 @@ public class EffectCrushMixin {
 
     @WrapOperation(method = "crushItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/RecipeHolder;value()Lnet/minecraft/world/item/crafting/Recipe;"))
     private static <T extends Recipe<?>> T rollForItems(RecipeHolder<CrushRecipe> instance, Operation<CrushRecipe> original, @Local(argsOnly = true) List<ItemEntity> itemEntities) {
-        var recipe = ars_Technica$adaptRecipe(instance.value(), ars_technica$crushedItemTracker.remove(itemEntities));
+        var recipe = ars_Technica$adaptRecipe(instance.value(), ars_technica$crushedItemTracker.get(itemEntities));
         //noinspection unchecked
         return (T) original.call(new RecipeHolder<>(instance.id(), recipe));
+    }
+
+    @Inject(method = "crushItems", at = @At(value = "RETURN"))
+    private static <T extends Recipe<?>> void cleanup(Level world, List<ItemEntity> itemEntities, int maxItemCrush, CallbackInfo ci) {
+        ars_technica$crushedItemTracker.remove(itemEntities);
     }
 
     @WrapOperation(method = "onResolveBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/RecipeHolder;value()Lnet/minecraft/world/item/crafting/Recipe;"))
