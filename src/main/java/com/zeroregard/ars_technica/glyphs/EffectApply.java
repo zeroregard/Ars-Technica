@@ -1,6 +1,10 @@
 package com.zeroregard.ars_technica.glyphs;
 
+import com.hollingsworth.arsnouveau.api.item.inv.InteractType;
+import com.hollingsworth.arsnouveau.api.item.inv.InventoryManager;
 import com.hollingsworth.arsnouveau.api.spell.*;
+import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.IWrappedCaster;
+import com.hollingsworth.arsnouveau.api.spell.wrapped_caster.PlayerCaster;
 import com.hollingsworth.arsnouveau.api.util.SpellUtil;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
@@ -11,7 +15,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,12 +24,11 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.FakePlayer;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,7 +58,7 @@ public class EffectApply extends AbstractItemResolveEffect {
 
     private boolean handleBlockApplication(BlockPos centerPos, BlockHitResult blockHitResult, Level world, @Nullable LivingEntity shooter,
                                            SpellStats spellStats, SpellContext spellContext, SpellResolver resolver) {
-        ApplyItemSource applySource = getApplyItemSource(shooter, world);
+        ApplyItemSource applySource = getApplyItemSource(spellContext.getCaster());
         if (applySource.isEmpty()) {
             return false;
         }
@@ -107,7 +109,7 @@ public class EffectApply extends AbstractItemResolveEffect {
                                   @Nullable LivingEntity shooter,
                                   SpellStats spellStats,
                                   SpellContext spellContext, SpellResolver resolver) {
-        ApplyItemSource applySource = getApplyItemSource(shooter, world);
+        ApplyItemSource applySource = getApplyItemSource(spellContext.getCaster());
         if (applySource.isEmpty()) {
             return;
         }
@@ -177,12 +179,16 @@ public class EffectApply extends AbstractItemResolveEffect {
         }
     }
 
-    private ApplyItemSource getApplyItemSource(@Nullable LivingEntity shooter, Level world) {
-        if (shooter instanceof FakePlayer) {
-            return new InventoryApplyItemSource(shooter, world);
-        } else if (shooter instanceof Player player) {
-            return new PlayerApplyItemSource(player);
+    private ApplyItemSource getApplyItemSource(IWrappedCaster caster) {
+        if (caster instanceof PlayerCaster playerCaster) {
+            return new PlayerApplyItemSource(playerCaster.player);
         }
+
+        var manager = caster.getInvManager();
+        if (manager != null) {
+            return new InventoryApplyItemSource(manager);
+        }
+
         return new EmptyApplyItemSource();
     }
 
@@ -204,11 +210,21 @@ public class EffectApply extends AbstractItemResolveEffect {
     }
 
     private abstract static class ApplyItemSource {
-        public abstract ItemStack getItem();
-        public abstract int getAvailableCount();
-        public abstract void consumeItem();
+        public abstract @NotNull ItemStack getItem();
+
+        public int getAvailableCount() {
+            return this.getItem().getCount();
+        }
+
         public abstract void consumeItems(int count);
-        public abstract boolean isEmpty();
+
+        public void consumeItem() {
+            this.consumeItems(1);
+        }
+
+        public boolean isEmpty() {
+            return this.getItem().isEmpty();
+        }
     }
 
     private static class PlayerApplyItemSource extends ApplyItemSource {
@@ -219,112 +235,41 @@ public class EffectApply extends AbstractItemResolveEffect {
         }
 
         @Override
-        public ItemStack getItem() {
+        public @NotNull ItemStack getItem() {
             return player.getOffhandItem();
         }
 
         @Override
-        public int getAvailableCount() {
-            return player.getOffhandItem().getCount();
-        }
-
-        @Override
-        public void consumeItem() {
-            player.getOffhandItem().shrink(1);
-        }
-
-        @Override
         public void consumeItems(int count) {
-            player.getOffhandItem().shrink(count);
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return player.getOffhandItem().isEmpty();
+            getItem().shrink(count);
         }
     }
 
     private static class InventoryApplyItemSource extends ApplyItemSource {
-        private Container foundContainer;
-        private int foundSlot;
+        private InventoryManager manager;
 
-        public InventoryApplyItemSource(LivingEntity shooter, Level world) {
-            findFirstAvailableItem(shooter, world);
-        }
-
-        private void findFirstAvailableItem(LivingEntity shooter, Level world) {
-            BlockPos shooterPos = shooter.blockPosition();
-            
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dy = -1; dy <= 1; dy++) {
-                    for (int dz = -1; dz <= 1; dz++) {
-                        if (dx == 0 && dy == 0 && dz == 0) continue;
-                        
-                        BlockPos checkPos = shooterPos.offset(dx, dy, dz);
-                        BlockEntity blockEntity = world.getBlockEntity(checkPos);
-                        
-                        if (blockEntity instanceof Container container) {
-                            for (int slot = 0; slot < container.getContainerSize(); slot++) {
-                                ItemStack item = container.getItem(slot);
-                                if (!item.isEmpty()) {
-                                    this.foundContainer = container;
-                                    this.foundSlot = slot;
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        public InventoryApplyItemSource(InventoryManager manager) {
+            this.manager = manager;
         }
 
         @Override
-        public ItemStack getItem() {
-            if (foundContainer != null) {
-                return foundContainer.getItem(foundSlot);
+        public @NotNull ItemStack getItem() {
+            var ref = this.manager.findItem(s -> true, InteractType.EXTRACT);
+            if (ref.isEmpty()) {
+                return ItemStack.EMPTY;
             }
-            return ItemStack.EMPTY;
-        }
-
-        @Override
-        public int getAvailableCount() {
-            if (foundContainer != null) {
-                return foundContainer.getItem(foundSlot).getCount();
-            }
-            return 0;
-        }
-
-        @Override
-        public void consumeItem() {
-            if (foundContainer != null) {
-                ItemStack item = foundContainer.getItem(foundSlot);
-                item.shrink(1);
-                if (item.isEmpty()) {
-                    foundContainer.setItem(foundSlot, ItemStack.EMPTY);
-                }
-            }
+            return ref.getHandler().getStackInSlot(ref.getSlot());
         }
 
         @Override
         public void consumeItems(int count) {
-            if (foundContainer != null) {
-                ItemStack item = foundContainer.getItem(foundSlot);
-                item.shrink(count);
-                if (item.isEmpty()) {
-                    foundContainer.setItem(foundSlot, ItemStack.EMPTY);
-                }
-            }
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return foundContainer == null || getItem().isEmpty();
+            this.manager.extractItem(s -> true, 1);
         }
     }
 
     private static class EmptyApplyItemSource extends ApplyItemSource {
         @Override
-        public ItemStack getItem() { return ItemStack.EMPTY; }
+        public @NotNull ItemStack getItem() { return ItemStack.EMPTY; }
         @Override
         public int getAvailableCount() { return 0; }
         @Override
