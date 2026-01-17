@@ -3,12 +3,14 @@ package com.zeroregard.ars_technica.helpers;
 
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
+import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
+import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
+import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
-
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -64,13 +66,12 @@ public class RecipeHelpers {
     }
 
 
-    public static Optional<RecipeHolder<Recipe<SingleRecipeInput>>> getPressingRecipeForItemStack(ItemStack input, Level world) {
+    public static Optional<RecipeHolder<PressingRecipe>> getPressingRecipeForItemStack(ItemStack input, Level world) {
         SingleRecipeInput wrapper = new SingleRecipeInput(input);
         return world.getRecipeManager().getRecipeFor(AllRecipeTypes.PRESSING.getType(), wrapper, world);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static Optional<ProcessingRecipe> getCrushingRecipeForItemStack(ItemStack input, Level world) {
+    public static Optional<AbstractCrushingRecipe> getCrushingRecipeForItemStack(ItemStack input, Level world) {
         SingleRecipeInput recipeInput = new SingleRecipeInput(input);
 
         Optional<RecipeHolder<AbstractCrushingRecipe>> recipeHolder =
@@ -83,8 +84,7 @@ public class RecipeHelpers {
         return recipeHolder.map(RecipeHolder::value);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static Optional<ProcessingRecipe> getSplashingRecipeForItemStack(ItemStack input, Level world) {
+    public static Optional<SplashingRecipe> getSplashingRecipeForItemStack(ItemStack input, Level world) {
         SingleRecipeInput wrapper = new SingleRecipeInput(input);
 
         Optional<RecipeHolder<SplashingRecipe>> recipeHolder =
@@ -93,8 +93,7 @@ public class RecipeHelpers {
         return recipeHolder.map(RecipeHolder::value);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static Optional<ProcessingRecipe> getHauntingRecipeForItemStack(ItemStack input, Level world) {
+    public static Optional<HauntingRecipe> getHauntingRecipeForItemStack(ItemStack input, Level world) {
         SingleRecipeInput wrapper = new SingleRecipeInput(input);
 
         Optional<RecipeHolder<HauntingRecipe>> recipeHolder =
@@ -111,8 +110,10 @@ public class RecipeHelpers {
         return world.getRecipeManager().getRecipeFor(AllRecipeTypes.ITEM_APPLICATION.getType(), wrapper, world);
     }
 
-    public static Optional<RecipeHolder<Recipe<RecipeInput>>> getItemApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
-        var allApplicationRecipes = world.getRecipeManager().getAllRecipesFor(AllRecipeTypes.ITEM_APPLICATION.getType());
+    public static Optional<RecipeHolder<ManualApplicationRecipe>> getItemApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
+        RecipeType<ManualApplicationRecipe> type = AllRecipeTypes.ITEM_APPLICATION.getType();
+
+        var allApplicationRecipes = world.getRecipeManager().getAllRecipesFor(type);
         
         for (var recipeHolder : allApplicationRecipes) {
             var recipe = recipeHolder.value();
@@ -130,8 +131,10 @@ public class RecipeHelpers {
         return Optional.empty();
     }
 
-    public static Optional<RecipeHolder<Recipe<RecipeInput>>> getDeployingRecipe(ItemStack applyItem, ItemStack target, Level world) {
-        var allDeployingRecipes = world.getRecipeManager().getAllRecipesFor(AllRecipeTypes.DEPLOYING.getType());
+    public static Optional<RecipeHolder<DeployerApplicationRecipe>> getDeployingRecipe(ItemStack applyItem, ItemStack target, Level world) {
+        RecipeType<DeployerApplicationRecipe> type = AllRecipeTypes.DEPLOYING.getType();
+
+        var allDeployingRecipes = world.getRecipeManager().getAllRecipesFor(type);
         
         for (var recipeHolder : allDeployingRecipes) {
             var recipe = recipeHolder.value();
