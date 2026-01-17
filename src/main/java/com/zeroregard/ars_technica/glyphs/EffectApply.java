@@ -10,6 +10,7 @@ import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentPierce;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
+import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -19,9 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -86,7 +85,9 @@ public class EffectApply extends AbstractItemResolveEffect {
                 continue;
             }
 
-            applySource.consumeItem();
+            if (recipe.get().value() instanceof ItemApplicationRecipe iar && !iar.shouldKeepHeldItem()) {
+                applySource.consumeItem();
+            }
 
             Block resultBlock = Block.byItem(result.getItem());
             if (resultBlock != null && !resultBlock.equals(net.minecraft.world.level.block.Blocks.AIR)) {
@@ -131,12 +132,15 @@ public class EffectApply extends AbstractItemResolveEffect {
             }
 
             List<ItemStack> results = new ArrayList<>();
+            var consumeItem = true;
             var seqRecipe = RecipeHelpers.getSequencedAssemblyRecipe(AllRecipeTypes.DEPLOYING.getType(), DeployerApplicationRecipe.class, applyItem, itemStack, world);
             if (seqRecipe.isPresent()) {
+                consumeItem = !seqRecipe.get().value().shouldKeepHeldItem();
                 results.addAll(seqRecipe.get().value().rollResults(world.getRandom()));
             } else {
                 var recipe = getApplicationRecipe(applyItem, itemStack, world);
                 if (recipe.isPresent()) {
+                    consumeItem = !recipe.get().value().shouldKeepHeldItem();
                     results.add(recipe.get().value().getResultItem(world.registryAccess()));
                 }
             }
@@ -148,7 +152,9 @@ public class EffectApply extends AbstractItemResolveEffect {
                 applicationsToThisStack = Math.min(applicationsToThisStack, applySource.getAvailableCount());
 
                 if (applicationsToThisStack > 0) {
-                    applySource.consumeItems(applicationsToThisStack);
+                    if (consumeItem) {
+                        applySource.consumeItems(applicationsToThisStack);
+                    }
 
                     itemStack.shrink(applicationsToThisStack);
                     if (itemStack.getCount() <= 0) {
@@ -192,16 +198,16 @@ public class EffectApply extends AbstractItemResolveEffect {
         return new EmptyApplyItemSource();
     }
 
-    private Optional<RecipeHolder<Recipe<RecipeInput>>> getApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
+    private Optional<RecipeHolder<ItemApplicationRecipe>> getApplicationRecipe(ItemStack applyItem, ItemStack target, Level world) {
         var recipe = RecipeHelpers.getItemApplicationRecipe(applyItem, target, world);
         if (recipe.isPresent()) {
-            return recipe;
+            return recipe.map(r -> new RecipeHolder<>(r.id(), r.value()));
         }
         
-        return RecipeHelpers.getDeployingRecipe(applyItem, target, world);
+        return RecipeHelpers.getDeployingRecipe(applyItem, target, world).map(r -> new RecipeHolder<>(r.id(), r.value()));
     }
 
-    private Optional<RecipeHolder<Recipe<RecipeInput>>> getApplicationRecipe(ItemStack applyItem, BlockState target, Level world) {
+    private Optional<RecipeHolder<ItemApplicationRecipe>> getApplicationRecipe(ItemStack applyItem, BlockState target, Level world) {
         ItemStack targetItem = new ItemStack(target.getBlock().asItem());
         if (targetItem.isEmpty() || targetItem.getItem() == net.minecraft.world.item.Items.AIR) {
             return Optional.empty();

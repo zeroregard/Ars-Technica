@@ -74,13 +74,13 @@ public class WhirlProcessing extends FanProcessing {
             return RecipeHelpers.getSplashingRecipeForItemStack(
                     entity.getItem(),
                     world
-            );
+            ).map(r -> (ProcessingRecipe) r);
         }
         else if(type == AllFanProcessingTypes.HAUNTING) {
             return RecipeHelpers.getHauntingRecipeForItemStack(
                     entity.getItem(),
                     world
-            );
+            ).map(r -> (ProcessingRecipe) r);
         }
         return Optional.empty();
     }
