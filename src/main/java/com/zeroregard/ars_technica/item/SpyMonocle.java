@@ -27,11 +27,10 @@ import java.util.List;
 import static com.hollingsworth.arsnouveau.client.registry.ModKeyBindings.HEAD_CURIO_HOTKEY;
 
 public class SpyMonocle extends Item {
-    private boolean isZoomed = false;
     public static final float ZOOM_FOV_MODIFIER = 0.1F;
     public static final float ZOOM_SENSITIVITY_MODIFIER = 0.05F;
     private static final String ZOOM_TAG = "Zoomed";
-    private Double previousSensitivity = null;
+    private static Double previousSensitivity = null;
 
     public SpyMonocle(Properties properties) {
         super(properties);
@@ -50,7 +49,11 @@ public class SpyMonocle extends Item {
         if (world.isClientSide && entity instanceof Player player) {
             var curioSlot = CuriosApi.getCuriosInventory(player).flatMap(handler -> handler.findFirstCurio(stack.getItem()));
             if(curioSlot.isPresent()) {
-                setZoomState(stack, HEAD_CURIO_HOTKEY.isDown() && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON, player);
+                Minecraft mc = Minecraft.getInstance();
+                boolean shouldZoom = HEAD_CURIO_HOTKEY.isDown() 
+                    && mc.options.getCameraType() == CameraType.FIRST_PERSON
+                    && mc.screen == null;
+                setZoomState(stack, shouldZoom, player);
             }
         }
     }
@@ -78,7 +81,7 @@ public class SpyMonocle extends Item {
         return currentlyZoomed;
     }
 
-    private void adjustMouseSensitivity(Player player, boolean zooming) {
+    private static void adjustMouseSensitivity(Player player, boolean zooming) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == player) {
             if(zooming) {
@@ -87,6 +90,16 @@ public class SpyMonocle extends Item {
                 }
                 mc.options.sensitivity().set(previousSensitivity * ZOOM_SENSITIVITY_MODIFIER);
             } else if (previousSensitivity != null) {
+                mc.options.sensitivity().set(previousSensitivity);
+                previousSensitivity = null;
+            }
+        }
+    }
+
+    public static void forceResetZoom(@Nullable Player player) {
+        Minecraft mc = Minecraft.getInstance();
+        if (previousSensitivity != null) {
+            if (player == null || mc.player == player) {
                 mc.options.sensitivity().set(previousSensitivity);
                 previousSensitivity = null;
             }
