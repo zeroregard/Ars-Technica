@@ -44,7 +44,7 @@ jobs:
         run: ./gradlew build --no-daemon
       - name: Generate changelog
         run: |
-          printf "Auto-generated Changelog:\n%s" "$(git log "$(git describe --tags --abbrev=0 HEAD~1)..HEAD~1" --oneline | awk '! / (ci|ver|internal|README)!?([:,. ]|$)/ { $1="-"; print $0 }')" > .ci-changelog.md
+          printf "Auto-generated Changelog:\n%s" "$(git log "$(git describe --tags --abbrev=0 HEAD~1)..HEAD" --oneline | awk '! / (ci|ver|internal|README)!?([:,. ]|$)/ { $1="-"; print $0 }')" > .ci-changelog.md
           cat .ci-changelog.md
       - uses: Kir-Antipov/mc-publish@v3.3
         with:
