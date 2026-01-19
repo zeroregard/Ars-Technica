@@ -1,0 +1,57 @@
+name: Publish on CurseForge
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      "*"
+
+env:
+  MC_MIN_VER: '1.21'
+  MC_MAX_VER: '1.21.1'
+  JAVA_VERSION: 21
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
+      - name: Fetch tags (actions/checkout#1467)
+        run: |
+          git fetch --tags --force
+      - name: Get version from tag
+        run: |
+          echo "VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: "temurin"
+          cache: gradle
+          cache-dependency-path: |
+            *.gradle*
+            gradle/wrapper/gradle-wrapper.properties
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+      - name: Generate changelog
+        run: |
+          printf "Auto-generated Changelog:\n%s" "$(git log "$(git describe --tags --abbrev=0 HEAD~1)..HEAD~1" --oneline | awk '! / (ci|ver|internal|README)!?([:,. ]|$)/ { $1="-"; print $0 }')" > .ci-changelog.md
+          cat .ci-changelog.md
+      - uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: 1096161
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          name: Ars Technica ${{ env.VERSION }} for ${{ env.MC_MAX_VER }}
+          version: ${{ env.VERSION }}
+          game-versions: |
+            >=${{ env.MC_MIN_VER }} <=${{ env.MC_MAX_VER }}
+          changelog-file: .ci-changelog.md
