@@ -9,7 +9,6 @@ import com.hollingsworth.arsnouveau.common.datagen.ApparatusRecipeProvider;
 import com.hollingsworth.arsnouveau.common.datagen.ImbuementRecipeProvider;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.item.PressurePerk;
-import com.zeroregard.ars_technica.recipe.TechnomancerArmorRecipe;
 import com.zeroregard.ars_technica.registry.BlockRegistry;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.data.CachedOutput;
@@ -295,11 +294,23 @@ public class ArsProviders {
             
             List<CompletableFuture<?>> futures = new ArrayList<>();
             
-            // Dye recipes
+            // Dye recipes - Technomancer (medium)
             futures.add(saveDyeRecipe(cache, output, "dye_techno_hat", "ars_technica:technomancer_helmet"));
             futures.add(saveDyeRecipe(cache, output, "dye_techno_robes", "ars_technica:technomancer_chestplate"));
             futures.add(saveDyeRecipe(cache, output, "dye_techno_leggings", "ars_technica:technomancer_leggings"));
             futures.add(saveDyeRecipe(cache, output, "dye_techno_boots", "ars_technica:technomancer_boots"));
+
+            // Dye recipes - Artificer (light)
+            futures.add(saveDyeRecipe(cache, output, "dye_artificer_cap", "ars_technica:artificer_cap"));
+            futures.add(saveDyeRecipe(cache, output, "dye_artificer_tunic", "ars_technica:artificer_tunic"));
+            futures.add(saveDyeRecipe(cache, output, "dye_artificer_pants", "ars_technica:artificer_pants"));
+            futures.add(saveDyeRecipe(cache, output, "dye_artificer_shoes", "ars_technica:artificer_shoes"));
+
+            // Dye recipes - Machinaguard (heavy)
+            futures.add(saveDyeRecipe(cache, output, "dye_machinaguard_helmet", "ars_technica:machinaguard_helmet"));
+            futures.add(saveDyeRecipe(cache, output, "dye_machinaguard_chestplate", "ars_technica:machinaguard_chestplate"));
+            futures.add(saveDyeRecipe(cache, output, "dye_machinaguard_leggings", "ars_technica:machinaguard_leggings"));
+            futures.add(saveDyeRecipe(cache, output, "dye_machinaguard_boots", "ars_technica:machinaguard_boots"));
 
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         }
@@ -403,37 +414,105 @@ public class ArsProviders {
             List<CompletableFuture<?>> futures = new ArrayList<>();
             
             // Conditional recipes (when ars_elemental is loaded)
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_helmet", 
-                "ars_elemental:mark_of_mastery", "ars_nouveau:magic_hood", "ars_technica:technomancer_helmet",
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_helmet", 
+                "ars_elemental:mark_of_mastery", "ars_nouveau:arcanist_hood", "ars_technica:technomancer_helmet",
                 List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), true));
             
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_chestplate",
-                "ars_elemental:mark_of_mastery", "ars_nouveau:magic_robe", "ars_technica:technomancer_chestplate", 
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_chestplate",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:arcanist_robes", "ars_technica:technomancer_chestplate", 
                 List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
             
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_leggings",
-                "ars_elemental:mark_of_mastery", "ars_nouveau:magic_legs", "ars_technica:technomancer_leggings",
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_leggings",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:arcanist_leggings", "ars_technica:technomancer_leggings",
                 List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
             
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_boots",
-                "ars_elemental:mark_of_mastery", "ars_nouveau:magic_boots", "ars_technica:technomancer_boots",
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_boots",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:arcanist_boots", "ars_technica:technomancer_boots",
                 List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
 
             // Default recipes (no conditions)
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_helmet_default",
-                "ars_technica:mark_of_technomancy", "ars_nouveau:magic_hood", "ars_technica:technomancer_helmet",
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_helmet_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:arcanist_hood", "ars_technica:technomancer_helmet",
                 List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), false));
             
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_chestplate_default",
-                "ars_technica:mark_of_technomancy", "ars_nouveau:magic_robe", "ars_technica:technomancer_chestplate",
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_chestplate_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:arcanist_robes", "ars_technica:technomancer_chestplate",
                 List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
             
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_leggings_default",
-                "ars_technica:mark_of_technomancy", "ars_nouveau:magic_legs", "ars_technica:technomancer_leggings",
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_leggings_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:arcanist_leggings", "ars_technica:technomancer_leggings",
                 List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
             
-            futures.add(saveArmorUpgradeRecipe(cache, output, "technomancer_boots_default",
-                "ars_technica:mark_of_technomancy", "ars_nouveau:magic_boots", "ars_technica:technomancer_boots",
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "technomancer_boots_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:arcanist_boots", "ars_technica:technomancer_boots",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
+
+            // Artificer (light armor) recipes - conditional (when ars_elemental is loaded)
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_cap",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:sorcerer_hood", "ars_technica:artificer_cap",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), true));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_tunic",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:sorcerer_robes", "ars_technica:artificer_tunic",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_pants",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:sorcerer_leggings", "ars_technica:artificer_pants",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_shoes",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:sorcerer_boots", "ars_technica:artificer_shoes",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
+
+            // Artificer (light armor) recipes - default (no conditions)
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_cap_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:sorcerer_hood", "ars_technica:artificer_cap",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), false));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_tunic_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:sorcerer_robes", "ars_technica:artificer_tunic",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_pants_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:sorcerer_leggings", "ars_technica:artificer_pants",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "artificer_shoes_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:sorcerer_boots", "ars_technica:artificer_shoes",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
+
+            // Machinaguard (heavy armor) recipes - conditional (when ars_elemental is loaded)
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_helmet",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:battlemage_hood", "ars_technica:machinaguard_helmet",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), true));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_chestplate",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:battlemage_robes", "ars_technica:machinaguard_chestplate",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_leggings",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:battlemage_leggings", "ars_technica:machinaguard_leggings",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_boots",
+                "ars_elemental:mark_of_mastery", "ars_nouveau:battlemage_boots", "ars_technica:machinaguard_boots",
+                List.of("ars_elemental:mark_of_mastery", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), true));
+
+            // Machinaguard (heavy armor) recipes - default (no conditions)
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_helmet_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:battlemage_hood", "ars_technica:machinaguard_helmet",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "create:goggles"), false));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_chestplate_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:battlemage_robes", "ars_technica:machinaguard_chestplate",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_leggings_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:battlemage_leggings", "ars_technica:machinaguard_leggings",
+                List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
+            
+            futures.add(saveArmorUpgradeRecipeWithItem(cache, output, "machinaguard_boots_default",
+                "ars_technica:mark_of_technomancy", "ars_nouveau:battlemage_boots", "ars_technica:machinaguard_boots",
                 List.of("ars_technica:mark_of_technomancy", "c:ingots/netherite", "c:ingots/brass", "c:ingots/brass"), false));
 
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
@@ -453,7 +532,7 @@ public class ArsProviders {
                 json.add("neoforge:conditions", conditions);
             }
             
-            json.addProperty("type", "ars_technica:armor_upgrade");
+            json.addProperty("type", "sauce:armor_upgrade");
             
             // Add pedestal items
             com.google.gson.JsonArray pedestalArray = new com.google.gson.JsonArray();
@@ -481,8 +560,53 @@ public class ArsProviders {
             
             // Add source cost
             json.addProperty("sourceCost", 7000);
+            json.addProperty("tier", 3);
             
             // Add keepNbtOfReagent for all armor recipes
+            json.addProperty("keepNbtOfReagent", true);
+
+            Path path = output.resolve("data/" + root + "/recipe/" + name + ".json");
+            return DataProvider.saveStable(cache, json, path);
+        }
+
+        private CompletableFuture<?> saveArmorUpgradeRecipeWithItem(CachedOutput cache, Path output, String name, 
+                String markItem, String reagentItem, String resultItem, List<String> pedestalItems, boolean conditional) {
+            JsonObject json = new JsonObject();
+            
+            if (conditional) {
+                com.google.gson.JsonArray conditions = new com.google.gson.JsonArray();
+                JsonObject condition = new JsonObject();
+                condition.addProperty("type", "neoforge:mod_loaded");
+                condition.addProperty("modid", "ars_elemental");
+                conditions.add(condition);
+                json.add("neoforge:conditions", conditions);
+            }
+            
+            json.addProperty("type", "sauce:armor_upgrade");
+            
+            com.google.gson.JsonArray pedestalArray = new com.google.gson.JsonArray();
+            for (String item : pedestalItems) {
+                JsonObject pedestalItem = new JsonObject();
+                if (item.contains(":") && !item.startsWith("c:")) {
+                    pedestalItem.addProperty("item", item);
+                } else {
+                    pedestalItem.addProperty("tag", item);
+                }
+                pedestalArray.add(pedestalItem);
+            }
+            json.add("pedestalItems", pedestalArray);
+            
+            JsonObject reagent = new JsonObject();
+            reagent.addProperty("item", reagentItem);
+            json.add("reagent", reagent);
+            
+            JsonObject result = new JsonObject();
+            result.addProperty("count", 1);
+            result.addProperty("id", resultItem);
+            json.add("result", result);
+            
+            json.addProperty("sourceCost", 7000);
+            json.addProperty("tier", 3);
             json.addProperty("keepNbtOfReagent", true);
 
             Path path = output.resolve("data/" + root + "/recipe/" + name + ".json");

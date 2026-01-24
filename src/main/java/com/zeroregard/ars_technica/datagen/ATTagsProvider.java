@@ -32,31 +32,30 @@ public class ATTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-      var hat = ItemRegistry.TECHNOMANCER_HELMET.get();
-      var chest = ItemRegistry.TECHNOMANCER_CHESTPLATE.get();
-      var legs = ItemRegistry.TECHNOMANCER_LEGGINGS.get();
-      var boots = ItemRegistry.TECHNOMANCER_BOOTS.get();
+      addArmorTags(ItemRegistry.TECHNOMANCER_HELMET.get(), ItemRegistry.TECHNOMANCER_CHESTPLATE.get(), ItemRegistry.TECHNOMANCER_LEGGINGS.get(), ItemRegistry.TECHNOMANCER_BOOTS.get());
+      addArmorTags(ItemRegistry.ARTIFICER_CAP.get(), ItemRegistry.ARTIFICER_TUNIC.get(), ItemRegistry.ARTIFICER_PANTS.get(), ItemRegistry.ARTIFICER_SHOES.get());
+      addArmorTags(ItemRegistry.MACHINAGUARD_HELMET.get(), ItemRegistry.MACHINAGUARD_CHESTPLATE.get(), ItemRegistry.MACHINAGUARD_LEGGINGS.get(), ItemRegistry.MACHINAGUARD_BOOTS.get());
+    }
 
-      tag(MAGIC_HOOD).add(hat);
-      tag(MAGIC_ROBE).add(chest);
-      tag(MAGIC_LEG).add(legs);
-      tag(MAGIC_BOOT).add(boots);
-
-      // Magic armor tag containing all technomancer armor pieces
-      tag(MAGIC_ARMOR).add(hat, chest, legs, boots);
-
+    private void addArmorTags(Item hat, Item chest, Item legs, Item boots) {
       tag(ItemTags.ARMOR_ENCHANTABLE).add(hat, chest, legs, boots);
       tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(hat, chest, legs, boots);
       tag(ItemTags.DURABILITY_ENCHANTABLE).add(hat, chest, legs, boots);
 
       tag(ItemTags.HEAD_ARMOR_ENCHANTABLE).add(hat);
       tag(ItemTags.HEAD_ARMOR).add(hat);
+      tag(MAGIC_HOOD).add(hat);
       tag(ItemTags.CHEST_ARMOR_ENCHANTABLE).add(chest);
       tag(ItemTags.CHEST_ARMOR).add(chest);
+      tag(MAGIC_ROBE).add(chest);
       tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(legs);
       tag(ItemTags.LEG_ARMOR).add(legs);
+      tag(MAGIC_LEG).add(legs);
       tag(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(boots);
       tag(ItemTags.FOOT_ARMOR).add(boots);
+      tag(MAGIC_BOOT).add(boots);
+
+      tag(MAGIC_ARMOR).add(hat, chest, legs, boots);
     }
 
     @Override

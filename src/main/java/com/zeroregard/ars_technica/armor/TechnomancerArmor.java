@@ -9,7 +9,9 @@ import com.hollingsworth.arsnouveau.api.spell.Spell;
 import com.hollingsworth.arsnouveau.api.spell.SpellSchools;
 import com.hollingsworth.arsnouveau.api.util.PerkUtil;
 import com.hollingsworth.arsnouveau.common.armor.AnimatedMagicArmor;
+import com.alexthw.sauce.event.AttributeEventHandler;
 import com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.client.armor.TechnomancerArmorRenderer;
 import com.zeroregard.ars_technica.client.utils.TooltipUtils;
@@ -28,10 +30,12 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.api.distmarker.Dist;
@@ -63,7 +67,7 @@ public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModif
   });
 
   public TechnomancerArmor(Type slot, @Nullable String tooltipSpecialInformation) {
-    super(ATMaterials.techno, slot, new TechnomancerArmorModel("technomancer_medium_armor").withEmptyAnim());
+    super(ATMaterials.techno, slot, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponentRegistry.ARMOR_PERKS, new com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder()), new TechnomancerArmorModel("technomancer_medium_armor").withEmptyAnim());
     specialInformation = tooltipSpecialInformation;
   }
 
@@ -151,7 +155,12 @@ public class TechnomancerArmor extends AnimatedMagicArmor implements ISpellModif
   public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
     var modifiers = super.getDefaultAttributeModifiers()
             .withModifierAdded(PerkAttributes.MAX_MANA, new AttributeModifier(ArsNouveau.prefix("max_mana_armor_" + this.type.getName()), ARMOR_MAX_MANA.get(), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(this.type.getSlot()))
-            .withModifierAdded(PerkAttributes.MANA_REGEN_BONUS, new AttributeModifier(ArsNouveau.prefix("mana_regen_armor_" + this.type.getName()), ARMOR_MANA_REGEN.get(), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(this.type.getSlot()));
+            .withModifierAdded(PerkAttributes.MANA_REGEN_BONUS, new AttributeModifier(ArsNouveau.prefix("mana_regen_armor_" + this.type.getName()), ARMOR_MANA_REGEN.get(), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(this.type.getSlot()))
+            .withModifierAdded(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(ArsTechnica.prefix("knockback_resistance_armor_" + this.type.getName()), 0.025, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(this.type.getSlot()));
+
+    if (AttributeEventHandler.schoolToPowerAttribute.get(SpellSchools.MANIPULATION) != null) {
+      modifiers = modifiers.withModifierAdded(AttributeEventHandler.schoolToPowerAttribute.get(SpellSchools.MANIPULATION), new AttributeModifier(ArsTechnica.prefix("manipulation_power_armor_" + this.type.getName()), 1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.bySlot(this.type.getSlot()));
+    }
 
     for (PerkInstance perkInstance : PerkUtil.getPerksFromItem(stack)) {
       IPerk perk = perkInstance.getPerk();

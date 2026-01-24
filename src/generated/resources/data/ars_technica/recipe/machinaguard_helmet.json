@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ars_elemental"
+    }
+  ],
+  "type": "sauce:armor_upgrade",
+  "keepNbtOfReagent": true,
+  "pedestalItems": [
+    {
+      "item": "ars_elemental:mark_of_mastery"
+    },
+    {
+      "tag": "c:ingots/netherite"
+    },
+    {
+      "tag": "c:ingots/brass"
+    },
+    {
+      "item": "create:goggles"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:battlemage_hood"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_technica:machinaguard_helmet"
+  },
+  "sourceCost": 7000,
+  "tier": 3
+}

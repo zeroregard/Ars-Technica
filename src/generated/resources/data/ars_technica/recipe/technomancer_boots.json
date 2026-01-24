@@ -5,7 +5,7 @@
       "modid": "ars_elemental"
     }
   ],
-  "type": "ars_technica:armor_upgrade",
+  "type": "sauce:armor_upgrade",
   "keepNbtOfReagent": true,
   "pedestalItems": [
     {
@@ -22,11 +22,12 @@
     }
   ],
   "reagent": {
-    "tag": "ars_nouveau:magic_boots"
+    "item": "ars_nouveau:arcanist_boots"
   },
   "result": {
     "count": 1,
     "id": "ars_technica:technomancer_boots"
   },
-  "sourceCost": 7000
+  "sourceCost": 7000,
+  "tier": 3
 }

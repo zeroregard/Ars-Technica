@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.common.items.ExperienceGem;
 import com.hollingsworth.arsnouveau.common.items.RendererBlockItem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.zeroregard.ars_technica.armor.ATGogglesItem;
+import com.zeroregard.ars_technica.armor.HeavyTechnomancerArmor;
+import com.zeroregard.ars_technica.armor.LightTechnomancerArmor;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
 import com.zeroregard.ars_technica.item.RunicSpanner;
 import com.zeroregard.ars_technica.item.SpyMonocle;
@@ -13,6 +15,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -34,6 +38,24 @@ public class ItemRegistry {
     public static final DeferredItem<Item> TECHNOMANCER_CHESTPLATE = ITEMS.register("technomancer_chestplate", () -> new TechnomancerArmor(ArmorItem.Type.CHESTPLATE, null));
     public static final DeferredItem<Item> TECHNOMANCER_LEGGINGS = ITEMS.register("technomancer_leggings", () -> new TechnomancerArmor(ArmorItem.Type.LEGGINGS, null));
     public static final DeferredItem<Item> TECHNOMANCER_BOOTS = ITEMS.register("technomancer_boots", () -> new TechnomancerArmor(ArmorItem.Type.BOOTS, null));
+
+    public static final DeferredItem<Item> ARTIFICER_CAP = ITEMS.register("artificer_cap", () -> new LightTechnomancerArmor(ArmorItem.Type.HELMET, ".create_goggles_info", defaultArmorProperties(ArmorItem.Type.HELMET)));
+    public static final DeferredItem<Item> ARTIFICER_TUNIC = ITEMS.register("artificer_tunic", () -> new LightTechnomancerArmor(ArmorItem.Type.CHESTPLATE, null, defaultArmorProperties(ArmorItem.Type.CHESTPLATE)));
+    public static final DeferredItem<Item> ARTIFICER_PANTS = ITEMS.register("artificer_pants", () -> new LightTechnomancerArmor(ArmorItem.Type.LEGGINGS, null, defaultArmorProperties(ArmorItem.Type.LEGGINGS)));
+    public static final DeferredItem<Item> ARTIFICER_SHOES = ITEMS.register("artificer_shoes", () -> new LightTechnomancerArmor(ArmorItem.Type.BOOTS, null, defaultArmorProperties(ArmorItem.Type.BOOTS)));
+
+    public static final DeferredItem<Item> MACHINAGUARD_HELMET = ITEMS.register("machinaguard_helmet", () -> new HeavyTechnomancerArmor(ArmorItem.Type.HELMET, ".create_goggles_info"));
+    public static final DeferredItem<Item> MACHINAGUARD_CHESTPLATE = ITEMS.register("machinaguard_chestplate", () -> new HeavyTechnomancerArmor(ArmorItem.Type.CHESTPLATE, null));
+    public static final DeferredItem<Item> MACHINAGUARD_LEGGINGS = ITEMS.register("machinaguard_leggings", () -> new HeavyTechnomancerArmor(ArmorItem.Type.LEGGINGS, null));
+    public static final DeferredItem<Item> MACHINAGUARD_BOOTS = ITEMS.register("machinaguard_boots", () -> new HeavyTechnomancerArmor(ArmorItem.Type.BOOTS, null));
+
+    private static Item.Properties defaultArmorProperties(ArmorItem.Type slot) {
+        return new Item.Properties()
+                .stacksTo(1)
+                .rarity(Rarity.EPIC)
+                .component(DataComponentRegistry.ARMOR_PERKS, new com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder())
+                .durability(slot.getDurability(30));
+    }
 
     public static final DeferredItem<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(new Item.Properties().stacksTo(1)));
     public static DeferredItem<Item> TRANSMUTATION_FOCUS = ITEMS.register(
