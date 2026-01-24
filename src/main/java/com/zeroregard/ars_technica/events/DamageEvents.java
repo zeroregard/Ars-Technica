@@ -4,6 +4,8 @@ import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry;
 import com.hollingsworth.arsnouveau.setup.registry.ModPotions;
 import com.simibubi.create.AllDamageTypes;
 import com.zeroregard.ars_technica.ArsTechnica;
+import com.zeroregard.ars_technica.armor.HeavyTechnomancerArmor;
+import com.zeroregard.ars_technica.armor.LightTechnomancerArmor;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -25,7 +27,9 @@ public class DamageEvents {
             int bonusReduction = 0;
             for (ItemStack stack : event.getEntity().getArmorSlots()) {
                 Item item = stack.getItem();
-                if (item instanceof TechnomancerArmor && isMechanicalDamageSource(event.getSource())) {
+                if ((item instanceof TechnomancerArmor || 
+                     item instanceof LightTechnomancerArmor || 
+                     item instanceof HeavyTechnomancerArmor) && isMechanicalDamageSource(event.getSource())) {
                     bonusReduction++;
                 }
             }
