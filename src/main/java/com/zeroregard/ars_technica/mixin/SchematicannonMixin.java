@@ -6,6 +6,8 @@ import com.simibubi.create.content.schematics.cannon.SchematicannonBlockEntity;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.Config;
 import com.zeroregard.ars_technica.api.ITechnomancerAware;
+import com.zeroregard.ars_technica.armor.HeavyTechnomancerArmor;
+import com.zeroregard.ars_technica.armor.LightTechnomancerArmor;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
 import com.zeroregard.ars_technica.helpers.CurioHelper;
 import com.zeroregard.ars_technica.network.ParticleEffectPacket;
@@ -49,7 +51,7 @@ public class SchematicannonMixin implements ITechnomancerAware {
         Level world = entity.getLevel();
         List<ServerPlayer> nearbyPlayers = world.getEntitiesOfClass(ServerPlayer.class, aabb);
         boolean foundTechnomancer  = nearbyPlayers.stream().anyMatch(player ->
-                TechnomancerArmor.isWearingFullSet(player) ||
+                isWearingAnyTechnicaSet(player) ||
                         CurioHelper.hasTaggedCurio(player, prefix("technomancer_perk"))
         );
 
@@ -85,5 +87,11 @@ public class SchematicannonMixin implements ITechnomancerAware {
     @Override
     public void setTechnomancerNearby(boolean value) {
         this.technomancerNearby = value;
+    }
+
+    private static boolean isWearingAnyTechnicaSet(ServerPlayer player) {
+        return TechnomancerArmor.isWearingFullSet(player) ||
+                LightTechnomancerArmor.isWearingFullSet(player) ||
+                HeavyTechnomancerArmor.isWearingFullSet(player);
     }
 }
