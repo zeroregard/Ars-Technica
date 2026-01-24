@@ -47,6 +47,30 @@ public class ClientHandler {
 
         event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
                 ItemRegistry.TECHNOMANCER_LEGGINGS.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.ARTIFICER_SHOES.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.ARTIFICER_TUNIC.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.ARTIFICER_CAP.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.ARTIFICER_PANTS.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.MACHINAGUARD_BOOTS.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.MACHINAGUARD_CHESTPLATE.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.MACHINAGUARD_HELMET.get());
+
+        event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),
+                ItemRegistry.MACHINAGUARD_LEGGINGS.get());
     }
 
     @SubscribeEvent
@@ -59,7 +83,6 @@ public class ClientHandler {
         DyeColor color = stack.getOrDefault(DataComponents.BASE_COLOR, DyeColor.PURPLE);
         return FastColor.ABGR32.opaque(color.getTextColor());
     }
-
     @SubscribeEvent
     public void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);

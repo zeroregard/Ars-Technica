@@ -1,5 +1,5 @@
 {
-  "type": "ars_technica:armor_upgrade",
+  "type": "sauce:armor_upgrade",
   "keepNbtOfReagent": true,
   "pedestalItems": [
     {
@@ -16,11 +16,12 @@
     }
   ],
   "reagent": {
-    "tag": "ars_nouveau:magic_hood"
+    "item": "ars_nouveau:arcanist_hood"
   },
   "result": {
     "count": 1,
     "id": "ars_technica:technomancer_helmet"
   },
-  "sourceCost": 7000
+  "sourceCost": 7000,
+  "tier": 3
 }

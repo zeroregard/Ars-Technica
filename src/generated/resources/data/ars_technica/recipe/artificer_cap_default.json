@@ -1,0 +1,27 @@
+{
+  "type": "sauce:armor_upgrade",
+  "keepNbtOfReagent": true,
+  "pedestalItems": [
+    {
+      "item": "ars_technica:mark_of_technomancy"
+    },
+    {
+      "tag": "c:ingots/netherite"
+    },
+    {
+      "tag": "c:ingots/brass"
+    },
+    {
+      "item": "create:goggles"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:sorcerer_hood"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_technica:artificer_cap"
+  },
+  "sourceCost": 7000,
+  "tier": 3
+}

@@ -1,0 +1,27 @@
+{
+  "type": "sauce:armor_upgrade",
+  "keepNbtOfReagent": true,
+  "pedestalItems": [
+    {
+      "item": "ars_technica:mark_of_technomancy"
+    },
+    {
+      "tag": "c:ingots/netherite"
+    },
+    {
+      "tag": "c:ingots/brass"
+    },
+    {
+      "item": "create:goggles"
+    }
+  ],
+  "reagent": {
+    "item": "ars_nouveau:battlemage_hood"
+  },
+  "result": {
+    "count": 1,
+    "id": "ars_technica:machinaguard_helmet"
+  },
+  "sourceCost": 7000,
+  "tier": 3
+}
