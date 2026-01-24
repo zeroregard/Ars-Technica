@@ -67,7 +67,7 @@ public class HeavyTechnomancerArmor extends AnimatedMagicArmor implements ISpell
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   public HeavyTechnomancerArmor(Type slot, @Nullable String tooltipSpecialInformation) {
-    super(ATMaterials.techno_heavy, slot, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponentRegistry.ARMOR_PERKS, new com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder()), new TechnomancerArmorModel("technomancer_medium_armor").withEmptyAnim());
+    super(ATMaterials.techno_heavy, slot, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(DataComponentRegistry.ARMOR_PERKS, new com.hollingsworth.arsnouveau.common.items.data.ArmorPerkHolder()), new TechnomancerArmorModel("machinaguard_heavy_armor").withEmptyAnim());
     specialInformation = tooltipSpecialInformation;
   }
 

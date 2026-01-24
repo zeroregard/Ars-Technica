@@ -65,7 +65,7 @@ public class LightTechnomancerArmor extends AnimatedMagicArmor implements ISpell
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   public LightTechnomancerArmor(Type slot, @Nullable String tooltipSpecialInformation, Item.Properties builder) {
-    super(ATMaterials.techno_light, slot, builder, new TechnomancerArmorModel("technomancer_medium_armor").withEmptyAnim());
+    super(ATMaterials.techno_light, slot, builder, new TechnomancerArmorModel("artificer_armor").withEmptyAnim());
     specialInformation = tooltipSpecialInformation;
   }
 
