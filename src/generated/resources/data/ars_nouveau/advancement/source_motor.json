@@ -1,5 +1,5 @@
 {
-  "parent": "ars_technica:calibrated_precision_mechanism",
+  "parent": "ars_nouveau:calibrated_precision_mechanism",
   "criteria": {
     "has_source_motor": {
       "conditions": {

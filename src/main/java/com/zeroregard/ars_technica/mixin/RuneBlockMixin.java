@@ -5,7 +5,7 @@ import com.hollingsworth.arsnouveau.common.block.tile.RuneTile;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.zeroregard.ars_technica.client.gui.RuneTileScreen;
 import com.zeroregard.ars_technica.helpers.InteractionHelper;
-import com.zeroregard.ars_technica.item.RunicSpanner;
+import com.zeroregard.ars_technica.helpers.ArcaneWrenchHelper;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -32,7 +32,7 @@ public class RuneBlockMixin implements IWrenchable {
 
     @Inject(method = "useItemOn", at = @At("HEAD"), cancellable = true)
     public void useWrench(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit, CallbackInfoReturnable<ItemInteractionResult> cir) {
-        if (stack.getItem() instanceof RunicSpanner) {
+        if (ArcaneWrenchHelper.isArcaneWrench(stack)) {
             UseOnContext context = new UseOnContext(player, handIn, hit);
             InteractionResult result = onWrenched(state, context);
             ItemInteractionResult itemResult = InteractionHelper.fromInteractionResult(result);

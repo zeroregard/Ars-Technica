@@ -14,14 +14,17 @@ import net.minecraft.world.item.ItemStack;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
-public class RunicSpannerRenderer extends CustomRenderedItemModelRenderer {
+public class ArcaneWrenchRenderer extends CustomRenderedItemModelRenderer {
 
-    protected static final PartialModel GEAR = PartialModel.of(prefix("item/arcane_gear"));
+    /** Base wrench shape + our texture (same model as legacy runic_spanner). */
+    public static final PartialModel RUNIC_SPANNER_BASE = PartialModel.of(prefix("item/runic_spanner"));
+    public static final PartialModel GEAR = PartialModel.of(prefix("item/arcane_gear"));
 
     @Override
     protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext transformType,
                           PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
-        renderer.render(model.getOriginalModel(), light);
+        // Use our runic_spanner model (PartialModel loads it like the gear) so we get our texture; match Create's render() for compatibility.
+        renderer.render(RUNIC_SPANNER_BASE.get(), light);
 
         float xOffset = -1/16f;
         ms.translate(-xOffset, 0, 0);

@@ -1,8 +1,7 @@
 package com.zeroregard.ars_technica.helpers.mixin;
 
-
+import com.zeroregard.ars_technica.helpers.ArcaneWrenchHelper;
 import com.zeroregard.ars_technica.helpers.mixin.droppers.IDropper;
-import com.zeroregard.ars_technica.item.RunicSpanner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 public class ArsTechnicaWrenchable {
     public static InteractionResult onSneakWrenched(BlockState state, UseOnContext context, IDropper itemDropper) {
         ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
-        if (stack.getItem() instanceof RunicSpanner) {
+        if (ArcaneWrenchHelper.isArcaneWrench(stack)) {
             Level world = context.getLevel();
             BlockPos pos = context.getClickedPos();
             Player player = context.getPlayer();

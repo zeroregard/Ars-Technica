@@ -1,0 +1,18 @@
+{
+  "type": "ars_nouveau:enchanting_apparatus",
+  "keepNbtOfReagent": false,
+  "pedestalItems": [
+    { "tag": "c:ingots/gold" },
+    { "item": "ars_technica:calibrated_precision_mechanism" },
+    { "item": "ars_nouveau:manipulation_essence" }
+  ],
+  "reagent": { "item": "create:wrench" },
+  "result": {
+    "count": 1,
+    "id": "create:wrench",
+    "components": {
+      "ars_technica:runic_wrench": true
+    }
+  },
+  "sourceCost": 500
+}
