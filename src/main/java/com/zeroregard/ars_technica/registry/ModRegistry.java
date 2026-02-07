@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.registry;
 
 import com.hollingsworth.arsnouveau.setup.registry.CreativeTabRegistry;
 import com.zeroregard.ars_technica.armor.ATMaterials;
+import com.zeroregard.ars_technica.helpers.ArcaneWrenchHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -37,11 +38,12 @@ public class ModRegistry {
     static {
         ARS_TECHNICA_TAB = TABS.register("general", () -> CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.ars_technica"))
-                .icon(() -> ItemRegistry.TRANSMUTATION_FOCUS.get().getDefaultInstance())
+                .icon(() -> ItemRegistry.TECHNOMANCER_HELMET.get().getDefaultInstance())
                 .displayItems((params, output) -> {
                     for (var entry : ItemRegistry.ITEMS.getEntries()) {
                         output.accept(entry.get().getDefaultInstance());
                     }
+                    output.accept(ArcaneWrenchHelper.createArcaneWrench());
                 }).withTabsBefore(CreativeTabRegistry.BLOCKS.getId())
                 .build());
     }

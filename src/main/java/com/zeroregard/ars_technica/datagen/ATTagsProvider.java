@@ -97,11 +97,6 @@ public class ATTagsProvider {
           .replace(false)
           .add(ItemRegistry.GARGANTUAN_EXPERIENCE_GEM.get());
 
-      // Tool tags - needs replace: false
-      tag(WRENCH)
-          .replace(false)
-          .add(ItemRegistry.RUNIC_SPANNER.get());
-
       // Music disc tag - include our pocket factory disc
       tag(MUSIC_DISCS)
           .replace(false)

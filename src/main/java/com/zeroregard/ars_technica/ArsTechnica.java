@@ -50,7 +50,12 @@ public class ArsTechnica {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 
+    private static boolean stressValuesRegistered;
+
     private static void registerStressValues() {
+        if (stressValuesRegistered)
+            return;
+        stressValuesRegistered = true;
         Block sourceMotorBlock = BlockRegistry.SOURCE_MOTOR.get();
         BlockStressValues.CAPACITIES.register(sourceMotorBlock, () -> 256.0);
         BlockStressValues.setGeneratorSpeed(256).accept(sourceMotorBlock);

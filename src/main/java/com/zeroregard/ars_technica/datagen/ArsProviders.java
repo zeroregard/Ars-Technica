@@ -89,15 +89,6 @@ public class ArsProviders {
         }
 
         protected void addEquipmentRecipes() {
-            recipes.add(builder()
-                    .withResult(ItemRegistry.RUNIC_SPANNER)
-                    .withReagent(WRENCH)
-                    .withPedestalItem(Ingredient.fromValues(java.util.stream.Stream.of(new Ingredient.TagValue(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/gold"))))))
-                    .withPedestalItem(Ingredient.of(new ItemStack(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get())))
-                    .withPedestalItem(Ingredient.of(MANIPULATION_ESSENCE))
-                    .withSourceCost(500)
-                    .build());
-
             // Blank disc recipe - conditional on etched not being loaded
             recipes.add(builder()
                     .withResult(ItemRegistry.BLANK_DISC)

@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.datagen;
 
 import com.hollingsworth.arsnouveau.common.datagen.advancement.ANAdvancementBuilder;
 import com.hollingsworth.arsnouveau.common.datagen.advancement.ANAdvancements;
+import com.simibubi.create.AllItems;
 import com.zeroregard.ars_technica.ArsTechnica;
 import com.zeroregard.ars_technica.registry.ItemRegistry;
 import net.minecraft.advancements.*;
@@ -44,10 +45,13 @@ public class ATAdvancementsProvider extends net.neoforged.neoforge.common.data.A
         public void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<AdvancementHolder> con, @NotNull ExistingFileHelper existingFileHelper) {
             advancementConsumer = con;
             saveBasicItem(ItemRegistry.CALIBRATED_PRECISION_MECHANISM.get(), ars_parent("enchanting_apparatus"));
-            saveBasicItem(ItemRegistry.SOURCE_MOTOR.get(), technica_parent("calibrated_precision_mechanism"));
-            saveBasicItem(ItemRegistry.RUNIC_SPANNER.get(), technica_parent("calibrated_precision_mechanism"));
-            saveBasicItem(ItemRegistry.SPY_MONOCLE.get(), technica_parent("calibrated_precision_mechanism"));
-            saveBasicItem(ItemRegistry.TRANSMUTATION_FOCUS.get(), technica_parent("calibrated_precision_mechanism"));
+            // Child advancements must use ars_parent so they reference ars_nouveau:calibrated_precision_mechanism (same namespace as generated IDs).
+            ResourceLocation calibratedParent = ars_parent("calibrated_precision_mechanism");
+            saveBasicItem(ItemRegistry.SOURCE_MOTOR.get(), calibratedParent);
+            // Arcane Wrench is Create's wrench with runic_wrench component; advancement uses wrench + id runic_spanner
+            buildBasicItem(AllItems.WRENCH.get(), "runic_spanner", AdvancementType.TASK, calibratedParent).save(advancementConsumer);
+            saveBasicItem(ItemRegistry.SPY_MONOCLE.get(), calibratedParent);
+            saveBasicItem(ItemRegistry.TRANSMUTATION_FOCUS.get(), calibratedParent);
         }
 
         public AdvancementHolder saveBasicItem(ItemLike item, ResourceLocation parent) {

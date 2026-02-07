@@ -7,7 +7,6 @@ import com.zeroregard.ars_technica.armor.ATGogglesItem;
 import com.zeroregard.ars_technica.armor.HeavyTechnomancerArmor;
 import com.zeroregard.ars_technica.armor.LightTechnomancerArmor;
 import com.zeroregard.ars_technica.armor.TechnomancerArmor;
-import com.zeroregard.ars_technica.item.RunicSpanner;
 import com.zeroregard.ars_technica.item.SpyMonocle;
 import com.zeroregard.ars_technica.item.TransmutationFocus;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -17,6 +16,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -57,7 +57,6 @@ public class ItemRegistry {
                 .durability(slot.getDurability(30));
     }
 
-    public static final DeferredItem<Item> RUNIC_SPANNER = ITEMS.register("runic_spanner", () -> new RunicSpanner(new Item.Properties().stacksTo(1)));
     public static DeferredItem<Item> TRANSMUTATION_FOCUS = ITEMS.register(
             "transmutation_focus", () -> new TransmutationFocus(
                     new Item.Properties().stacksTo(1)
@@ -117,6 +116,10 @@ public class ItemRegistry {
     }
 
     public static void register(IEventBus bus) {
+        // Old runic_spanner item was removed; alias resolves to Create's wrench (ArcaneWrenchItemStackMixin adds the component when loading saved stacks).
+        ITEMS.addAlias(
+                ResourceLocation.fromNamespaceAndPath(MODID, "runic_spanner"),
+                ResourceLocation.fromNamespaceAndPath("create", "wrench"));
         ITEMS.register(bus);
         GogglesItem.addIsWearingPredicate(ATGogglesItem::isWearingTechnomancerHelmet);
         GogglesItem.addIsWearingPredicate(ATGogglesItem::isWearingSpyMonocle);
