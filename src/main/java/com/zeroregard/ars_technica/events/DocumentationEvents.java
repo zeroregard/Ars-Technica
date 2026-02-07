@@ -17,6 +17,7 @@ import com.hollingsworth.arsnouveau.api.documentation.entry.TextEntry;
 import com.hollingsworth.arsnouveau.api.registry.DocumentationRegistry;
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.setup.registry.Documentation;
+
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -50,7 +51,7 @@ public class DocumentationEvents {
                 .withCraftingPages(ItemRegistry.TRANSMUTATION_FOCUS.get())
                 .withCraftingPages(BlockRegistry.TRANSMUTATION_TURRET.get()));
 
-        // Items and Equipment
+        // Items and Equipment - withCraftingPages finds Enchanting Apparatus recipe runic_spanner (output: create:wrench)
         Documentation.addPage(new DocEntryBuilder(ArsTechnica.MODID, DocumentationRegistry.ITEMS, "arcane_wrench")
                 .withIcon(ArcaneWrenchHelper.createArcaneWrench())
                 .withPage(TextEntry.create("ars_technica.page1.arcane_wrench", "ars_technica.page.arcane_wrench"))

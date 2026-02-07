@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.entity.fusion.fluids;
 
 import com.zeroregard.ars_technica.entity.fusion.ArcaneFusionEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,10 +30,17 @@ public class ArcaneFusionFluids {
      * @return List of FluidSourceProvider, representing either FluidState or IFluidHandler
      */
     public List<FluidSourceProvider> pickupFluids() {
-        List<FluidSourceProvider> results = new ArrayList<>();
         BlockPos center = new BlockPos(parent.getBlockX(), parent.getBlockY(), parent.getBlockZ());
-        int range = 5; // TODO: get range from AOE ( ? )
+        return pickupFluidsAround(level, center, 5);
+    }
 
+    /**
+     * Picks up fluids from the world around a center position (e.g. for compacting with nearby fluids).
+     * Scans blocks for fluid source blocks and fluid handler block entities (tanks).
+     * Use range 8 when casting compact near tanks so the tank is reliably found.
+     */
+    public static List<FluidSourceProvider> pickupFluidsAround(Level level, BlockPos center, int range) {
+        List<FluidSourceProvider> results = new ArrayList<>();
         for (BlockPos pos : BlockPos.betweenClosed(center.offset(-range, -range, -range), center.offset(range, range, range))) {
             BlockState blockState = level.getBlockState(pos);
             FluidState fluidState = blockState.getFluidState();
@@ -41,10 +49,13 @@ public class ArcaneFusionFluids {
                 // Fluid dropped in the world
                 FluidStack fluidStack = new FluidStack(fluidState.getType(), fluidState.getAmount());
                 results.add(new FluidSourceProvider(fluidStack, pos, fluidState));
-            }  else {
+            } else {
                 // No direct fluid state - check if there's a fluid tank at this position and try draining fluid
                 BlockEntity blockEntity = level.getBlockEntity(pos);
                 var fluidHandler = Capabilities.FluidHandler.BLOCK.getCapability(level, pos, blockState, blockEntity, null);
+                if (fluidHandler == null) {
+                    fluidHandler = Capabilities.FluidHandler.BLOCK.getCapability(level, pos, blockState, blockEntity, Direction.UP);
+                }
                 if (blockEntity != null && fluidHandler != null) {
                     // Simulate draining from the tank to get the amount of fluid available
                     FluidStack fluidStack = fluidHandler.drain(1000, IFluidHandler.FluidAction.SIMULATE); // Simulate drain for a bucket
@@ -54,7 +65,6 @@ public class ArcaneFusionFluids {
                 }
             }
         }
-
         return results;
     }
 }

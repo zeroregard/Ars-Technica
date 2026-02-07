@@ -9,11 +9,16 @@ import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.content.kinetics.mixer.CompactingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
+import com.zeroregard.ars_technica.ArsTechnica;
+import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import net.minecraft.util.RandomSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -74,22 +79,31 @@ public class RecipeHelpers {
     }
 
     /**
-     * Result of matching a set of item entities to a Compacting recipe.
-     * Consumption list indicates which entity to shrink and by how much.
+     * Result of matching a set of item entities (and optionally nearby fluids) to a Compacting recipe.
+     * Consumption lists indicate which entities to shrink and which fluid sources to drain.
      */
-    public record CompactingMatch(RecipeHolder<CompactingRecipe> recipe, List<ConsumptionEntry> consumption) {
+    public record CompactingMatch(RecipeHolder<CompactingRecipe> recipe, List<ConsumptionEntry> consumption, List<FluidConsumptionEntry> fluidConsumption) {
         public record ConsumptionEntry(ItemEntity entity, int count) {}
+        public record FluidConsumptionEntry(FluidSourceProvider provider, int amountMb) {}
     }
 
     /**
-     * Finds the first Compacting recipe that can be satisfied by the given item entities (item-only recipes).
+     * Finds the first Compacting recipe that can be satisfied by the given item entities and optional nearby fluids.
+     * When fluids is null or empty, only item-only recipes are considered. When fluids are provided, recipes with fluid ingredients are also matched.
+     * Also supports recipes that use ONLY fluids (e.g. 250mb chocolate -> chocolate bar) as a fallback when no item match is found.
      * Entities are considered in order of distance to posVec so closer items are preferred.
      */
-    public static Optional<CompactingMatch> findCompactingMatch(List<ItemEntity> entities, Vec3 posVec, Level world) {
-        if (entities == null || entities.isEmpty()) {
+    public static Optional<CompactingMatch> findCompactingMatch(List<ItemEntity> entities, List<FluidSourceProvider> fluids, Vec3 posVec, Level world) {
+        List<FluidSourceProvider> availableFluids = fluids != null ? new ArrayList<>(fluids) : List.of();
+        boolean hasItems = entities != null && !entities.isEmpty();
+        ArsTechnica.LOGGER.info("[findCompactingMatch] hasItems={} entityCount={} fluidCount={}", hasItems, entities != null ? entities.size() : -1, availableFluids.size());
+        if (!hasItems && availableFluids.isEmpty()) {
+            ArsTechnica.LOGGER.info("[findCompactingMatch] early exit: no items and no fluids");
             return Optional.empty();
         }
-        List<ItemEntity> sorted = new ArrayList<>(entities);
+        List<ItemEntity> sorted = entities != null && !entities.isEmpty()
+                ? new ArrayList<>(entities)
+                : new ArrayList<>();
         sorted.removeIf(e -> e == null || e.isRemoved() || e.getItem().isEmpty());
         sorted.sort(Comparator.comparingDouble(e -> e.position().distanceToSqr(posVec)));
 
@@ -100,23 +114,23 @@ public class RecipeHelpers {
                 pool.put(e, count);
             }
         }
-        if (pool.isEmpty()) {
-            return Optional.empty();
-        }
 
         @SuppressWarnings("unchecked")
         List<RecipeHolder<CompactingRecipe>> recipes = (List<RecipeHolder<CompactingRecipe>>) (List<?>) world.getRecipeManager().getAllRecipesFor(AllRecipeTypes.COMPACTING.getType());
+        ArsTechnica.LOGGER.info("[findCompactingMatch] COMPACTING recipe type={} totalRecipes={}", AllRecipeTypes.COMPACTING.getType(), recipes.size());
 
-        for (RecipeHolder<CompactingRecipe> holder : recipes) {
-            CompactingRecipe recipe = holder.value();
-            if (!recipe.getFluidIngredients().isEmpty()) {
-                continue;
-            }
-            List<Ingredient> ingredients = recipe.getIngredients();
-            if (ingredients.isEmpty()) {
-                continue;
-            }
-            Map<ItemEntity, Integer> poolCopy = new HashMap<>(pool);
+        // First try recipes that use items (with optional fluids)
+        if (!pool.isEmpty()) {
+            for (RecipeHolder<CompactingRecipe> holder : recipes) {
+                CompactingRecipe recipe = holder.value();
+                if (!recipe.getFluidIngredients().isEmpty() && availableFluids.isEmpty()) {
+                    continue;
+                }
+                List<Ingredient> ingredients = recipe.getIngredients();
+                if (ingredients.isEmpty()) {
+                    continue;
+                }
+                Map<ItemEntity, Integer> poolCopy = new HashMap<>(pool);
             List<CompactingMatch.ConsumptionEntry> plan = new ArrayList<>();
             boolean matched = true;
             for (Ingredient ing : ingredients) {
@@ -137,7 +151,23 @@ public class RecipeHelpers {
             if (!matched) {
                 continue;
             }
-            // Merge plan: (entity, 1) + (entity, 1) -> (entity, 2)
+            // Match fluid requirements (same as MixingRecipeHelpers)
+            List<CompactingMatch.FluidConsumptionEntry> fluidPlan = new ArrayList<>();
+            for (var fluidIngredient : recipe.getFluidIngredients()) {
+                var fluidCandidate = availableFluids.stream()
+                        .filter(fluid -> fluidIngredient.ingredient().test(fluid.getFluidStack()))
+                        .filter(fluid -> fluid.getMbAmount() >= fluidIngredient.amount())
+                        .findFirst();
+                if (fluidCandidate.isEmpty()) {
+                    matched = false;
+                    break;
+                }
+                fluidPlan.add(new CompactingMatch.FluidConsumptionEntry(fluidCandidate.get(), fluidIngredient.amount()));
+            }
+            if (!matched || fluidPlan.size() != recipe.getFluidIngredients().size()) {
+                continue;
+            }
+            // Merge item plan: (entity, 1) + (entity, 1) -> (entity, 2)
             Map<ItemEntity, Integer> merged = new HashMap<>();
             for (CompactingMatch.ConsumptionEntry entry : plan) {
                 merged.merge(entry.entity(), entry.count(), Integer::sum);
@@ -145,9 +175,107 @@ public class RecipeHelpers {
             List<CompactingMatch.ConsumptionEntry> consumption = merged.entrySet().stream()
                     .map(e -> new CompactingMatch.ConsumptionEntry(e.getKey(), e.getValue()))
                     .collect(Collectors.toList());
-            return Optional.of(new CompactingMatch(holder, consumption));
+            return Optional.of(new CompactingMatch(holder, consumption, fluidPlan));
+            }
+        }
+
+        // Fallback: recipes that use ONLY fluids (e.g. 250mb chocolate -> chocolate bar)
+        ArsTechnica.LOGGER.info("[findCompactingMatch] fluid-only fallback: availableFluids={}", availableFluids.size());
+        if (!availableFluids.isEmpty()) {
+            for (RecipeHolder<CompactingRecipe> holder : recipes) {
+                CompactingRecipe recipe = holder.value();
+                boolean skipFluidEmpty = recipe.getFluidIngredients().isEmpty();
+                boolean skipHasItems = !recipe.getIngredients().isEmpty();
+                if (skipFluidEmpty || skipHasItems) {
+                    if (!skipFluidEmpty && skipHasItems) ArsTechnica.LOGGER.info("[findCompactingMatch] fluid-only skip recipe {}: has item ingredients", holder.id());
+                    continue;
+                }
+                ArsTechnica.LOGGER.info("[findCompactingMatch] trying fluid-only recipe {} fluidIngredientCount={}", holder.id(), recipe.getFluidIngredients().size());
+                List<CompactingMatch.FluidConsumptionEntry> fluidPlan = new ArrayList<>();
+                for (var fluidIngredient : recipe.getFluidIngredients()) {
+                    int req = fluidIngredient.amount();
+                    var fluidCandidate = availableFluids.stream()
+                            .filter(fluid -> {
+                                boolean test = fluidIngredient.ingredient().test(fluid.getFluidStack());
+                                if (!test) ArsTechnica.LOGGER.info("[findCompactingMatch]   ingredient.test failed for fluid {} amount {}mb", fluid.getFluidStack().getFluid(), fluid.getMbAmount());
+                                return test;
+                            })
+                            .filter(fluid -> {
+                                boolean ok = fluid.getMbAmount() >= req;
+                                if (!ok) ArsTechnica.LOGGER.info("[findCompactingMatch]   amount failed: have {}mb need {}mb", fluid.getMbAmount(), req);
+                                return ok;
+                            })
+                            .findFirst();
+                    if (fluidCandidate.isEmpty()) {
+                        fluidPlan.clear();
+                        ArsTechnica.LOGGER.info("[findCompactingMatch]   no fluid candidate for requirement {}mb", req);
+                        break;
+                    }
+                    fluidPlan.add(new CompactingMatch.FluidConsumptionEntry(fluidCandidate.get(), fluidIngredient.amount()));
+                }
+                if (fluidPlan.size() == recipe.getFluidIngredients().size()) {
+                    ArsTechnica.LOGGER.info("[findCompactingMatch] MATCH fluid-only recipe {}", holder.id());
+                    return Optional.of(new CompactingMatch(holder, List.of(), fluidPlan));
+                }
+            }
+            ArsTechnica.LOGGER.info("[findCompactingMatch] no fluid-only recipe matched");
         }
         return Optional.empty();
+    }
+
+    public static boolean hasPackingRecipe(Item item, int gridSize, Level world) {
+        NonNullList<ItemStack> mutableItems = NonNullList.withSize(gridSize * gridSize, ItemStack.EMPTY);
+        CraftingHelpers.setSquareShape(mutableItems, new ItemStack(item, 1), gridSize);
+        CraftingInput tempContainer = CraftingInput.of(gridSize, gridSize, List.copyOf(mutableItems));
+        return world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, tempContainer, world).isPresent();
+    }
+
+    /** Returns true if at least one pack (2x2 or 3x3) is possible with the given entities. Used to avoid spawning the press when nothing can be packed. */
+    public static boolean canDoAnyPack(List<ItemEntity> entityList, int gridSize, Level world) {
+        if (entityList == null || entityList.isEmpty()) return false;
+        int packSize = gridSize * gridSize;
+        Map<Item, List<ItemEntity>> grouped = entityList.stream()
+                .filter(e -> e != null && !e.isRemoved() && !e.getItem().isEmpty())
+                .collect(Collectors.groupingBy(e -> e.getItem().getItem()));
+        for (var entry : grouped.entrySet()) {
+            Item item = entry.getKey();
+            List<ItemEntity> entities = entry.getValue();
+            if (!hasPackingRecipe(item, gridSize, world)) continue;
+            int total = entities.stream().mapToInt(e -> e.getItem().getCount()).sum();
+            if (total < packSize) continue;
+            NonNullList<ItemStack> mutableItems = NonNullList.withSize(packSize, ItemStack.EMPTY);
+            CraftingHelpers.setSquareShape(mutableItems, new ItemStack(item, 1), gridSize);
+            CraftingInput container = CraftingInput.of(gridSize, gridSize, List.copyOf(mutableItems));
+            ItemStack packedItem = CraftingHelpers.getItem(container, item, world);
+            if (packedItem.isEmpty()) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** Performs one pack (one 2x2 or 3x3 output) from the first packable group with enough items. Returns true if a pack was done. */
+    public static boolean tryDoOnePack(List<ItemEntity> entityList, BlockPos pos, int gridSize, Level world) {
+        if (entityList == null || entityList.isEmpty()) return false;
+        int packSize = gridSize * gridSize;
+        Map<Item, List<ItemEntity>> grouped = entityList.stream()
+                .filter(e -> e != null && !e.isRemoved() && !e.getItem().isEmpty())
+                .collect(Collectors.groupingBy(e -> e.getItem().getItem()));
+        for (var entry : grouped.entrySet()) {
+            Item item = entry.getKey();
+            List<ItemEntity> entities = entry.getValue();
+            if (!hasPackingRecipe(item, gridSize, world)) continue;
+            int total = entities.stream().mapToInt(e -> e.getItem().getCount()).sum();
+            if (total < packSize) continue;
+            NonNullList<ItemStack> mutableItems = NonNullList.withSize(packSize, ItemStack.EMPTY);
+            CraftingHelpers.setSquareShape(mutableItems, new ItemStack(item, 1), gridSize);
+            CraftingInput container = CraftingInput.of(gridSize, gridSize, List.copyOf(mutableItems));
+            ItemStack packedItem = CraftingHelpers.getItem(container, item, world);
+            if (packedItem.isEmpty()) continue;
+            ItemHelpers.createItemEntity(packedItem, world, pos);
+            ItemHelpers.subtractItemsFromItemEntitiesInPlace(entities, packSize, item);
+            return true;
+        }
+        return false;
     }
 
     public static Optional<AbstractCrushingRecipe> getCrushingRecipeForItemStack(ItemStack input, Level world) {

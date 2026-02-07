@@ -3,15 +3,15 @@ package com.zeroregard.ars_technica.glyphs;
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtract;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
 import com.simibubi.create.content.logistics.depot.DepotBlock;
 import com.zeroregard.ars_technica.entity.ArcanePressEntity;
+import com.zeroregard.ars_technica.entity.fusion.fluids.ArcaneFusionFluids;
+import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
-import com.zeroregard.ars_technica.helpers.RecipeHelpers.CompactingMatch;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -19,13 +19,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.util.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static com.zeroregard.ars_technica.ArsTechnica.LOGGER;
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
 public class EffectPress extends AbstractItemResolveEffect {
@@ -52,6 +52,7 @@ public class EffectPress extends AbstractItemResolveEffect {
                 
                 Vec3 spawnPos = Vec3.atCenterOf(blockPos).add(0, 1.0, 0);
                 ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, maxAmountToPress, speed, color, Collections.emptyList());
+                arcanePressEntity.setPressMode();
                 arcanePressEntity.bindDepot(blockPos);
                 world.addFreshEntity(arcanePressEntity);
                 return;
@@ -72,15 +73,37 @@ public class EffectPress extends AbstractItemResolveEffect {
         float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
         var color = new Color(spellContext.getSpell().color().getColor());
 
-        if (spellStats.hasBuff(AugmentExtract.INSTANCE)) {
-            Optional<CompactingMatch> compactMatch = RecipeHelpers.findCompactingMatch(entityList, posVec, world);
-            if (compactMatch.isPresent()) {
-                Vec3 spawnPos = posVec.add(0, 1.0, 0);
-                ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, 1, speed, color, Collections.emptyList());
-                arcanePressEntity.setCompactJob(compactMatch.get());
-                world.addFreshEntity(arcanePressEntity);
+        if (spellStats.hasBuff(AugmentSensitive.INSTANCE)) {
+            int gridSize = getPackGridSize(spellStats.getAmpMultiplier());
+            if (!RecipeHelpers.canDoAnyPack(entityList, gridSize, world)) {
                 return;
             }
+            Vec3 spawnPos = posVec.add(0, 1.0, 0);
+            ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, maxAmountToPress, speed, color, Collections.emptyList());
+            arcanePressEntity.setPackMode(entityList, pos, gridSize);
+            world.addFreshEntity(arcanePressEntity);
+            return;
+        }
+
+        if (spellStats.hasBuff(AugmentExtract.INSTANCE)) {
+            // Gather fluids at spell impact and at shooter so "cast near tank" works even if ray hit is elsewhere
+            List<FluidSourceProvider> nearbyFluids = new ArrayList<>(
+                ArcaneFusionFluids.pickupFluidsAround(world, BlockPos.containing(posVec), 8));
+            if (shooter != null) {
+                BlockPos shooterBlock = shooter.blockPosition();
+                if (!shooterBlock.equals(BlockPos.containing(posVec))) {
+                    nearbyFluids.addAll(ArcaneFusionFluids.pickupFluidsAround(world, shooterBlock, 8));
+                }
+            }
+            if (RecipeHelpers.findCompactingMatch(entityList, nearbyFluids, posVec, world).isEmpty()) {
+                return;
+            }
+            LOGGER.info("[Press+Extract] entities={} fluids={} pos={} fluidsDetail={}", entityList != null ? entityList.size() : -1, nearbyFluids.size(), BlockPos.containing(posVec), nearbyFluids.stream().limit(5).map(f -> f.getFluidStack().getFluid().toString() + ":" + f.getMbAmount() + "mb").toList());
+            Vec3 spawnPos = posVec.add(0, 1.0, 0);
+            ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, maxAmountToPress, speed, color, Collections.emptyList());
+            arcanePressEntity.setCompactMode(entityList, nearbyFluids, posVec);
+            world.addFreshEntity(arcanePressEntity);
+            return;
         }
 
         List<ItemEntity> validPressableEntities = new ArrayList<>();
@@ -98,9 +121,17 @@ public class EffectPress extends AbstractItemResolveEffect {
 
             if (closest != null) {
                 ArcanePressEntity arcanePressEntity = new ArcanePressEntity(closest.position().add(0, 1.0f, 0), world, maxAmountToPress, speed, color, validPressableEntities);
+                arcanePressEntity.setPressMode();
                 world.addFreshEntity(arcanePressEntity);
             }
         }
+    }
+
+    private static int getPackGridSize(double amplifier) {
+        int value = (int) amplifier + 2;
+        value = Math.max(value, 1);
+        value = Math.min(value, 3);
+        return value;
     }
 
     @Override
@@ -112,13 +143,14 @@ public class EffectPress extends AbstractItemResolveEffect {
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
         map.put(AugmentAOE.INSTANCE, "Increases the amount of items processed");
-        map.put(AugmentExtract.INSTANCE, "Uses Compact recipes instead of Press when items can form one");
+        map.put(AugmentExtract.INSTANCE, "Uses Compact recipes (with nearby fluids) instead of Press when items can form one");
+        map.put(AugmentSensitive.INSTANCE, "Uses Packing (2x2/3x3 same-item crafting) instead of Press or Compact");
     }
 
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentAOE.INSTANCE, AugmentExtract.INSTANCE);
+        return augmentSetOf(AugmentAOE.INSTANCE, AugmentExtract.INSTANCE, AugmentSensitive.INSTANCE);
     }
 
     @Nonnull
