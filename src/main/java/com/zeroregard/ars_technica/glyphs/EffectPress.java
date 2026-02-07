@@ -2,10 +2,12 @@ package com.zeroregard.ars_technica.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
+import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtract;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.logistics.depot.DepotBlock;
 import com.zeroregard.ars_technica.entity.ArcanePressEntity;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
+import com.zeroregard.ars_technica.helpers.RecipeHelpers.CompactingMatch;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -64,23 +66,30 @@ public class EffectPress extends AbstractItemResolveEffect {
                                   @Nullable LivingEntity shooter,
                                   SpellStats spellStats,
                                   SpellContext spellContext, SpellResolver resolver) {
-        List<ItemEntity> validPressableEntities = new ArrayList<>();
-
-        for (ItemEntity itemEntity : entityList) {
-            ItemStack itemStack = itemEntity.getItem();
-
-            var pressingRecipe = RecipeHelpers.getPressingRecipeForItemStack(itemStack, world);
-
-            if (pressingRecipe.isPresent()) {
-                validPressableEntities.add(itemEntity);
-            }
-        }
-
         boolean hasFocus = SpellResolverHelpers.hasTransmutationFocus(resolver);
         int aoeBuff = (int)Math.round(spellStats.getAoeMultiplier());
         int maxAmountToPress = Math.round(4 * (1 + aoeBuff)) * (hasFocus ? 2 : 1);
         float speed = hasFocus ? DEFAULT_SPEED * 2.5f : DEFAULT_SPEED;
         var color = new Color(spellContext.getSpell().color().getColor());
+
+        if (spellStats.hasBuff(AugmentExtract.INSTANCE)) {
+            Optional<CompactingMatch> compactMatch = RecipeHelpers.findCompactingMatch(entityList, posVec, world);
+            if (compactMatch.isPresent()) {
+                Vec3 spawnPos = posVec.add(0, 1.0, 0);
+                ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, 1, speed, color, Collections.emptyList());
+                arcanePressEntity.setCompactJob(compactMatch.get());
+                world.addFreshEntity(arcanePressEntity);
+                return;
+            }
+        }
+
+        List<ItemEntity> validPressableEntities = new ArrayList<>();
+        for (ItemEntity itemEntity : entityList) {
+            ItemStack itemStack = itemEntity.getItem();
+            if (RecipeHelpers.getPressingRecipeForItemStack(itemStack, world).isPresent()) {
+                validPressableEntities.add(itemEntity);
+            }
+        }
 
         if (!validPressableEntities.isEmpty()) {
             ItemEntity closest = validPressableEntities.stream()
@@ -103,12 +112,13 @@ public class EffectPress extends AbstractItemResolveEffect {
     public void addAugmentDescriptions(Map<AbstractAugment, String> map) {
         super.addAugmentDescriptions(map);
         map.put(AugmentAOE.INSTANCE, "Increases the amount of items processed");
+        map.put(AugmentExtract.INSTANCE, "Uses Compact recipes instead of Press when items can form one");
     }
 
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentAOE.INSTANCE);
+        return augmentSetOf(AugmentAOE.INSTANCE, AugmentExtract.INSTANCE);
     }
 
     @Nonnull

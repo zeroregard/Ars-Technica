@@ -7,20 +7,22 @@ import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
 import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
+import com.simibubi.create.content.kinetics.mixer.CompactingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RecipeHelpers {
 
@@ -69,6 +71,83 @@ public class RecipeHelpers {
     public static Optional<RecipeHolder<PressingRecipe>> getPressingRecipeForItemStack(ItemStack input, Level world) {
         SingleRecipeInput wrapper = new SingleRecipeInput(input);
         return world.getRecipeManager().getRecipeFor(AllRecipeTypes.PRESSING.getType(), wrapper, world);
+    }
+
+    /**
+     * Result of matching a set of item entities to a Compacting recipe.
+     * Consumption list indicates which entity to shrink and by how much.
+     */
+    public record CompactingMatch(RecipeHolder<CompactingRecipe> recipe, List<ConsumptionEntry> consumption) {
+        public record ConsumptionEntry(ItemEntity entity, int count) {}
+    }
+
+    /**
+     * Finds the first Compacting recipe that can be satisfied by the given item entities (item-only recipes).
+     * Entities are considered in order of distance to posVec so closer items are preferred.
+     */
+    public static Optional<CompactingMatch> findCompactingMatch(List<ItemEntity> entities, Vec3 posVec, Level world) {
+        if (entities == null || entities.isEmpty()) {
+            return Optional.empty();
+        }
+        List<ItemEntity> sorted = new ArrayList<>(entities);
+        sorted.removeIf(e -> e == null || e.isRemoved() || e.getItem().isEmpty());
+        sorted.sort(Comparator.comparingDouble(e -> e.position().distanceToSqr(posVec)));
+
+        Map<ItemEntity, Integer> pool = new HashMap<>();
+        for (ItemEntity e : sorted) {
+            int count = e.getItem().getCount();
+            if (count > 0) {
+                pool.put(e, count);
+            }
+        }
+        if (pool.isEmpty()) {
+            return Optional.empty();
+        }
+
+        @SuppressWarnings("unchecked")
+        List<RecipeHolder<CompactingRecipe>> recipes = (List<RecipeHolder<CompactingRecipe>>) (List<?>) world.getRecipeManager().getAllRecipesFor(AllRecipeTypes.COMPACTING.getType());
+
+        for (RecipeHolder<CompactingRecipe> holder : recipes) {
+            CompactingRecipe recipe = holder.value();
+            if (!recipe.getFluidIngredients().isEmpty()) {
+                continue;
+            }
+            List<Ingredient> ingredients = recipe.getIngredients();
+            if (ingredients.isEmpty()) {
+                continue;
+            }
+            Map<ItemEntity, Integer> poolCopy = new HashMap<>(pool);
+            List<CompactingMatch.ConsumptionEntry> plan = new ArrayList<>();
+            boolean matched = true;
+            for (Ingredient ing : ingredients) {
+                ItemEntity found = null;
+                for (ItemEntity e : sorted) {
+                    if (poolCopy.getOrDefault(e, 0) <= 0) continue;
+                    if (!ing.test(e.getItem())) continue;
+                    found = e;
+                    break;
+                }
+                if (found == null) {
+                    matched = false;
+                    break;
+                }
+                poolCopy.merge(found, -1, Integer::sum);
+                plan.add(new CompactingMatch.ConsumptionEntry(found, 1));
+            }
+            if (!matched) {
+                continue;
+            }
+            // Merge plan: (entity, 1) + (entity, 1) -> (entity, 2)
+            Map<ItemEntity, Integer> merged = new HashMap<>();
+            for (CompactingMatch.ConsumptionEntry entry : plan) {
+                merged.merge(entry.entity(), entry.count(), Integer::sum);
+            }
+            List<CompactingMatch.ConsumptionEntry> consumption = merged.entrySet().stream()
+                    .map(e -> new CompactingMatch.ConsumptionEntry(e.getKey(), e.getValue()))
+                    .collect(Collectors.toList());
+            return Optional.of(new CompactingMatch(holder, consumption));
+        }
+        return Optional.empty();
     }
 
     public static Optional<AbstractCrushingRecipe> getCrushingRecipeForItemStack(ItemStack input, Level world) {

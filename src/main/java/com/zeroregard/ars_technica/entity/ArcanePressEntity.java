@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.entity;
 
 import com.simibubi.create.AllSoundEvents;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
+import com.zeroregard.ars_technica.helpers.RecipeHelpers.CompactingMatch;
 import com.zeroregard.ars_technica.registry.EntityRegistry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.EntityType;
@@ -19,6 +20,9 @@ import java.util.List;
 
 public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity {
 
+    private static final int TICKS_TO_PRESS_RATIO = 20;
+
+    private CompactingMatch compactJob;
 
     public ArcanePressEntity(Vec3 position, Level world, int maxAmountToPress, float speed, Color color, List<ItemEntity> pressableEntities) {
         super(EntityRegistry.ARCANE_PRESS_ENTITY.get(), position, world, maxAmountToPress, speed, color, pressableEntities);
@@ -26,6 +30,54 @@ public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity 
 
     public ArcanePressEntity(EntityType<ArcanePressEntity> entityType, Level world) {
         super(entityType, world);
+    }
+
+    public void setCompactJob(CompactingMatch match) {
+        this.compactJob = match;
+    }
+
+    @Override
+    public void tick() {
+        if (compactJob != null) {
+            if (world.isClientSide()) {
+                tickCount++;
+                return;
+            }
+            int ticksToPress = Math.max(1, Math.round(TICKS_TO_PRESS_RATIO / speed));
+            if (tickCount >= ticksToPress) {
+                executeCompact();
+                discard();
+                return;
+            }
+            tickCount++;
+            return;
+        }
+        super.tick();
+    }
+
+    private void executeCompact() {
+        if (compactJob == null || world.isClientSide()) return;
+        for (CompactingMatch.ConsumptionEntry entry : compactJob.consumption()) {
+            ItemEntity e = entry.entity();
+            if (e.isRemoved()) continue;
+            ItemStack stack = e.getItem();
+            stack.shrink(entry.count());
+            if (stack.isEmpty()) {
+                e.discard();
+            }
+        }
+        var recipe = compactJob.recipe().value();
+        List<ItemStack> results = recipe.rollResults(world.random);
+        ItemStack outputStack = results.isEmpty() ? ItemStack.EMPTY : results.get(0);
+        if (!outputStack.isEmpty()) {
+            Vec3 at = position();
+            ItemEntity outputEntity = new ItemEntity(world, at.x, at.y, at.z, outputStack.copy());
+            outputEntity.setDeltaMovement(Vec3.ZERO);
+            outputEntity.setPickUpDelay(10);
+            world.addFreshEntity(outputEntity);
+        }
+        AllSoundEvents.MECHANICAL_PRESS_ACTIVATION.playOnServer(world, blockPosition(), .5f, .75f + (speed / 16));
+        compactJob = null;
     }
 
     @Override
