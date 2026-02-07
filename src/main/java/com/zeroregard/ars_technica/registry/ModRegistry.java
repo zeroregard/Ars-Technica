@@ -38,7 +38,7 @@ public class ModRegistry {
     static {
         ARS_TECHNICA_TAB = TABS.register("general", () -> CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.ars_technica"))
-                .icon(() -> ItemRegistry.TRANSMUTATION_FOCUS.get().getDefaultInstance())
+                .icon(() -> ItemRegistry.TECHNOMANCER_HELMET.get().getDefaultInstance())
                 .displayItems((params, output) -> {
                     for (var entry : ItemRegistry.ITEMS.getEntries()) {
                         output.accept(entry.get().getDefaultInstance());
