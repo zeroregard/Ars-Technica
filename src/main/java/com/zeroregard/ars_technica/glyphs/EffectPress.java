@@ -4,8 +4,13 @@ import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtract;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentSensitive;
+import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.simibubi.create.content.logistics.depot.DepotBlock;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
+import com.zeroregard.ars_technica.entity.ArcaneCompactEntity;
+import com.zeroregard.ars_technica.entity.ArcanePackEntity;
 import com.zeroregard.ars_technica.entity.ArcanePressEntity;
+import com.zeroregard.ars_technica.glyphs.AugmentSuperheat;
 import com.zeroregard.ars_technica.entity.fusion.fluids.ArcaneFusionFluids;
 import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
@@ -25,7 +30,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.zeroregard.ars_technica.ArsTechnica.LOGGER;
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
 public class EffectPress extends AbstractItemResolveEffect {
@@ -52,7 +56,6 @@ public class EffectPress extends AbstractItemResolveEffect {
                 
                 Vec3 spawnPos = Vec3.atCenterOf(blockPos).add(0, 1.0, 0);
                 ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, maxAmountToPress, speed, color, Collections.emptyList());
-                arcanePressEntity.setPressMode();
                 arcanePressEntity.bindDepot(blockPos);
                 world.addFreshEntity(arcanePressEntity);
                 return;
@@ -79,9 +82,8 @@ public class EffectPress extends AbstractItemResolveEffect {
                 return;
             }
             Vec3 spawnPos = posVec.add(0, 1.0, 0);
-            ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, maxAmountToPress, speed, color, Collections.emptyList());
-            arcanePressEntity.setPackMode(entityList, pos, gridSize);
-            world.addFreshEntity(arcanePressEntity);
+            ArcanePackEntity packEntity = new ArcanePackEntity(spawnPos, world, maxAmountToPress, speed, color, entityList, pos, gridSize);
+            world.addFreshEntity(packEntity);
             return;
         }
 
@@ -95,14 +97,13 @@ public class EffectPress extends AbstractItemResolveEffect {
                     nearbyFluids.addAll(ArcaneFusionFluids.pickupFluidsAround(world, shooterBlock, 8));
                 }
             }
-            if (RecipeHelpers.findCompactingMatch(entityList, nearbyFluids, posVec, world).isEmpty()) {
+            HeatCondition suppliedHeat = getSuppliedHeatForCompact(spellStats, spellContext);
+            if (RecipeHelpers.findCompactingMatch(entityList, nearbyFluids, posVec, world, suppliedHeat).isEmpty()) {
                 return;
             }
-            LOGGER.info("[Press+Extract] entities={} fluids={} pos={} fluidsDetail={}", entityList != null ? entityList.size() : -1, nearbyFluids.size(), BlockPos.containing(posVec), nearbyFluids.stream().limit(5).map(f -> f.getFluidStack().getFluid().toString() + ":" + f.getMbAmount() + "mb").toList());
             Vec3 spawnPos = posVec.add(0, 1.0, 0);
-            ArcanePressEntity arcanePressEntity = new ArcanePressEntity(spawnPos, world, maxAmountToPress, speed, color, Collections.emptyList());
-            arcanePressEntity.setCompactMode(entityList, nearbyFluids, posVec);
-            world.addFreshEntity(arcanePressEntity);
+            ArcaneCompactEntity compactEntity = new ArcaneCompactEntity(spawnPos, world, maxAmountToPress, speed, color, entityList, nearbyFluids, posVec, suppliedHeat);
+            world.addFreshEntity(compactEntity);
             return;
         }
 
@@ -121,10 +122,23 @@ public class EffectPress extends AbstractItemResolveEffect {
 
             if (closest != null) {
                 ArcanePressEntity arcanePressEntity = new ArcanePressEntity(closest.position().add(0, 1.0f, 0), world, maxAmountToPress, speed, color, validPressableEntities);
-                arcanePressEntity.setPressMode();
                 world.addFreshEntity(arcanePressEntity);
             }
         }
+    }
+
+    /** When using Extract (Compact): Superheat augment → SUPERHEATED; Smelt as next effect in spell (like Fuse) → HEATED; else NONE. */
+    private static HeatCondition getSuppliedHeatForCompact(SpellStats spellStats, SpellContext spellContext) {
+        if (spellStats.hasBuff(AugmentSuperheat.INSTANCE)) return HeatCondition.SUPERHEATED;
+        SpellContext child = spellContext.makeChildContext();
+        while (child.hasNextPart()) {
+            AbstractSpellPart next = child.nextPart();
+            if (next instanceof AbstractEffect) {
+                if (next == EffectSmelt.INSTANCE) return HeatCondition.HEATED;
+                break;
+            }
+        }
+        return HeatCondition.NONE;
     }
 
     private static int getPackGridSize(double amplifier) {
@@ -145,12 +159,13 @@ public class EffectPress extends AbstractItemResolveEffect {
         map.put(AugmentAOE.INSTANCE, "Increases the amount of items processed");
         map.put(AugmentExtract.INSTANCE, "Uses Compact recipes (with nearby fluids) instead of Press when items can form one");
         map.put(AugmentSensitive.INSTANCE, "Uses Packing (2x2/3x3 same-item crafting) instead of Press or Compact");
+        map.put(AugmentSuperheat.INSTANCE, "With Extract: allows super-heated Compact recipes");
     }
 
     @Nonnull
     @Override
     public Set<AbstractAugment> getCompatibleAugments() {
-        return augmentSetOf(AugmentAOE.INSTANCE, AugmentExtract.INSTANCE, AugmentSensitive.INSTANCE);
+        return augmentSetOf(AugmentAOE.INSTANCE, AugmentExtract.INSTANCE, AugmentSensitive.INSTANCE, AugmentSuperheat.INSTANCE);
     }
 
     @Nonnull

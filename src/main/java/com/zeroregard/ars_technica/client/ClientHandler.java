@@ -88,6 +88,8 @@ public class ClientHandler {
         event.registerEntityRenderer(EntityRegistry.ARCANE_POLISH_ENTITY.get(), ArcanePolishEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_HAMMER_ENTITY.get(), ArcaneHammerEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_PRESS_ENTITY.get(), ArcanePressEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.ARCANE_COMPACT_ENTITY.get(), ArcanePressEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegistry.ARCANE_PACK_ENTITY.get(), ArcanePressEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_FUSION_ENTITY.get(), ArcaneFusionEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ARCANE_WHIRL_ENTITY.get(), ArcaneWhirlEntityRenderer::new);
         event.registerEntityRenderer(EntityRegistry.ITEM_PROJECTILE_ENTITY.get(), ItemProjectileRenderer::new);
