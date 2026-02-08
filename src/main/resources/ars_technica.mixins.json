@@ -14,11 +14,15 @@
         "PedestalMixin",
         "EffectCrushMixin",
         "ArcaneWrenchItemStackMixin",
-        "ArcaneWrenchEnchantingApparatusRecipeMixin"
+        "ArcaneWrenchEnchantingApparatusRecipeMixin",
+        "GlyphItemMixin"
     ],
     "minVersion": "0.8",
     "client": [
         "CrushingCategoryMixin",
-        "ArcaneWrenchPartialItemModelRendererMixin"
+        "ArcaneWrenchPartialItemModelRendererMixin",
+        "CraftingButtonMixin",
+        "GlyphButtonMixin",
+        "GuiSpellBookMixin"
     ]
 }

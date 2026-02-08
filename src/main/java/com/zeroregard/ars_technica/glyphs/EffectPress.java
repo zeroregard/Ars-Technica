@@ -10,12 +10,16 @@ import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.zeroregard.ars_technica.entity.ArcaneCompactEntity;
 import com.zeroregard.ars_technica.entity.ArcanePackEntity;
 import com.zeroregard.ars_technica.entity.ArcanePressEntity;
-import com.zeroregard.ars_technica.glyphs.AugmentSuperheat;
 import com.zeroregard.ars_technica.entity.fusion.fluids.ArcaneFusionFluids;
 import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
+import com.zeroregard.ars_technica.api.IPossibleProcessingModes;
+import com.zeroregard.ars_technica.api.IResolvedProcessingMode;
+import com.zeroregard.ars_technica.saucelib.api.compound.ISubsequentEffectProvider;
+import com.zeroregard.ars_technica.saucelib.api.compound.SubsequentContextHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -32,9 +36,12 @@ import java.util.*;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
-public class EffectPress extends AbstractItemResolveEffect {
+public class EffectPress extends AbstractItemResolveEffect implements ISubsequentEffectProvider, IPossibleProcessingModes, IResolvedProcessingMode {
     public static EffectPress INSTANCE = new EffectPress(prefix("glyph_press"), "Press");
     private static float DEFAULT_SPEED = 4.0f;
+
+    /** With Extract: Smelt as next effect enables heated Compact recipes. */
+    private static final ResourceLocation[] SUBSEQUENT_GLYPHS = new ResourceLocation[]{ EffectSmelt.INSTANCE.getRegistryName() };
 
     private EffectPress(ResourceLocation resourceLocation, String description) {
         super(resourceLocation, description);
@@ -146,6 +153,61 @@ public class EffectPress extends AbstractItemResolveEffect {
         value = Math.max(value, 1);
         value = Math.min(value, 3);
         return value;
+    }
+
+    /** Derives the active Press mode from the cluster (effect at 0 plus following augments/effects). */
+    public static PressMode getPressModeFromCluster(List<AbstractSpellPart> cluster) {
+        if (cluster == null || cluster.isEmpty()) return PressMode.PRESSING;
+        boolean hasSensitive = cluster.stream().anyMatch(AugmentSensitive.INSTANCE::equals);
+        if (hasSensitive) return PressMode.PACKING;
+        boolean hasExtract = cluster.stream().anyMatch(AugmentExtract.INSTANCE::equals);
+        if (!hasExtract) return PressMode.PRESSING;
+        boolean hasSuperheat = cluster.stream().anyMatch(AugmentSuperheat.INSTANCE::equals);
+        if (hasSuperheat) return PressMode.SUPERHEATED_COMPACTING;
+        for (int i = 1; i < cluster.size(); i++) {
+            AbstractSpellPart part = cluster.get(i);
+            if (part instanceof AbstractEffect) {
+                return part == EffectSmelt.INSTANCE ? PressMode.HEATED_COMPACTING : PressMode.COMPACTING;
+            }
+        }
+        return PressMode.COMPACTING;
+    }
+
+    /** Only base recipe types for the "(Create Processing: ...)" shift tooltip: Press, Compact, Pack. */
+    @Override
+    public List<Component> getPossibleProcessingTypesTooltip() {
+        return List.of(
+            Component.literal("Press"),
+            Component.literal("Compact"),
+            Component.literal("Pack")
+        );
+    }
+
+    @Override
+    public Component getActiveProcessingTypeTooltip(List<AbstractSpellPart> spell, int thisGlyphIndex) {
+        List<AbstractSpellPart> cluster = SubsequentContextHelper.getCluster(spell, thisGlyphIndex);
+        return Component.literal(getPressModeFromCluster(cluster).getRecipeDisplayName());
+    }
+
+    @Override
+    public ResourceLocation[] getSubsequentEffectGlyphs() {
+        return SUBSEQUENT_GLYPHS;
+    }
+
+    @Override
+    public boolean isPartInCluster(AbstractSpellPart part) {
+        if (part == null) return false;
+        if (part instanceof AbstractAugment augment) {
+            return getCompatibleAugments() != null && getCompatibleAugments().contains(augment);
+        }
+        if (part instanceof AbstractEffect nextEffect) {
+            ResourceLocation id = nextEffect.getRegistryName();
+            if (SUBSEQUENT_GLYPHS == null || id == null) return false;
+            for (ResourceLocation sid : SUBSEQUENT_GLYPHS) {
+                if (sid != null && sid.equals(id)) return true;
+            }
+        }
+        return false;
     }
 
     @Override
