@@ -66,7 +66,8 @@ public final class GlyphDocTooltipHelper {
             }
         }
         lines.add(spellPart.getBookDescLang());
-        ProcessingTooltipHelper.addProcessingTooltipLines(spellPart, lines, net.minecraft.client.gui.screens.Screen.hasShiftDown(), false, List.of(), -1);
+        // In the tome docs always show the Create Processing line (Press, Fuse, Whirl); no need for shift.
+        ProcessingTooltipHelper.addProcessingTooltipLines(spellPart, lines, true, false, List.of(), -1);
         return lines;
     }
 }

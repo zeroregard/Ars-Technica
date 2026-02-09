@@ -50,7 +50,7 @@ public final class ProcessingTooltipHelper {
                 String joined = modeLines.stream()
                         .map(Component::getString)
                         .collect(Collectors.joining(", "));
-                lines.add(Component.literal("(Create Processing: " + joined + ")")
+                lines.add(Component.literal("[Create Processing: " + joined + "]")
                         .withStyle(ChatFormatting.GREEN));
             }
         }
