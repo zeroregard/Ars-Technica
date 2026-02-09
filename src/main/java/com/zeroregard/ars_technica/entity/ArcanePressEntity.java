@@ -9,16 +9,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.Color;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity {
-
+public class ArcanePressEntity extends AbstractDensificationEntity {
 
     public ArcanePressEntity(Vec3 position, Level world, int maxAmountToPress, float speed, Color color, List<ItemEntity> pressableEntities) {
         super(EntityRegistry.ARCANE_PRESS_ENTITY.get(), position, world, maxAmountToPress, speed, color, pressableEntities);
@@ -73,26 +68,6 @@ public class ArcanePressEntity extends ArcaneProcessEntity implements GeoEntity 
 
     @Override
     protected boolean canProcessStack(ItemStack stack) {
-        var pressingRecipe = RecipeHelpers.getPressingRecipeForItemStack(stack, world);
-        return pressingRecipe.isPresent();
+        return RecipeHelpers.getPressingRecipeForItemStack(stack, world).isPresent();
     }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "pressController", 0, this::pressAnimationPredicate));
-    }
-
-    AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return factory;
-    }
-
-    private PlayState pressAnimationPredicate(AnimationState<?> event) {
-        event.getController().setAnimation(RawAnimation.begin().thenPlay("press"));
-        event.getController().setAnimationSpeed(speed);
-        return PlayState.CONTINUE;
-    }
-
 }

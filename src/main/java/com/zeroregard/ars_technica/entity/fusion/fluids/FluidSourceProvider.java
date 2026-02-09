@@ -31,7 +31,12 @@ public class FluidSourceProvider {
         this.tankSource = null;
     }
 
+    /** Returns the current fluid for recipe matching. For tanks this reads from the handler so it stays correct across ticks. */
     public FluidStack getFluidStack() {
+        if (tankSource != null) {
+            FluidStack current = tankSource.getFluidInTank(0);
+            return current.isEmpty() ? fluidStack : current;
+        }
         return fluidStack;
     }
 

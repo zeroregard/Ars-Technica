@@ -2,6 +2,7 @@ package com.zeroregard.ars_technica.client.gui.documentation;
 
 import com.hollingsworth.arsnouveau.api.spell.AbstractSpellPart;
 import com.hollingsworth.arsnouveau.api.spell.SpellSchool;
+import com.zeroregard.ars_technica.api.ProcessingTooltipHelper;
 import com.hollingsworth.arsnouveau.common.capability.IPlayerCap;
 import com.hollingsworth.arsnouveau.common.items.Glyph;
 import com.hollingsworth.arsnouveau.setup.config.Config;
@@ -65,6 +66,8 @@ public final class GlyphDocTooltipHelper {
             }
         }
         lines.add(spellPart.getBookDescLang());
+        // In the tome docs always show the Create Processing line (Press, Fuse, Whirl); no need for shift.
+        ProcessingTooltipHelper.addProcessingTooltipLines(spellPart, lines, true, false, List.of(), -1);
         return lines;
     }
 }

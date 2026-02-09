@@ -12,13 +12,13 @@
       "projectName": "Ars-Technica",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\clientRunProgramArgs.txt"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/clientRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\clientRunVmArgs.txt",
-        "-Dfml.modFolders\u003dars_technica%%C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\bin\\main"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dars_technica%%/Users/mathiasprivate/Documents/Mods/Ars-Technica/bin/main"
       ],
-      "cwd": "${workspaceFolder}\\run",
+      "cwd": "${workspaceFolder}/run",
       "env": {},
       "console": "internalConsole",
       "shortenCommandLine": "none"
@@ -34,13 +34,13 @@
       "projectName": "Ars-Technica",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\dataRunProgramArgs.txt"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/dataRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\dataRunVmArgs.txt",
-        "-Dfml.modFolders\u003dars_technica%%C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\bin\\main"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/dataRunVmArgs.txt",
+        "-Dfml.modFolders\u003dars_technica%%/Users/mathiasprivate/Documents/Mods/Ars-Technica/bin/main"
       ],
-      "cwd": "${workspaceFolder}\\run",
+      "cwd": "${workspaceFolder}/run",
       "env": {},
       "console": "internalConsole",
       "shortenCommandLine": "none"
@@ -56,13 +56,13 @@
       "projectName": "Ars-Technica",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\gameTestServerRunProgramArgs.txt"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/gameTestServerRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\gameTestServerRunVmArgs.txt",
-        "-Dfml.modFolders\u003dars_technica%%C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\bin\\main"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/gameTestServerRunVmArgs.txt",
+        "-Dfml.modFolders\u003dars_technica%%/Users/mathiasprivate/Documents/Mods/Ars-Technica/bin/main"
       ],
-      "cwd": "${workspaceFolder}\\run",
+      "cwd": "${workspaceFolder}/run",
       "env": {},
       "console": "internalConsole",
       "shortenCommandLine": "none"
@@ -78,13 +78,13 @@
       "projectName": "Ars-Technica",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\serverRunProgramArgs.txt"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/serverRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\build\\moddev\\serverRunVmArgs.txt",
-        "-Dfml.modFolders\u003dars_technica%%C:\\Users\\mathi\\Documents\\Projects\\Mods\\Ars-Technica\\bin\\main"
+        "@/Users/mathiasprivate/Documents/Mods/Ars-Technica/build/moddev/serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dars_technica%%/Users/mathiasprivate/Documents/Mods/Ars-Technica/bin/main"
       ],
-      "cwd": "${workspaceFolder}\\run",
+      "cwd": "${workspaceFolder}/run",
       "env": {},
       "console": "internalConsole",
       "shortenCommandLine": "none"
