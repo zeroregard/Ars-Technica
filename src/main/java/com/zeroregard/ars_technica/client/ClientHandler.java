@@ -29,11 +29,6 @@ import net.neoforged.neoforge.client.event.*;
 public class ClientHandler {
 
     @SubscribeEvent
-    public void bindRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-
-    }
-
-    @SubscribeEvent
     public void initItemColors(final RegisterColorHandlersEvent.Item event) {
 
         event.register((stack, color) -> color > 0 ? -1 : colorFromArmor(stack),

@@ -22,7 +22,7 @@ public final class ProcessingTooltipHelper {
      * Appends processing tooltip lines when the part implements {@link ISubsequentEffectProvider}.
      * When {@code partIsInSpellStrip}, adds one line from {@link ISubsequentEffectProvider#getSpellContextAdditionalTooltip}
      * (e.g. "[Create Recipe: Press]") in green. Otherwise, if {@code shiftDown}, adds one line from
-     * {@link ISubsequentEffectProvider#getDefaultAdditionalTooltip} (e.g. "(Create Processing: Press, Compact, Pack)") in green.
+     * {@link ISubsequentEffectProvider#getDefaultAdditionalTooltip} (e.g. "[Create Processing: Press, Compact, Pack]") in green.
      */
     public static void addProcessingTooltipLines(
             AbstractSpellPart part,
