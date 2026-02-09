@@ -14,8 +14,6 @@ import com.zeroregard.ars_technica.entity.fusion.fluids.ArcaneFusionFluids;
 import com.zeroregard.ars_technica.entity.fusion.fluids.FluidSourceProvider;
 import com.zeroregard.ars_technica.helpers.RecipeHelpers;
 import com.zeroregard.ars_technica.helpers.SpellResolverHelpers;
-import com.zeroregard.ars_technica.api.IPossibleProcessingModes;
-import com.zeroregard.ars_technica.api.IResolvedProcessingMode;
 import com.zeroregard.ars_technica.saucelib.api.compound.ISubsequentEffectProvider;
 import com.zeroregard.ars_technica.saucelib.api.compound.SubsequentContextHelper;
 import net.minecraft.core.BlockPos;
@@ -36,7 +34,7 @@ import java.util.*;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
-public class EffectPress extends AbstractItemResolveEffect implements ISubsequentEffectProvider, IPossibleProcessingModes, IResolvedProcessingMode {
+public class EffectPress extends AbstractItemResolveEffect implements ISubsequentEffectProvider {
     public static EffectPress INSTANCE = new EffectPress(prefix("glyph_press"), "Press");
     private static float DEFAULT_SPEED = 4.0f;
 
@@ -175,7 +173,7 @@ public class EffectPress extends AbstractItemResolveEffect implements ISubsequen
 
     /** Only base recipe types for the "(Create Processing: ...)" shift tooltip: Press, Compact, Pack. */
     @Override
-    public List<Component> getPossibleProcessingTypesTooltip() {
+    public List<Component> getDefaultAdditionalTooltip() {
         return List.of(
             Component.literal("Press"),
             Component.literal("Compact"),
@@ -184,7 +182,7 @@ public class EffectPress extends AbstractItemResolveEffect implements ISubsequen
     }
 
     @Override
-    public Component getActiveProcessingTypeTooltip(List<AbstractSpellPart> spell, int thisGlyphIndex) {
+    public Component getSpellContextAdditionalTooltip(List<AbstractSpellPart> spell, int thisGlyphIndex) {
         List<AbstractSpellPart> cluster = SubsequentContextHelper.getCluster(spell, thisGlyphIndex);
         return Component.literal(getPressModeFromCluster(cluster).getRecipeDisplayName());
     }
