@@ -41,6 +41,16 @@ public class EntityRegistry {
             EntityType.Builder.<ArcanePressEntity>of(ArcanePressEntity::new, MobCategory.MISC)
                     .sized(1.0F, 1.0F));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<ArcaneCompactEntity>> ARCANE_COMPACT_ENTITY = registerEntity(
+            "arcane_compact_entity",
+            EntityType.Builder.<ArcaneCompactEntity>of(ArcaneCompactEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ArcanePackEntity>> ARCANE_PACK_ENTITY = registerEntity(
+            "arcane_pack_entity",
+            EntityType.Builder.<ArcanePackEntity>of(ArcanePackEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F));
+
     public static final DeferredHolder<EntityType<?>, EntityType<ArcaneFusionEntity>> ARCANE_FUSION_ENTITY = registerEntity(
             "arcane_fusion_entity",
             EntityType.Builder.<ArcaneFusionEntity>of(ArcaneFusionEntity::new, MobCategory.MISC)

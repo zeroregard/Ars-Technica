@@ -1,24 +1,28 @@
 {
-    "required": true,
-    "package": "com.zeroregard.ars_technica.mixin",
-    "compatibilityLevel": "JAVA_21",
-    "mixins": [
-        "SchematicannonMixin",
-        "RuneBlockMixin",
-        "RuneTileMixin",
-        "RelayBlockMixin",
-        "AnimatedMagicArmorMixin",
-        "BacktankUtilMixin",
-        "TurretMixin",
-        "ContainmentJarMixin",
-        "PedestalMixin",
-        "EffectCrushMixin",
-        "ArcaneWrenchItemStackMixin",
-        "ArcaneWrenchEnchantingApparatusRecipeMixin"
-    ],
-    "minVersion": "0.8",
-    "client": [
-        "CrushingCategoryMixin",
-        "ArcaneWrenchPartialItemModelRendererMixin"
-    ]
+  "required": true,
+  "package": "com.zeroregard.ars_technica.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "mixins": [
+    "SchematicannonMixin",
+    "RuneBlockMixin",
+    "RuneTileMixin",
+    "RelayBlockMixin",
+    "AnimatedMagicArmorMixin",
+    "BacktankUtilMixin",
+    "TurretMixin",
+    "ContainmentJarMixin",
+    "PedestalMixin",
+    "EffectCrushMixin",
+    "ArcaneWrenchItemStackMixin",
+    "ArcaneWrenchEnchantingApparatusRecipeMixin"
+  ],
+  "client": [
+    "CrushingCategoryMixin",
+    "ArcaneWrenchPartialItemModelRendererMixin",
+    "CraftingButtonMixin",
+    "GlyphButtonMixin",
+    "GlyphItemMixin",
+    "GuiSpellBookMixin"
+  ]
 }

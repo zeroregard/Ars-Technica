@@ -1,13 +1,13 @@
 package com.zeroregard.ars_technica.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.zeroregard.ars_technica.entity.ArcanePressEntity;
+import com.zeroregard.ars_technica.entity.AbstractDensificationEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import org.joml.Quaternionf;
 
-public class ArcanePressEntityRenderer extends ArcaneEntityRendererBase<ArcanePressEntity> {
+public class ArcanePressEntityRenderer extends ArcaneEntityRendererBase<AbstractDensificationEntity> {
     private static float accumulatedTime = 0.0f;
 
     public ArcanePressEntityRenderer(EntityRendererProvider.Context context) {
@@ -15,7 +15,7 @@ public class ArcanePressEntityRenderer extends ArcaneEntityRendererBase<ArcanePr
     }
 
     @Override
-    public void render(ArcanePressEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
+    public void render(AbstractDensificationEntity entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         accumulatedTime += Minecraft.getInstance().getFrameTimeNs() / 1000000000f;
         float elapsedTime = (accumulatedTime);
         float angle = elapsedTime * (8 * (float)Math.PI / 10);

@@ -12,7 +12,9 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.logistics.depot.DepotBlock;
 import com.zeroregard.ars_technica.entity.ArcaneWhirlEntity;
+import com.zeroregard.ars_technica.saucelib.api.compound.ISubsequentEffectProvider;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,13 +27,20 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
+public class EffectWhirl extends AbstractEffect implements ISubsequentEffectProvider {
 
-public class EffectWhirl extends AbstractEffect {
+    private static final ResourceLocation[] SUBSEQUENT = new ResourceLocation[]{
+            EffectConjureWater.INSTANCE.getRegistryName(),
+            EffectFlare.INSTANCE.getRegistryName(),
+            EffectSmelt.INSTANCE.getRegistryName(),
+            EffectHex.INSTANCE.getRegistryName()
+    };
     public static EffectWhirl INSTANCE = new EffectWhirl(prefix("glyph_whirl"), "Whirl");
     public final float DEFAULT_RADIUS  = 1.5f;
     public final int DEFAULT_DURATION = 360;
@@ -161,6 +170,42 @@ public class EffectWhirl extends AbstractEffect {
     @Override
     public SpellTier defaultTier() {
         return SpellTier.TWO;
+    }
+
+    @Override
+    public ResourceLocation[] getSubsequentEffectGlyphs() {
+        return SUBSEQUENT;
+    }
+
+    @Override
+    public boolean isPartInCluster(AbstractSpellPart part) {
+        return part == EffectConjureWater.INSTANCE || part == EffectFlare.INSTANCE
+                || part == EffectSmelt.INSTANCE || part == EffectHex.INSTANCE;
+    }
+
+    @Override
+    public List<Component> getDefaultAdditionalTooltip() {
+        return List.of(
+                Component.literal("Washing"),
+                Component.literal("Smoking"),
+                Component.literal("Smelting"),
+                Component.literal("Haunting"));
+    }
+
+    @Override
+    public Component getSpellContextAdditionalTooltip(List<AbstractSpellPart> spell, int thisGlyphIndex) {
+        for (int i = thisGlyphIndex + 1; i < spell.size(); i++) {
+            AbstractSpellPart next = spell.get(i);
+            if (next == null) continue;
+            if (next instanceof AbstractEffect) {
+                if (next == EffectConjureWater.INSTANCE) return Component.literal("Washing");
+                if (next == EffectFlare.INSTANCE) return Component.literal("Smoking");
+                if (next == EffectSmelt.INSTANCE) return Component.literal("Smelting");
+                if (next == EffectHex.INSTANCE) return Component.literal("Haunting");
+                break;
+            }
+        }
+        return null;
     }
 }
 

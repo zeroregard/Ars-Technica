@@ -2,9 +2,10 @@ package com.zeroregard.ars_technica.glyphs;
 
 import com.hollingsworth.arsnouveau.api.spell.*;
 import com.hollingsworth.arsnouveau.common.spell.augment.AugmentAOE;
-import com.hollingsworth.arsnouveau.common.spell.augment.AugmentExtendTime;
 import com.hollingsworth.arsnouveau.common.spell.effect.EffectSmelt;
 import com.zeroregard.ars_technica.entity.fusion.ArcaneFusionEntity;
+import com.zeroregard.ars_technica.saucelib.api.compound.ISubsequentEffectProvider;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,12 +18,15 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.util.Color;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static com.zeroregard.ars_technica.ArsTechnica.prefix;
 
-public class EffectFuse extends AbstractEffect {
+public class EffectFuse extends AbstractEffect implements ISubsequentEffectProvider {
+
+    private static final ResourceLocation[] SUBSEQUENT = new ResourceLocation[]{ EffectSmelt.INSTANCE.getRegistryName() };
     public static EffectFuse INSTANCE = new EffectFuse(prefix("glyph_fuse"), "Fuse");
 
     private EffectFuse(ResourceLocation resourceLocation, String description) {
@@ -105,5 +109,37 @@ public class EffectFuse extends AbstractEffect {
     @Override
     public SpellTier defaultTier() {
         return SpellTier.ONE;
+    }
+
+    @Override
+    public ResourceLocation[] getSubsequentEffectGlyphs() {
+        return SUBSEQUENT;
+    }
+
+    @Override
+    public boolean isPartInCluster(AbstractSpellPart part) {
+        return part == AugmentSuperheat.INSTANCE || part == EffectSmelt.INSTANCE;
+    }
+
+    @Override
+    public List<Component> getDefaultAdditionalTooltip() {
+        return List.of(
+                Component.literal("Mixing"),
+                Component.literal("Heated Mixing"),
+                Component.literal("Superheated Mixing"));
+    }
+
+    @Override
+    public Component getSpellContextAdditionalTooltip(List<AbstractSpellPart> spell, int thisGlyphIndex) {
+        for (int i = thisGlyphIndex + 1; i < spell.size(); i++) {
+            AbstractSpellPart part = spell.get(i);
+            if (part == null) continue;
+            if (part instanceof AbstractAugment && part == AugmentSuperheat.INSTANCE)
+                return Component.literal("Superheated Mixing");
+            if (part instanceof AbstractEffect) {
+                return part == EffectSmelt.INSTANCE ? Component.literal("Heated Mixing") : Component.literal("Mixing");
+            }
+        }
+        return Component.literal("Mixing");
     }
 }

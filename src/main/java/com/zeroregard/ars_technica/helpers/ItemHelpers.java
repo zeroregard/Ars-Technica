@@ -42,4 +42,23 @@ public class ItemHelpers {
       oldEntity.discard();
     }
   }
+
+  /**
+   * Subtracts items in place from the given entities (shrink stacks, discard when empty).
+   * Does not create new entities for remainders, so the same list can be reused for multiple
+   * operations (e.g. ArcanePressEntity pack mode running multiple cycles).
+   */
+  public static void subtractItemsFromItemEntitiesInPlace(List<ItemEntity> itemEntities, int totalItemsToRemove, Item item) {
+    for (ItemEntity entity : itemEntities) {
+      if (totalItemsToRemove <= 0) break;
+      ItemStack stack = entity.getItem();
+      if (stack.getItem() != item) continue;
+      int countToRemove = Math.min(stack.getCount(), totalItemsToRemove);
+      stack.shrink(countToRemove);
+      totalItemsToRemove -= countToRemove;
+      if (stack.isEmpty()) {
+        entity.discard();
+      }
+    }
+  }
 }
