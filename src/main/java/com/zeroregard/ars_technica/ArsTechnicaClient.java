@@ -33,7 +33,7 @@ public class ArsTechnicaClient {
         modEventBus.addListener(ArsTechnicaClient::registerAdditionalModels);
     }
 
-    /** Register Arcane Wrench item partial models so they are loaded and PartialModel.get() works. Side-loaded models must use the 'standalone' variant. */
+    /** Register item partial models so they are loaded and PartialModel.get() works (e.g. Arcane Wrench). Block partials (arcane_pipe, arcane_shaft_half) are loaded by the partial model system—do not register them here. */
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
         event.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(ArsTechnica.MODID, "item/runic_spanner"), "standalone"));
         event.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(ArsTechnica.MODID, "item/arcane_gear"), "standalone"));

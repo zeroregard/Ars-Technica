@@ -1,7 +1,6 @@
 package com.zeroregard.ars_technica.client.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import com.simibubi.create.content.schematics.cannon.SchematicannonBlockEntity;
 import com.simibubi.create.content.schematics.cannon.SchematicannonRenderer;
 import com.zeroregard.ars_technica.api.ITechnomancerAware;
@@ -21,6 +20,7 @@ import net.minecraft.world.phys.Vec3;
 public class ArcaneSchematiccannonRenderer extends SchematicannonRenderer {
 
     private static float accumulatedTime = 0.0f;
+
     public ArcaneSchematiccannonRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
@@ -28,11 +28,25 @@ public class ArcaneSchematiccannonRenderer extends SchematicannonRenderer {
     @Override
     protected void renderSafe(SchematicannonBlockEntity blockEntity, float partialTicks, PoseStack ms,
                               MultiBufferSource buffer, int light, int overlay) {
-        super.renderSafe(blockEntity, partialTicks, ms, buffer, light, overlay);
-        
-        if (blockEntity instanceof ITechnomancerAware technomancerAware && technomancerAware.isTechnomancerNearby()) {
-            accumulatedTime += Minecraft.getInstance().getFrameTimeNs() / 1000000000f;
+        try {
+            super.renderSafe(blockEntity, partialTicks, ms, buffer, light, overlay);
+        } catch (Exception e) {
+            // Avoid crashes from other mods (e.g. null lightReader in block colors) or unloaded models.
+        }
+
+        if (blockEntity instanceof ITechnomancerAware technomancerAware && technomancerAware.isTechnomancerNearby()
+                && isArcanePipeModelLoaded()) {
+            accumulatedTime += Minecraft.getInstance().getFrameTimeNs() / 1_000_000_000f;
             renderCannonModel(blockEntity, partialTicks, ms, buffer, light, overlay);
+        }
+    }
+
+    /** True once the arcane pipe partial model is available (loaded by the partial model system, like arcane_shaft_half). */
+    private static boolean isArcanePipeModelLoaded() {
+        try {
+            return AllPartialModels.ARCANE_PIPE.get() != null;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -51,28 +65,28 @@ public class ArcaneSchematiccannonRenderer extends SchematicannonRenderer {
         double distSq = camPos.distanceToSqr(Vec3.atCenterOf(pos));
         double distance = Math.sqrt(distSq);
         float alpha = 1.0f;
-
         if (distance > 4) {
             alpha = (float) Mth.clamp(1.0 - ((distance - 4) / 4.0), 0.0, 1.0);
         }
         int alphaInt = Math.round(255 * alpha);
 
-        ms.pushPose();
-
-
-        var translateX = .5f + 0.005 * Math.sin(accumulatedTime * 30);
-        var translateZ = .5f + 0.005 * Math.cos(accumulatedTime * 30);
-        SuperByteBuffer pipe = CachedBuffers.partial(AllPartialModels.ARCANE_PIPE, state);
-        pipe.translate(.5f, 15 / 16f, .5f);
-        pipe.scale(1.05f);
-        pipe.rotate((float) ((yaw + 90) / 180 * Math.PI), Direction.UP);
-        pipe.rotate((float) (pitch / 180 * Math.PI), Direction.SOUTH);
-        pipe.translate(-translateX, -15 / 16f, -translateZ);
-        pipe.translate(0, -recoil / 100, 0);
-        pipe.light(LightTexture.FULL_BRIGHT)
-                .color(255, 255, 255, alphaInt)
-                .renderInto(ms,  buffer.getBuffer(RenderType.translucentMovingBlock()));
-        ms.popPose();
+        try {
+            SuperByteBuffer pipe = CachedBuffers.partial(AllPartialModels.ARCANE_PIPE, state);
+            ms.pushPose();
+            float translateX = .5f + 0.005f * (float) Math.sin(accumulatedTime * 30);
+            float translateZ = .5f + 0.005f * (float) Math.cos(accumulatedTime * 30);
+            pipe.translate(.5f, 15 / 16f, .5f);
+            pipe.scale(1.05f);
+            pipe.rotate((float) ((yaw + 90) / 180 * Math.PI), Direction.UP);
+            pipe.rotate((float) (pitch / 180 * Math.PI), Direction.SOUTH);
+            pipe.translate(-translateX, -15 / 16f, -translateZ);
+            pipe.translate(0, -recoil / 100, 0);
+            pipe.light(LightTexture.FULL_BRIGHT)
+                    .color(255, 255, 255, alphaInt)
+                    .renderInto(ms, buffer.getBuffer(RenderType.translucentMovingBlock()));
+            ms.popPose();
+        } catch (Exception e) {
+            // Partial not ready yet (e.g. before resources loaded); skip this frame.
+        }
     }
-
 }
