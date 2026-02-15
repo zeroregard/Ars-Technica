@@ -37,6 +37,9 @@ public class ATTagsProvider {
       addArmorTags(ItemRegistry.MACHINAGUARD_HELMET.get(), ItemRegistry.MACHINAGUARD_CHESTPLATE.get(), ItemRegistry.MACHINAGUARD_LEGGINGS.get(), ItemRegistry.MACHINAGUARD_BOOTS.get());
     }
 
+    /** All The Arcanist Gear (ATG) / ATM-style upgrade tags — same as Ars Elemental so our armors can be used in ATG upgrade recipes. */
+    private static final String ATG_NAMESPACE = "allthearcanistgear";
+
     private void addArmorTags(Item hat, Item chest, Item legs, Item boots) {
       tag(ItemTags.ARMOR_ENCHANTABLE).add(hat, chest, legs, boots);
       tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(hat, chest, legs, boots);
@@ -45,15 +48,19 @@ public class ATTagsProvider {
       tag(ItemTags.HEAD_ARMOR_ENCHANTABLE).add(hat);
       tag(ItemTags.HEAD_ARMOR).add(hat);
       tag(MAGIC_HOOD).add(hat);
+      tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(ATG_NAMESPACE, "elemental_hat"))).add(hat);
       tag(ItemTags.CHEST_ARMOR_ENCHANTABLE).add(chest);
       tag(ItemTags.CHEST_ARMOR).add(chest);
       tag(MAGIC_ROBE).add(chest);
+      tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(ATG_NAMESPACE, "elemental_chest"))).add(chest);
       tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(legs);
       tag(ItemTags.LEG_ARMOR).add(legs);
       tag(MAGIC_LEG).add(legs);
+      tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(ATG_NAMESPACE, "elemental_legs"))).add(legs);
       tag(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(boots);
       tag(ItemTags.FOOT_ARMOR).add(boots);
       tag(MAGIC_BOOT).add(boots);
+      tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(ATG_NAMESPACE, "elemental_boots"))).add(boots);
 
       tag(MAGIC_ARMOR).add(hat, chest, legs, boots);
     }
