@@ -1,6 +1,5 @@
 package com.zeroregard.ars_technica.mixin;
 
-import com.simibubi.create.AllItems;
 import com.zeroregard.ars_technica.helpers.ArcaneWrenchHelper;
 import com.zeroregard.ars_technica.registry.DataComponentRegistry;
 import net.minecraft.core.HolderLookup;
@@ -55,7 +54,7 @@ public class ArcaneWrenchItemStackMixin {
         if (!compound.contains("id") || !compound.getString("id").equals("ars_technica:runic_spanner"))
             return;
         ItemStack stack = opt.get();
-        if (stack.isEmpty() || !AllItems.WRENCH.isIn(stack) || stack.has(DataComponentRegistry.ARCANE_WRENCH.get()))
+        if (stack.isEmpty() || !ArcaneWrenchHelper.isCreateWrenchStack(stack) || stack.has(DataComponentRegistry.ARCANE_WRENCH.get()))
             return;
         ItemStack migrated = stack.copy();
         migrated.set(DataComponentRegistry.ARCANE_WRENCH.get(), Boolean.TRUE);
@@ -71,7 +70,7 @@ public class ArcaneWrenchItemStackMixin {
         if (!id.equals("ars_technica:runic_spanner"))
             return;
         ItemStack stack = cir.getReturnValue();
-        if (stack.isEmpty() || !AllItems.WRENCH.isIn(stack))
+        if (stack.isEmpty() || !ArcaneWrenchHelper.isCreateWrenchStack(stack))
             return;
         if (stack.has(DataComponentRegistry.ARCANE_WRENCH.get()))
             return;
