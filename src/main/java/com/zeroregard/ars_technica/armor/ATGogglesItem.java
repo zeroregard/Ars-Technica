@@ -8,9 +8,12 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 public interface ATGogglesItem {
 
+    /** True when the entity is wearing any technomancer-variant helmet that augments HUD with Create goggles info. */
     static boolean isWearingTechnomancerHelmet(LivingEntity entity) {
         ItemStack headSlot = entity.getItemBySlot(EquipmentSlot.HEAD);
-        return headSlot.is(ItemRegistry.TECHNOMANCER_HELMET.get());
+        return headSlot.is(ItemRegistry.TECHNOMANCER_HELMET.get())
+                || headSlot.is(ItemRegistry.ARTIFICER_CAP.get())
+                || headSlot.is(ItemRegistry.MACHINAGUARD_HELMET.get());
     }
 
     static boolean isWearingSpyMonocle(LivingEntity entity) {
