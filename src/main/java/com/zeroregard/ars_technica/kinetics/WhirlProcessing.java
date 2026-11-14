@@ -57,9 +57,24 @@ public class WhirlProcessing extends FanProcessing {
             Optional<ProcessingRecipe> recipe = getProcessingRecipeForEntity(entity, type, world);
             // If there's a processing recipe, we need to check if any of them are chanced based
             if (!recipe.isEmpty()) {
-                for (ItemStack stack : stacks) {
+                for (int i = 0, numStacks = stacks.size(); i < numStacks; i++) {
+                    ItemStack stack = stacks.get(i);
                     if (RecipeHelpers.isChanceBased(stack, recipe.get())) {
-                        stack.grow(stack.getCount());
+                        var total = stack.getCount() * 2;
+                        if (total <= 0) {
+                            continue;
+                        }
+
+                        var maxStackSize = stack.getMaxStackSize();
+                        var size = Math.min(total, maxStackSize);
+                        stack.setCount(size);
+                        total -= size;
+
+                        while (total > 0) {
+                            size = Math.min(total, maxStackSize);
+                            stacks.add(stack.copyWithCount(size));
+                            total -= size;
+                        }
                     }
                 }
             }
