@@ -156,8 +156,8 @@ repositories {
         url = "https://maven.minecraftforge.net"
     }
     maven {
-        name = "OctoStudios"
-        url = uri("https://maven.octo-studios.com/releases")
+        name = "Shatterbyte"
+        url = uri("https://maven.shatterbyte.com/releases")
     }
     maven { url 'https://jitpack.io' }
 
